@@ -1,6 +1,10 @@
 name: Build and test
 
-on: [workflow_dispatch, push]
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
@@ -40,7 +44,7 @@ jobs:
 
       - name: Start containers and run tests
         run: |
-          mv env-template .env
+          mv env.example .env
           docker-compose -f docker-compose.yml -f docker-compose.ci.yml up -d
           docker-compose exec -T postgres createdb -U postgres apptest
           docker-compose exec -T backend alembic upgrade head
