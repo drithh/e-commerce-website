@@ -1,4 +1,4 @@
-exclude: '(frontend/src/generated/|backend/alembic/versions/)'
+exclude: '(frontend/src/generated/)'
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
@@ -13,7 +13,11 @@ repos:
     hooks:
       - id: black
         files: backend/
+        args:
+          - --line-length=88
+          - --target-version=py39
         types: [file, python]
+
   - repo: https://github.com/myint/autoflake
     rev: v1.4
     hooks:
