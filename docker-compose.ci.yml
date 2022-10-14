@@ -1,0 +1,8 @@
+version: "3.9"
+
+services:
+  backend:
+    image: "e-commerce-website-backend:latest"
+
+  frontend:
+    image: "e-commerce-website-frontend:latest"
