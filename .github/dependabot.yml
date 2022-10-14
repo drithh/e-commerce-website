@@ -19,6 +19,8 @@ updates:
     directory: '/backend/'
     schedule:
       interval: 'weekly'
+    ignore:
+      - dependency-name: 'python'
 
   - package-ecosystem: 'pip'
     directory: '/backend/'
