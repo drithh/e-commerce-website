@@ -1,8 +1,8 @@
 """models
 
-Revision ID: 3411330daad8
+Revision ID: c70b9286c25d
 Revises: 
-Create Date: 2022-10-15 14:32:28.103008
+Create Date: 2022-10-15 16:55:11.499129
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '3411330daad8'
+revision = 'c70b9286c25d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,7 +34,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('size', sa.String(length=1), nullable=False),
+    sa.Column('size', sa.String(length=16), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
@@ -59,7 +59,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('title', sa.String(length=64), nullable=False),
+    sa.Column('title', sa.String(length=128), nullable=False),
     sa.Column('image_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.ForeignKeyConstraint(['image_id'], ['images.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -80,7 +80,7 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('address', sa.String(length=64), nullable=False),
+    sa.Column('address', sa.String(length=128), nullable=False),
     sa.Column('city', sa.String(length=64), nullable=False),
     sa.Column('shipping_price', sa.Integer(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
@@ -94,7 +94,7 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('title', sa.String(length=64), nullable=False),
     sa.Column('brand', sa.String(length=64), nullable=False),
-    sa.Column('product_detail', sa.String(length=128), nullable=False),
+    sa.Column('product_detail', sa.String(length=256), nullable=False),
     sa.Column('price', sa.Integer(), nullable=False),
     sa.Column('condition', sa.String(length=64), nullable=False),
     sa.Column('category_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
