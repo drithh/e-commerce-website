@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey, Integer
-from app.db import Base
-from app.models.default import DefaultModel
+from db import Base
+from models.default import DefaultModel
 
 
 class ProductSizeQuantity(DefaultModel, Base):
