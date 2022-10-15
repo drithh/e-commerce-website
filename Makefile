@@ -4,7 +4,7 @@ APP=docker-compose exec backend
 MIGRATE=docker-compose run --rm backend poetry run alembic
 
 seed:
-	$(APP) poetry run python -m app.seeder
+	$(APP) poetry run python -m app.seeders.seeder
 
 migrate-up:
 		$(MIGRATE) upgrade head

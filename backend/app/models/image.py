@@ -9,3 +9,13 @@ class Image(DefaultModel, Base):
 
     name = Column(String(length=64), nullable=False, unique=True)
     image_url = Column(String(length=64), nullable=False)
+
+    @classmethod
+    def seed(cls, fake, name):
+        url = f"https://test.com/{name}.jpg"
+        image = Image(
+            id=fake.uuid4(),
+            name=name,
+            image_url=url,
+        )
+        return image
