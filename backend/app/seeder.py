@@ -1,7 +1,8 @@
 from faker import Faker
-from app.models.user import User
-from app.models.image import Image
+
 from app import db
+from app.models.image import Image
+from app.models.user import User
 
 
 def seed():
