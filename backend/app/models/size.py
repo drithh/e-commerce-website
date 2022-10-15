@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, Boolean
-from db import Base
-from models.default import DefaultModel
+from app.db import Base
+from app.models.default import DefaultModel
 
 
 class Size(DefaultModel, Base):

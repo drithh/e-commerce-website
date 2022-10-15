@@ -1,7 +1,16 @@
 include .env
 
 APP=docker-compose exec backend
-
+MIGRATE=docker-compose run --rm backend poetry run alembic
 
 seed:
-	$(APP) python app/seeder.py 
+	$(APP) poetry run python -m app.seeder
+
+migrate-up:
+		$(MIGRATE) upgrade head
+migrate-down:
+		$(MIGRATE) downgrade -1
+
+create:
+		@read -p  "What is the name of migration?" NAME; \
+		${MIGRATE} revision --autogenerate -m $$NAME

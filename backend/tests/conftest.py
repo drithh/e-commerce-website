@@ -8,7 +8,7 @@ from sqlalchemy.orm.session import Session, sessionmaker
 from starlette.testclient import TestClient
 
 from app.core.config import settings
-from db import Base
+from app.db import Base
 from app.deps.db import get_db
 from app.deps.users import get_user_manager
 from app.factory import create_app
