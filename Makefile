@@ -14,3 +14,6 @@ migrate-down:
 create:
 		@read -p  "What is the name of migration?" NAME; \
 		${MIGRATE} revision --autogenerate -m $$NAME
+
+pre-commit:
+		pre-commit run --all-files
