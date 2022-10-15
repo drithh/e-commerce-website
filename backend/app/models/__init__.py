@@ -2,6 +2,16 @@
 from fastapi_users.db import SQLAlchemyBaseUserTable
 
 from app.db import Base
-from app.models.user import User
-from app.models.image import Image
-from app.models.category import Category
+from app.models import (
+    user,
+    banner,
+    category,
+    image,
+    product,
+    size,
+    cart,
+    product_size_quantity,
+    order,
+    order_item,
+    product_image,
+)

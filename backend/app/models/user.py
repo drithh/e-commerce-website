@@ -1,14 +1,11 @@
-from fastapi_users_db_sqlalchemy import GUID
-from sqlalchemy import Column, DateTime, ForeignKey, String, Boolean
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql.functions import func
+from sqlalchemy import Column, String, Boolean
 from app.db import Base
+from app.models.default import DefaultModel
 
 
-class User(Base):
+class User(DefaultModel, Base):
     __tablename__ = "users"
 
-    id = Column(GUID, primary_key=True)
     name = Column(String(length=64), nullable=False)
     email = Column(String(length=64), unique=True, index=True, nullable=False)
 
@@ -21,14 +18,3 @@ class User(Base):
     balance = Column(String(length=64), nullable=False)
 
     is_admin = Column(Boolean, nullable=False)
-
-    created_at = Column(
-        DateTime(timezone=True), server_default=func.now(), nullable=True
-    )
-    updated_at = Column(
-        DateTime(timezone=True), server_default=func.now(), nullable=True
-    )
-    deleted_at = Column(DateTime(timezone=True), nullable=True)
-
-    def __repr__(self):
-        return f"User(id={self.id!r}, name={self.email!r})"
