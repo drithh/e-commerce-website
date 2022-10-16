@@ -1,8 +1,8 @@
 """models
 
-Revision ID: 9e2b97d3f8a6
+Revision ID: 6ddd2b9da8c8
 Revises: 
-Create Date: 2022-10-16 11:40:50.912674
+Create Date: 2022-10-16 15:12:08.321104
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '9e2b97d3f8a6'
+revision = '6ddd2b9da8c8'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -47,11 +47,11 @@ def upgrade():
     sa.Column('password', sa.String(length=128), nullable=False),
     sa.Column('salt', sa.String(length=128), nullable=False),
     sa.Column('phone_number', sa.String(length=64), nullable=False),
-    sa.Column('address_name', sa.String(length=64), nullable=False),
+    sa.Column('address_name', sa.String(length=64), nullable=True),
     sa.Column('address', sa.String(length=128), nullable=True),
     sa.Column('city', sa.String(length=64), nullable=True),
-    sa.Column('balance', sa.String(length=64), nullable=True),
-    sa.Column('is_admin', sa.Boolean(), nullable=True),
+    sa.Column('balance', sa.Integer(), server_default='0', nullable=False),
+    sa.Column('is_admin', sa.Boolean(), server_default='false', nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)

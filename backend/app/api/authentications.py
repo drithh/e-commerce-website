@@ -19,7 +19,6 @@ from app.schemas.authentication import UserCreate, UserRead
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_PATH}/sign-in")
-# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.post("/sign-in", response_model=UserRead, status_code=status.HTTP_200_OK)
@@ -50,7 +49,6 @@ async def sign_in(
         phone_number=user.User.phone_number,
         type="seller" if user.User.is_admin else "buyer",
     )
-
     return UserRead(
         user_information=user,
         access_token=access_token,
@@ -77,20 +75,28 @@ async def sign_up(
 
     hashed_password, salt = User.encrypt_password(request.password)
 
-    insert_statement = """
-        INSERT INTO "users" (name, email, phone_number, salt, password)
-        VALUES (:name, :email, :phone_number, :salt, :password)
-        """
-    await session.execute(
-        insert_statement,
-        params={
-            "name": request.name,
-            "email": request.email,
-            "phone_number": request.phone_number,
-            "salt": salt,
-            "password": hashed_password,
-        },
+    # insert_statement = """
+    #     INSERT INTO "users" (name, email, phone_number, salt, password)
+    #     VALUES (:name, :email, :phone_number, :salt, :password)
+    #     """
+    # await session.execute(
+    #     insert_statement,
+    #     params={
+    #         "name": request.name,
+    #         "email": request.email,
+    #         "phone_number": request.phone_number,
+    #         "salt": salt,
+    #         "password": hashed_password,
+    #     },
+    # )
+    new_user = User(
+        name=request.name,
+        email=request.email,
+        phone_number=request.phone_number,
+        salt=salt,
+        password=hashed_password,
     )
+    session.add(new_user)
     await session.commit()
 
     access_token = create_access_token(data={"sub": request.email})
@@ -101,8 +107,12 @@ async def sign_up(
         phone_number=request.phone_number,
         type="buyer",
     )
+    logger.info(f"User {user.email} signed up")
     return UserRead(
-        user_information=user, token=access_token, message="success, user created"
+        user_information=user,
+        access_token=access_token,
+        token_type="bearer",
+        message="success, user created",
     )
 
 
@@ -134,9 +144,7 @@ async def get_current_active_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
-        logger.info(token)
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        logger.info(payload)
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception

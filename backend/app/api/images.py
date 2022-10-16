@@ -5,6 +5,7 @@ from fastapi.routing import APIRouter
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
+from app.core.logger import logger
 from app.deps.db import get_async_session
 from app.models.image import Image
 from app.schemas.image import ImageBase
@@ -20,5 +21,4 @@ async def get_image(
     items = (
         await session.execute(select(Image).filter(Image.name.like(f"%{image_name}%")))
     ).first()
-
     return items.Image

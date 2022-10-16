@@ -1,5 +1,5 @@
 import bcrypt
-from sqlalchemy import Boolean, Column, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 from app.db import Base
 from app.models.default import DefaultModel
@@ -15,12 +15,12 @@ class User(DefaultModel, Base):
     salt = Column(String(length=128), nullable=False)
 
     phone_number = Column(String(length=64), nullable=False)
-    address_name = Column(String(length=64), nullable=False)
+    address_name = Column(String(length=64), nullable=True)
     address = Column(String(length=128), nullable=True)
     city = Column(String(length=64), nullable=True)
-    balance = Column(String(length=64), nullable=True, default=0)
+    balance = Column(Integer, nullable=False, server_default="0")
 
-    is_admin = Column(Boolean, nullable=True, default=False)
+    is_admin = Column(Boolean, nullable=False, server_default="false")
 
     @classmethod
     def default_seed(cls, fake):
