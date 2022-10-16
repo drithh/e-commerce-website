@@ -15,11 +15,11 @@ class User(DefaultModel, Base):
     salt = Column(String(length=128), nullable=False)
 
     phone_number = Column(String(length=64), nullable=False)
-    address = Column(String(length=128), nullable=False)
-    city = Column(String(length=64), nullable=False)
-    balance = Column(String(length=64), nullable=False, default=0)
+    address = Column(String(length=128), nullable=True)
+    city = Column(String(length=64), nullable=True)
+    balance = Column(String(length=64), nullable=True, default=0)
 
-    is_admin = Column(Boolean, nullable=False, default=False)
+    is_admin = Column(Boolean, nullable=True, default=False)
 
     @classmethod
     def default_seed(cls, fake):

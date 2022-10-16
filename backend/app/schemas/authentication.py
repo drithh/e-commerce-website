@@ -12,19 +12,32 @@ class TokenData(BaseModel):
     email: Union[str, None] = None
 
 
-class Login(BaseModel):
-    email: str
-    password: str
-
-
 class User(BaseModel):
     name: str
     email: str
     phone_number: str
-    address: str
-    city: str
-    balance: int
     type: str
+
+
+class UserDefault(BaseModel):
+    name: str
+    email: str
+    phone_number: str
+    salt: str
+    hashed_password: str
+
+
+class UserCreate(BaseModel):
+    name: str
+    email: str
+    password: str
+    phone_number: str
+
+
+class UserRead(BaseModel):
+    user_information: User
+    token: str
+    message: str
 
     class Config:
         orm_mode = True

@@ -1,13 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
-from fastapi_users import FastAPIUsers
 from starlette.middleware.cors import CORSMiddleware
-from starlette.requests import Request
 from starlette.responses import FileResponse
 
 from app.api import api_router, authentications, images
 from app.core.config import settings
+from app.schemas.http_exception import HTTPException
 
 
 def create_app():
@@ -23,6 +23,17 @@ def create_app():
     init_db_hooks(app)
     setup_cors_middleware(app)
     serve_static_app(app)
+
+    @app.exception_handler(HTTPException)
+    async def custom_execption_handler(request: Request, exc: HTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "message": exc.message,
+            },
+            headers=exc.headers,
+        )
+
     return app
 
 
