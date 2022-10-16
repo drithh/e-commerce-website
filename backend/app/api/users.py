@@ -1,46 +1,49 @@
-from typing import Any, List
+from typing import Any
 
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
-from sqlalchemy import func, select
+from sqlalchemy import update
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import Response
 
+from app.api.authentications import get_current_active_user
 from app.deps.db import get_async_session
-from app.deps.users import current_superuser
 from app.models.user import User
-from app.schemas.user import UserRead
+from app.schemas.user import UserGetAddress
 
-router = APIRouter(prefix="/users")
+router = APIRouter()
 
 
-@router.get("", response_model=List[UserRead])
-async def get_users(
-    response: Response,
-    session: AsyncSession = Depends(get_async_session),
-    user: User = Depends(current_superuser),
+@router.get("", response_model=UserGetAddress)
+async def get_user(
+    current_user: User = Depends(get_current_active_user),
 ) -> Any:
-    total = await session.scalar(select(func.count(User.id)))
-    users = (
-        (await session.execute(select(User).offset(0).limit(10).order_by(User.id)))
-        .scalars()
-        .all()
+    return current_user.User
+
+
+@router.get("/shipping_address", response_model=UserGetAddress)
+async def get_user_shipping_address(
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    return current_user.User
+
+
+@router.post("/shipping_address", response_model=UserGetAddress)
+async def post_user_shipping_address(
+    request: UserGetAddress,
+    session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    await session.execute(
+        update(User)
+        .where(User.id == current_user.User.id)
+        .values(
+            address_name=request.address_name,
+            address=request.address,
+            city=request.city,
+            phone_number=request.phone_number,
+        )
     )
-    response.headers["Content-Range"] = f"{0}-{0 + len(users)}/{total}"
-    return users
+    await session.commit()
 
-
-# @router.get("/users", response_model=List[UserRead])
-# async def get_users(
-#     response: Response,
-#     session: AsyncSession = Depends(get_async_session),
-#     user: User = Depends(current_superuser),
-#     skip: int = 0,
-#     limit: int = 100,
-# ) -> Any:
-#     total = await session.scalar(select(func.count(User.id)))
-#     users = (
-#         (await session.execute(select(User).offset(skip).limit(limit))).scalars().all()
-#     )
-#     response.headers["Content-Range"] = f"{skip}-{skip + len(users)}/{total}"
-#     return users
+    return current_user.User

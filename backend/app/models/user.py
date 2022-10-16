@@ -15,6 +15,7 @@ class User(DefaultModel, Base):
     salt = Column(String(length=128), nullable=False)
 
     phone_number = Column(String(length=64), nullable=False)
+    address_name = Column(String(length=64), nullable=False)
     address = Column(String(length=128), nullable=True)
     city = Column(String(length=64), nullable=True)
     balance = Column(String(length=64), nullable=True, default=0)
@@ -31,6 +32,7 @@ class User(DefaultModel, Base):
             password=password,
             salt=salt,
             phone_number=fake.phone_number(),
+            address_name=fake.text(max_nb_chars=20),
             address=fake.address(),
             city=fake.city(),
             balance=fake.pyint(),
@@ -43,6 +45,7 @@ class User(DefaultModel, Base):
             password=password,
             salt=salt,
             phone_number=fake.phone_number(),
+            address_name=fake.text(max_nb_chars=20),
             address=fake.address(),
             city=fake.city(),
             balance=fake.pyint(),
@@ -60,6 +63,7 @@ class User(DefaultModel, Base):
             password=password,
             salt=salt,
             phone_number=fake.phone_number(),
+            address_name=fake.text(max_nb_chars=20),
             address=fake.address(),
             city=fake.city(),
             balance=fake.pyint(),

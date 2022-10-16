@@ -5,9 +5,8 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 
-from app.api import api_router, authentications, images
+from app.api import api_router, authentications, images, users
 from app.core.config import settings
-from app.schemas.http_exception import HTTPException
 
 
 def create_app():
@@ -24,16 +23,6 @@ def create_app():
     setup_cors_middleware(app)
     serve_static_app(app)
 
-    @app.exception_handler(HTTPException)
-    async def custom_execption_handler(request: Request, exc: HTTPException):
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={
-                "message": exc.message,
-            },
-            headers=exc.headers,
-        )
-
     return app
 
 
@@ -45,9 +34,14 @@ def setup_routers(app: FastAPI) -> None:
         tags=["Authentication"],
     )
     app.include_router(
+        users.router,
+        prefix=f"{settings.API_PATH}/user",
+        tags=["User"],
+    )
+    app.include_router(
         images.router,
-        prefix=f"{settings.API_PATH}/images",
-        tags=["Images"],
+        prefix=f"{settings.API_PATH}/image",
+        tags=["Image"],
     )
     # The following operation needs to be at the end of this function
     use_route_names_as_operation_ids(app)

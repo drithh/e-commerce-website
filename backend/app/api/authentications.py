@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from fastapi import Depends, status
+from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
@@ -8,19 +8,18 @@ from passlib.context import CryptContext
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
-# SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
-# ACCESS_TOKEN_EXPIRE_MINUTES = 30
 from app.core.config import settings
+from app.core.logger import logger
 from app.deps.db import get_async_session
 from app.models.user import User
 from app.schemas.authentication import TokenData
 from app.schemas.authentication import User as UserSchema
-from app.schemas.authentication import UserCreate, UserDefault, UserRead
-from app.schemas.http_exception import HTTPException
+from app.schemas.authentication import UserCreate, UserRead
 
 router = APIRouter()
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_PATH}/sign-in")
+# pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 @router.post("/sign-in", response_model=UserRead, status_code=status.HTTP_200_OK)
@@ -52,10 +51,15 @@ async def sign_in(
         type="seller" if user.User.is_admin else "buyer",
     )
 
-    return UserRead(user_information=user, token=access_token, message="Login success")
+    return UserRead(
+        user_information=user,
+        access_token=access_token,
+        token_type="bearer",
+        message="Login success",
+    )
 
 
-@router.post("/sign-up", status_code=status.HTTP_201_CREATED)
+@router.post("/sign-up", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def sign_up(
     request: UserCreate,
     session: AsyncSession = Depends(get_async_session),
@@ -120,7 +124,9 @@ async def get_current_active_user(
         headers={"WWW-Authenticate": "Bearer"},
     )
     try:
+        logger.info(token)
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        logger.info(payload)
         email: str = payload.get("sub")
         if email is None:
             raise credentials_exception
