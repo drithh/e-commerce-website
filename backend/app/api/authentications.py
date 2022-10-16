@@ -1,166 +1,86 @@
-from typing import Generic, Sequence, Type
+from datetime import datetime, timedelta
 
-from fastapi import APIRouter
-from fastapi_users import models, schemas
-from fastapi_users.authentication import AuthenticationBackend, Authenticator
-from fastapi_users.jwt import SecretType
-from fastapi_users.manager import UserManagerDependency
-from fastapi_users.router import (
-    get_auth_router,
-    get_register_router,
-    get_reset_password_router,
-    get_users_router,
-    get_verify_router,
-)
+from fastapi import Depends, HTTPException, status
+from fastapi.routing import APIRouter
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio.session import AsyncSession
 
-try:
-    from fastapi_users.router import get_oauth_router
-    from fastapi_users.router.oauth import get_oauth_associate_router
-    from httpx_oauth.oauth2 import BaseOAuth2
-except ModuleNotFoundError:  # pragma: no cover
-    BaseOAuth2 = Type  # type: ignore
+# SECRET_KEY = "09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7"
+# ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from app.core.config import settings
+from app.deps.db import get_async_session
+from app.models.user import User
+from app.schemas.authentication import Login, Token, TokenData
+from app.schemas.authentication import User as UserSchema
+
+router = APIRouter()
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_PATH}/sign-in")
 
 
-class FastAPIUsers(Generic[models.UP, models.ID]):
-    """
-    Main object that ties together the component for users authentication.
-
-    :param get_user_manager: Dependency callable getter to inject the
-    user manager class instance.
-    :param auth_backends: List of authentication backends.
-
-    :attribute current_user: Dependency callable getter to inject authenticated user
-    with a specific set of parameters.
-    """
-
-    authenticator: Authenticator
-
-    def __init__(
-        self,
-        get_user_manager: UserManagerDependency[models.UP, models.ID],
-        auth_backends: Sequence[AuthenticationBackend],
-    ):
-        self.authenticator = Authenticator(auth_backends, get_user_manager)
-        self.get_user_manager = get_user_manager
-        self.current_user = self.authenticator.current_user
-
-    def get_register_router(
-        self, user_schema: Type[schemas.U], user_create_schema: Type[schemas.UC]
-    ) -> APIRouter:
-        """
-        Return a router with a register route.
-
-        :param user_schema: Pydantic schema of a public user.
-        :param user_create_schema: Pydantic schema for creating a user.
-        """
-        return get_register_router(
-            self.get_user_manager, user_schema, user_create_schema
+@router.post("/sign-in")
+async def login(
+    request: OAuth2PasswordRequestForm = Depends(),
+    session: AsyncSession = Depends(get_async_session),
+):
+    user = (
+        await session.execute(select(User).filter(User.email == request.username))
+    ).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid authentication credentials",
+            headers={"WWW-Authenticate": "Bearer"},
         )
 
-    def get_verify_router(self, user_schema: Type[schemas.U]) -> APIRouter:
-        """
-        Return a router with e-mail verification routes.
-
-        :param user_schema: Pydantic schema of a public user.
-        """
-        return get_verify_router(self.get_user_manager, user_schema)
-
-    def get_reset_password_router(self) -> APIRouter:
-        """Return a reset password process router."""
-        return get_reset_password_router(self.get_user_manager)
-
-    def get_auth_router(
-        self, backend: AuthenticationBackend, requires_verification: bool = False
-    ) -> APIRouter:
-        """
-        Return an auth router for a given authentication backend.
-
-        :param backend: The authentication backend instance.
-        :param requires_verification: Whether the authentication
-        require the user to be verified or not. Defaults to False.
-        """
-        return get_auth_router(
-            backend,
-            self.get_user_manager,
-            self.authenticator,
-            requires_verification,
+    if not User.verify_password(request.password, user.User):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect password",
+            headers={"WWW-Authenticate": "Bearer"},
         )
+    access_token = create_access_token(data={"sub": user.User.email})
+    return {"access_token": access_token, "token_type": "bearer"}
 
-    def get_oauth_router(
-        self,
-        oauth_client: BaseOAuth2,
-        backend: AuthenticationBackend,
-        state_secret: SecretType,
-        redirect_url: str = None,
-        associate_by_email: bool = False,
-    ) -> APIRouter:
-        """
-        Return an OAuth router for a given OAuth client and authentication backend.
 
-        :param oauth_client: The HTTPX OAuth client instance.
-        :param backend: The authentication backend instance.
-        :param state_secret: Secret used to encode the state JWT.
-        :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
-        If not given, the URL to the callback endpoint will be generated.
-        :param associate_by_email: If True, any existing user with the same
-        e-mail address will be associated to this user. Defaults to False.
-        """
-        return get_oauth_router(
-            oauth_client,
-            backend,
-            self.get_user_manager,
-            state_secret,
-            redirect_url,
-            associate_by_email,
-        )
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
+    return encoded_jwt
 
-    def get_oauth_associate_router(
-        self,
-        oauth_client: BaseOAuth2,
-        user_schema: Type[schemas.U],
-        state_secret: SecretType,
-        redirect_url: str = None,
-        requires_verification: bool = False,
-    ) -> APIRouter:
-        """
-        Return an OAuth association router for a given OAuth client.
 
-        :param oauth_client: The HTTPX OAuth client instance.
-        :param user_schema: Pydantic schema of a public user.
-        :param state_secret: Secret used to encode the state JWT.
-        :param redirect_url: Optional arbitrary redirect URL for the OAuth2 flow.
-        If not given, the URL to the callback endpoint will be generated.
-        :param requires_verification: Whether the endpoints
-        require the users to be verified or not. Defaults to False.
-        """
-        return get_oauth_associate_router(
-            oauth_client,
-            self.authenticator,
-            self.get_user_manager,
-            user_schema,
-            state_secret,
-            redirect_url,
-            requires_verification,
-        )
+async def get_current_active_user(
+    token: str = Depends(oauth2_scheme),
+    session: AsyncSession = Depends(get_async_session),
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+        token_data = TokenData(email=email)
+    except JWTError:
+        raise credentials_exception
+    user = (
+        await session.execute(select(User).filter(User.email == token_data.email))
+    ).first()
+    if user is None:
+        raise credentials_exception
+    return user
 
-    def get_users_router(
-        self,
-        user_schema: Type[schemas.U],
-        user_update_schema: Type[schemas.UU],
-        requires_verification: bool = False,
-    ) -> APIRouter:
-        """
-        Return a router with routes to manage users.
 
-        :param user_schema: Pydantic schema of a public user.
-        :param user_update_schema: Pydantic schema for updating a user.
-        :param requires_verification: Whether the endpoints
-        require the users to be verified or not. Defaults to False.
-        """
-        return get_users_router(
-            self.get_user_manager,
-            user_schema,
-            user_update_schema,
-            self.authenticator,
-            requires_verification,
-        )
+@router.get("/users/me/", response_model=UserSchema)
+async def read_users_me(current_user: User = Depends(get_current_active_user)):
+    user = current_user.User
+    user.type = "seller" if user.is_admin else "buyer"
+    return user

@@ -75,7 +75,8 @@ class User(DefaultModel, Base):
         return hashed_password.decode("utf-8"), salt
 
     @classmethod
-    def verify_password(cls, password, hashed_password, salt):
+    def verify_password(cls, password, user):
+        hashed_password, salt = user.password, user.salt
         password = password.encode("utf-8")
         salt = salt.encode("utf-8")
         hashed_password = hashed_password.encode("utf-8")

@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import DeclarativeMeta
 from app.schemas.request_params import RequestParams
 
 
-def parse_react_admin_params(model: DeclarativeMeta) -> RequestParams:
+def parse_request(model: DeclarativeMeta) -> RequestParams:
     """Parses sort and range parameters coming from a react-admin request"""
 
     def inner(
