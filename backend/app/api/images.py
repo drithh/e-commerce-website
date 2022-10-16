@@ -13,7 +13,7 @@ router = APIRouter()
 
 
 @router.get("/{image_name}", response_model=ImageBase, status_code=200)
-async def get_images(
+async def get_image(
     image_name: str,
     session: AsyncSession = Depends(get_async_session),
 ) -> Any:

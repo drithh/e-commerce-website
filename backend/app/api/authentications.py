@@ -114,6 +114,16 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 
+async def get_current_active_admin(
+    session: AsyncSession = Depends(get_async_session),
+    token: str = Depends(oauth2_scheme),
+):
+    user = await get_current_active_user(token=token, session=session)
+    if not user.User.is_admin:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return user
+
+
 async def get_current_active_user(
     token: str = Depends(oauth2_scheme),
     session: AsyncSession = Depends(get_async_session),

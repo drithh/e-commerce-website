@@ -28,11 +28,37 @@ class UserGetAddress(BaseModel):
         orm_mode = True
 
 
-class UserPostAddress(BaseModel):
-    address_name: str
-    phone_number: str
-    address: str
-    city: str
+class UserPutAddress(BaseModel):
+    detail: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserGetBalance(BaseModel):
+    id: UUID
+    balance: int
+
+    class Config:
+        orm_mode = True
+
+
+class UserPutBalanceRequest(BaseModel):
+    balance: int
+
+    class Config:
+        orm_mode = True
+
+
+class UserPutBalance(BaseModel):
+    detail: str
+
+    class Config:
+        orm_mode = True
+
+
+class UserDelete(BaseModel):
+    id: UUID
 
     class Config:
         orm_mode = True
