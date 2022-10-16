@@ -11,20 +11,36 @@ from app.deps.users import current_superuser
 from app.models.user import User
 from app.schemas.user import UserRead
 
-router = APIRouter()
+router = APIRouter(prefix="/users")
 
 
-@router.get("/users", response_model=List[UserRead])
+@router.get("", response_model=List[UserRead])
 async def get_users(
     response: Response,
     session: AsyncSession = Depends(get_async_session),
     user: User = Depends(current_superuser),
-    skip: int = 0,
-    limit: int = 100,
 ) -> Any:
     total = await session.scalar(select(func.count(User.id)))
     users = (
-        (await session.execute(select(User).offset(skip).limit(limit))).scalars().all()
+        (await session.execute(select(User).offset(0).limit(10).order_by(User.id)))
+        .scalars()
+        .all()
     )
-    response.headers["Content-Range"] = f"{skip}-{skip + len(users)}/{total}"
+    response.headers["Content-Range"] = f"{0}-{0 + len(users)}/{total}"
     return users
+
+
+# @router.get("/users", response_model=List[UserRead])
+# async def get_users(
+#     response: Response,
+#     session: AsyncSession = Depends(get_async_session),
+#     user: User = Depends(current_superuser),
+#     skip: int = 0,
+#     limit: int = 100,
+# ) -> Any:
+#     total = await session.scalar(select(func.count(User.id)))
+#     users = (
+#         (await session.execute(select(User).offset(skip).limit(limit))).scalars().all()
+#     )
+#     response.headers["Content-Range"] = f"{skip}-{skip + len(users)}/{total}"
+#     return users
