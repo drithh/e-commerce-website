@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime, timedelta
 
 from fastapi import Depends, HTTPException, status
@@ -5,14 +6,16 @@ from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
 from app.core.logger import logger
 from app.deps.db import get_async_session
+from app.deps.email import send_forgot_password_email
+from app.models.forgot_password import ForgotPassword
 from app.models.user import User
-from app.schemas.authentication import TokenData
+from app.schemas.authentication import PostForgotPassword, TokenData
 from app.schemas.authentication import User as UserSchema
 from app.schemas.authentication import UserCreate, UserRead
 
@@ -75,20 +78,6 @@ async def sign_up(
 
     hashed_password, salt = User.encrypt_password(request.password)
 
-    # insert_statement = """
-    #     INSERT INTO "users" (name, email, phone_number, salt, password)
-    #     VALUES (:name, :email, :phone_number, :salt, :password)
-    #     """
-    # await session.execute(
-    #     insert_statement,
-    #     params={
-    #         "name": request.name,
-    #         "email": request.email,
-    #         "phone_number": request.phone_number,
-    #         "salt": salt,
-    #         "password": hashed_password,
-    #     },
-    # )
     new_user = User(
         name=request.name,
         email=request.email,
@@ -113,6 +102,43 @@ async def sign_up(
         access_token=access_token,
         token_type="bearer",
         message="success, user created",
+    )
+
+
+@router.post(
+    "/forgot-password",
+    status_code=status.HTTP_200_OK,
+    response_model=PostForgotPassword,
+)
+async def forgot_password(
+    email: str,
+    session: AsyncSession = Depends(get_async_session),
+):
+    user = (await session.execute(select(User).filter(User.email == email))).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email not registered",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    reset_token = str(uuid.uuid4())
+
+    # remove old token
+    await session.execute(
+        delete(ForgotPassword).filter(ForgotPassword.user_id == user.User.id)
+    )
+    send_forgot_password_email
+
+    forgot_password = ForgotPassword(
+        user_id=user.User.id,
+        token=reset_token,
+        expired_at=datetime.now() + timedelta(hours=1),
+    )
+    session.add(forgot_password)
+    await session.commit()
+    await send_forgot_password_email(email, reset_token)
+    return PostForgotPassword(
+        detail="Reset password link sent to your email",
     )
 
 

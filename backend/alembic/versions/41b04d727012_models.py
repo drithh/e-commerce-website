@@ -1,8 +1,8 @@
 """models
 
-Revision ID: 6ddd2b9da8c8
+Revision ID: 41b04d727012
 Revises: 
-Create Date: 2022-10-16 15:12:08.321104
+Create Date: 2022-10-16 15:32:18.209894
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '6ddd2b9da8c8'
+revision = '41b04d727012'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -75,6 +75,17 @@ def upgrade():
     sa.ForeignKeyConstraint(['image_id'], ['images.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('title')
+    )
+    op.create_table('forgot_passwords',
+    sa.Column('id', fastapi_users_db_sqlalchemy.generics.GUID(), server_default=sa.text('uuid_generate_v4()'), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
+    sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('token', sa.String(length=128), nullable=False),
+    sa.Column('expired_at', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.PrimaryKeyConstraint('id')
     )
     op.create_table('orders',
     sa.Column('id', fastapi_users_db_sqlalchemy.generics.GUID(), server_default=sa.text('uuid_generate_v4()'), nullable=False),
@@ -160,6 +171,7 @@ def downgrade():
     op.drop_table('product_images')
     op.drop_table('products')
     op.drop_table('orders')
+    op.drop_table('forgot_passwords')
     op.drop_table('categories')
     op.drop_table('banners')
     op.drop_index(op.f('ix_users_email'), table_name='users')

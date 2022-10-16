@@ -5,6 +5,7 @@ from app.models import (
     banner,
     cart,
     category,
+    forgot_password,
     image,
     order,
     order_item,
