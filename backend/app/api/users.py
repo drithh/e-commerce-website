@@ -7,23 +7,17 @@ from sqlalchemy.exc import DatabaseError
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import Response
 
-from app.api.authentications import get_current_active_admin, get_current_active_user
 from app.core.logger import logger
+from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_async_session
 from app.models.user import User
-from app.schemas.user import (
-    UserDelete,
-    UserGetAddress,
-    UserGetBalance,
-    UserPutAddress,
-    UserPutBalance,
-    UserPutBalanceRequest,
-)
+from app.schemas.request_params import DefaultResponse
+from app.schemas.user import DeleteUser, GetUserAddress, GetUserBalance, PutUserBalance
 
 router = APIRouter()
 
 
-@router.get("", response_model=UserGetAddress, status_code=status.HTTP_200_OK)
+@router.get("", response_model=GetUserAddress, status_code=status.HTTP_200_OK)
 async def get_user(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
@@ -31,7 +25,7 @@ async def get_user(
 
 
 @router.get(
-    "/shipping_address", response_model=UserGetAddress, status_code=status.HTTP_200_OK
+    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
 )
 async def get_user_shipping_address(
     current_user: User = Depends(get_current_active_user),
@@ -40,10 +34,10 @@ async def get_user_shipping_address(
 
 
 @router.put(
-    "/shipping_address", response_model=UserPutAddress, status_code=status.HTTP_200_OK
+    "/shipping_address", response_model=DefaultResponse, status_code=status.HTTP_200_OK
 )
 async def put_user_shipping_address(
-    request: UserGetAddress,
+    request: GetUserAddress,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
@@ -59,10 +53,10 @@ async def put_user_shipping_address(
     )
     await session.commit()
     logger.info(f"User {current_user.User.email} updated shipping address")
-    return UserPutAddress(message="Shipping address updated")
+    return DefaultResponse(detail="Shipping address updated")
 
 
-@router.get("/balance", response_model=UserGetBalance, status_code=status.HTTP_200_OK)
+@router.get("/balance", response_model=GetUserBalance, status_code=status.HTTP_200_OK)
 async def get_user_balance(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
@@ -70,10 +64,10 @@ async def get_user_balance(
 
 
 @router.put(
-    "/balance", response_model=UserPutBalance, status_code=status.HTTP_201_CREATED
+    "/balance", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED
 )
 async def put_user_balance(
-    request: UserPutBalanceRequest,
+    request: PutUserBalance,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(get_current_active_user),
 ):
@@ -83,14 +77,14 @@ async def put_user_balance(
     )
     await session.commit()
     logger.info(f"User {current_user.User.email} updated balance")
-    return UserPutBalance(
+    return DefaultResponse(
         detail=f"Your balance has been updated, current_balance:{new_balance}"
     )
 
 
 @router.delete("", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
-    request: UserDelete,
+    request: DeleteUser,
     session: AsyncSession = Depends(get_async_session),
     current_user: User = Depends(get_current_active_admin),
 ) -> Response:

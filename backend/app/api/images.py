@@ -9,12 +9,12 @@ from sqlalchemy.ext.asyncio.session import AsyncSession
 from app.core.logger import logger
 from app.deps.db import get_async_session
 from app.models.image import Image
-from app.schemas.image import ImageBase
+from app.schemas.image import GetImage
 
 router = APIRouter()
 
 
-@router.get("/{image_name}", response_model=ImageBase, status_code=status.HTTP_200_OK)
+@router.get("/{image_name}", response_model=GetImage, status_code=status.HTTP_200_OK)
 async def get_image(
     image_name: str,
     session: AsyncSession = Depends(get_async_session),

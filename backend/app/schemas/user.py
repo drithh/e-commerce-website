@@ -3,7 +3,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class UserGet(BaseModel):
+class GetUser(BaseModel):
     id: UUID
     name: str
     email: str
@@ -17,7 +17,7 @@ class UserGet(BaseModel):
         orm_mode = True
 
 
-class UserGetAddress(BaseModel):
+class GetUserAddress(BaseModel):
     id: UUID
     address_name: str
     phone_number: str
@@ -28,14 +28,7 @@ class UserGetAddress(BaseModel):
         orm_mode = True
 
 
-class UserPutAddress(BaseModel):
-    detail: str
-
-    class Config:
-        orm_mode = True
-
-
-class UserGetBalance(BaseModel):
+class GetUserBalance(BaseModel):
     id: UUID
     balance: int
 
@@ -43,21 +36,14 @@ class UserGetBalance(BaseModel):
         orm_mode = True
 
 
-class UserPutBalanceRequest(BaseModel):
+class PutUserBalance(BaseModel):
     balance: int
 
     class Config:
         orm_mode = True
 
 
-class UserPutBalance(BaseModel):
-    detail: str
-
-    class Config:
-        orm_mode = True
-
-
-class UserDelete(BaseModel):
+class DeleteUser(BaseModel):
     id: UUID
 
     class Config:
