@@ -23,6 +23,8 @@ class DefaultModel:
             DateTime(timezone=True), server_default=func.now(), nullable=True
         )
         updated_at = Column(
-            DateTime(timezone=True), server_default=func.now(), nullable=True
+            DateTime(timezone=True),
+            server_default=func.now(),
+            nullable=True,
         )
         deleted_at = Column(DateTime(timezone=True), nullable=True)

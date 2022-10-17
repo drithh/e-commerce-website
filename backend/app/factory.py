@@ -19,6 +19,7 @@ from app.api import (
     users,
 )
 from app.core.config import settings
+from app.core.logger import logger
 
 
 def create_app():
@@ -28,7 +29,7 @@ def create_app():
         openapi_url=f"{settings.API_PATH}/openapi.json",
         docs_url="/docs/",
         description=description,
-        redoc_url=None,
+        redoc_url="/redoc/",
     )
 
     @app.exception_handler(StarletteHTTPException)
@@ -102,7 +103,7 @@ def setup_routers(app: FastAPI) -> None:
     )
     app.include_router(
         orders.router,
-        prefix=f"{settings.API_PATH}/order",
+        prefix=f"{settings.API_PATH}",
         tags=["Order"],
     )
 

@@ -18,14 +18,15 @@ def get_db() -> Generator:
 
 
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:
-    @event.listens_for(Query, "before_compile", retval=True)
-    def no_deleted(query):
-        for desc in query.column_descriptions:
-            entity = desc["entity"]
-            if entity:
-                query = query.filter(entity.deleted_at.is_(None))
-        return query
-
     async with async_session_maker() as session:
+
+        @event.listens_for(Query, "before_compile", retval=True)
+        def no_deleted(query):
+            for desc in query.column_descriptions:
+                entity = desc["entity"]
+                if entity:
+                    query = query.filter(entity.name != "admin")
+            return query
+
         yield session
         await session.close()
