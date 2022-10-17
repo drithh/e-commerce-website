@@ -1,8 +1,8 @@
 """models
 
-Revision ID: 41b04d727012
+Revision ID: a02e28de5f6e
 Revises: 
-Create Date: 2022-10-16 15:32:18.209894
+Create Date: 2022-10-17 09:12:03.939014
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '41b04d727012'
+revision = 'a02e28de5f6e'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -62,7 +62,7 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('title', sa.String(length=128), nullable=False),
     sa.Column('image_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['image_id'], ['images.id'], ),
+    sa.ForeignKeyConstraint(['image_id'], ['images.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('categories',
@@ -72,7 +72,7 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('title', sa.String(length=64), nullable=False),
     sa.Column('image_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['image_id'], ['images.id'], ),
+    sa.ForeignKeyConstraint(['image_id'], ['images.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('title')
     )
@@ -84,7 +84,7 @@ def upgrade():
     sa.Column('token', sa.String(length=128), nullable=False),
     sa.Column('expired_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('orders',
@@ -92,11 +92,12 @@ def upgrade():
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
+    sa.Column('status', sa.String(length=64), nullable=False),
     sa.Column('address', sa.String(length=128), nullable=False),
     sa.Column('city', sa.String(length=64), nullable=False),
     sa.Column('shipping_price', sa.Integer(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('products',
@@ -110,7 +111,7 @@ def upgrade():
     sa.Column('price', sa.Integer(), nullable=False),
     sa.Column('condition', sa.String(length=64), nullable=False),
     sa.Column('category_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ),
+    sa.ForeignKeyConstraint(['category_id'], ['categories.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('product_images',
@@ -120,8 +121,8 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('image_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('product_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['image_id'], ['images.id'], ),
-    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
+    sa.ForeignKeyConstraint(['image_id'], ['images.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('product_size_quantities',
@@ -132,8 +133,8 @@ def upgrade():
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('product_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('size_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
-    sa.ForeignKeyConstraint(['size_id'], ['sizes.id'], ),
+    sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['size_id'], ['sizes.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('carts',
@@ -144,8 +145,8 @@ def upgrade():
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('product_size_quantity_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['product_size_quantity_id'], ['product_size_quantities.id'], ),
-    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['product_size_quantity_id'], ['product_size_quantities.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('order_items',
@@ -156,8 +157,8 @@ def upgrade():
     sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('order_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('product_size_quantity_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
-    sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
-    sa.ForeignKeyConstraint(['product_size_quantity_id'], ['product_size_quantities.id'], ),
+    sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['product_size_quantity_id'], ['product_size_quantities.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

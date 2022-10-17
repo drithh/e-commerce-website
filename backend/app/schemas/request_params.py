@@ -10,7 +10,7 @@ class RequestParams(BaseModel):
 
 
 class DefaultResponse(BaseModel):
-    detail: str
+    message: str
 
     class Config:
         orm_mode = True

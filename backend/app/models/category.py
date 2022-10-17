@@ -9,7 +9,7 @@ class Category(DefaultModel, Base):
     __tablename__ = "categories"
 
     title = Column(String(length=64), nullable=False, unique=True)
-    image_id = Column(ForeignKey("images.id"), nullable=False)
+    image_id = Column(ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
 
     @classmethod
     def seed(cls, fake, image_id):

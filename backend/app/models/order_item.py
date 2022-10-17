@@ -8,9 +8,9 @@ class OrderItem(DefaultModel, Base):
     __tablename__ = "order_items"
 
     quantity = Column(Integer, nullable=False)
-    order_id = Column(ForeignKey("orders.id"), nullable=False)
+    order_id = Column(ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
     product_size_quantity_id = Column(
-        ForeignKey("product_size_quantities.id"), nullable=False
+        ForeignKey("product_size_quantities.id", ondelete="CASCADE"), nullable=False
     )
 
     @classmethod

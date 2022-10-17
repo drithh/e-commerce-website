@@ -53,7 +53,7 @@ async def put_user_shipping_address(
     )
     await session.commit()
     logger.info(f"User {current_user.User.email} updated shipping address")
-    return DefaultResponse(detail="Shipping address updated")
+    return DefaultResponse(message="Shipping address updated")
 
 
 @router.get("/balance", response_model=GetUserBalance, status_code=status.HTTP_200_OK)
@@ -78,7 +78,7 @@ async def put_user_balance(
     await session.commit()
     logger.info(f"User {current_user.User.email} updated balance")
     return DefaultResponse(
-        detail=f"Your balance has been updated, current_balance:{new_balance}"
+        message=f"Your balance has been updated, current_balance:{new_balance}"
     )
 
 

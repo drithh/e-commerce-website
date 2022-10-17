@@ -10,4 +10,4 @@ class ForgotPassword(DefaultModel, Base):
 
     token = Column(String(length=128), nullable=False)
     expired_at = Column(DateTime(timezone=True), nullable=False)
-    user_id = Column(ForeignKey("users.id"), nullable=False)
+    user_id = Column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

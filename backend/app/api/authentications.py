@@ -146,13 +146,13 @@ async def forgot_password(
     await session.commit()
     await send_forgot_password_email(email, reset_token)
     return DefaultResponse(
-        detail="Reset password link sent to your email",
+        message="Reset password link sent to your email",
     )
 
 
 @router.put(
     "/reset-password/{token}",
-    status_code=status.HTTP_200_OK,
+    status_code=status.HTTP_201_CREATED,
     response_model=DefaultResponse,
 )
 async def reset_password(
@@ -192,10 +192,14 @@ async def reset_password(
     user.User.password = hashed_password
     user.User.salt = salt
     await session.commit()
-    return DefaultResponse(detail="Password reset success")
+    return DefaultResponse(message="Password reset success")
 
 
-@router.put("/change-password", status_code=status.HTTP_200_OK)
+@router.put(
+    "/change-password",
+    status_code=status.HTTP_201_CREATED,
+    response_model=DefaultResponse,
+)
 async def change_password(
     request: ChangePassword,
     session: AsyncSession = Depends(get_async_session),
@@ -213,4 +217,4 @@ async def change_password(
     current_user.User.password = hashed_password
     current_user.User.salt = salt
     await session.commit()
-    return DefaultResponse(detail="Password changed success")
+    return DefaultResponse(message="Password changed success")

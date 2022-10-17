@@ -12,7 +12,9 @@ class Product(DefaultModel, Base):
     product_detail = Column(String(length=256), nullable=False)
     price = Column(Integer, nullable=False)
     condition = Column(String(length=64), nullable=False)
-    category_id = Column(ForeignKey("categories.id"), nullable=False)
+    category_id = Column(
+        ForeignKey("categories.id", ondelete="CASCADE"), nullable=False
+    )
 
     @classmethod
     def seed(cls, fake, category_id):
