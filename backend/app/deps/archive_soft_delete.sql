@@ -22,7 +22,7 @@ BEGIN
             OLD.deleted_at := now();
         END IF;
         EXECUTE format('INSERT INTO %I.%I SELECT $1.*'
-                    , TG_TABLE_SCHEMA, '_archive_' || TG_TABLE_NAME)
+                    , TG_TABLE_SCHEMA, 'z_archive_' || TG_TABLE_NAME)
         USING OLD;
     END IF;
     RETURN NULL;

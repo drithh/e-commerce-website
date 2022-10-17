@@ -1,6 +1,6 @@
 include .env
 
-APP=docker-compose exec backend
+APP=docker-compose run backend
 MIGRATE=docker-compose run --rm backend poetry run alembic
 
 seed:
