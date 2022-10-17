@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
 from sqlalchemy import delete, update
 from sqlalchemy.exc import DatabaseError
@@ -23,21 +23,25 @@ from app.schemas.user import (
 router = APIRouter()
 
 
-@router.get("", response_model=UserGetAddress, status_code=200)
+@router.get("", response_model=UserGetAddress, status_code=status.HTTP_200_OK)
 async def get_user(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user.User
 
 
-@router.get("/shipping_address", response_model=UserGetAddress, status_code=200)
+@router.get(
+    "/shipping_address", response_model=UserGetAddress, status_code=status.HTTP_200_OK
+)
 async def get_user_shipping_address(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user.User
 
 
-@router.put("/shipping_address", response_model=UserPutAddress, status_code=200)
+@router.put(
+    "/shipping_address", response_model=UserPutAddress, status_code=status.HTTP_200_OK
+)
 async def put_user_shipping_address(
     request: UserGetAddress,
     session: AsyncSession = Depends(get_async_session),
@@ -58,14 +62,16 @@ async def put_user_shipping_address(
     return UserPutAddress(message="Shipping address updated")
 
 
-@router.get("/balance", response_model=UserGetBalance, status_code=200)
+@router.get("/balance", response_model=UserGetBalance, status_code=status.HTTP_200_OK)
 async def get_user_balance(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user.User
 
 
-@router.put("/balance", response_model=UserPutBalance, status_code=201)
+@router.put(
+    "/balance", response_model=UserPutBalance, status_code=status.HTTP_201_CREATED
+)
 async def put_user_balance(
     request: UserPutBalanceRequest,
     session: AsyncSession = Depends(get_async_session),
@@ -82,7 +88,7 @@ async def put_user_balance(
     )
 
 
-@router.delete("", status_code=204)
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
     request: UserDelete,
     session: AsyncSession = Depends(get_async_session),
@@ -99,6 +105,8 @@ async def delete_user(
             .replace("\\", "")
         )
         logger.error(error)
-        raise HTTPException(status_code=500, detail=f"{error}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"{error}"
+        )
     logger.info(f"User {request.id} deleted by {current_user.User.email}")
     await session.commit()

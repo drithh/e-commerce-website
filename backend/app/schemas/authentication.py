@@ -55,3 +55,13 @@ class UserRead(BaseModel):
 
 class PostForgotPassword(BaseModel):
     detail: str
+
+
+class ResetPassword(BaseModel):
+    token: str
+    password: str
+
+
+class ChangePassword(BaseModel):
+    old_password: str
+    new_password: str

@@ -1,5 +1,6 @@
 from typing import Any
 
+from fastapi import status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 from sqlalchemy import select
@@ -13,7 +14,7 @@ from app.schemas.image import ImageBase
 router = APIRouter()
 
 
-@router.get("/{image_name}", response_model=ImageBase, status_code=200)
+@router.get("/{image_name}", response_model=ImageBase, status_code=status.HTTP_200_OK)
 async def get_image(
     image_name: str,
     session: AsyncSession = Depends(get_async_session),

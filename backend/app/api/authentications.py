@@ -1,6 +1,7 @@
 import uuid
 from datetime import datetime, timedelta
 
+import pytz
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -15,7 +16,12 @@ from app.deps.db import get_async_session
 from app.deps.email import send_forgot_password_email
 from app.models.forgot_password import ForgotPassword
 from app.models.user import User
-from app.schemas.authentication import PostForgotPassword, TokenData
+from app.schemas.authentication import (
+    ChangePassword,
+    PostForgotPassword,
+    ResetPassword,
+    TokenData,
+)
 from app.schemas.authentication import User as UserSchema
 from app.schemas.authentication import UserCreate, UserRead
 
@@ -65,7 +71,8 @@ async def sign_up(
     request: UserCreate,
     session: AsyncSession = Depends(get_async_session),
 ):
-    form_validation(request)
+    email_validation(request.email)
+    password_validation(request.password)
     user = (
         await session.execute(select(User).filter(User.email == request.email))
     ).first()
@@ -142,22 +149,47 @@ async def forgot_password(
     )
 
 
-def create_access_token(data: dict):
-    to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
-    return encoded_jwt
-
-
-async def get_current_active_admin(
+@router.put("/reset-password/{token}", status_code=status.HTTP_200_OK)
+async def reset_password(
+    request: ResetPassword,
     session: AsyncSession = Depends(get_async_session),
-    token: str = Depends(oauth2_scheme),
 ):
-    user = await get_current_active_user(token=token, session=session)
-    if not user.User.is_admin:
-        raise HTTPException(status_code=401, detail="Unauthorized")
-    return user
+    password_validation(request.password)
+    forgot_password = (
+        await session.execute(
+            select(ForgotPassword).filter(ForgotPassword.token == request.token)
+        )
+    ).first()
+    if not forgot_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid token",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    if forgot_password.ForgotPassword.expired_at < datetime.now(tz=pytz.UTC):
+
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token expired",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    #  remove old token
+    await session.execute(
+        delete(ForgotPassword).filter(ForgotPassword.token == request.token)
+    )
+
+    # update password
+    user = (
+        await session.execute(
+            select(User).filter(User.id == forgot_password.ForgotPassword.user_id)
+        )
+    ).first()
+    hashed_password, salt = User.encrypt_password(request.password)
+    user.User.password = hashed_password
+    user.User.salt = salt
+    await session.commit()
+    return {"detail": "Password reset success"}
 
 
 async def get_current_active_user(
@@ -185,39 +217,82 @@ async def get_current_active_user(
     return user
 
 
-def form_validation(request):
-    if "@" not in request.email or "." not in request.email:
+@router.put("/change-password", status_code=status.HTTP_200_OK)
+async def change_password(
+    request: ChangePassword,
+    session: AsyncSession = Depends(get_async_session),
+    current_user: User = Depends(get_current_active_user),
+):
+    password_validation(request.new_password)
+
+    if not User.verify_password(request.old_password, current_user.User):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Incorrect password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    hashed_password, salt = User.encrypt_password(request.new_password)
+    current_user.User.password = hashed_password
+    current_user.User.salt = salt
+    await session.commit()
+    return {"detail": "Password changed success"}
+
+
+def create_access_token(data: dict):
+    to_encode = data.copy()
+    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm="HS256")
+    return encoded_jwt
+
+
+async def get_current_active_admin(
+    session: AsyncSession = Depends(get_async_session),
+    token: str = Depends(oauth2_scheme),
+):
+    user = await get_current_active_user(token=token, session=session)
+    if not user.User.is_admin:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized"
+        )
+    return user
+
+
+def email_validation(email: str):
+    if "@" not in email or "." not in email:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email is not valid",
         )
 
-    if len(request.password) < 8:
+
+def password_validation(password: str):
+    if len(password) < 8:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must be at least 8 characters",
         )
-    if request.password.isalpha():
+    if password.isalpha():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one number",
         )
-    if request.password.isnumeric():
+    if password.isnumeric():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one letter",
         )
-    if request.password.isalnum():
+    if password.isalnum():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one special character",
         )
-    if request.password.islower():
+    if password.islower():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one uppercase letter",
         )
-    if request.password.isupper():
+    if password.isupper():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one lowercase letter",

@@ -21,6 +21,7 @@ Faker = "^15.1.1"
 bcrypt = "^4.0.1"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 fastapi-mail = "^1.2.0"
+pytz = "^2022.4"
 
 [tool.poetry.dev-dependencies]
 black = "^22.10.0"
