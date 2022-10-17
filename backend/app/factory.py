@@ -7,7 +7,17 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 
-from app.api import api_router, authentications, images, users
+from app.api import (
+    authentications,
+    carts,
+    categories,
+    homes,
+    images,
+    orders,
+    products,
+    sales,
+    users,
+)
 from app.core.config import settings
 
 
@@ -50,7 +60,6 @@ def create_app():
 
 
 def setup_routers(app: FastAPI) -> None:
-    app.include_router(api_router, prefix=settings.API_PATH)
     app.include_router(
         authentications.router,
         prefix=f"{settings.API_PATH}",
@@ -66,6 +75,37 @@ def setup_routers(app: FastAPI) -> None:
         prefix=f"{settings.API_PATH}/image",
         tags=["Image"],
     )
+    app.include_router(
+        homes.router,
+        prefix=f"{settings.API_PATH}/home",
+        tags=["Home"],
+    )
+    app.include_router(
+        products.router,
+        prefix=f"{settings.API_PATH}/products",
+        tags=["Product"],
+    )
+    app.include_router(
+        categories.router,
+        prefix=f"{settings.API_PATH}/categories",
+        tags=["Category"],
+    )
+    app.include_router(
+        carts.router,
+        prefix=f"{settings.API_PATH}/cart",
+        tags=["Cart"],
+    )
+    app.include_router(
+        sales.router,
+        prefix=f"{settings.API_PATH}",
+        tags=["Sales"],
+    )
+    app.include_router(
+        orders.router,
+        prefix=f"{settings.API_PATH}/order",
+        tags=["Order"],
+    )
+
     # The following operation needs to be at the end of this function
     use_route_names_as_operation_ids(app)
 
