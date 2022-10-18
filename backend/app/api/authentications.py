@@ -165,7 +165,7 @@ def reset_password(
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if forgot_password.ForgotPassword.expired_at < datetime.now(tz=pytz.UTC):
+    if forgot_password.expired_at < datetime.now(tz=pytz.UTC):
 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
