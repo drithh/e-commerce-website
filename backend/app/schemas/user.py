@@ -8,7 +8,7 @@ class GetUser(BaseModel):
     name: str
     email: str
     phone_number: str
-    name_address: str
+    address_name: str
     address: str
     city: str
     balance: int

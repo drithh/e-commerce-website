@@ -22,14 +22,23 @@ router = APIRouter()
 
 
 @router.get("", response_model=GetUser, status_code=status.HTTP_200_OK)
-async def get_user(
+def get_user(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
-    return current_user.User
+    return current_user
+
+
+@router.get(
+    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
+)
+def get_user_shipping_address(
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    return current_user
 
 
 @router.get("/all", status_code=status.HTTP_200_OK)
-async def get_all_user(
+def get_all_user(
     session: Generator = Depends(get_db),
 ) -> Any:
     user = session.query(User).all()
@@ -37,31 +46,22 @@ async def get_all_user(
     return user
 
 
-@router.get(
-    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
-)
-async def get_user_shipping_address(
-    current_user: User = Depends(get_current_active_user),
-) -> Any:
-    return current_user.User
-
-
 @router.put(
     "/shipping_address", response_model=DefaultResponse, status_code=status.HTTP_200_OK
 )
-async def put_user_shipping_address(
+def put_user_shipping_address(
     request: GetUserAddress,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
-    current_user.User.address_name = request.address_name
-    current_user.User.address = request.address
-    current_user.User.city = request.city
-    current_user.User.phone_number = request.phone_number
+    current_user.address_name = request.address_name
+    current_user.address = request.address
+    current_user.city = request.city
+    current_user.phone_number = request.phone_number
 
     session.commit()
 
-    logger.info(f"User {current_user.User.email} updated shipping address")
+    logger.info(f"User {current_user.email} updated shipping address")
     return DefaultResponse(message="Shipping address updated")
 
 
@@ -69,19 +69,19 @@ async def put_user_shipping_address(
 async def get_user_balance(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
-    return current_user.User
+    return current_user
 
 
 @router.put(
     "/balance", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED
 )
-async def put_user_balance(
+def put_user_balance(
     request: PutUserBalance,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    new_balance = int(current_user.User.balance) + request.balance
-    current_user.User.balance = new_balance
+    new_balance = int(current_user.balance) + request.balance
+    current_user.balance = new_balance
     session.commit()
     logger.info(f"User {current_user.User.email} updated balance")
     return DefaultResponse(
@@ -90,7 +90,7 @@ async def put_user_balance(
 
 
 @router.delete("", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_user(
+def delete_user(
     request: DeleteUser,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),

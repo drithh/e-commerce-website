@@ -31,7 +31,7 @@ router = APIRouter()
 
 
 @router.post("/sign-in", response_model=UserRead, status_code=status.HTTP_200_OK)
-async def sign_in(
+def sign_in(
     request: OAuth2PasswordRequestForm = Depends(),
     session: Generator = Depends(get_db),
 ):
@@ -43,18 +43,18 @@ async def sign_in(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    if not User.verify_password(request.password, user.User):
+    if not User.verify_password(request.password, user):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    access_token = create_access_token(data={"sub": user.User.email})
+    access_token = create_access_token(data={"sub": user.email})
     user = GetUser(
-        name=user.User.name,
-        email=user.User.email,
-        phone_number=user.User.phone_number,
-        type="seller" if user.User.is_admin else "buyer",
+        name=user.name,
+        email=user.email,
+        phone_number=user.phone_number,
+        type="seller" if user.is_admin else "buyer",
     )
     return UserRead(
         user_information=user,
@@ -65,7 +65,7 @@ async def sign_in(
 
 
 @router.post("/sign-up", response_model=UserRead, status_code=status.HTTP_201_CREATED)
-async def sign_up(
+def sign_up(
     request: UserCreate,
     session: Generator = Depends(get_db),
 ):
@@ -127,13 +127,11 @@ async def forgot_password(
     reset_token = str(uuid.uuid4())
 
     # remove old token
-    session.query(ForgotPassword).filter(
-        ForgotPassword.user_id == user.User.id
-    ).delete()
+    session.query(ForgotPassword).filter(ForgotPassword.user_id == user.id).delete()
 
     # send_forgot_password_email
     forgot_password = ForgotPassword(
-        user_id=user.User.id,
+        user_id=user.id,
         token=reset_token,
         expired_at=datetime.now() + timedelta(hours=1),
     )
@@ -150,7 +148,7 @@ async def forgot_password(
     status_code=status.HTTP_201_CREATED,
     response_model=DefaultResponse,
 )
-async def reset_password(
+def reset_password(
     request: ResetPassword,
     session: Generator = Depends(get_db),
 ):
@@ -176,17 +174,13 @@ async def reset_password(
         )
 
     session.query(ForgotPassword).filter(
-        ForgotPassword.id == forgot_password.ForgotPassword.id
+        ForgotPassword.id == forgot_password.id
     ).delete()
 
-    user = (
-        session.query(User)
-        .filter(User.id == forgot_password.ForgotPassword.user_id)
-        .first()
-    )
+    user = session.query(User).filter(User.id == forgot_password.user_id).first()
     hashed_password, salt = User.encrypt_password(request.password)
-    user.User.password = hashed_password
-    user.User.salt = salt
+    user.password = hashed_password
+    user.salt = salt
     session.commit()
     return DefaultResponse(message="Password reset success")
 
@@ -196,21 +190,21 @@ async def reset_password(
     status_code=status.HTTP_201_CREATED,
     response_model=DefaultResponse,
 )
-async def change_password(
+def change_password(
     request: ChangePassword,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
     password_validation(request.new_password)
 
-    if not User.verify_password(request.old_password, current_user.User):
+    if not User.verify_password(request.old_password, current_user):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Incorrect password",
             headers={"WWW-Authenticate": "Bearer"},
         )
     hashed_password, salt = User.encrypt_password(request.new_password)
-    current_user.User.password = hashed_password
-    current_user.User.salt = salt
+    current_user.password = hashed_password
+    current_user.salt = salt
     session.commit()
     return DefaultResponse(message="Password changed success")
