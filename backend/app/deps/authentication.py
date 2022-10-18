@@ -50,7 +50,7 @@ async def get_current_active_admin(
     token: str = Depends(oauth2_scheme),
 ):
     user = await get_current_active_user(token=token, session=session)
-    if not user.User.is_admin:
+    if not user.is_admin:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Unauthorized"
         )
