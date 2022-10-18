@@ -20,11 +20,11 @@ depends_on = None
 def upgrade():
     # drop all tables in database
 
-    sql_file = open("app/sql/soft_delete.sql", "r")
+    sql_file = open("app/sql/update_at.sql", "r")
     sql = sql_file.read()
     op.execute(sql)
 
-    sql_file = open("app/sql/update_at.sql", "r")
+    sql_file = open("app/sql/soft_delete.sql", "r")
     sql = sql_file.read()
     op.execute(sql)
     # commit

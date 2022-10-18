@@ -1,13 +1,12 @@
 from datetime import datetime, timedelta
+from typing import Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from app.core.config import settings
-from app.deps.db import get_async_session
+from app.deps.db import get_db
 from app.models.user import User
 from app.schemas.authentication import TokenData
 
@@ -16,7 +15,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl=f"{settings.API_PATH}/sign-in")
 
 async def get_current_active_user(
     token: str = Depends(oauth2_scheme),
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -31,9 +30,8 @@ async def get_current_active_user(
         token_data = TokenData(email=email)
     except JWTError:
         raise credentials_exception
-    user = (
-        await session.execute(select(User).filter(User.email == token_data.email))
-    ).first()
+    user = session.query(User).filter(User.email == token_data.email).first()
+
     if user is None:
         raise credentials_exception
     return user
@@ -48,7 +46,7 @@ def create_access_token(data: dict):
 
 
 async def get_current_active_admin(
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
     token: str = Depends(oauth2_scheme),
 ):
     user = await get_current_active_user(token=token, session=session)

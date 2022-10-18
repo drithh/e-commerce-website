@@ -20,6 +20,7 @@ from app.api import (
 )
 from app.core.config import settings
 from app.core.logger import logger
+from app.db import SessionLocal, async_session_maker
 
 
 def create_app():
@@ -155,7 +156,22 @@ def use_route_names_as_operation_ids(app: FastAPI) -> None:
 
 
 def init_db_hooks(app: FastAPI) -> None:
+    from sqlalchemy import event
+    from sqlalchemy.orm.query import Query
+
     from app.db import database
+
+    @event.listens_for(
+        Query, "before_compile", retval=True, bake_ok=True, propagate=True
+    )
+    def no_deleted(query):
+        # disable limit
+        query._enable_assertions = False
+        for desc in query.column_descriptions:
+            entity = desc["entity"]
+            if entity:
+                query = query.filter(entity.deleted_at.is_(None))
+        return query
 
     @app.on_event("startup")
     async def startup():

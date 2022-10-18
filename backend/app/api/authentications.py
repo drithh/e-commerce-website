@@ -1,12 +1,11 @@
 import uuid
 from datetime import datetime, timedelta
+from typing import Generator
 
 import pytz
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
-from sqlalchemy import delete, select
-from sqlalchemy.ext.asyncio.session import AsyncSession
 
 from app.core.logger import logger
 from app.deps.authentication import (
@@ -15,7 +14,7 @@ from app.deps.authentication import (
     get_current_active_user,
     password_validation,
 )
-from app.deps.db import get_async_session
+from app.deps.db import get_db
 from app.deps.email import send_forgot_password_email
 from app.models.forgot_password import ForgotPassword
 from app.models.user import User
@@ -34,11 +33,9 @@ router = APIRouter()
 @router.post("/sign-in", response_model=UserRead, status_code=status.HTTP_200_OK)
 async def sign_in(
     request: OAuth2PasswordRequestForm = Depends(),
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
 ):
-    user = (
-        await session.execute(select(User).filter(User.email == request.username))
-    ).first()
+    user = session.query(User).filter(User.email == request.username).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -70,13 +67,11 @@ async def sign_in(
 @router.post("/sign-up", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def sign_up(
     request: UserCreate,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
 ):
     email_validation(request.email)
     password_validation(request.password)
-    user = (
-        await session.execute(select(User).filter(User.email == request.email))
-    ).first()
+    user = session.query(User).filter(User.email == request.email).first()
     if user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -94,7 +89,7 @@ async def sign_up(
         password=hashed_password,
     )
     session.add(new_user)
-    await session.commit()
+    session.commit()
 
     access_token = create_access_token(data={"sub": request.email})
 
@@ -120,9 +115,9 @@ async def sign_up(
 )
 async def forgot_password(
     email: str,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
 ):
-    user = (await session.execute(select(User).filter(User.email == email))).first()
+    user = session.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -132,18 +127,18 @@ async def forgot_password(
     reset_token = str(uuid.uuid4())
 
     # remove old token
-    await session.execute(
-        delete(ForgotPassword).filter(ForgotPassword.user_id == user.User.id)
-    )
-    send_forgot_password_email
+    session.query(ForgotPassword).filter(
+        ForgotPassword.user_id == user.User.id
+    ).delete()
 
+    # send_forgot_password_email
     forgot_password = ForgotPassword(
         user_id=user.User.id,
         token=reset_token,
         expired_at=datetime.now() + timedelta(hours=1),
     )
     session.add(forgot_password)
-    await session.commit()
+    session.commit()
     await send_forgot_password_email(email, reset_token)
     return DefaultResponse(
         message="Reset password link sent to your email",
@@ -157,14 +152,15 @@ async def forgot_password(
 )
 async def reset_password(
     request: ResetPassword,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
 ):
     password_validation(request.password)
     forgot_password = (
-        await session.execute(
-            select(ForgotPassword).filter(ForgotPassword.token == request.token)
-        )
-    ).first()
+        session.query(ForgotPassword)
+        .filter(ForgotPassword.token == request.token)
+        .first()
+    )
+
     if not forgot_password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -179,19 +175,19 @@ async def reset_password(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    await session.execute(
-        delete(ForgotPassword).filter(ForgotPassword.token == request.token)
-    )
+    session.query(ForgotPassword).filter(
+        ForgotPassword.id == forgot_password.ForgotPassword.id
+    ).delete()
 
     user = (
-        await session.execute(
-            select(User).filter(User.id == forgot_password.ForgotPassword.user_id)
-        )
-    ).first()
+        session.query(User)
+        .filter(User.id == forgot_password.ForgotPassword.user_id)
+        .first()
+    )
     hashed_password, salt = User.encrypt_password(request.password)
     user.User.password = hashed_password
     user.User.salt = salt
-    await session.commit()
+    session.commit()
     return DefaultResponse(message="Password reset success")
 
 
@@ -202,7 +198,7 @@ async def reset_password(
 )
 async def change_password(
     request: ChangePassword,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
     password_validation(request.new_password)
@@ -216,5 +212,5 @@ async def change_password(
     hashed_password, salt = User.encrypt_password(request.new_password)
     current_user.User.password = hashed_password
     current_user.User.salt = salt
-    await session.commit()
+    session.commit()
     return DefaultResponse(message="Password changed success")

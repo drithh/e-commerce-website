@@ -1,15 +1,13 @@
-from typing import Any
+from typing import Any, Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
-from sqlalchemy import delete, select, update
 from sqlalchemy.exc import DatabaseError
-from sqlalchemy.ext.asyncio.session import AsyncSession
 from starlette.responses import Response
 
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
-from app.deps.db import get_async_session
+from app.deps.db import get_db
 from app.models.user import User
 from app.schemas.request_params import DefaultResponse
 from app.schemas.user import (
@@ -32,9 +30,10 @@ async def get_user(
 
 @router.get("/all", status_code=status.HTTP_200_OK)
 async def get_all_user(
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
 ) -> Any:
-    user = (await session.execute(select(User))).all()
+    user = session.query(User).all()
+
     return user
 
 
@@ -52,20 +51,16 @@ async def get_user_shipping_address(
 )
 async def put_user_shipping_address(
     request: GetUserAddress,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
-    await session.execute(
-        update(User)
-        .where(User.id == current_user.User.id)
-        .values(
-            address_name=request.address_name,
-            address=request.address,
-            city=request.city,
-            phone_number=request.phone_number,
-        )
-    )
-    await session.commit()
+    current_user.User.address_name = request.address_name
+    current_user.User.address = request.address
+    current_user.User.city = request.city
+    current_user.User.phone_number = request.phone_number
+
+    session.commit()
+
     logger.info(f"User {current_user.User.email} updated shipping address")
     return DefaultResponse(message="Shipping address updated")
 
@@ -82,14 +77,12 @@ async def get_user_balance(
 )
 async def put_user_balance(
     request: PutUserBalance,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
     new_balance = int(current_user.User.balance) + request.balance
-    await session.execute(
-        update(User).where(User.id == current_user.User.id).values(balance=new_balance)
-    )
-    await session.commit()
+    current_user.User.balance = new_balance
+    session.commit()
     logger.info(f"User {current_user.User.email} updated balance")
     return DefaultResponse(
         message=f"Your balance has been updated, current_balance:{new_balance}"
@@ -99,11 +92,12 @@ async def put_user_balance(
 @router.delete("", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(
     request: DeleteUser,
-    session: AsyncSession = Depends(get_async_session),
+    session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> Response:
     try:
-        await session.execute(delete(User).where(User.id == request.id))
+        session.query(User).filter(User.id == request.id).delete()
+        session.commit()
     except DatabaseError as e:
         error = (
             e.orig.args[0]
@@ -117,4 +111,3 @@ async def delete_user(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"{error}"
         )
     logger.info(f"User {request.id} deleted by {current_user.User.email}")
-    await session.commit()
