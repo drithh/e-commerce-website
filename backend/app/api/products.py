@@ -84,7 +84,9 @@ def update_product(
     return DefaultResponse(message="Product updated")
 
 
-@router.delete("/{product_id}", status_code=status.HTTP_200_OK)
+@router.delete(
+    "/{product_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
 def delete_product(
     product_id: UUID,
     session: Generator = Depends(get_db),
@@ -98,7 +100,7 @@ def delete_product(
     return DefaultResponse(message="Product deleted")
 
 
-@router.get("", status_code=status.HTTP_200_OK)
+@router.get("", response_model=Any, status_code=status.HTTP_200_OK)
 def get_products(
     session: Generator = Depends(get_db),
     category: List[UUID] = Query(),
