@@ -16,7 +16,7 @@ from typing import Any, Generator
 router = APIRouter()
 
 @router.get("/banner", response_model=GetBanners, status_code=status.HTTP_200_OK)
-async def get_banner(
+def get_banner(
     session: Generator = Depends(get_db),
 ) -> Any:
     return (
@@ -28,7 +28,7 @@ async def get_banner(
     )
 
 @router.get("/category", response_model=GetCategories, status_code=status.HTTP_200_OK)
-async def get_category(
+def get_category(
     session: Generator = Depends(get_db),
 ) -> Any:
     return (
