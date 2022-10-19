@@ -288,24 +288,23 @@ test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==22.8.0)", "databases[sqlite] (
 
 [[package]]
 name = "fastapi-users"
-version = "10.1.5"
+version = "10.2.0"
 description = "Ready-to-use and customizable users management for FastAPI"
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-email-validator = ">=1.1.0,<1.3"
+email-validator = ">=1.1.0,<1.4"
 fastapi = ">=0.65.2"
 fastapi-users-db-sqlalchemy = {version = ">=4.0.0", optional = true, markers = "extra == \"sqlalchemy\""}
 makefun = ">=1.11.2,<2.0.0"
 passlib = {version = "1.7.4", extras = ["bcrypt"]}
-pyjwt = {version = "2.4.0", extras = ["crypto"]}
+pyjwt = {version = "2.5.0", extras = ["crypto"]}
 python-multipart = "0.0.5"
 
 [package.extras]
 beanie = ["fastapi-users-db-beanie (>=1.0.0)"]
-dev = ["asgi_lifespan", "black", "bumpversion", "codecov", "flake8", "flake8-docstrings", "flit", "httpx", "httpx-oauth", "isort", "markdown-include", "mike", "mkdocs", "mkdocs-material", "mkdocs-mermaid2-plugin", "mypy", "pygments", "pymdown-extensions", "pytest", "pytest-asyncio", "pytest-cov", "pytest-mock", "requests", "types-redis", "uvicorn"]
 oauth = ["httpx-oauth (>=0.4,<0.8)"]
 redis = ["redis (>=4.3.3,<5.0.0)"]
 sqlalchemy = ["fastapi-users-db-sqlalchemy (>=4.0.0)"]
@@ -647,20 +646,21 @@ python-versions = ">=3.6"
 plugins = ["importlib-metadata"]
 
 [[package]]
-name = "PyJWT"
-version = "2.4.0"
+name = "pyjwt"
+version = "2.5.0"
 description = "JSON Web Token implementation in Python"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 cryptography = {version = ">=3.3.1", optional = true, markers = "extra == \"crypto\""}
+types-cryptography = {version = ">=3.3.21", optional = true, markers = "extra == \"crypto\""}
 
 [package.extras]
-crypto = ["cryptography (>=3.3.1)"]
-dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.3.1)", "mypy", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx", "sphinx-rtd-theme", "zope.interface"]
-docs = ["sphinx", "sphinx-rtd-theme", "zope.interface"]
+crypto = ["cryptography (>=3.3.1)", "types-cryptography (>=3.3.21)"]
+dev = ["coverage[toml] (==5.0.4)", "cryptography (>=3.3.1)", "pre-commit", "pytest (>=6.0.0,<7.0.0)", "sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "types-cryptography (>=3.3.21)", "zope.interface"]
+docs = ["sphinx (>=4.5.0,<5.0.0)", "sphinx-rtd-theme", "zope.interface"]
 tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 
 [[package]]
@@ -846,6 +846,14 @@ python-versions = ">=3.7"
 test = ["pre-commit", "pytest"]
 
 [[package]]
+name = "types-cryptography"
+version = "3.3.23.1"
+description = "Typing stubs for cryptography"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.4.0"
 description = "Backported and Experimental Type Hints for Python 3.7+"
@@ -892,7 +900,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "4eacfa1469531713c2c2dfc2288a821b11d2a850c99ed8dc821b3ccede0285ce"
+content-hash = "9e3c0c423332dcf382307b2bd07d7ac5c8566382dfe410ac96a3f00df408b77f"
 
 [metadata.files]
 alembic = [
@@ -1132,8 +1140,8 @@ fastapi = [
     {file = "fastapi-0.85.1.tar.gz", hash = "sha256:1facd097189682a4ff11cbd01334a992e51b56be663b2bd50c2c09523624f144"},
 ]
 fastapi-users = [
-    {file = "fastapi-users-10.1.5.tar.gz", hash = "sha256:47cb99eef18eea654170674f5a86c4bed898a6ee666b45007f9805e687ff32f5"},
-    {file = "fastapi_users-10.1.5-py3-none-any.whl", hash = "sha256:dded5947d271b80e67b2093f25c591a71eff62975e622ef9871b6283174a87b5"},
+    {file = "fastapi_users-10.2.0-py3-none-any.whl", hash = "sha256:e6ea0627f9d4cd9f707b830bdf805ae4c67a44beccbaf9d4cb0222c0d7213ab6"},
+    {file = "fastapi_users-10.2.0.tar.gz", hash = "sha256:481f72cc1e755e355c7dc44709a3961d831d068cac95e7f5d9e3b23386d9a4b7"},
 ]
 fastapi-users-db-sqlalchemy = [
     {file = "fastapi-users-db-sqlalchemy-4.0.3.tar.gz", hash = "sha256:7d223742e687cf386bea4e990d6ca8571185c50f365301a34e8eb14ebbda18b2"},
@@ -1444,9 +1452,9 @@ Pygments = [
     {file = "Pygments-2.13.0-py3-none-any.whl", hash = "sha256:f643f331ab57ba3c9d89212ee4a2dabc6e94f117cf4eefde99a0574720d14c42"},
     {file = "Pygments-2.13.0.tar.gz", hash = "sha256:56a8508ae95f98e2b9bdf93a6be5ae3f7d8af858b43e02c5a2ff083726be40c1"},
 ]
-PyJWT = [
-    {file = "PyJWT-2.4.0-py3-none-any.whl", hash = "sha256:72d1d253f32dbd4f5c88eaf1fdc62f3a19f676ccbadb9dbc5d07e951b2b26daf"},
-    {file = "PyJWT-2.4.0.tar.gz", hash = "sha256:d42908208c699b3b973cbeb01a969ba6a96c821eefb1c5bfe4c390c01d67abba"},
+pyjwt = [
+    {file = "PyJWT-2.5.0-py3-none-any.whl", hash = "sha256:8d82e7087868e94dd8d7d418e5088ce64f7daab4b36db654cbaedb46f9d1ca80"},
+    {file = "PyJWT-2.5.0.tar.gz", hash = "sha256:e77ab89480905d86998442ac5788f35333fa85f65047a534adc38edf3c88fc3b"},
 ]
 pyparsing = [
     {file = "pyparsing-3.0.9-py3-none-any.whl", hash = "sha256:5026bae9a10eeaefb61dab2f09052b9f4307d44aee4eda64b309723d8d206bbc"},
@@ -1537,6 +1545,10 @@ tomli = [
 traitlets = [
     {file = "traitlets-5.4.0-py3-none-any.whl", hash = "sha256:93663cc8236093d48150e2af5e2ed30fc7904a11a6195e21bab0408af4e6d6c8"},
     {file = "traitlets-5.4.0.tar.gz", hash = "sha256:3f2c4e435e271592fe4390f1746ea56836e3a080f84e7833f0f801d9613fec39"},
+]
+types-cryptography = [
+    {file = "types-cryptography-3.3.23.1.tar.gz", hash = "sha256:f108e7a7161eedd9fe391e1a8ae5a98d40c1da2f0418bc0812a9119990272314"},
+    {file = "types_cryptography-3.3.23.1-py3-none-any.whl", hash = "sha256:b9f8aa93d9e4d7ff920961cdce3dc7cca479946890924d68356b66f15f4f35e3"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.4.0-py3-none-any.whl", hash = "sha256:16fa4864408f655d35ec496218b85f79b3437c829e93320c7c9215ccfd92489e"},
