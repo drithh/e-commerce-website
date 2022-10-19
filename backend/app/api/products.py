@@ -1,4 +1,4 @@
-from typing import Any, Generator
+from typing import Any, Generator, List, Union
 from uuid import UUID
 
 from fastapi import Query, status
@@ -93,15 +93,60 @@ def delete_product(
 
     product = session.query(Product).filter(Product.id == product_id).first()
     session.delete(product)
-
-    product_image = (
-        session.query(ProductImage).filter(ProductImage.product_id == product_id).all()
-    )
-    for item in product_image:
-        deleted_image = session.query(Image).filter(Image.id == item.image_id).first()
-        session.delete(deleted_image)
-        session.delete(item)
-
     session.commit()
 
     return DefaultResponse(message="Product deleted")
+
+
+@router.get("", status_code=status.HTTP_200_OK)
+def get_products(
+    session: Generator = Depends(get_db),
+    category: List[UUID] = Query(),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(100, ge=1),
+    sort_by: str = Query("asc", regex="^(asc|desc)$"),
+    price: List[int] = Query([1, 1000000], ge=0),
+    condition: str = Query("new", regex="^(new|used)$"),
+    product_name: Union[str, None] = Query(None),
+) -> Any:
+
+    if sort_by == "asc":
+        sort = Product.price.asc()
+    else:
+        sort = Product.price.desc()
+
+    if product_name:
+        products = (
+            session.query(Product)
+            .filter(
+                Product.title == product_name,
+                Product.category_id.in_(category),
+                Product.price.in_(range(price[0], price[1])),
+                Product.condition == condition,
+            )
+            .order_by(sort)
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all()
+        )
+
+    else:
+        products = (
+            session.query(Product)
+            .filter(
+                Product.category_id.in_(category),
+                Product.price.in_(range(price[0], price[1])),
+                Product.condition == condition,
+            )
+            .order_by(sort)
+            .offset((page - 1) * page_size)
+            .limit(page_size)
+            .all()
+        )
+
+    total_rows = len(products)
+
+    return {
+        "data": products,
+        "total_rows": total_rows,
+    }
