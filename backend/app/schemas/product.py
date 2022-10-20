@@ -59,6 +59,7 @@ class GetProduct(BaseModel):
     price: int
     category_id: UUID
     condition: str
+    size: list
 
     class Config:
         orm_mode = True

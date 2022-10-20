@@ -11,6 +11,8 @@ from app.deps.db import get_db
 from app.models.image import Image
 from app.models.product import Product
 from app.models.product_image import ProductImage
+from app.models.product_size_quantity import ProductSizeQuantity
+from app.models.size import Size
 from app.models.user import User
 from app.schemas.product import CreateProduct, GetProduct, UpdateProduct
 from app.schemas.request_params import DefaultResponse
@@ -167,8 +169,14 @@ def get_product(
         .all()
     )
     product = session.query(Product).filter(Product.id == id).first()
+    product_size = (
+        session.query(Size.size)
+        .join(ProductSizeQuantity)
+        .filter(ProductSizeQuantity.product_id == id)
+        .all()
+    )
 
-    images_url = [image.image_url for image in product_image]
-    product.images_url = images_url
+    product.images_url = [image.image_url for image in product_image]
+    product.size = [size.size for size in product_size]
 
     return product
