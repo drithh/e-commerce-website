@@ -1,5 +1,4 @@
 from typing import Generator
-from uuid import UUID
 
 from fastapi import Query, status
 from fastapi.params import Depends
@@ -11,7 +10,7 @@ from app.deps.db import get_db
 from app.models.category import Category
 from app.models.image import Image
 from app.models.user import User
-from app.schemas.category import GetCategory, SetImage
+from app.schemas.category import DeleteCategory, GetCategory, SetImage, UpdateCategory
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -52,12 +51,26 @@ def create_category(
 def update_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-    category_id: UUID = Query(...),
+    category_id: UpdateCategory = Depends(UpdateCategory),
     category_name: str = Query(..., min_length=2, max_length=100),
 ):
-    session.query(Category).filter(Category.id == category_id).update(
+    session.query(Category).filter(Category.id == category_id.id).update(
         {"title": category_name}
     )
     session.commit()
 
     return DefaultResponse(message="Category updated")
+
+
+@router.delete(
+    "{category_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def delete_category(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+    category_id: DeleteCategory = Depends(DeleteCategory),
+):
+    session.query(Category).filter(Category.id == category_id.id).delete()
+    session.commit()
+
+    return DefaultResponse(message="Category deleted")

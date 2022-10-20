@@ -25,3 +25,17 @@ class SetImage(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class UpdateCategory(BaseModel):
+    id: UUID
+
+    class Config:
+        orm_mode = True
+
+
+class DeleteCategory(BaseModel):
+    id: UUID
+
+    class Config:
+        orm_mode = True
