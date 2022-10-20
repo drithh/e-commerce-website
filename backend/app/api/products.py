@@ -106,13 +106,13 @@ def get_products(
     category: List[UUID] = Query(),
     page: int = Query(1, ge=1),
     page_size: int = Query(100, ge=1),
-    sort_by: str = Query("asc", regex="^(asc|desc)$"),
+    sort_by: str = Query("a_z", regex="^(a_z|z_a)$"),
     price: List[int] = Query([1, 1000000], ge=0),
     condition: str = Query("new", regex="^(new|used)$"),
     product_name: Union[str, None] = Query(None),
 ) -> Any:
 
-    if sort_by == "asc":
+    if sort_by == "a_z":
         sort = Product.price.asc()
     else:
         sort = Product.price.desc()
