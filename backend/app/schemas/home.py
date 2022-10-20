@@ -11,11 +11,13 @@ class Banner(BaseModel):
     class Config:
         orm_mode = True
 
+
 class GetBanners(BaseModel):
     data: list[Banner]
 
     class Config:
         orm_mode = True
+
 
 class Category(BaseModel):
     id: UUID
@@ -24,7 +26,8 @@ class Category(BaseModel):
 
     class Config:
         orm_mode = True
-    
+
+
 class GetCategories(BaseModel):
     data: list[Category]
 
