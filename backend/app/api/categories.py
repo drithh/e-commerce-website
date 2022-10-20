@@ -1,4 +1,5 @@
 from typing import Generator
+from uuid import UUID
 
 from fastapi import Query, status
 from fastapi.params import Depends
@@ -43,3 +44,20 @@ def create_category(
     session.commit()
 
     return DefaultResponse(message="Category added")
+
+
+@router.put(
+    "{category_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def update_category(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+    category_id: UUID = Query(...),
+    category_name: str = Query(..., min_length=2, max_length=100),
+):
+    session.query(Category).filter(Category.id == category_id).update(
+        {"title": category_name}
+    )
+    session.commit()
+
+    return DefaultResponse(message="Category updated")
