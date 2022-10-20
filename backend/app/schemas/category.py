@@ -17,3 +17,11 @@ class GetCategory(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class SetImage(BaseModel):
+    name: str
+    image_url: str
+
+    class Config:
+        orm_mode = True
