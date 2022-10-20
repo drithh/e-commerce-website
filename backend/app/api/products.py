@@ -12,7 +12,7 @@ from app.models.image import Image
 from app.models.product import Product
 from app.models.product_image import ProductImage
 from app.models.user import User
-from app.schemas.product import CreateProduct, UpdateProduct
+from app.schemas.product import CreateProduct, GetProduct, UpdateProduct
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -152,3 +152,23 @@ def get_products(
         "data": products,
         "total_rows": total_rows,
     }
+
+
+@router.get("/{id}", response_model=GetProduct, status_code=status.HTTP_200_OK)
+def get_product(
+    id: UUID,
+    session: Generator = Depends(get_db),
+) -> Any:
+
+    product_image = (
+        session.query(Image)
+        .join(ProductImage)
+        .filter(ProductImage.product_id == id)
+        .all()
+    )
+    product = session.query(Product).filter(Product.id == id).first()
+
+    images_url = [image.image_url for image in product_image]
+    product.images_url = images_url
+
+    return product

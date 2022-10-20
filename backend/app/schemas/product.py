@@ -48,3 +48,17 @@ class UpdateProduct(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class GetProduct(BaseModel):
+    id: UUID
+    title: str
+    brand: str
+    product_detail: str
+    images_url: List[str]
+    price: int
+    category_id: UUID
+    condition: str
+
+    class Config:
+        orm_mode = True
