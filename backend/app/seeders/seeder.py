@@ -4,6 +4,7 @@ from app import db
 from app.seeders.banner_seeder import banner_seed
 from app.seeders.cart_seeder import cart_seed
 from app.seeders.category_seeder import category_seed
+from app.seeders.favorite_seeder import favorite_seed
 from app.seeders.image_seeder import image_seed
 from app.seeders.order_item_seeder import order_item_seed
 from app.seeders.order_seeder import order_seed
@@ -34,6 +35,7 @@ def seed():
         product_size_quantity_id = product_size_quantity_seed(
             fake, session, product_id, size_id
         )
+        favorite_seed(fake, session, user_id, product_id)
         order_id = order_seed(fake, session, user_id)
         session.commit()
 
