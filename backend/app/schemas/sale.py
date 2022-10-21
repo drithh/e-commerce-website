@@ -1,7 +1,9 @@
-from typing import Dict
-
 from pydantic import BaseModel
 
 
+class Sales(BaseModel):
+    total: int
+
+
 class GetSales(BaseModel):
-    data: Dict[str, int]
+    data: Sales

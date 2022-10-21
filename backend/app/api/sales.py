@@ -5,6 +5,7 @@ from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
+from app.deps.authentication import get_current_active_admin
 from app.deps.db import get_db
 from app.models.order import Order
 from app.models.order_item import OrderItem
@@ -15,11 +16,11 @@ from app.schemas.sale import GetSales
 router = APIRouter()
 
 
-@router.get("", response_model=GetSales, status_code=status.HTTP_200_OK)
+@router.get("", status_code=status.HTTP_200_OK)
 def get_sales(
     session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
 ):
-
     finished_order = (
         session.query(Order, OrderItem)
         .join(OrderItem)
