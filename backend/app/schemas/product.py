@@ -63,3 +63,24 @@ class GetProduct(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class Product(BaseModel):
+    id: UUID
+    title: str
+    brand: str
+    product_detail: str
+    price: int
+    category_id: UUID
+    condition: str
+
+    class Config:
+        orm_mode = True
+
+
+class GetProducts(BaseModel):
+    data: List[Product]
+    total_rows: int
+
+    class Config:
+        orm_mode = True

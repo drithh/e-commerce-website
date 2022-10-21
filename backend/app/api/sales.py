@@ -16,7 +16,7 @@ from app.schemas.sale import GetSales
 router = APIRouter()
 
 
-@router.get("", status_code=status.HTTP_200_OK)
+@router.get("", response_model=GetSales, status_code=status.HTTP_200_OK)
 def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),

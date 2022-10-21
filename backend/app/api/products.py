@@ -14,7 +14,7 @@ from app.models.product_image import ProductImage
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.size import Size
 from app.models.user import User
-from app.schemas.product import CreateProduct, GetProduct, UpdateProduct
+from app.schemas.product import CreateProduct, GetProduct, GetProducts, UpdateProduct
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -118,7 +118,6 @@ def get_products(
         sort = Product.price.asc()
     else:
         sort = Product.price.desc()
-
     if product_name:
         products = (
             session.query(Product)
@@ -135,25 +134,37 @@ def get_products(
         )
 
     else:
-        products = (
-            session.query(Product)
-            .filter(
-                Product.category_id.in_(category),
-                Product.price.in_(range(price[0], price[1])),
-                Product.condition == condition,
-            )
-            .order_by(sort)
-            .offset((page - 1) * page_size)
-            .limit(page_size)
-            .all()
-        )
-
+        products = session.execute(
+            """
+                SELECT * FROM only products WHERE category_id IN :category AND
+                price BETWEEN :price1 AND :price2 AND condition = :condition
+                ORDER BY price ASC OFFSET :offset LIMIT :limit
+            """,
+            {
+                "category": tuple(category),
+                "price1": price[0],
+                "price2": price[1],
+                "condition": condition,
+                "offset": (page - 1) * page_size,
+                "limit": page_size,
+            },
+        ).all()
+        # products = (
+        #     session.query(Product)
+        #     .filter(
+        #         Product.category_id.in_(category),
+        #         Product.price.in_(range(price[0], price[1])),
+        #         Product.condition == condition,
+        #     )
+        #     .order_by(sort)
+        #     .offset((page - 1) * page_size)
+        #     .limit(page_size)
+        #     .all()
+        # )
+    return products
     total_rows = len(products)
 
-    return {
-        "data": products,
-        "total_rows": total_rows,
-    }
+    return GetProducts(data=products, total_rows=total_rows)
 
 
 @router.get("/{id}", response_model=GetProduct, status_code=status.HTTP_200_OK)

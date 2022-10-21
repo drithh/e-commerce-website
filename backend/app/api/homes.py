@@ -27,7 +27,7 @@ def get_banner(
 
 
 @router.get("/category", response_model=GetCategories, status_code=status.HTTP_200_OK)
-def get_category(
+def get_category_with_image(
     session: Generator = Depends(get_db),
 ) -> Any:
     return {
