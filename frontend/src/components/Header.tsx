@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import WhistlistIcon from '../assets/icons/WhistlistIcon';
 import UserIcon from '../assets/icons/UserIcon';
 import SearchIcon from '../assets/icons/SearchIcon';
+import AuthForm from './auth/AuthForm';
 // import DownArrow from '../assets/icons/DownArrow';
 // import InstagramLogo from '../assets/icons/InstagramLogo';
 // import FacebookLogo from '../assets/icons/FacebookLogo';
@@ -35,7 +36,7 @@ const Header = () => {
       <nav
         className={`${
           scrolled ? 'bg-white  shadow-md z-50' : 'bg-transparent'
-        } w-full z-50 h-20  flex  fixed top-0 place-items-center transition-all place-content-center`}
+        } w-full z-50 h-20  flex  fixed top-0 place-items-center transition-all place-content-center duration-1000`}
       >
         <div className="max-w-6xl w-full">
           <div className={`flex justify-between align-baseline `}>
@@ -70,10 +71,10 @@ const Header = () => {
                 {/* <SearchForm /> */}
                 <SearchIcon />
               </li>
-              <li>
-                <UserIcon />
-                {/* <AuthForm> */}
-                {/* </AuthForm> */}
+              <li className="opacity-100">
+                <AuthForm>
+                  <UserIcon />
+                </AuthForm>
               </li>
               <li>
                 <Link to="/wishlist">
@@ -86,7 +87,7 @@ const Header = () => {
                     <WhistlistIcon />
                     {/* {noOfWishlist > 0 && (
                       <span
-                        className={`${animate} absolute text-xs -top-3 -right-3 bg-gray500 text-gray100 py-1 px-2 rounded-full`}
+                        className={`${animate} absolute text-xs -top-3 -right-3 bg-gray-500 text-gray-100 py-1 px-2 rounded-full`}
                       >
                         {noOfWishlist}
                       </span>

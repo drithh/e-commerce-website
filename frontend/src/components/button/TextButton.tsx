@@ -9,7 +9,7 @@ const TextButton: FC<Props> = ({ value }) => (
   <div className={`group transition-all flex justify-center w-28 relative`}>
     <button
       type="button"
-      className={`inline-block no-underline text-gray500 p-2 duration-500 group-hover:tracking-widest`}
+      className={`inline-block no-underline text-gray-500 p-2 duration-500 group-hover:tracking-widest`}
     >
       {value}
     </button>

@@ -1,4 +1,4 @@
-import TextButton from './TextButton';
+import TextButton from './button/TextButton';
 // import styles from './Hero.module.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -15,27 +15,21 @@ const sliders = [
     id: 2,
     image:
       'https://storage.googleapis.com/startup-campus/banners/banner-2.webp',
-    subtitle: '50% off',
-    titleUp: 'New Cocktail',
-    titleDown: 'Dresses',
+    title: 'New Cocktail Dresses',
     rightText: false,
   },
   {
     id: 1,
     image:
       'https://storage.googleapis.com/startup-campus/banners/banner-1.webp',
-    subtitle: 'Spring Revolution',
-    titleUp: 'Night Summer',
-    titleDown: 'Dresses',
+    title: 'Night Summer Dresses',
     rightText: true,
   },
   {
     id: 3,
     image:
       'https://storage.googleapis.com/startup-campus/banners/banner-3.webp',
-    subtitle: 'Spring promo',
-    titleUp: 'The Weekend',
-    titleDown: 'Promotions',
+    title: 'The Weekend Promotions',
     rightText: false,
   },
 ];
@@ -88,8 +82,9 @@ const Slideshow = () => {
                     slider.rightText ? 'sm:text-right' : 'sm:text-left'
                   }`}
                 >
-                  {slider.titleUp} <br />
-                  {slider.titleDown}
+                  {convertTitle(slider.title).titleUp}
+                  <br />
+                  {convertTitle(slider.title).titleDown}
                 </span>
                 <TextButton value={'Shop Now'} />
               </div>
@@ -99,6 +94,13 @@ const Slideshow = () => {
       </div>
     </>
   );
+};
+
+const convertTitle = (title: string) => {
+  const index = title.indexOf(' ', title.length / 2);
+  const titleUp = title.slice(0, index);
+  const titleDown = title.slice(index + 1);
+  return { titleUp, titleDown };
 };
 
 export default Slideshow;

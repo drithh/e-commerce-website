@@ -6,7 +6,7 @@ module.exports = {
       fontFamily: {
         title: ['"Allerta-Stencil-Regular"', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
-        josefin: ['Josefin Sans', 'sans-serif'],
+        lato: ['Lato', 'sans-serif'],
       },
     },
   },
