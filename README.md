@@ -24,7 +24,7 @@ make migrate-up
 # Run Seeder
 make seed
 
-# Create database used for testing
+# Create database used for testing (optional)
 docker-compose exec postgres createdb apptest -U postgres
 ```
 
