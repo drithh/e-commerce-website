@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Allerta-Stencil-Regular';
+  src: local('Allerta-Stencil-Regular.woff'),
+    url(assets/fonts/Allerta-Stencil-Regular.woff) format('woff');
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400;500;600&family=Poppins:wght@100;200;300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
