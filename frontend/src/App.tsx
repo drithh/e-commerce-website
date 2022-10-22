@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Header from './components/Header';
-import Banner from './components/Banner';
+import Home from './pages/Home';
 import Footer from './components/Footer';
 
 function App() {
@@ -9,9 +9,7 @@ function App() {
     <div className="App font-poppins relative ">
       <BrowserRouter>
         <Header />
-        <div className=" min-h-screen">
-          <Banner />
-        </div>
+        <Home />
         <Footer />
       </BrowserRouter>
     </div>
