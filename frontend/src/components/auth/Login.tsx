@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-
+import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
 
@@ -19,13 +19,13 @@ const Login: React.FC<Props> = ({
   setErrorMsg,
   setSuccessMsg,
 }) => {
-  // const auth = useAuth();
+  const auth = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let loginResponse: any;
+    const loginResponse = await auth.login!(email, password);
     if (loginResponse.success) {
       setSuccessMsg('login_successful');
     } else {

@@ -1,7 +1,7 @@
 import { Fragment, useState, FC } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { IoCloseOutline } from 'react-icons/io5';
-// import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Login from './Login';
 import Register from './Register';
@@ -15,8 +15,7 @@ type Props = {
 };
 
 const LoginForm: FC<Props> = ({ extraClass, children }) => {
-  // const auth = useAuth();
-  let auth = { user: null, login: null, logout: null };
+  const auth = useAuth();
   const [currentPage, setCurrentPage] = useState<CurrentPage>('login');
   const [open, setOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -145,8 +144,7 @@ const SuccessModal = ({
   successMsg: string;
   setSuccessMsg: React.Dispatch<React.SetStateAction<string>>;
 }) => {
-  // const auth = useAuth();
-  let auth: any;
+  const auth = useAuth();
 
   const handleLogout = () => {
     auth.logout!();

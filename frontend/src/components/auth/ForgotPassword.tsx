@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-
+import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
 
@@ -17,7 +17,8 @@ const ForgotPassword: React.FC<Props> = ({
   setErrorMsg,
   setSuccessMsg,
 }) => {
-  let auth: any;
+  const auth = useAuth();
+
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

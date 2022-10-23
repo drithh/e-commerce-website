@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useReducer } from "react";
-import cartReducer from "./cartReducer";
-import CartContext from "./CartContext";
-import { getCookie, setCookies } from "cookies-next";
+import React, { useContext, useEffect, useReducer } from 'react';
+import cartReducer from './cartReducer';
+import CartContext from './CartContext';
+import Cookies from 'js-cookie';
 import {
   ADD_ITEM,
   ADD_ONE,
@@ -11,7 +11,7 @@ import {
   cartType,
   CLEAR_CART,
   SET_CART,
-} from "./cart-types";
+} from './cart-types';
 
 export const ProvideCart = ({ children }: { children: React.ReactNode }) => {
   const value = useProvideCart();
@@ -25,7 +25,7 @@ const useProvideCart = () => {
   const [state, dispatch] = useReducer(cartReducer, initPersistState);
 
   useEffect(() => {
-    const initialCart = getCookie("cart");
+    const initialCart = Cookies.get('cart');
     if (initialCart) {
       const cartItems = JSON.parse(initialCart as string);
       dispatch({ type: SET_CART, payload: cartItems });
@@ -33,7 +33,7 @@ const useProvideCart = () => {
   }, []);
 
   useEffect(() => {
-    setCookies("cart", state.cart);
+    Cookies.set('cart', JSON.stringify(state.cart));
   }, [state.cart]);
 
   const addItem = (item: itemType) => {

@@ -4,15 +4,15 @@ import LeftArrow from '../assets/icons/LeftArrow';
 import Button from '../components/button/Button';
 import GhostButton from '../components/button/GhostButton';
 import { Link } from 'react-router-dom';
-// import { useCart } from '../context/cart/CartProvider';
-// import { useWishlist } from '../context/wishlist/WishlistProvider';
+import { useCart } from '../context/cart/CartProvider';
+import { useWishlist } from '../context/wishlist/WishlistProvider';
 
 // let w = window.innerWidth;
 
 const Wishlist = () => {
   // const t = useTranslations('CartWishlist');
-  // const { addOne } = useCart();
-  // const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
+  const { addOne } = useCart();
+  const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
 
   let subtotal = 0;
 
@@ -42,36 +42,36 @@ const Wishlist = () => {
               <thead>
                 <tr className="border-t-2 border-b-2 border-gray200">
                   <th className="font-normal hidden md:table-cell text-left sm:text-center py-2 xl:w-72">
-                    {'product_image'}
+                    Product Image
                   </th>
                   <th className="font-normal hidden md:table-cell text-left sm:text-center py-2 xl:w-72">
-                    {'product_name'}
+                    Product Name
                   </th>
                   <th className="font-normal md:hidden text-left sm:text-center py-2 xl:w-72">
-                    {'product_details'}
+                    Product Detail
                   </th>
                   <th
                     className={`font-normal py-2 ${
-                      // wishlist.length === 0 ? 'text-center' : 'text-right'
+                      wishlist.length === 0 ? 'text-center' : 'text-right'
                     }`}
                   >
-                    {'unit_price'}
+                    Unit Price
                   </th>
                   <th className="font-normal hidden sm:table-cell py-2 max-w-xs">
-                    {'add'}
+                    Add
                   </th>
                   <th className="font-normal hidden sm:table-cell py-2 text-right w-10 whitespace-nowrap">
-                    {'remove'}
+                    Remove
                   </th>
                   <th className="font-normal sm:hidden py-2 text-right w-10">
-                    {'actions'}
+                    Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
                 {wishlist.length === 0 ? (
                   <tr className="w-full text-center h-60 border-b-2 border-gray200">
-                    <td colSpan={5}>{'wishlist_is_empty'}</td>
+                    <td colSpan={5}>Whislist is empty!</td>
                   </tr>
                 ) : (
                   wishlist.map((item) => {
@@ -79,18 +79,14 @@ const Wishlist = () => {
                     return (
                       <tr className="border-b-2 border-gray200" key={item.id}>
                         <td className="my-3 flex justify-center flex-col items-start sm:items-center">
-                          <Link
-                            href={`/products/${encodeURIComponent(item.id)}`}
-                          >
-                            <a>
-                              <Image
-                                src={item.img1 as string}
-                                alt={item.name}
-                                width={95}
-                                height={128}
-                                className="h-32 xl:mr-4"
-                              />
-                            </a>
+                          <Link to={`/products/${encodeURIComponent(item.id)}`}>
+                            <img
+                              src={item.img1 as string}
+                              alt={item.name}
+                              width={95}
+                              height={128}
+                              className="h-32 xl:mr-4"
+                            />
                           </Link>
                           <span className="text-xs md:hidden">{item.name}</span>
                         </td>
@@ -102,7 +98,7 @@ const Wishlist = () => {
                         </td>
                         <td className="text-center hidden sm:table-cell max-w-xs text-gray400">
                           <Button
-                            value={'add_to_cart'}
+                            value={'Add To Cart'}
                             extraClass="hidden sm:block m-auto"
                             onClick={() => addOne!(item)}
                           />
@@ -135,7 +131,7 @@ const Wishlist = () => {
                 onClick={clearWishlist}
                 extraClass="w-full sm:w-48 whitespace-nowrap"
               >
-                {'clear_wishlist'}
+                Clear Wishlist
               </GhostButton>
             </div>
           </div>
@@ -148,12 +144,12 @@ const Wishlist = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  return {
-    props: {
-      messages: (await import(`../messages/common/${locale}.json`)).default,
-    },
-  };
-};
+// export const getStaticProps: GetStaticProps = async ({ locale }) => {
+//   return {
+//     props: {
+//       messages: (await import(`../messages/common/${locale}.json`)).default,
+//     },
+//   };
+// };
 
 export default Wishlist;

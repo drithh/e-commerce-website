@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-
+import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
 
@@ -17,8 +17,7 @@ const Register: React.FC<Props> = ({
   setErrorMsg,
   setSuccessMsg,
 }) => {
-  // const auth = useAuth();
-  let auth: any;
+  const auth = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

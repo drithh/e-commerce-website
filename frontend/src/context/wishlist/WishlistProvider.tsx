@@ -1,8 +1,8 @@
-import { useContext, useEffect, useReducer } from "react";
-import { getCookie, setCookies } from "cookies-next";
+import { useContext, useEffect, useReducer } from 'react';
+import Cookies from 'js-cookie';
 
-import wishlistReducer from "./wishlistReducer";
-import WishlistContext from "./WishlistContext";
+import wishlistReducer from './wishlistReducer';
+import WishlistContext from './WishlistContext';
 import {
   ADD_TO_WISHLIST,
   DELETE_WISHLIST_ITEM,
@@ -10,7 +10,7 @@ import {
   itemType,
   wishlistType,
   SET_WISHLIST,
-} from "./wishlist-type";
+} from './wishlist-type';
 
 export const ProvideWishlist = ({
   children,
@@ -32,7 +32,7 @@ const useProvideWishlist = () => {
   const [state, dispatch] = useReducer(wishlistReducer, initPersistState);
 
   useEffect(() => {
-    const initialWishlist = getCookie("wishlist");
+    const initialWishlist = Cookies.get('wishlist');
     if (initialWishlist) {
       const wishlistItems = JSON.parse(initialWishlist as string);
       dispatch({ type: SET_WISHLIST, payload: wishlistItems });
@@ -40,7 +40,7 @@ const useProvideWishlist = () => {
   }, []);
 
   useEffect(() => {
-    setCookies("wishlist", state.wishlist);
+    Cookies.set('wishlist', JSON.stringify(state.wishlist));
   }, [state.wishlist]);
 
   const addToWishlist = (item: itemType) => {

@@ -1,6 +1,6 @@
-import axios from "axios";
-import { getCookie, removeCookies, setCookies } from "cookies-next";
-import React, { useState, useEffect, useContext, createContext } from "react";
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import React, { useState, useEffect, useContext, createContext } from 'react';
 
 type authType = {
   user: null | User;
@@ -60,7 +60,7 @@ function useProvideAuth() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const initialAuth = getCookie("user");
+    const initialAuth = Cookies.get('user');
     if (initialAuth) {
       const initUser = JSON.parse(initialAuth as string);
       setUser(initUser);
@@ -68,7 +68,7 @@ function useProvideAuth() {
   }, []);
 
   useEffect(() => {
-    setCookies("user", user);
+    Cookies.set('user', JSON.stringify(user));
   }, [user]);
 
   const register = async (
@@ -101,12 +101,12 @@ function useProvideAuth() {
       setUser(user);
       return {
         success: true,
-        message: "register_successful",
+        message: 'register_successful',
       };
     } catch (err) {
       const errResponse = (err as any).response.data;
       let errorMessage: string;
-      if (errResponse.error.type === "alreadyExists") {
+      if (errResponse.error.type === 'alreadyExists') {
         errorMessage = errResponse.error.type;
       } else {
         errorMessage = errResponse.error.detail.message;
@@ -139,12 +139,12 @@ function useProvideAuth() {
       setUser(user);
       return {
         success: true,
-        message: "login_successful",
+        message: 'login_successful',
       };
     } catch (err) {
       return {
         success: false,
-        message: "incorrect",
+        message: 'incorrect',
       };
     }
   };
@@ -161,20 +161,20 @@ function useProvideAuth() {
       setUser(user);
       return {
         success: forgotPasswordResponse.success,
-        message: "reset_email_sent",
+        message: 'reset_email_sent',
       };
     } catch (err) {
       console.log(err);
       return {
         success: false,
-        message: "something_went_wrong",
+        message: 'something_went_wrong',
       };
     }
   };
 
   const logout = () => {
     setUser(null);
-    removeCookies("user");
+    Cookies.remove('user');
   };
 
   // Return the user object and auth methods

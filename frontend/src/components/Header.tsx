@@ -4,14 +4,33 @@ import WhistlistIcon from '../assets/icons/WhistlistIcon';
 import UserIcon from '../assets/icons/UserIcon';
 import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
+import CartItem from './cart/CartItem';
+import { useWishlist } from '../context/wishlist/WishlistProvider';
 // import DownArrow from '../assets/icons/DownArrow';
 // import InstagramLogo from '../assets/icons/InstagramLogo';
 // import FacebookLogo from '../assets/icons/FacebookLogo';
-import BagIcon from '../assets/icons/BagIcon';
 
 const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
+  const { wishlist } = useWishlist();
+  const [animate, setAnimate] = useState('');
+
+  let noOfWishlist = wishlist.length;
+
+  // Animate Wishlist Number
+  const handleAnimate = useCallback(() => {
+    if (noOfWishlist === 0) return;
+    setAnimate('animate__animated animate__headShake');
+  }, [noOfWishlist, setAnimate]);
+
+  // Set animate when no of wishlist changes
+  useEffect(() => {
+    handleAnimate();
+    setTimeout(() => {
+      setAnimate('');
+    }, 1000);
+  }, [handleAnimate]);
 
   const handleScroll = useCallback(() => {
     const offset = window.scrollY;
@@ -85,19 +104,19 @@ const Header = () => {
                     aria-label="Wishlist"
                   >
                     <WhistlistIcon />
-                    {/* {noOfWishlist > 0 && (
+                    {noOfWishlist > 0 && (
                       <span
                         className={`${animate} absolute text-xs -top-3 -right-3 bg-gray-500 text-gray-100 py-1 px-2 rounded-full`}
                       >
                         {noOfWishlist}
                       </span>
-                    )} */}
+                    )}
                   </button>
                   {/*  */}
                 </Link>
               </li>
               <li>
-                <BagIcon />
+                <CartItem />
               </li>
             </ul>
           </div>
