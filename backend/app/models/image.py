@@ -11,8 +11,7 @@ class Image(DefaultModel, Base):
     image_url = Column(String(length=64), nullable=False)
 
     @classmethod
-    def seed(cls, fake, name):
-        url = f"https://test.com/{name}.jpg"
+    def seed(cls, fake, name, url):
         image = Image(
             id=fake.uuid4(),
             name=name,

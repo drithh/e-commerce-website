@@ -14,24 +14,112 @@ from app.seeders.product_size_quantity_seeder import product_size_quantity_seed
 from app.seeders.size_seeder import size_seed
 from app.seeders.user_seeder import user_seed
 
+banners_urls = [
+    "banners/banner-1.webp",
+    "banners/banner-2.webp",
+    "banners/banner-3.webp",
+]
+
+categories_urls = [
+    "categories/angkle-boots.webp",
+    "categories/bags.webp",
+    "categories/coats.webp",
+    "categories/dresses.webp",
+    "categories/hats.webp",
+    "categories/pullovers.webp",
+    "categories/sandals.webp",
+    "categories/shirts.webp",
+    "categories/sneakers.webp",
+    "categories/t-shirts.webp",
+]
+
+product_items = [
+    {
+        "category": "shirts",
+        "item": [
+            {
+                "name": "Men Japanese Tree Shirt",
+                "price": 160000,
+            },
+            {
+                "name": "Cordudoy Solid Shirt",
+                "price": 230000,
+            },
+            {
+                "name": "Men Picture Print Shirt",
+                "price": 180000,
+            },
+            {
+                "name": "Random Baroque Shirt",
+                "price": 160000,
+            },
+            {
+                "name": "Button Up Cordudoy Shirt",
+                "price": 210000,
+            },
+            {
+                "name": "Block Patched Shirt",
+                "price": 250000,
+            },
+            {
+                "name": "Sunflower Print Shirt",
+                "price": 230000,
+            },
+            {
+                "name": "Argyle Figure Shirt",
+                "price": 150000,
+            },
+            {
+                "name": "Figure Graphic Through Shirt",
+                "price": 160000,
+            },
+            {
+                "name": "Men Leopard Print Shirt",
+                "price": 140000,
+            },
+        ],
+    },
+]
+
+category_items = []
+product_urls = []
+for product_item in product_items:
+    category_items.append(product_item["category"])
+    for item in product_item["item"]:
+        for i in range(1, 3):
+            product_urls.append(
+                f"products/{product_item['category']}/{item['name'].replace(' ', '-').lower()}-{i}.webp"
+            )
+
 
 def seed():
+
     fake = Faker("id_ID")
     with db.SessionLocal() as session:
 
         user_id = user_seed(fake, session)
-        image_id = image_seed(fake, session)
+
+        banner_image_id = image_seed(fake, session, banners_urls)
+        category_image_id = image_seed(fake, session, categories_urls)
+        product_image_id = image_seed(fake, session, product_urls)
+
         size_id = size_seed(fake, session)
         session.commit()
 
-        category_id = category_seed(fake, session, image_id[:6])
-        banner_seed(fake, session, image_id[6:12])
+        category_id = category_seed(fake, session, category_items, category_image_id)
+        banner_seed(fake, session, banner_image_id)
         session.commit()
 
-        product_id = product_seed(fake, session, category_id)
+        # change product_items category to category_id
+        for product_item in product_items:
+            product_item["category"] = category_id[
+                category_items.index(product_item["category"])
+            ]
+
+        product_id = product_seed(fake, session, product_items)
         session.commit()
 
-        product_image_seed(fake, session, product_id, image_id[12:])
+        product_image_seed(fake, session, product_id, product_image_id)
         product_size_quantity_id = product_size_quantity_seed(
             fake, session, product_id, size_id
         )

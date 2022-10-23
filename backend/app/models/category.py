@@ -12,10 +12,10 @@ class Category(DefaultModel, Base):
     image_id = Column(ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
 
     @classmethod
-    def seed(cls, fake, image_id):
+    def seed(cls, fake, category, image_id):
         category = Category(
             id=fake.uuid4(),
-            title=fake.word(),
+            title=category,
             image_id=image_id,
         )
         return category
