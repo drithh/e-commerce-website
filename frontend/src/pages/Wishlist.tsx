@@ -21,9 +21,9 @@ const Wishlist = () => {
       {/* ===== Head Section ===== */}
       <Header />
 
-      <main id="main-content">
+      <main id="main-content" className="max-w-7xl mx-auto mt-24 min-h-[60vh]">
         {/* ===== Heading & Continue Shopping */}
-        <div className="app-max-width px-4 sm:px-8 md:px-20 w-full border-t-2 border-gray100">
+        <div className="app-max-width px-4 sm:px-8 md:px-20 w-full border-t-2 border-gray-100">
           <h1 className="text-2xl sm:text-4xl text-center sm:text-left mt-6 mb-2 animatee__animated animate__bounce">
             Wishlist
           </h1>
@@ -40,7 +40,7 @@ const Wishlist = () => {
           <div className="h-full w-full">
             <table className="w-full mb-6">
               <thead>
-                <tr className="border-t-2 border-b-2 border-gray200">
+                <tr className="border-t-2 border-b-2 border-gray-200">
                   <th className="font-normal hidden md:table-cell text-left sm:text-center py-2 xl:w-72">
                     Product Image
                   </th>
@@ -70,14 +70,14 @@ const Wishlist = () => {
               </thead>
               <tbody>
                 {wishlist.length === 0 ? (
-                  <tr className="w-full text-center h-60 border-b-2 border-gray200">
+                  <tr className="w-full text-center h-60 border-b-2 border-gray-200">
                     <td colSpan={5}>Whislist is empty!</td>
                   </tr>
                 ) : (
                   wishlist.map((item) => {
                     subtotal += item.price * item.qty!;
                     return (
-                      <tr className="border-b-2 border-gray200" key={item.id}>
+                      <tr className="border-b-2 border-gray-200" key={item.id}>
                         <td className="my-3 flex justify-center flex-col items-start sm:items-center">
                           <Link to={`/products/${encodeURIComponent(item.id)}`}>
                             <img
@@ -93,10 +93,10 @@ const Wishlist = () => {
                         <td className="text-center hidden md:table-cell">
                           {item.name}
                         </td>
-                        <td className="text-right text-gray400">
+                        <td className="text-right text-gray-400">
                           $ {item.price}
                         </td>
-                        <td className="text-center hidden sm:table-cell max-w-xs text-gray400">
+                        <td className="text-center hidden sm:table-cell max-w-xs text-gray-400">
                           <Button
                             value={'Add To Cart'}
                             extraClass="hidden sm:block m-auto"
@@ -115,7 +115,7 @@ const Wishlist = () => {
                           <button
                             onClick={() => deleteWishlistItem!(item)}
                             type="button"
-                            className="outline-none text-gray300 hover:text-gray500 focus:outline-none text-4xl sm:text-2xl"
+                            className="outline-none text-gray-300 hover:text-gray-500 focus:outline-none text-4xl sm:text-2xl"
                           >
                             &#10005;
                           </button>
@@ -143,13 +143,5 @@ const Wishlist = () => {
     </div>
   );
 };
-
-// export const getStaticProps: GetStaticProps = async ({ locale }) => {
-//   return {
-//     props: {
-//       messages: (await import(`../messages/common/${locale}.json`)).default,
-//     },
-//   };
-// };
 
 export default Wishlist;

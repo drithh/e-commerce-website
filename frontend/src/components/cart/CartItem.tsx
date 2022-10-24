@@ -53,7 +53,7 @@ export default function CartItem() {
           <BagIcon extraClass="h-8 w-8 sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
-              className={`${animate} absolute text-xs -top-3 bg-gray500 text-gray100 py-1 px-2 rounded-full`}
+              className={`${animate} absolute text-xs -top-3 bg-gray-500 text-gray-100 py-1 px-2 rounded-full`}
             >
               {noOfItems}
             </span>
@@ -79,7 +79,7 @@ export default function CartItem() {
               //   leaveFrom="opacity-100"
               //   leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray500 opacity-50" />
+              <Dialog.Overlay className="fixed inset-0 bg-gray-500 opacity-50" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}

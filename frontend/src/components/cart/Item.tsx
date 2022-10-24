@@ -21,14 +21,14 @@ const Item: FC<Props> = ({
   onDelete,
 }) => {
   return (
-    <div className="item flex bg-white my-4 border-b-2 pb-4 border-gray200">
+    <div className="item flex bg-white my-4 border-b-2 pb-4 border-gray-200">
       <img className="w-2/12" src={img} alt={name} width={70} height={104} />
       <div className="midPart mx-4 flex-grow">
         <span>{name}</span>
-        <div className="plusOrMinus w-2/6 mt-4 flex border border-gray300 divide-x-2 divide-gray300">
+        <div className="plusOrMinus w-2/6 mt-4 flex border border-gray-300 divide-x-2 divide-gray-300">
           <div
             onClick={onRemove}
-            className="h-full w-12 flex justify-center items-center cursor-pointer hover:bg-gray500 hover:text-gray100"
+            className="h-full w-12 flex justify-center items-center cursor-pointer hover:bg-gray-500 hover:text-gray-100"
           >
             -
           </div>
@@ -37,7 +37,7 @@ const Item: FC<Props> = ({
           </div>
           <div
             onClick={onAdd}
-            className="h-full w-12 flex justify-center items-center cursor-pointer hover:bg-gray500 hover:text-gray100"
+            className="h-full w-12 flex justify-center items-center cursor-pointer hover:bg-gray-500 hover:text-gray-100"
           >
             +
           </div>
@@ -47,7 +47,7 @@ const Item: FC<Props> = ({
         <button
           onClick={onDelete}
           type="button"
-          className="outline-none text-gray300 hover:text-gray500 focus:outline-none text-xl mb-3"
+          className="outline-none text-gray-300 hover:text-gray-500 focus:outline-none text-xl mb-3"
         >
           &#10005;
         </button>

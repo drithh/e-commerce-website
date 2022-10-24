@@ -1,4 +1,4 @@
-const WhistlistIcon = () => (
+const WishlistIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="h-6 w-6"
@@ -15,4 +15,4 @@ const WhistlistIcon = () => (
   </svg>
 );
 
-export default WhistlistIcon;
+export default WishlistIcon;

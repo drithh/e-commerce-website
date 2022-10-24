@@ -31,10 +31,12 @@ const GhostButton: FC<Props> = ({
     <button
       type="button"
       onClick={onClick}
-      className={`bg-white text-center cursor-pointer text-xl sm:text-base tracking-widest text-gray500 ${
-        !noBorder && 'border border-gray500'
+      className={`bg-white text-center cursor-pointer text-xl sm:text-base tracking-widest text-gray-500 ${
+        !noBorder && 'border border-gray-500'
       } ${
-        inverted ? 'hover:bg-gray500 hover:text-gray100' : 'hover:text-gray400'
+        inverted
+          ? 'hover:bg-gray-500 hover:text-gray-100'
+          : 'hover:text-gray-400'
       } ${btnSize} ${extraClass}`}
     >
       {children}
