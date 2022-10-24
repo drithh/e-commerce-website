@@ -214,6 +214,96 @@ product_items = [
             },
         ],
     },
+    {
+        "category": "angkle-boots",
+        "item": [
+            {
+                "name": "Zipper Side Combat Boots",
+                "price": 380000,
+            },
+            {
+                "name": "Side Zip Suedette Booties",
+                "price": 300000,
+            },
+            {
+                "name": "Buckle Decor Boots",
+                "price": 250000,
+            },
+            {
+                "name": "Faux Suede Boots",
+                "price": 390000,
+            },
+            {
+                "name": "Letter Detail Wedge Boots",
+                "price": 290000,
+            },
+            {
+                "name": "Minimalist Zipper Boots",
+                "price": 270000,
+            },
+            {
+                "name": "Ruched Detail Boots",
+                "price": 340000,
+            },
+            {
+                "name": "Leopard Head Boots",
+                "price": 310000,
+            },
+            {
+                "name": "Braided Textured Chelsea Boots",
+                "price": 460000,
+            },
+            {
+                "name": "Chunky Snow Boots",
+                "price": 510000,
+            },
+        ],
+    },
+    {
+        "category": "trousers",
+        "item": [
+            {
+                "name": "Leather Straight Leg Pants",
+                "price": 310000,
+            },
+            {
+                "name": "Elastic Waist Wide Leg Pants",
+                "price": 200000,
+            },
+            {
+                "name": "High Waist Flap Pocket Cargo Pants",
+                "price": 220000,
+            },
+            {
+                "name": "Flap Pocket Cord Pants",
+                "price": 300000,
+            },
+            {
+                "name": "Flap Pocket Drawstring Hem Cargo Pants",
+                "price": 250000,
+            },
+            {
+                "name": "High Waist Plicated Detail Pants",
+                "price": 310000,
+            },
+            {
+                "name": "High Waist Slant Pocket Fold Pleated Pants",
+                "price": 400000,
+            },
+            {
+                "name": "High Waist Plicated Detail Cargo Pants",
+                "price": 330000,
+            },
+            {
+                "name": "Drawstring Waist Wide Leg Pants",
+                "price": 340000,
+            },
+            {
+                "name": "Slant Pocket Cord Straight Leg Pants",
+                "price": 300000,
+            },
+        ],
+    },
 ]
 
 category_items = []
@@ -279,6 +369,7 @@ def delete():
         session.execute("DELETE FROM categories")
         session.execute("DELETE FROM sizes")
         session.execute("DELETE FROM images")
+        session.execute("DELETE FROM favorites")
         session.execute("DELETE FROM users")
         session.commit()
 

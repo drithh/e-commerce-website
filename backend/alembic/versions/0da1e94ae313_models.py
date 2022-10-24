@@ -53,8 +53,8 @@ def upgrade():
             nullable=True,
         ),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("name", sa.String(length=64), nullable=False),
-        sa.Column("image_url", sa.String(length=64), nullable=False),
+        sa.Column("name", sa.String(length=128), nullable=False),
+        sa.Column("image_url", sa.String(length=128), nullable=False),
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("name"),
     )

@@ -5,7 +5,8 @@ MIGRATE=docker-compose run --rm backend poetry run alembic
 
 seed:
 	$(APP) poetry run python -m app.seeders.seeder
-
+dearchive:
+	$(APP) poetry run python -m app.dearchive
 migrate-up:
 		$(MIGRATE) upgrade head
 migrate-down:

@@ -7,8 +7,8 @@ from app.models.default import DefaultModel
 class Image(DefaultModel, Base):
     __tablename__ = "images"
 
-    name = Column(String(length=64), nullable=False, unique=True)
-    image_url = Column(String(length=64), nullable=False)
+    name = Column(String(length=128), nullable=False, unique=True)
+    image_url = Column(String(length=128), nullable=False)
 
     @classmethod
     def seed(cls, fake, name, url):
