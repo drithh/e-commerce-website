@@ -79,6 +79,141 @@ product_items = [
             },
         ],
     },
+    {
+        "category": "t-shirts",
+        "item": [
+            {
+                "name": "Skeleteon Tee",
+                "price": 90000,
+            },
+            {
+                "name": "Cactus Slogan Graphic Tee",
+                "price": 120000,
+            },
+            {
+                "name": "Slogan Graphic Oversizde Tee",
+                "price": 140000,
+            },
+            {
+                "name": "Slogan Graphic Round Tee",
+                "price": 110000,
+            },
+            {
+                "name": "Reflective ExpressionTee",
+                "price": 150000,
+            },
+            {
+                "name": "Cat Tee",
+                "price": 90000,
+            },
+            {
+                "name": "Dazy Star Tee",
+                "price": 110000,
+            },
+            {
+                "name": "Teddy Bear Tee",
+                "price": 120000,
+            },
+            {
+                "name": "Galaxy Print Tee",
+                "price": 120000,
+            },
+            {
+                "name": "Cow Tee",
+                "price": 80000,
+            },
+        ],
+    },
+    {
+        "category": "sandals",
+        "item": [
+            {
+                "name": "Cartoon Shark Slides",
+                "price": 180000,
+            },
+            {
+                "name": "Sole Thong Sandals",
+                "price": 120000,
+            },
+            {
+                "name": "Straw Pompom Sandals",
+                "price": 250000,
+            },
+            {
+                "name": "Decor Strap Sandals",
+                "price": 340000,
+            },
+            {
+                "name": "Color Ankle Sandals",
+                "price": 130000,
+            },
+            {
+                "name": "Bow Decor Sandals",
+                "price": 60000,
+            },
+            {
+                "name": "Minimalist Sling Back Sandals",
+                "price": 90000,
+            },
+            {
+                "name": "Floral Pattern Sandals",
+                "price": 280000,
+            },
+            {
+                "name": "Minimalist Fuzzy Sandals",
+                "price": 150000,
+            },
+            {
+                "name": "Open Toe Massage Slides",
+                "price": 180000,
+            },
+        ],
+    },
+    {
+        "category": "sneakers",
+        "item": [
+            {
+                "name": "Men Skate Shoes",
+                "price": 410000,
+            },
+            {
+                "name": "Halloween Pumpkin Running Shoes",
+                "price": 300000,
+            },
+            {
+                "name": "Colorblock Chunky Sneakers",
+                "price": 340000,
+            },
+            {
+                "name": "Front Canvas Shoes",
+                "price": 240000,
+            },
+            {
+                "name": "All Over Print Shoes",
+                "price": 280000,
+            },
+            {
+                "name": "Neon Yellow Shoes",
+                "price": 190000,
+            },
+            {
+                "name": "Metallic Skate Shoes",
+                "price": 330000,
+            },
+            {
+                "name": "Plant Wedge Sneakers",
+                "price": 350000,
+            },
+            {
+                "name": "Hollow Out Shoes",
+                "price": 220000,
+            },
+            {
+                "name": "Graffiti Print Shoes",
+                "price": 290000,
+            },
+        ],
+    },
 ]
 
 category_items = []
