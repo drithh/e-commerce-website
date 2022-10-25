@@ -1,12 +1,13 @@
 include .env
 
 APP=docker-compose run backend
+EXEC=docker-compose exec backend
 MIGRATE=docker-compose run --rm backend poetry run alembic
 
 seed:
-	$(APP) poetry run python -m app.seeders.seeder
+	$(EXEC) poetry run python -m app.seeders.seeder
 dearchive:
-	$(APP) poetry run python -m app.dearchive
+	$(EXEC) poetry run python -m app.dearchive
 migrate-up:
 		$(MIGRATE) upgrade head
 migrate-down:
