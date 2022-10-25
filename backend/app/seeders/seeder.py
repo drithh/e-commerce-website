@@ -4,7 +4,6 @@ from app import db
 from app.seeders.banner_seeder import banner_seed
 from app.seeders.cart_seeder import cart_seed
 from app.seeders.category_seeder import category_seed
-from app.seeders.favorite_seeder import favorite_seed
 from app.seeders.image_seeder import image_seed
 from app.seeders.order_item_seeder import order_item_seed
 from app.seeders.order_seeder import order_seed
@@ -13,6 +12,7 @@ from app.seeders.product_seeder import product_seed
 from app.seeders.product_size_quantity_seeder import product_size_quantity_seed
 from app.seeders.size_seeder import size_seed
 from app.seeders.user_seeder import user_seed
+from app.seeders.wishlist_seeder import wishlist_seed
 
 banners_urls = [
     "banners/banner-1.webp",
@@ -348,7 +348,7 @@ def seed():
         product_size_quantity_id = product_size_quantity_seed(
             fake, session, product_id, size_id
         )
-        favorite_seed(fake, session, user_id, product_id)
+        wishlist_seed(fake, session, user_id, product_id)
         order_id = order_seed(fake, session, user_id)
         session.commit()
 
@@ -369,7 +369,7 @@ def delete():
         session.execute("DELETE FROM categories")
         session.execute("DELETE FROM sizes")
         session.execute("DELETE FROM images")
-        session.execute("DELETE FROM favorites")
+        session.execute("DELETE FROM wishlists")
         session.execute("DELETE FROM users")
         session.commit()
 

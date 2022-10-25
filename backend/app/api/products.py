@@ -1,7 +1,8 @@
+import base64
 from typing import Any, Generator, List, Union
 from uuid import UUID
 
-from fastapi import Query, status
+from fastapi import File, Form, Query, Response, UploadFile, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
@@ -191,3 +192,41 @@ def get_product(
     product.size = [size.size for size in product_size]
 
     return product
+
+
+@router.post("/search_image/upload", status_code=status.HTTP_200_OK)
+def search_image_upload(
+    file: UploadFile = File(...),
+    session: Generator = Depends(get_db),
+) -> Any:
+    if file:
+        try:
+            contents = file.file.read()
+            logger.info(file.filename)
+            with open(file.filename, "wb") as f:
+                f.write(contents)
+            return Response(content=contents, media_type="image/png")
+        except Exception:
+            return {"message": "There was an error uploading the file"}
+        finally:
+            file.file.close()
+    return {"message": f"Successfully uploaded {file.filename}"}
+
+
+@router.post("/search_image", status_code=status.HTTP_200_OK)
+def search_image(
+    filedata: str = Form(...),
+    session: Generator = Depends(get_db),
+) -> Any:
+    filename = "test.png"
+    image_as_bytes = str.encode(filedata)  # convert string to bytes
+    img_recovered = base64.b64decode(image_as_bytes)
+    return Response(content=img_recovered, media_type="image/png")
+    # decode base64string
+    try:
+        with open("uploaded_" + filename, "wb") as f:
+            f.write(img_recovered)
+    except Exception:
+        return {"message": "There was an error uploading the file"}
+
+    return {"message": f"Successfuly uploaded {filename}"}

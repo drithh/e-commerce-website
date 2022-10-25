@@ -16,7 +16,7 @@ def dearhived():
         session.execute("DELETE FROM z_archive_order_items")
         session.execute("DELETE FROM z_archive_product_size_quantities")
         session.execute("DELETE FROM z_archive_product_images")
-        session.execute("DELETE FROM z_archive_favorites")
+        session.execute("DELETE FROM z_archive_wishlists")
         session.commit()
 
 
