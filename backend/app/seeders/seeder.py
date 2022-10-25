@@ -1,6 +1,7 @@
 from faker import Faker
 
 from app import db
+from app.core.logger import logger
 from app.seeders.banner_seeder import banner_seed
 from app.seeders.cart_seeder import cart_seed
 from app.seeders.category_seeder import category_seed
@@ -20,18 +21,6 @@ banners_urls = [
     "banners/banner-3.webp",
 ]
 
-categories_urls = [
-    "categories/angkle-boots.webp",
-    "categories/bags.webp",
-    "categories/coats.webp",
-    "categories/dresses.webp",
-    "categories/hats.webp",
-    "categories/pullovers.webp",
-    "categories/sandals.webp",
-    "categories/shirts.webp",
-    "categories/sneakers.webp",
-    "categories/t-shirts.webp",
-]
 
 product_items = [
     {
@@ -304,6 +293,186 @@ product_items = [
             },
         ],
     },
+    {
+        "category": "pullovers",
+        "item": [
+            {
+                "name": "High Neck Drop Shoulder Fleece Sweatshirt",
+                "price": 200000,
+            },
+            {
+                "name": "Solid Drop Shoulder Oversized Sweatshirt Without Tee",
+                "price": 250000,
+            },
+            {
+                "name": "Quarter Zip Drop Shoulder Sweater",
+                "price": 450000,
+            },
+            {
+                "name": "Solid Drop Shoulder Sweater",
+                "price": 300000,
+            },
+            {
+                "name": "Mock Neck Drop Shoulder Sweater",
+                "price": 500000,
+            },
+            {
+                "name": "Men Block Striped Pattern Drop Shoulder Sweater",
+                "price": 400000,
+            },
+            {
+                "name": "Men Geo & Stripe Pattern Drop Shoulder Sweater Without Tee",
+                "price": 470000,
+            },
+            {
+                "name": "Men Argyle Pattern Drop Shoulder Sweater",
+                "price": 400000,
+            },
+            {
+                "name": "Men Colorblock Drop Shoulder Drawstring Hooded Sweater Without Tee",
+                "price": 560000,
+            },
+            {
+                "name": "Men Stripe Pattern Ribbed Knit Sweater",
+                "price": 360000,
+            },
+        ],
+    },
+    {
+        "category": "dresses",
+        "item": [
+            {
+                "name": "Cowl Neck Solid Slip Dress",
+                "price": 230000,
+            },
+            {
+                "name": "Solid Cami Dress",
+                "price": 265000,
+            },
+            {
+                "name": "Split Thigh Tank Dress",
+                "price": 140000,
+            },
+            {
+                "name": "Allover Floral Print Tie Front Shirred Ruffle Trim Dress",
+                "price": 233000,
+            },
+            {
+                "name": "Solid Scoop Neck Split Thigh Dress",
+                "price": 210000,
+            },
+            {
+                "name": "Floral Print Puff Sleeve Tie Side Wrap Dress",
+                "price": 400000,
+            },
+            {
+                "name": "Solid Rib-knit Bodycon Dress",
+                "price": 80000,
+            },
+            {
+                "name": "Ditsy Floral Print Ruffle Hem Dress",
+                "price": 300000,
+            },
+            {
+                "name": "Solid A-line Dress",
+                "price": 360000,
+            },
+            {
+                "name": "Ruffle Hem Puff Sleeve Dress",
+                "price": 300000,
+            },
+        ],
+    },
+    {
+        "category": "coats",
+        "item": [
+            {
+                "name": "Raglan Sleeve Zip Up Teddy Coat",
+                "price": 670000,
+            },
+            {
+                "name": "Drop Shoulder Dual Pockets Teddy Coat",
+                "price": 500000,
+            },
+            {
+                "name": "Drop Shoulder Pocket Patched Teddy Coat",
+                "price": 670000,
+            },
+            {
+                "name": "Dual Pocket Drop Shoulder Teddy Coat",
+                "price": 500000,
+            },
+            {
+                "name": "Lapel Neck Single Breasted Teddy Coat",
+                "price": 480000,
+            },
+            {
+                "name": "Extended Sizes Men Single Breasted Slant Pocket Coat",
+                "price": 740000,
+            },
+            {
+                "name": "Men Buffalo Plaid Pattern Flap Pocket Coat",
+                "price": 515000,
+            },
+            {
+                "name": "Men Zip Up Drawstring Hooded 2 In 1 Coat",
+                "price": 480000,
+            },
+            {
+                "name": "Men Buffalo Plaid Print Zip Up Coat Without Hoodie",
+                "price": 480000,
+            },
+            {
+                "name": "Men Plaid & Letter Graphic Flap Pocket Zipper Coat",
+                "price": 550000,
+            },
+        ],
+    },
+    {
+        "category": "bags",
+        "item": [
+            {
+                "name": "Mini Floral Embroidered Metal Lock Flap Straw Bag",
+                "price": 150000,
+            },
+            {
+                "name": "Patch Detail Bucket Bag",
+                "price": 250000,
+            },
+            {
+                "name": "Minimalist Large Capacity Bucket Bag",
+                "price": 100000,
+            },
+            {
+                "name": "Floral Pattern Square Bag",
+                "price": 95000,
+            },
+            {
+                "name": "Buckle Detail Bucket Bag",
+                "price": 300000,
+            },
+            {
+                "name": "Men Hook-and-loop Fastener Flap Messenger Bag",
+                "price": 265000,
+            },
+            {
+                "name": "Men Letter Patch Decor Casual Daypack",
+                "price": 358000,
+            },
+            {
+                "name": "Men Large Capacity Flap Square Bag",
+                "price": 400000,
+            },
+            {
+                "name": "Men Minimalist Flap Messenger Bag",
+                "price": 200000,
+            },
+            {
+                "name": "Men Letter Patch Cartoon Decor Messenger Bag",
+                "price": 310000,
+            },
+        ],
+    },
 ]
 
 category_items = []
@@ -322,16 +491,21 @@ def seed():
     fake = Faker("id_ID")
     with db.SessionLocal() as session:
 
+        logger.info("Seeding Table Users")
         user_id = user_seed(fake, session)
 
+        logger.info("Seeding Table Images")
         banner_image_id = image_seed(fake, session, banners_urls)
-        category_image_id = image_seed(fake, session, categories_urls)
         product_image_id = image_seed(fake, session, product_urls)
 
+        logger.info("Seeding Table Sizes")
         size_id = size_seed(fake, session)
         session.commit()
 
-        category_id = category_seed(fake, session, category_items, category_image_id)
+        logger.info("Seeding Table Categories")
+        category_id = category_seed(fake, session, category_items)
+
+        logger.info("Seeding Table Banners")
         banner_seed(fake, session, banner_image_id)
         session.commit()
 
@@ -341,18 +515,29 @@ def seed():
                 category_items.index(product_item["category"])
             ]
 
+        logger.info("Seeding Table Products")
         product_id = product_seed(fake, session, product_items)
         session.commit()
 
+        logger.info("Seeding Table Product Images")
         product_image_seed(fake, session, product_id, product_image_id)
+
+        logger.info("Seeding Table Product Sizes")
         product_size_quantity_id = product_size_quantity_seed(
             fake, session, product_id, size_id
         )
+
+        logger.info("Seeding Table Whistlists")
         wishlist_seed(fake, session, user_id, product_id)
+
+        logger.info("Seeding Table Orders")
         order_id = order_seed(fake, session, user_id)
         session.commit()
 
+        logger.info("Seeding Table Order Items")
         order_item_seed(fake, session, order_id, product_size_quantity_id)
+
+        logger.info("Seeding Table Carts")
         cart_seed(fake, session, user_id, product_size_quantity_id)
         session.commit()
 
