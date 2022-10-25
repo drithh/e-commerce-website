@@ -10,9 +10,12 @@ body {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
 }
 body::-webkit-scrollbar {
-  /* WebKit */
   width: 0;
   height: 0;
+}
+
+button:focus {
+  outline: none;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@100;200;300;400;500;600&display=swap');

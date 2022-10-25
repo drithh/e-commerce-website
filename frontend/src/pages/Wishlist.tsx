@@ -17,11 +17,11 @@ const Wishlist = () => {
   let subtotal = 0;
 
   return (
-    <div>
+    <>
       {/* ===== Head Section ===== */}
       <Header />
 
-      <main id="main-content" className="max-w-7xl mx-auto mt-24 min-h-[60vh]">
+      <main id="main-content" className="max-w-7xl mx-auto mt-20 min-h-[60vh]">
         {/* ===== Heading & Continue Shopping */}
         <div className="app-max-width px-4 sm:px-8 md:px-20 w-full border-t-2 border-gray-100">
           <h1 className="text-2xl sm:text-4xl text-center sm:text-left mt-6 mb-2 animatee__animated animate__bounce">
@@ -140,7 +140,7 @@ const Wishlist = () => {
 
       {/* ===== Footer Section ===== */}
       <Footer />
-    </div>
+    </>
   );
 };
 

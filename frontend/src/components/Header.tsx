@@ -9,7 +9,7 @@ import { useWishlist } from '../context/wishlist/WishlistProvider';
 // import DownArrow from '../assets/icons/DownArrow';
 // import InstagramLogo from '../assets/icons/InstagramLogo';
 // import FacebookLogo from '../assets/icons/FacebookLogo';
-
+import PopoverMenu from './PopoverMenu';
 const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
@@ -57,21 +57,39 @@ const Header = () => {
           scrolled ? 'bg-white  shadow-md z-50' : 'bg-transparent'
         } w-full z-50 h-20  flex  fixed top-0 place-items-center transition-all place-content-center duration-1000`}
       >
-        <div className="max-w-6xl w-full">
-          <div className={`flex justify-between align-baseline `}>
+        <div className="2xl:max-w-[96rem] w-full h-full">
+          <div className="flex justify-between align-baseline h-full justify-content-center">
             {/* Left Nav */}
-            <ul className={`flex-0 lg:flex-1 flex gap-x-4 place-items-center`}>
-              <li>
-                <Link to={`/product-category/men`}>{'men'}</Link>
+            <ul className="flex-0 lg:flex-1 flex gap-x-4 place-items-center ">
+              <li className="relative h-6">
+                <PopoverMenu
+                  menuTitle="Tops"
+                  linksArray={[
+                    ['T-Shirts', '/'],
+                    ['Shirts', '/about'],
+                    ['Coats', '/blog'],
+                    ['Dresses', '/blog'],
+                    ['Pullovers', '/blog'],
+                  ]}
+                />
               </li>
-              <li>
-                <Link to={`/product-category/women`}>{'women'}</Link>
+              <li className="relative h-6">
+                <PopoverMenu
+                  menuTitle="Bottoms"
+                  linksArray={[['Trousers', '/']]}
+                />
               </li>
-              <li>
-                <Link to="/product-category/bags">{'bags'}</Link>
-              </li>
-              <li>
-                <Link to="/coming-soon">{'blogs'}</Link>
+              <li className="relative h-6">
+                <PopoverMenu
+                  menuTitle="Shoes & Accessories"
+                  linksArray={[
+                    ['Bags', '/'],
+                    ['Hats', '/about'],
+                    ['Sneakers', '/blog'],
+                    ['Sandals', '/blog'],
+                    ['Angkle Boots', '/blog'],
+                  ]}
+                />
               </li>
             </ul>
 
@@ -85,7 +103,7 @@ const Header = () => {
             </div>
 
             {/* Right Nav */}
-            <ul className={`flex-1 flex justify-end gap-x-8`}>
+            <ul className="flex-1 flex 2xl:mr-0 mr-4 lg:justify-end justify-start gap-x-8 place-items-center">
               <li>
                 {/* <SearchForm /> */}
                 <SearchIcon />

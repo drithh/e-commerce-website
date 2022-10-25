@@ -65,7 +65,7 @@ const Slideshow = () => {
               <div className="block">
                 <img
                   src={slider.image}
-                  className="h-screen"
+                  className="w-screen object-cover"
                   alt={'some name'}
                 />
               </div>

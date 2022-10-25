@@ -5,11 +5,16 @@ import Footer from '../components/Footer';
 
 const Home = () => {
   return (
-    <div className=" min-h-screen">
+    <>
+      {/* ===== Head Section ===== */}
       <Header />
-      <Banner />
+      <main id="main-content" className="mt-20 min-h-[60vh]">
+        <Banner />
+      </main>
+
+      {/* ===== Footer Section ===== */}
       <Footer />
-    </div>
+    </>
   );
 };
 
