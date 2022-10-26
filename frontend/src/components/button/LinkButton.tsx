@@ -35,7 +35,7 @@ const LinkButton: FC<Props> = ({
       to={href}
       role="button"
       aria-label={aria_label}
-      className={`bg-white group text-center inline-block cursor-pointe ${
+      className={`cursor-pointe group inline-block bg-white text-center ${
         inverted
           ? 'hover:bg-gray-500 hover:text-gray-100'
           : 'hover:text-gray-400'

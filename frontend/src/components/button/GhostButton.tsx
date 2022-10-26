@@ -31,7 +31,7 @@ const GhostButton: FC<Props> = ({
     <button
       type="button"
       onClick={onClick}
-      className={`bg-white text-center cursor-pointer text-xl sm:text-base tracking-widest text-gray-500 ${
+      className={`cursor-pointer bg-white text-center text-xl tracking-widest text-gray-500 sm:text-base ${
         !noBorder && 'border border-gray-500'
       } ${
         inverted

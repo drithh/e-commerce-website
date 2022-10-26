@@ -6,14 +6,14 @@ type Props = {
 };
 
 const TextButton: FC<Props> = ({ value }) => (
-  <div className={`group transition-all flex justify-center w-28 relative`}>
+  <div className={`group relative flex w-28 justify-center transition-all`}>
     <button
       type="button"
-      className={`inline-block no-underline text-gray-500 p-2 duration-500 group-hover:tracking-widest`}
+      className={`inline-block p-2 text-gray-500 no-underline duration-500 group-hover:tracking-widest`}
     >
       {value}
     </button>
-    <div className="border-b-2 border-transparent absolute bottom-2 w-2.5 duration-500 group-hover:w-4/5 group-hover:border-gray-500 group-hover:duration-500"></div>
+    <div className="absolute bottom-2 w-2.5 border-b-2 border-transparent duration-500 group-hover:w-4/5 group-hover:border-gray-500 group-hover:duration-500"></div>
   </div>
 );
 

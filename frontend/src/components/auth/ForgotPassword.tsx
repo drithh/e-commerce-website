@@ -36,7 +36,7 @@ const ForgotPassword: React.FC<Props> = ({
     <>
       <Dialog.Title
         as="h3"
-        className="text-3xl text-center my-8 font-medium leading-10 text-gray-800"
+        className="my-8 text-center text-3xl font-medium leading-10 text-gray-800"
       >
         Forgot your password?
       </Dialog.Title>
@@ -52,7 +52,7 @@ const ForgotPassword: React.FC<Props> = ({
           value={email}
         />
         {errorMsg !== '' && (
-          <div className="text-red text-sm mb-4 whitespace-nowrap">
+          <div className="text-red mb-4 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}
@@ -66,7 +66,7 @@ const ForgotPassword: React.FC<Props> = ({
           Go back to{' '}
           <span
             onClick={onLogin}
-            className="text-gray-500 focus:outline-none focus:underline cursor-pointer"
+            className="cursor-pointer text-gray-500 focus:underline focus:outline-none"
           >
             Login
           </span>

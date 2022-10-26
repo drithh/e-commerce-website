@@ -37,7 +37,7 @@ const Login: React.FC<Props> = ({
     <>
       <Dialog.Title
         as="h3"
-        className="text-4xl text-center my-8 font-medium leading-6 text-gray-800"
+        className="my-8 text-center text-4xl font-medium leading-6 text-gray-800"
       >
         Login
       </Dialog.Title>
@@ -63,17 +63,17 @@ const Login: React.FC<Props> = ({
           value={password}
         />
         {errorMsg !== '' && (
-          <div className="text-red text-sm mb-4 whitespace-nowrap">
+          <div className="text-red mb-4 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}
-        <div className="flex justify-between mb-4">
+        <div className="mb-4 flex justify-between">
           <div className="flex items-center text-gray-400 focus:outline-none">
             <input
               type="checkbox"
               id="remember"
               name="remember"
-              className="w-4 h-4 mb-0 mr-2"
+              className="mb-0 mr-2 h-4 w-4"
             />
             <label htmlFor="remember" className="text-sm">
               Remember me?
@@ -81,7 +81,7 @@ const Login: React.FC<Props> = ({
           </div>
           <span
             onClick={onForgotPassword}
-            className="text-gray-400 text-sm hover:text-gray-500 focus:outline-none focus:text-gray-500 cursor-pointer"
+            className="cursor-pointer text-sm text-gray-400 hover:text-gray-500 focus:text-gray-500 focus:outline-none"
           >
             Forgot your password?
           </span>
@@ -96,7 +96,7 @@ const Login: React.FC<Props> = ({
           Not a member?{' '}
           <span
             onClick={onRegister}
-            className="text-gray-500 focus:outline-none focus:underline cursor-pointer"
+            className="cursor-pointer text-gray-500 focus:underline focus:outline-none"
           >
             Register
           </span>

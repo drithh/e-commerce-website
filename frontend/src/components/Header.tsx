@@ -54,13 +54,13 @@ const Header = () => {
     <>
       <nav
         className={`${
-          scrolled ? 'bg-white  shadow-md z-50' : 'bg-transparent'
-        } w-full z-50 h-20  flex  fixed top-0 place-items-center transition-all place-content-center duration-1000`}
+          scrolled ? 'z-50  bg-white shadow-md' : 'bg-transparent'
+        } fixed top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
       >
-        <div className="2xl:max-w-[96rem] w-full h-full">
-          <div className="flex justify-between align-baseline h-full justify-content-center">
+        <div className="h-full w-full 2xl:max-w-[96rem]">
+          <div className="justify-content-center flex h-full justify-between align-baseline">
             {/* Left Nav */}
-            <ul className="flex-0 lg:flex-1 flex gap-x-4 place-items-center ">
+            <ul className="flex-0 flex place-items-center gap-x-4 lg:flex-1 ">
               <li className="relative h-6">
                 <PopoverMenu
                   menuTitle="Tops"
@@ -94,16 +94,16 @@ const Header = () => {
             </ul>
 
             {/* Haru Logo */}
-            <div className="flex-1 flex justify-center items-center cursor-pointer ">
-              <div className="w-32 h-auto">
+            <div className="flex flex-1 cursor-pointer items-center justify-center ">
+              <div className="h-auto w-32">
                 <Link to="/">
-                  <div className="text-4xl font-title">TUTU</div>
+                  <div className="font-title text-4xl">TUTU</div>
                 </Link>
               </div>
             </div>
 
             {/* Right Nav */}
-            <ul className="flex-1 flex 2xl:mr-0 mr-4 lg:justify-end justify-start gap-x-8 place-items-center">
+            <ul className="mr-4 flex flex-1 place-items-center justify-start gap-x-8 lg:justify-end 2xl:mr-0">
               <li>
                 {/* <SearchForm /> */}
                 <SearchIcon />
@@ -124,7 +124,7 @@ const Header = () => {
                     <WhistlistIcon />
                     {noOfWishlist > 0 && (
                       <span
-                        className={`${animate} absolute text-xs -top-3 -right-3 bg-gray-500 text-gray-100 py-1 px-2 rounded-full`}
+                        className={`${animate} absolute -top-3 -right-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
                       >
                         {noOfWishlist}
                       </span>

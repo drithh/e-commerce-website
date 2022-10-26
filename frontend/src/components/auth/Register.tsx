@@ -50,7 +50,7 @@ const Register: React.FC<Props> = ({
     <>
       <Dialog.Title
         as="h3"
-        className="text-4xl text-center my-8 font-medium leading-6 text-gray-800"
+        className="my-8 text-center text-4xl font-medium leading-6 text-gray-800"
       >
         Register
       </Dialog.Title>
@@ -104,12 +104,12 @@ const Register: React.FC<Props> = ({
           value={phone}
         />
         {errorMsg !== '' && (
-          <div className="text-red text-sm mb-2 whitespace-nowrap">
+          <div className="text-red mb-2 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}
-        <div className="flex justify-between mb-4">
-          <p className="text-gray-400 text-xs">
+        <div className="mb-4 flex justify-between">
+          <p className="text-xs text-gray-400">
             Your personal data will be used to support your experience
             throughout this website, to manage access to your account, and for
             other purposes described in our Privacy Policy
@@ -125,7 +125,7 @@ const Register: React.FC<Props> = ({
           {'Already a member ? '}
           <span
             onClick={onLogin}
-            className="text-gray-500 focus:outline-none focus:underline cursor-pointer"
+            className="cursor-pointer text-gray-500 focus:underline focus:outline-none"
           >
             Login
           </span>

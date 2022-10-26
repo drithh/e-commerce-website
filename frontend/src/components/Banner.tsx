@@ -37,7 +37,7 @@ const sliders = [
 const Slideshow = () => {
   return (
     <>
-      <div className="relative w-full z-20">
+      <div className="relative z-20 w-full">
         <Swiper
           style={
             {
@@ -71,14 +71,14 @@ const Slideshow = () => {
               </div>
 
               <div
-                className={`absolute bg-white p-4 opacity-90 sm:bg-transparent sm:p-0 sm:opacity-100 bottom-10 right-1/2 transform translate-x-1/2 sm:transform-none sm:top-1/3 ${
+                className={`absolute bottom-10 right-1/2 translate-x-1/2 transform bg-white p-4 opacity-90 sm:top-1/3 sm:transform-none sm:bg-transparent sm:p-0 sm:opacity-100 ${
                   slider.rightText
-                    ? 'sm:right-12 md:right-20 lg:right-40 flex flex-col items-center sm:items-end'
-                    : 'sm:left-12 md:left-20 lg:left-40 flex flex-col items-center sm:items-start'
+                    ? 'flex flex-col items-center sm:right-12 sm:items-end md:right-20 lg:right-40'
+                    : 'flex flex-col items-center sm:left-12 sm:items-start md:left-20 lg:left-40'
                 }`}
               >
                 <span
-                  className={`text-4xl sm:text-5xl md:text-6xl lg:text-7xl my-4 text-center ${
+                  className={`my-4 text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl ${
                     slider.rightText ? 'sm:text-right' : 'sm:text-left'
                   }`}
                 >

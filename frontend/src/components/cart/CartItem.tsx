@@ -53,7 +53,7 @@ export default function CartItem() {
           <BagIcon extraClass="h-8 w-8 sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
-              className={`${animate} absolute text-xs -top-3 bg-gray-500 text-gray-100 py-1 px-2 rounded-full`}
+              className={`${animate} absolute -top-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
             >
               {noOfItems}
             </span>
@@ -100,13 +100,13 @@ export default function CartItem() {
             >
               <div
                 style={{ height: '100vh' }}
-                className="relative inline-block dur h-screen w-full max-w-md overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl"
+                className="dur relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
               >
-                <div className="bg-lightgreen flex justify-between items-center p-6">
+                <div className="bg-lightgreen flex items-center justify-between p-6">
                   <h3 className="text-xl">Cart ({noOfItems})</h3>
                   <button
                     type="button"
-                    className="outline-none focus:outline-none text-3xl sm:text-2xl"
+                    className="text-3xl outline-none focus:outline-none sm:text-2xl"
                     onClick={closeModal}
                   >
                     &#10005;
@@ -114,7 +114,7 @@ export default function CartItem() {
                 </div>
 
                 <div className="h-full">
-                  <div className="itemContainer px-4 h-2/3 w-full flex-grow flex-shrink overflow-y-auto">
+                  <div className="itemContainer h-2/3 w-full flex-shrink flex-grow overflow-y-auto px-4">
                     {cart.map((item) => {
                       subtotal += item.price * item.qty!;
                       return (
@@ -131,7 +131,7 @@ export default function CartItem() {
                       );
                     })}
                   </div>
-                  <div className="btnContainer mt-4 px-4 h-1/3 mb-20 w-full flex flex-col ">
+                  <div className="btnContainer mt-4 mb-20 flex h-1/3 w-full flex-col px-4 ">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
                       <span>$ {roundDecimal(subtotal)}</span>

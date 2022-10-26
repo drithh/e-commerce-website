@@ -65,7 +65,7 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
             <div
               className={`${
                 open ? 'text-black' : 'text-gray-700'
-              } flex justify-center px-1 pb-2 text-gray-700 min-w-[8rem] w-max transition duration-500 ease-in-out hover:ring-0 hover:outline-0 border-0 outline-0 hover:text-black focus:outline-0 place-items-center gap-x-2 flex-row
+              } flex w-max min-w-[8rem] flex-row place-items-center justify-center gap-x-2 border-0 px-1 pb-2 text-gray-700 outline-0 transition duration-500 ease-in-out hover:text-black hover:outline-0 hover:ring-0 focus:outline-0
               `}
               ref={menuRef}
               onClick={() => handleClick(open)}
@@ -73,8 +73,8 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
               <div>{menuTitle}</div>
               <HiOutlineChevronDown
                 className={`${
-                  open ? 'text-black translate-y-[0.15rem]' : 'text-gray-500'
-                } text-[1.5rem] inline-block transform transition-all duration-500 opacity-70
+                  open ? 'translate-y-[0.15rem] text-black' : 'text-gray-500'
+                } inline-block transform text-[1.5rem] opacity-70 transition-all duration-500
                 `}
                 aria-hidden="true"
               />
@@ -93,14 +93,14 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
           >
             <Popover.Panel static className="z-10  mx-auto">
               <div
-                className="relative grid space-y-[2px] bg-white border border-gray-100 border-t-0 text-center shadow-md"
+                className="relative grid space-y-[2px] border border-t-0 border-gray-100 bg-white text-center shadow-md"
                 style={{ width: buttonWidth }}
               >
                 {linksArray.map(([title, href]) => (
                   <Fragment key={'PopoverPanel<>' + title + href}>
                     <a
                       href={href}
-                      className="py-2 px-1  text-gray-400 transition duration-500 ease-in-out bg-white hover:text-black"
+                      className="bg-white py-2  px-1 text-gray-400 transition duration-500 ease-in-out hover:text-black"
                     >
                       {title}
                     </a>

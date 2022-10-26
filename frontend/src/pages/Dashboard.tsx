@@ -1,6 +1,5 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+
 import { SlGraph } from 'react-icons/sl';
 import { MdOutlineAttachMoney } from 'react-icons/md';
 import { BsBookmark } from 'react-icons/bs';
@@ -9,40 +8,37 @@ import { AiOutlineUser } from 'react-icons/ai';
 const Home = () => {
   return (
     <>
-      {/* ===== Head Section ===== */}
-      <Header />
-
       <main
         id="main-content"
-        className=" mt-20 min-h-[60vh] flex  border-gray-400 border-y-2"
+        className=" mt-20 flex min-h-[60vh]  border-y-2 border-gray-400"
       >
         {/* ===== Side Panel Section ===== */}
-        <section className="side-panel w-52 pl-2 border-r-2 border-gray-400 inset-0 flex gap-y-[2px] flex-col  pt-4 font-medium">
-          <div className="pl-4 hover:text-gray-500 cursor-pointer  flex gap-x-3 place-items-center py-4">
+        <section className="side-panel inset-0 flex w-52 flex-col gap-y-[2px] border-r-2 border-gray-400 pl-2  pt-4 font-medium">
+          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
             <span className="text-xl">
               <SlGraph />
             </span>
             Dashboard
           </div>
-          <div className="pl-4 hover:text-gray-500 cursor-pointer  flex gap-x-3 place-items-center py-4">
+          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
             <span className="text-xl">
               <MdOutlineAttachMoney />
             </span>
             Orders
           </div>
-          <div className="pl-4 hover:text-gray-500 cursor-pointer  flex gap-x-3 place-items-center py-4">
+          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
             <span className="text-xl">
               <IoShirtOutline />
             </span>
             Products
           </div>
-          <div className="pl-4 hover:text-gray-500 cursor-pointer  flex gap-x-3 place-items-center py-4">
+          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
             <span className="text-xl">
               <BsBookmark />
             </span>
             Categories
           </div>
-          <div className="pl-4 hover:text-gray-500 cursor-pointer  flex gap-x-3 place-items-center py-4">
+          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
             <span className="text-xl">
               <AiOutlineUser />
             </span>
@@ -54,9 +50,6 @@ const Home = () => {
           <div></div>
         </section>
       </main>
-
-      {/* ===== Footer Section ===== */}
-      <Footer />
     </>
   );
 };

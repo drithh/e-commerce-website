@@ -1,4 +1,4 @@
-const FacebookLogo = ({ extraClass = "" }) => (
+const FacebookLogo = ({ extraClass = '' }) => (
   <svg
     aria-hidden="true"
     focusable="false"

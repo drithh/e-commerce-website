@@ -119,10 +119,10 @@ const LoginForm: FC<Props> = ({ extraClass, children }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="relative inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl">
+              <div className="relative my-8 inline-block w-full max-w-md transform overflow-hidden bg-white p-6 text-left align-middle shadow-xl transition-all">
                 <button
                   type="button"
-                  className="absolute right-4 top-3 outline-none focus:outline-none text-4xl"
+                  className="absolute right-4 top-3 text-4xl outline-none focus:outline-none"
                   onClick={closeModal}
                 >
                   <IoCloseOutline />
@@ -154,7 +154,7 @@ const SuccessModal = ({
     <>
       <Dialog.Title
         as="h3"
-        className="text-xl md:text-2xl whitespace-nowrap text-center my-8 font-medium leading-6 text-gray-900"
+        className="my-8 whitespace-nowrap text-center text-xl font-medium leading-6 text-gray-900 md:text-2xl"
       >
         {/* {("login_successful")} */}
         {/* {("register_successful")} */}
@@ -171,7 +171,7 @@ const SuccessModal = ({
           {'Phone '} - {auth.user?.phone && auth.user?.phone}
         </div>
       </div>
-      <div className="flex justify-center items-center">
+      <div className="flex items-center justify-center">
         <Button value={'Logout'} onClick={handleLogout} />
       </div>
     </>
