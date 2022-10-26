@@ -21,13 +21,10 @@ def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):
-    finished_order = (
-        session.query(Order, OrderItem)
-        .join(OrderItem)
-        .filter(Order.status == "finished")
-        .all()
-    )
+    finished_order = session.query(Order).filter(Order.status == "finished").all()
 
-    total_sold = sum([item.quantity for order, item in finished_order])
+    total_sold = sum([order.order_price for order in finished_order]) + sum(
+        [order.shipping_price for order in finished_order]
+    )
 
     return GetSales(data={"total": total_sold})
