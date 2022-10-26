@@ -42,6 +42,8 @@ class Settings(BaseSettings):
 
     SECRET_KEY: str
 
+    CLOUD_STORAGE: str
+
     # Email
     MAIL_USERNAME: str
     MAIL_PASSWORD: str
