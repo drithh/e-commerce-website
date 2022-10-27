@@ -16,12 +16,24 @@ from app.schemas.request_params import DefaultResponse
 router = APIRouter()
 
 
-@router.get("", response_model=GetCategory, status_code=status.HTTP_200_OK)
+@router.get("", status_code=status.HTTP_200_OK)
 def get_category(
     session: Generator = Depends(get_db),
 ):
+
     categories = session.query(Category).all()
-    return {"data": categories}
+    for category in categories:
+        category.image = session.execute(
+            """
+            SELECT images.image_url, product_images.product_id, products.category_id FROM images
+            JOIN product_images ON images.id = product_images.image_id
+            JOIN products ON products.id = product_images.product_id
+            WHERE products.category_id = :category_id
+            """,
+            {"category_id": category.id},
+        ).fetchone()["image_url"]
+
+    return categories
 
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
