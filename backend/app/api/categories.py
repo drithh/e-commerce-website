@@ -16,7 +16,7 @@ from app.schemas.request_params import DefaultResponse
 router = APIRouter()
 
 
-@router.get("", status_code=status.HTTP_200_OK)
+@router.get("", response_model=GetCategory, status_code=status.HTTP_200_OK)
 def get_category(
     session: Generator = Depends(get_db),
 ):
@@ -33,7 +33,7 @@ def get_category(
             {"category_id": category.id},
         ).fetchone()["image_url"]
 
-    return categories
+    return GetCategory(data=categories)
 
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)

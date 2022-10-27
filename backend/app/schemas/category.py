@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class Category(BaseModel):
     id: UUID
+    image: str
     title: str
 
     class Config:
