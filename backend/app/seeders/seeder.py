@@ -153,7 +153,7 @@ product_items = [
                 "price": 150000,
             },
             {
-                "name": "Open Toe Massage Slides",
+                "name": "Open Toe Massage Sandals",
                 "price": 180000,
             },
         ],
