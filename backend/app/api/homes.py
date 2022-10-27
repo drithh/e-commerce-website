@@ -45,19 +45,20 @@ def get_category_with_image(
 def get_best_seller(
     session: Generator = Depends(get_db),
 ) -> Any:
-    best_seller = session.execute(
-        """
-        SELECT products.id, products.title, images.image_url, COUNT(order_items.id) as total_sold FROM order_items
-        JOIN orders ON order_items.order_id = orders.id
-        JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
-        JOIN products ON product_size_quantities.product_id = products.id
-        JOIN product_images ON products.id = product_images.product_id
-        JOIN images ON product_images.image_id = images.id
-        WHERE orders.status = 'finished' AND images.image_url LIKE '%1.webp'
-        GROUP BY products.id, images.image_url, products.title
-        ORDER BY COUNT(order_items.id) DESC
-        LIMIT 8
-        """
-    ).fetchall()
 
-    return GetBestSeller(data=best_seller)
+    return GetBestSeller(
+        data=session.execute(
+            """
+            SELECT products.id, products.title, images.image_url, COUNT(order_items.id) as total_sold FROM order_items
+            JOIN orders ON order_items.order_id = orders.id
+            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
+            JOIN products ON product_size_quantities.product_id = products.id
+            JOIN product_images ON products.id = product_images.product_id
+            JOIN images ON product_images.image_id = images.id
+            WHERE orders.status = 'finished' AND images.image_url LIKE '%1.webp'
+            GROUP BY products.id, images.image_url, products.title
+            ORDER BY COUNT(order_items.id) DESC
+            LIMIT 8
+            """
+        ).fetchall()
+    )
