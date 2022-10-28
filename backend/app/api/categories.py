@@ -1,3 +1,4 @@
+from http.client import HTTPException
 from typing import Generator
 
 from fastapi import Query, status
@@ -20,8 +21,26 @@ router = APIRouter()
 def get_category(
     session: Generator = Depends(get_db),
 ):
+
     categories = session.query(Category).all()
-    return {"data": categories}
+    for category in categories:
+        category.image = session.execute(
+            """
+            SELECT images.image_url, product_images.product_id, products.category_id FROM images
+            JOIN product_images ON images.id = product_images.image_id
+            JOIN products ON products.id = product_images.product_id
+            WHERE products.category_id = :category_id
+            """,
+            {"category_id": category.id},
+        ).fetchone()["image_url"]
+
+        if not category.image:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Image not found for category {category.title}",
+            )
+
+    return GetCategory(data=categories)
 
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
@@ -29,18 +48,11 @@ def create_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
     category_name: str = Query(..., min_length=2, max_length=100),
-    image: SetImage = Depends(SetImage),
 ):
-    session.add(Image(name=image.name, image_url=image.image_url))
-    session.commit()
 
-    session.add(
-        Category(
-            title=category_name,
-            image_id=session.query(Image).filter(Image.name == image.name).first().id,
-        )
-    )
+    session.add(Category(title=category_name))
     session.commit()
+    logger.info(f"Category {category_name} created by {current_user.name}")
 
     return DefaultResponse(message="Category added")
 
@@ -58,6 +70,7 @@ def update_category(
         {"title": category_name}
     )
     session.commit()
+    logger.info(f"Category {category_name} updated by {current_user.name}")
 
     return DefaultResponse(message="Category updated")
 
@@ -72,5 +85,6 @@ def delete_category(
 ):
     session.query(Category).filter(Category.id == category_id.id).delete()
     session.commit()
+    logger.info(f"Category {Category.title} deleted by {current_user.name}")
 
     return DefaultResponse(message="Category deleted")
