@@ -14,4 +14,5 @@ from app.models import (
     product_size_quantity,
     size,
     user,
+    wishlist,
 )

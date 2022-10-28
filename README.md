@@ -9,9 +9,49 @@
 - Dependabot config
 - Docker images
 
-## Good to know
+## Project structure
 
-## Step 1: Getting started
+```
+.
+├── backend
+│   ├── alembic  -> Database migrations
+│   ├── app
+│   │   ├── api  -> API endpoints
+│   │   │   ├── authentications.py
+│   │   │   ├── carts.py
+│   │   │   ├── ...
+│   │   │   ├── sales.py
+│   │   │   └── users.py
+│   │   ├── core  -> Config and Utils
+│   │   │   ├── config.py
+│   │   │   └── logger.py
+│   │   ├── deps  -> API Dependencies
+│   │   │   ├── authentication.py
+│   │   │   ├── ...
+│   │   │   └── request_params.py
+│   │   ├── factory.py  -> FastAPI app factory
+│   │   ├── models  -> Database models
+│   │   │   ├── banner.py
+│   │   │   ├── cart.py
+│   │   │   ├── ...
+│   │   │   └── wishlist.py
+│   │   ├── schemas  -> Schemas for request and response
+│   │   │   ├── authentication.py
+│   │   │   ├── category.py
+│   │   │   ├── ...
+│   │   │   └── user.py
+│   │   └── seeders -> Database seeders
+│   │       ├── banner_seeder.py
+│   │       ├── cart_seeder.py
+│   │       ├── ...
+│   │       └── wishlist_seeder.py
+│   ├── pyproject.toml -> Package manager
+│   ├── sql -> SQL scripts
+│   └── tests -> Unit tests
+└── frontend -> Frontend
+```
+
+### Step 1: Getting started
 
 Start a local development instance with docker-compose
 
@@ -24,15 +64,13 @@ make migrate-up
 # Run Seeder
 make seed
 
-# Create database used for testing (optional)
-docker-compose exec postgres createdb apptest -U postgres
 ```
 
 Now you can navigate to the following URLs:
 
 - Backend: http://localhost:8000/api/v1
 - Backend OpenAPI docs: http://localhost:8000/docs/
-<!-- - Frontend: http://localhost:3000 -->
+- Frontend: http://localhost:3000
 
 ### Step 2: Setup pre-commit hooks and database
 
@@ -48,7 +86,7 @@ The backend setup of docker-compose is set to automatically reload the app whene
 
 ### Database migrations
 
-These two are the most used commands when working with alembic. For more info, follow through [Alembic's tutorial](https://alembic.sqlalchemy.org/en/latest/tutorial.html).
+Useful commands for database migrations:
 
 ```bash
 # Auto generate a revision
@@ -56,6 +94,16 @@ docker-compose exec backend alembic revision --autogenerate -m 'message'
 
 # Apply latest changes
 docker-compose exec backend alembic upgrade head
+
+# Run database migration
+make migrate-up
+
+# Run Seeder
+make seed
+
+# Dearchive Soft Deleted Field
+make dearchive
+
 ```
 
 ### Backend tests

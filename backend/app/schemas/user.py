@@ -1,3 +1,4 @@
+from typing import Union
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -8,9 +9,9 @@ class GetUser(BaseModel):
     name: str
     email: str
     phone_number: str
-    address_name: str
-    address: str
-    city: str
+    address_name: Union[str, None]
+    address: Union[str, None]
+    city: Union[str, None]
     balance: int
 
     class Config:
