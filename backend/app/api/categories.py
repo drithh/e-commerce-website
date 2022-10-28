@@ -41,18 +41,11 @@ def create_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
     category_name: str = Query(..., min_length=2, max_length=100),
-    image: SetImage = Depends(SetImage),
 ):
-    session.add(Image(name=image.name, image_url=image.image_url))
-    session.commit()
 
-    session.add(
-        Category(
-            title=category_name,
-            image_id=session.query(Image).filter(Image.name == image.name).first().id,
-        )
-    )
+    session.add(Category(title=category_name))
     session.commit()
+    logger.info(f"Category {category_name} created by {current_user.name}")
 
     return DefaultResponse(message="Category added")
 
@@ -70,6 +63,7 @@ def update_category(
         {"title": category_name}
     )
     session.commit()
+    logger.info(f"Category {category_name} updated by {current_user.name}")
 
     return DefaultResponse(message="Category updated")
 
@@ -84,5 +78,6 @@ def delete_category(
 ):
     session.query(Category).filter(Category.id == category_id.id).delete()
     session.commit()
+    logger.info(f"Category {Category.title} deleted by {current_user.name}")
 
     return DefaultResponse(message="Category deleted")
