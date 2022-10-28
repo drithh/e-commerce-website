@@ -1,3 +1,4 @@
+from http.client import HTTPException
 from typing import Generator
 
 from fastapi import Query, status
@@ -32,6 +33,12 @@ def get_category(
             """,
             {"category_id": category.id},
         ).fetchone()["image_url"]
+
+        if not category.image:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Image not found for category {category.title}",
+            )
 
     return GetCategory(data=categories)
 
