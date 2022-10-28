@@ -38,7 +38,6 @@ def create_product(
     )
 
     session.add(product)
-    session.commit()
 
     for image in request.images:
         image = Image(
@@ -54,7 +53,10 @@ def create_product(
         )
 
         session.add(product_image)
-        session.commit()
+
+    session.commit()
+
+    logger.info(f"Product {product.title} created by {current_user.name}")
 
     return DefaultResponse(message="Product added")
 
@@ -84,6 +86,8 @@ def update_product(
             updated_image.image_url = image.image_url
             session.commit()
 
+    logger.info(f"Product {product.title} updated by {current_user.name}")
+
     return DefaultResponse(message="Product updated")
 
 
@@ -99,6 +103,8 @@ def delete_product(
     product = session.query(Product).filter(Product.id == product_id).first()
     session.delete(product)
     session.commit()
+
+    logger.info(f"Product {product.title} deleted by {current_user.name}")
 
     return DefaultResponse(message="Product deleted")
 
