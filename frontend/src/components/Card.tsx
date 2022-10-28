@@ -10,9 +10,9 @@ import { itemType } from '../context/cart/cart-types';
 import { useCart } from '../context/cart/CartProvider';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
 
-type Props = {
+interface Props {
   item: itemType;
-};
+}
 
 const Card: FC<Props> = ({ item }) => {
   const { wishlist, addToWishlist, deleteWishlistItem } = useWishlist();
@@ -62,16 +62,16 @@ const Card: FC<Props> = ({ item }) => {
         <button
           type="button"
           onClick={() => addOne!(item)}
-          className="absolute font-lato left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 group-hover:bottom-8 font-semibold text-gray-400  transition-all duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 sm:block md:-bottom-10"
+          className="absolute font-lato left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 group-hover:bottom-8 font-semibold text-gray-700  transition-all duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 sm:block md:-bottom-10"
         >
-          Add to cart
+          Add To Cart
         </button>
       </div>
 
-      <div className="content">
+      <div className="content font-lato">
         <Link
           to={itemLink}
-          className="mb-1 block truncate text-xs text-gray-500 no-underline sm:text-base"
+          className="mb-1 block truncate text-base text-gray-700 no-underline sm:text-lg "
         >
           {name}
         </Link>

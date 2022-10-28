@@ -5,15 +5,17 @@ import { MdOutlineAttachMoney } from 'react-icons/md';
 import { BsBookmark } from 'react-icons/bs';
 import { IoShirtOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
+import Orders from '../components/dashboard/Orders';
+
 const Home = () => {
   return (
     <>
       <main
         id="main-content"
-        className=" mt-20 flex min-h-[60vh]  border-y-2 border-gray-400"
+        className=" mt-20 flex min-h-[60vh]  border-y border-gray-400"
       >
         {/* ===== Side Panel Section ===== */}
-        <section className="side-panel inset-0 flex w-52 flex-col gap-y-[2px] border-r-2 border-gray-400 pl-2  pt-4 font-medium">
+        <section className="side-panel inset-0 flex w-52 flex-col gap-y-[2px] border-r border-gray-400 pl-2  pt-4 font-medium">
           <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
             <span className="text-xl">
               <SlGraph />
@@ -45,9 +47,8 @@ const Home = () => {
             Customers
           </div>
         </section>
-        <section>
-          test
-          <div></div>
+        <section className="wrapper px-5 pt-7">
+          <Orders />
         </section>
       </main>
     </>

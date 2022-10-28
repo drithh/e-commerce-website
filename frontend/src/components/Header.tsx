@@ -54,7 +54,7 @@ const Header = () => {
     <>
       <nav
         className={`${
-          scrolled ? 'z-50  bg-white shadow-md' : 'bg-transparent'
+          scrolled ? 'bg-white shadow-md' : 'bg-transparent'
         } fixed top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
       >
         <div className="h-full w-full 2xl:max-w-[96rem]">
@@ -93,7 +93,7 @@ const Header = () => {
               </li>
             </ul>
 
-            {/* Haru Logo */}
+            {/* Tutu Logo */}
             <div className="flex flex-1 cursor-pointer items-center justify-center ">
               <div className="h-auto w-32">
                 <Link to="/">

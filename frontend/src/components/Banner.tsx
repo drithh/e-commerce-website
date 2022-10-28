@@ -65,8 +65,8 @@ const Slideshow = () => {
               <div className="block">
                 <img
                   src={slider.image}
-                  className="w-screen object-cover"
-                  alt={'some name'}
+                  className="w-screen object-strecth h-screen"
+                  alt={slider.title}
                 />
               </div>
 

@@ -115,7 +115,7 @@ const Home = () => {
 
   return (
     <>
-      <main id="main-content" className="mt-20 min-h-[60vh]">
+      <main id="main-content" className="min-h-[60vh]">
         <Banner />
 
         {/* ===== Category Section ===== */}
