@@ -5,6 +5,7 @@ from app.models import (
     banner,
     cart,
     category,
+    forgot_password,
     image,
     order,
     order_item,
@@ -13,4 +14,5 @@ from app.models import (
     product_size_quantity,
     size,
     user,
+    wishlist,
 )

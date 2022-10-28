@@ -5,7 +5,7 @@ def product_image_seed(fake, session, product_id, image_id):
     product_image_id = []
 
     for index, image in enumerate(image_id):
-        product = product_id[index // 6]
+        product = product_id[index // 2]
         product_image = ProductImage.seed(fake, product, image)
         session.add(product_image)
         product_image_id.append(product_image.id)

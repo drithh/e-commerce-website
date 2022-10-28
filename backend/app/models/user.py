@@ -1,5 +1,5 @@
 import bcrypt
-from sqlalchemy import Boolean, Column, String
+from sqlalchemy import Boolean, Column, Integer, String
 
 from app.db import Base
 from app.models.default import DefaultModel
@@ -15,11 +15,12 @@ class User(DefaultModel, Base):
     salt = Column(String(length=128), nullable=False)
 
     phone_number = Column(String(length=64), nullable=False)
-    address = Column(String(length=128), nullable=False)
-    city = Column(String(length=64), nullable=False)
-    balance = Column(String(length=64), nullable=False, default=0)
+    address_name = Column(String(length=64), nullable=True)
+    address = Column(String(length=128), nullable=True)
+    city = Column(String(length=64), nullable=True)
+    balance = Column(Integer, nullable=False, server_default="0")
 
-    is_admin = Column(Boolean, nullable=False, default=False)
+    is_admin = Column(Boolean, nullable=False, server_default="false")
 
     @classmethod
     def default_seed(cls, fake):
@@ -31,6 +32,7 @@ class User(DefaultModel, Base):
             password=password,
             salt=salt,
             phone_number=fake.phone_number(),
+            address_name=fake.text(max_nb_chars=20),
             address=fake.address(),
             city=fake.city(),
             balance=fake.pyint(),
@@ -43,6 +45,7 @@ class User(DefaultModel, Base):
             password=password,
             salt=salt,
             phone_number=fake.phone_number(),
+            address_name=fake.text(max_nb_chars=20),
             address=fake.address(),
             city=fake.city(),
             balance=fake.pyint(),
@@ -60,6 +63,7 @@ class User(DefaultModel, Base):
             password=password,
             salt=salt,
             phone_number=fake.phone_number(),
+            address_name=fake.text(max_nb_chars=20),
             address=fake.address(),
             city=fake.city(),
             balance=fake.pyint(),
@@ -75,7 +79,8 @@ class User(DefaultModel, Base):
         return hashed_password.decode("utf-8"), salt
 
     @classmethod
-    def verify_password(cls, password, hashed_password, salt):
+    def verify_password(cls, password, user):
+        hashed_password, salt = user.password, user.salt
         password = password.encode("utf-8")
         salt = salt.encode("utf-8")
         hashed_password = hashed_password.encode("utf-8")

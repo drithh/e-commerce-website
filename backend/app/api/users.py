@@ -1,30 +1,113 @@
-from typing import Any, List
+from typing import Any, Generator, List
 
-from fastapi.params import Depends
+from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
-from sqlalchemy import func, select
-from sqlalchemy.ext.asyncio.session import AsyncSession
+from sqlalchemy.exc import DatabaseError
 from starlette.responses import Response
 
-from app.deps.db import get_async_session
-from app.deps.users import current_superuser
+from app.core.logger import logger
+from app.deps.authentication import get_current_active_admin, get_current_active_user
+from app.deps.db import get_db
 from app.models.user import User
-from app.schemas.user import UserRead
+from app.schemas.request_params import DefaultResponse
+from app.schemas.user import (
+    DeleteUser,
+    GetUser,
+    GetUserAddress,
+    GetUserBalance,
+    PutUserBalance,
+)
 
 router = APIRouter()
 
 
-@router.get("/users", response_model=List[UserRead])
-async def get_users(
-    response: Response,
-    session: AsyncSession = Depends(get_async_session),
-    user: User = Depends(current_superuser),
-    skip: int = 0,
-    limit: int = 100,
+@router.get("", response_model=GetUser, status_code=status.HTTP_200_OK)
+def get_user(
+    current_user: User = Depends(get_current_active_user),
 ) -> Any:
-    total = await session.scalar(select(func.count(User.id)))
-    users = (
-        (await session.execute(select(User).offset(skip).limit(limit))).scalars().all()
+    return current_user
+
+
+@router.get(
+    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
+)
+def get_user_shipping_address(
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    return current_user
+
+
+@router.get("/all", response_model=List[GetUser], status_code=status.HTTP_200_OK)
+def get_all_user(
+    session: Generator = Depends(get_db),
+) -> Any:
+    user = session.query(User).all()
+
+    return user
+
+
+@router.put(
+    "/shipping_address", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def put_user_shipping_address(
+    request: GetUserAddress,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    current_user.address_name = request.address_name
+    current_user.address = request.address
+    current_user.city = request.city
+    current_user.phone_number = request.phone_number
+
+    session.commit()
+
+    logger.info(f"User {current_user.email} updated shipping address")
+    return DefaultResponse(message="Shipping address updated")
+
+
+@router.get("/balance", response_model=GetUserBalance, status_code=status.HTTP_200_OK)
+async def get_user_balance(
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    return current_user
+
+
+@router.put(
+    "/balance", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED
+)
+def put_user_balance(
+    request: PutUserBalance,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    new_balance = int(current_user.balance) + request.balance
+    current_user.balance = new_balance
+    session.commit()
+    logger.info(f"User {current_user.User.email} updated balance")
+    return DefaultResponse(
+        message=f"Your balance has been updated, current_balance:{new_balance}"
     )
-    response.headers["Content-Range"] = f"{skip}-{skip + len(users)}/{total}"
-    return users
+
+
+@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+def delete_user(
+    request: DeleteUser,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+) -> Response:
+    try:
+        session.query(User).filter(User.id == request.id).delete()
+        session.commit()
+    except DatabaseError as e:
+        error = (
+            e.orig.args[0]
+            .split("DETAIL:")[1]
+            .strip()
+            .replace('"', "")
+            .replace("\\", "")
+        )
+        logger.error(error)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"{error}"
+        )
+    logger.info(f"User {request.id} deleted by {current_user.User.email}")

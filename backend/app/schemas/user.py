@@ -1,15 +1,51 @@
-import uuid
+from typing import Union
+from uuid import UUID
 
-from fastapi_users import schemas
-
-
-class UserRead(schemas.BaseUser[uuid.UUID]):
-    pass
+from pydantic import BaseModel
 
 
-class UserCreate(schemas.BaseUserCreate):
-    pass
+class GetUser(BaseModel):
+    id: UUID
+    name: str
+    email: str
+    phone_number: str
+    address_name: Union[str, None]
+    address: Union[str, None]
+    city: Union[str, None]
+    balance: int
+
+    class Config:
+        orm_mode = True
 
 
-class UserUpdate(schemas.BaseUserUpdate):
-    pass
+class GetUserAddress(BaseModel):
+    id: UUID
+    address_name: str
+    phone_number: str
+    address: str
+    city: str
+
+    class Config:
+        orm_mode = True
+
+
+class GetUserBalance(BaseModel):
+    id: UUID
+    balance: int
+
+    class Config:
+        orm_mode = True
+
+
+class PutUserBalance(BaseModel):
+    balance: int
+
+    class Config:
+        orm_mode = True
+
+
+class DeleteUser(BaseModel):
+    id: UUID
+
+    class Config:
+        orm_mode = True

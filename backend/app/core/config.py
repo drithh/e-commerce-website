@@ -13,7 +13,7 @@ class Settings(BaseSettings):
 
     API_PATH: str = "/api/v1"
 
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 7 * 24 * 60  # 7 days
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
     BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
 
@@ -41,7 +41,24 @@ class Settings(BaseSettings):
         return v.replace("postgresql", "postgresql+asyncpg") if v else v
 
     SECRET_KEY: str
+
+    CLOUD_STORAGE: str
+
+    # Email
+    MAIL_USERNAME: str
+    MAIL_PASSWORD: str
+    MAIL_FROM: str
+    MAIL_PORT: int
+    MAIL_SERVER: str
+    MAIL_STARTTLS: bool
+    MAIL_SSL_TLS: bool
+    USE_CREDENTIALS: bool
+    VALIDATE_CERTS: bool
+
     #  END: required environment variables
+
+    class Config:
+        env_file = ".env"
 
 
 settings = Settings()

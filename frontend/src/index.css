@@ -1,0 +1,25 @@
+@font-face {
+  font-family: 'Allerta-Stencil-Regular';
+  src: local('Allerta-Stencil-Regular.woff'),
+    url(assets/fonts/Allerta-Stencil-Regular.woff) format('woff');
+}
+
+body {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+button:focus {
+  outline: none;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Poppins:wght@100;200;300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

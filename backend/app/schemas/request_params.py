@@ -7,3 +7,10 @@ class RequestParams(BaseModel):
     skip: int
     limit: int
     order_by: Any
+
+
+class DefaultResponse(BaseModel):
+    message: str
+
+    class Config:
+        orm_mode = True

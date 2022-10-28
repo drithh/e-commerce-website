@@ -8,8 +8,8 @@ class ProductSizeQuantity(DefaultModel, Base):
     __tablename__ = "product_size_quantities"
 
     quantity = Column(Integer, nullable=False)
-    product_id = Column(ForeignKey("products.id"), nullable=False)
-    size_id = Column(ForeignKey("sizes.id"), nullable=False)
+    product_id = Column(ForeignKey("products.id", ondelete="CASCADE"), nullable=False)
+    size_id = Column(ForeignKey("sizes.id", ondelete="CASCADE"), nullable=False)
 
     @classmethod
     def seed(cls, fake, product_id, size_id):
