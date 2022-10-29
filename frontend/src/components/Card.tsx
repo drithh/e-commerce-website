@@ -6,29 +6,28 @@ import { Link } from 'react-router-dom';
 import Heart from '../assets/icons/Heart';
 // import styles from './Card.module.css';
 import HeartSolid from '../assets/icons/HeartSolid';
-import { itemType } from '../context/cart/cart-types';
-import { useCart } from '../context/cart/CartProvider';
-import { useWishlist } from '../context/wishlist/WishlistProvider';
+// import { useCart } from '../context/cart/CartProvider';
+// import { useWishlist } from '../context/wishlist/WishlistProvider';
+import { BestSeller } from '../generated/models/best-seller';
 
 interface Props {
-  item: itemType;
+  item: BestSeller;
 }
 
 const Card: FC<Props> = ({ item }) => {
-  const { wishlist, addToWishlist, deleteWishlistItem } = useWishlist();
-  const { addOne } = useCart();
+  // const { wishlist, addToWishlist, deleteWishlistItem } = useWishlist();
+  // const { addOne } = useCart();
   const [isHovered, setIsHovered] = useState(false);
   const [isWLHovered, setIsWLHovered] = useState(false);
 
-  const { id, name, price, img1, img2 } = item;
+  const { id, title, price, images } = item;
 
   const itemLink = `/products/${encodeURIComponent(id)}`;
 
-  const alreadyWishlisted =
-    wishlist.filter((wItem) => wItem.id === id).length > 0;
+  const alreadyWishlisted = true;
 
   const handleWishlist = () => {
-    alreadyWishlisted ? deleteWishlistItem!(item) : addToWishlist!(item);
+    // alreadyWishlisted ? deleteWishlistItem!(item) : addToWishlist!(item);
   };
 
   return (
@@ -40,12 +39,12 @@ const Card: FC<Props> = ({ item }) => {
           onMouseOver={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
         >
-          {!isHovered && <img src={img1 as string} alt={name} />}
+          {!isHovered && <img src={images[0] as string} alt={title} />}
           {isHovered && (
             <img
               className="transform transition-transform duration-1000 hover:scale-110"
-              src={img2 as string}
-              alt={name}
+              src={(images[1] as string) || (images[0] as string)}
+              alt={title}
             />
           )}
         </Link>
@@ -61,7 +60,7 @@ const Card: FC<Props> = ({ item }) => {
         </button>
         <button
           type="button"
-          onClick={() => addOne!(item)}
+          // onClick={() => addOne!(item)}
           className="absolute font-lato left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 group-hover:bottom-8 font-semibold text-gray-700  transition-all duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 sm:block md:-bottom-10"
         >
           Add To Cart
@@ -73,12 +72,12 @@ const Card: FC<Props> = ({ item }) => {
           to={itemLink}
           className="mb-1 block truncate text-base text-gray-700 no-underline sm:text-lg "
         >
-          {name}
+          {title}
         </Link>
         <div className="text-gray-400">$ {price}</div>
         <button
           type="button"
-          onClick={() => addOne!(item)}
+          // onClick={() => addOne!(item)}
           className="text-sm font-bold uppercase sm:hidden"
         >
           Add to cart

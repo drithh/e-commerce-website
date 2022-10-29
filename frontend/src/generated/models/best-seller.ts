@@ -34,6 +34,12 @@ export interface BestSeller {
     'title': string;
     /**
      * 
+     * @type {number}
+     * @memberof BestSeller
+     */
+    'price': number;
+    /**
+     * 
      * @type {Array<string>}
      * @memberof BestSeller
      */

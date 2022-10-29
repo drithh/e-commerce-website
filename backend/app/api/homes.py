@@ -64,7 +64,7 @@ def get_best_seller(
 
     best_seller = session.execute(
         f"""
-            SELECT products.id, products.title, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image, products.price
+            SELECT products.id, products.title, products.price, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image
             FROM only products
             JOIN product_images ON products.id = product_images.product_id
             JOIN images ON product_images.image_id = images.id
@@ -72,7 +72,7 @@ def get_best_seller(
             JOIN order_items ON product_size_quantities.id = order_items.product_size_quantity_id
             JOIN orders ON order_items.order_id = orders.id
             WHERE orders.status = 'finished'
-            GROUP BY products.id, image_url, products.title
+            GROUP BY products.id, image, products.title, products.price
             ORDER BY COUNT(order_items.id) DESC
             """
     ).fetchall()

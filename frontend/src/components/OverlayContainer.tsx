@@ -8,9 +8,9 @@ type Props = {
 };
 
 const OverlayContainer: FC<Props> = ({ imgSrc, imgAlt, children }) => (
-  <div className="group relative flex items-center justify-center overflow-hidden">
+  <div className="group relative flex items-center justify-center overflow-hidden h-72">
     <img
-      className="transition-all duration-500 group-hover:scale-110"
+      className="transition-all duration-500 group-hover:scale-110  object-cover"
       src={imgSrc}
       alt={imgAlt}
       width={710}

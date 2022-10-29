@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class BestSeller(BaseModel):
     id: UUID
     title: str
+    price: int
     images: List[str]
 
 
