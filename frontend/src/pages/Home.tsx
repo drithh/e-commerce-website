@@ -3,9 +3,18 @@ import Banner from '../components/Banner';
 import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
+import axios from 'axios';
+import * as dotenv from 'dotenv';
+import { useQuery } from 'react-query';
+
+dotenv.config();
+
+const fetchBanners = () => {
+  return axios.get(`${process.env.REACT_APP_API_URL}/banners`);
+};
 
 const Home = () => {
-  const data = [
+  const datadummy = [
     {
       imgSrc: '/img/banner_minipage2.webp',
       imgAlt: 'Hat Collection',
@@ -113,6 +122,11 @@ const Home = () => {
     },
   ];
 
+  const { data, isLoading, error } = useQuery('banners', fetchBanners);
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error</div>;
+
   return (
     <>
       <main id="main-content" className="min-h-[60vh]">
@@ -125,7 +139,7 @@ const Home = () => {
           </div>
           <div className="wrapper mx-auto max-w-7xl">
             <div className="app-max-width app-x-padding grid h-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {data.map((item, index) => (
+              {data?.data.map((item: any, index: number) => (
                 <div className="relative w-full" key={index}>
                   <OverlayContainer imgSrc={item.imgSrc} imgAlt={item.imgAlt}>
                     <LinkButton
