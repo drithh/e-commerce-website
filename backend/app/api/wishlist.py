@@ -50,3 +50,19 @@ def create_wishlist(
     logger.info(f"User {current_user.name} added product {id} to wishlist")
 
     return DefaultResponse(message="Wishlist created")
+
+
+@router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
+def delete_wishlist(
+    id: UUID,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    session.query(Wishlist).filter(
+        Wishlist.user_id == current_user.id, Wishlist.product_id == id
+    ).delete()
+    session.commit()
+
+    logger.info(f"User {current_user.name} removed product {id} from wishlist")
+
+    return DefaultResponse(message="Wishlist deleted")
