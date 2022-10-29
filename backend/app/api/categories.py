@@ -37,9 +37,7 @@ def create_category(
     return DefaultResponse(message="Category added")
 
 
-@router.put(
-    "{category_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
-)
+@router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def update_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
@@ -55,9 +53,7 @@ def update_category(
     return DefaultResponse(message="Category updated")
 
 
-@router.delete(
-    "{category_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
-)
+@router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def delete_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),

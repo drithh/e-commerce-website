@@ -4,13 +4,10 @@ import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
 import axios from 'axios';
-import * as dotenv from 'dotenv';
 import { useQuery } from 'react-query';
 
-dotenv.config();
-
 const fetchBanners = () => {
-  return axios.get(`${process.env.REACT_APP_API_URL}/banners`);
+  return axios.get('http://localhost:8000/banners');
 };
 
 const Home = () => {

@@ -144,7 +144,7 @@ async def forgot_password(
 
 
 @router.put(
-    "/reset-password/{token}",
+    "/reset-password",
     status_code=status.HTTP_201_CREATED,
     response_model=DefaultResponse,
 )

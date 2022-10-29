@@ -1,4 +1,4 @@
-from email.generator import Generator
+from typing import Generator
 
 from fastapi import status
 from fastapi.params import Depends
