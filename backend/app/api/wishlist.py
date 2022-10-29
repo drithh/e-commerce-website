@@ -1,4 +1,5 @@
 from typing import Generator
+from uuid import UUID
 
 from fastapi import status
 from fastapi.params import Depends
@@ -35,3 +36,17 @@ def get_wishlist(
     ).fetchall()
 
     return GetWishlist(data=wishlists)
+
+
+@router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
+def create_wishlist(
+    id: UUID,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    session.add(Wishlist(user_id=current_user.id, product_id=id))
+    session.commit()
+
+    logger.info(f"User {current_user.name} added product {id} to wishlist")
+
+    return DefaultResponse(message="Wishlist created")
