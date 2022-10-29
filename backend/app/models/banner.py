@@ -11,10 +11,10 @@ class Banner(DefaultModel, Base):
     image_id = Column(ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
 
     @classmethod
-    def seed(cls, fake, image_id):
+    def seed(cls, fake, image_id, text):
         banner = Banner(
             id=fake.uuid4(),
-            title=fake.text(max_nb_chars=80),
+            title=text,
             image_id=image_id,
         )
         return banner

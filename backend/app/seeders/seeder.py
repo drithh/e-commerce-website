@@ -485,6 +485,8 @@ for product_item in product_items:
                 f"products/{product_item['category']}/{item['name'].replace(' ', '-').lower()}-{i}.webp"
             )
 
+banner_text = ["Night Summer Dresses", "The Weekend Promotions", "New Cocktail Dresses"]
+
 
 def seed():
 
@@ -506,7 +508,7 @@ def seed():
         category_id = category_seed(fake, session, category_items)
 
         logger.info("Seeding Table Banners")
-        banner_seed(fake, session, banner_image_id)
+        banner_seed(fake, session, banner_image_id, banner_text)
         session.commit()
 
         # change product_items category to category_id

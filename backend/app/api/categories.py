@@ -1,4 +1,3 @@
-from http.client import HTTPException
 from typing import Generator
 
 from fastapi import Query, status
@@ -21,26 +20,7 @@ router = APIRouter()
 def get_category(
     session: Generator = Depends(get_db),
 ):
-
-    categories = session.query(Category).all()
-    for category in categories:
-        category.image = session.execute(
-            """
-            SELECT images.image_url, product_images.product_id, products.category_id FROM images
-            JOIN product_images ON images.id = product_images.image_id
-            JOIN products ON products.id = product_images.product_id
-            WHERE products.category_id = :category_id
-            """,
-            {"category_id": category.id},
-        ).fetchone()["image_url"]
-
-        if not category.image:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Image not found for category {category.title}",
-            )
-
-    return GetCategory(data=categories)
+    return GetCategory(data=session.query(Category).all())
 
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)

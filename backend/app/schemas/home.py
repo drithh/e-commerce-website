@@ -1,3 +1,4 @@
+from typing import List
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -6,8 +7,7 @@ from pydantic import BaseModel
 class BestSeller(BaseModel):
     id: UUID
     title: str
-    image_url: str
-    total_sold: int
+    images: List[str]
 
 
 class GetBestSeller(BaseModel):
