@@ -8,17 +8,17 @@ fake = Faker("id_ID")
 
 
 def test_image_model(db: Session):
-    image = Image.seed(fake, "image_1", "image_url")
+    image = Image.seed(fake, "image_1", "image_url_1")
     db.add(image)
     db.commit()
     assert db.query(Image).filter(Image.id == image.id).first()
 
 
 def test_unique_image_name(db: Session):
-    image = Image.seed(fake, "image_2", "image_url")
+    image = Image.seed(fake, "image_2", "image_url_2")
     db.add(image)
     db.commit()
-    image2 = Image.seed(fake, "image_2", "image_url")
+    image2 = Image.seed(fake, "image_2", "image_url_2")
     db.add(image2)
     try:
         db.commit()
@@ -27,7 +27,7 @@ def test_unique_image_name(db: Session):
 
 
 def test_delete_image(db: Session):
-    image = Image.seed(fake, "image_3", "image_url")
+    image = Image.seed(fake, "image_3", "image_url_3")
     db.add(image)
     db.commit()
     db.delete(image)

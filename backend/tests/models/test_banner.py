@@ -9,23 +9,23 @@ fake = Faker("id_ID")
 
 
 def test_banner_model(db: Session):
-    image = Image.seed(fake, "image_banner_1", "image_url")
+    image = Image.seed(fake, "image_banner_1", "image_url_image_banner_1")
     db.add(image)
     db.commit()
-    banner = Banner.seed(fake, image.id, "banner1")
+    banner = Banner.seed(fake, image.id, "banner_1")
     db.add(banner)
     db.commit()
-    assert db.query(Banner).filter(Banner.id == banner.id).first()
+    assert db.query(Banner).filter(Banner.id == banner.id).first().image_id == image.id
 
 
 def test_unique_banner_title(db: Session):
-    image = Image.seed(fake, "image_banner_2", "image_url")
+    image = Image.seed(fake, "image_banner_2", "image_url_image_banner_2")
     db.add(image)
     db.commit()
-    banner = Banner.seed(fake, image.id, "banner2")
+    banner = Banner.seed(fake, image.id, "banner_2")
     db.add(banner)
     db.commit()
-    banner2 = Banner.seed(fake, image.id, "banner2")
+    banner2 = Banner.seed(fake, image.id, "banner_2")
     db.add(banner2)
     try:
         db.commit()
@@ -33,32 +33,22 @@ def test_unique_banner_title(db: Session):
         assert True
 
 
-def test_delete_banner(db: Session):
-    image = Image.seed(fake, "image_banner_3", "image_url")
-    db.add(image)
-    db.commit()
-    banner = Banner.seed(fake, image.id, "banner3")
-    db.add(banner)
-    db.commit()
-    db.delete(banner)
-    db.commit()
-    assert not db.query(Banner).filter(Banner.id == banner.id).first()
-
-
-def test_relation_banner_image(db: Session):
-    image = Image.seed(fake, "image_banner_4", "image_url")
-    db.add(image)
-    db.commit()
-    banner = Banner.seed(fake, image.id, "banner4")
-    db.add(banner)
-    db.commit()
-    assert db.query(Banner).filter(Banner.id == banner.id).first().image_id == image.id
-
-
-def test_foreign_key_banner_image(db: Session):
-    banner = Banner.seed(fake, fake.uuid4(), "banner5")
+def test_foreign_key_image_id(db: Session):
+    banner = Banner.seed(fake, fake.uuid4(), "banner_3")
     db.add(banner)
     try:
         db.commit()
     except IntegrityError:
         assert True
+
+
+def test_delete_banner(db: Session):
+    image = Image.seed(fake, "image_banner_4", "image_url_image_banner_4")
+    db.add(image)
+    db.commit()
+    banner = Banner.seed(fake, image.id, "banner_4")
+    db.add(banner)
+    db.commit()
+    db.delete(banner)
+    db.commit()
+    assert not db.query(Banner).filter(Banner.id == banner.id).first()
