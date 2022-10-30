@@ -7,7 +7,7 @@ from app.models.default import DefaultModel
 class Size(DefaultModel, Base):
     __tablename__ = "sizes"
 
-    size = Column(String(length=16), nullable=False)
+    size = Column(String(length=16), nullable=False, unique=True)
 
     @classmethod
     def seed(cls, fake, size):
