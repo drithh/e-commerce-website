@@ -11,6 +11,13 @@ dearchive:
 drop-tables:
 	$(EXEC) poetry run python -m app.util.drop-tables
 
+create-apptest:
+	docker compose exec postgres createdb apptest -U postgres
+	docker compose exec postgres psql -U postgres -d apptest -f docker-entrypoint-initdb.d/extension.sql
+
+test:
+	docker compose exec backend pytest
+
 migrate-up:
 		$(MIGRATE) upgrade head
 migrate-down:

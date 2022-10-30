@@ -7,7 +7,7 @@ from app.models.default import DefaultModel
 class Banner(DefaultModel, Base):
     __tablename__ = "banners"
 
-    title = Column(String(length=128), nullable=False)
+    title = Column(String(length=128), nullable=False, unique=True)
     image_id = Column(ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
 
     @classmethod

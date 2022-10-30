@@ -1,5 +1,4 @@
-import uuid
-from typing import Callable, Generator
+from typing import Generator
 
 import pytest
 from fastapi_users.password import PasswordHelper
@@ -10,9 +9,7 @@ from starlette.testclient import TestClient
 from app.core.config import settings
 from app.db import Base
 from app.deps.db import get_db
-from app.deps.users import get_user_manager
 from app.factory import create_app
-from app.models.item import Item
 from app.models.user import User
 from tests.utils import generate_random_string
 
@@ -71,34 +68,34 @@ def auto_rollback(db: Session):
     db.rollback()
 
 
-@pytest.fixture(scope="session")
-def create_user(db: Session, default_password: str):
-    user_manager = next(get_user_manager())
+# @pytest.fixture(scope="session")
+# def create_user(db: Session, default_password: str):
+#     user_manager = next(get_user_manager())
 
-    def inner():
-        user = User(
-            id=uuid.uuid4(),
-            email=f"{generate_random_string(20)}@{generate_random_string(10)}.com",
-            hashed_password=user_manager.password_helper.hash(default_password),
-        )
-        db.add(user)
-        db.commit()
-        return user
+#     def inner():
+#         user = User(
+#             id=uuid.uuid4(),
+#             email=f"{generate_random_string(20)}@{generate_random_string(10)}.com",
+#             hashed_password=user_manager.password_helper.hash(default_password),
+#         )
+#         db.add(user)
+#         db.commit()
+#         return user
 
-    return inner
+#     return inner
 
 
-@pytest.fixture(scope="session")
-def create_item(db: Session, create_user: Callable):
-    def inner(user=None):
-        if not user:
-            user = create_user()
-        item = Item(
-            user=user,
-            value="value",
-        )
-        db.add(item)
-        db.commit()
-        return item
+# @pytest.fixture(scope="session")
+# def create_item(db: Session, create_user: Callable):
+#     def inner(user=None):
+#         if not user:
+#             user = create_user()
+#         item = Item(
+#             user=user,
+#             value="value",
+#         )
+#         db.add(item)
+#         db.commit()
+#         return item
 
-    return inner
+#     return inner
