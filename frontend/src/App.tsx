@@ -8,12 +8,37 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { OpenAPI } from './api';
+import Cookies from 'js-cookie';
+// import { isTokenExpired, refreshToken, getToken } from './api/token';
+// import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.min.css';
+
 const queryClient = new QueryClient();
+
+OpenAPI.TOKEN = async () => {
+  const token = Cookies.get('token');
+  return token ? token : '';
+};
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div className="App relative font-poppins ">
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <BrowserRouter>
           {/* ===== Head Section ===== */}
           <Header />

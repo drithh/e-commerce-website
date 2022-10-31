@@ -22,19 +22,39 @@ async def get_current_active_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
-        email: str = payload.get("sub")
-        if email is None:
-            raise credentials_exception
-        token_data = TokenData(email=email)
-    except JWTError:
+    token_data = verify_token(token)
+    if token_data is None | False:
         raise credentials_exception
+
     user = session.query(User).filter(User.email == token_data.email).first()
 
     if user is None:
         raise credentials_exception
     return user
+
+
+def verify_token(token: str):
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        email: str = payload.get("sub")
+        if email is None:
+            return False
+        token_data = TokenData(email=email)
+    except JWTError:
+        return False
+    return token_data
+
+
+def authenticated(session: Generator, token: str = Depends(oauth2_scheme)):
+    token_data = verify_token(token)
+    if token_data is None | False:
+        return False
+
+    user = session.query(User).filter(User.email == token_data.email).first()
+    if user is None:
+        return False
+
+    return True
 
 
 def create_access_token(data: dict):

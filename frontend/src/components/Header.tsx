@@ -1,16 +1,29 @@
 import { useEffect, useState, useCallback, Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import WhistlistIcon from '../assets/icons/WhistlistIcon';
 import UserIcon from '../assets/icons/UserIcon';
 import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
-// import DownArrow from '../assets/icons/DownArrow';
-// import InstagramLogo from '../assets/icons/InstagramLogo';
-// import FacebookLogo from '../assets/icons/FacebookLogo';
+import { UserService } from '../api';
+import { useQuery } from 'react-query';
+import { ApiError } from '../api';
+import { toast } from 'react-toastify';
 import PopoverMenu from './PopoverMenu';
 const Header = () => {
+  const navigate = useNavigate();
+  const fetchUser = useQuery('user', UserService.getUser, {
+    retry: 0,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    onError(err: ApiError) {
+      if (err.status === 401) {
+        toast.error(err.body.message);
+        navigate('/');
+      }
+    },
+  });
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();
@@ -49,6 +62,12 @@ const Header = () => {
 
   if (!didMount) {
     return null;
+  }
+  if (fetchUser.isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (fetchUser.data) {
+    console.log(fetchUser.data);
   }
   return (
     <>

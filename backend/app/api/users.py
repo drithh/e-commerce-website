@@ -1,4 +1,4 @@
-from typing import Any, Generator, List
+from typing import Any, Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
@@ -6,7 +6,11 @@ from sqlalchemy.exc import DatabaseError
 from starlette.responses import Response
 
 from app.core.logger import logger
-from app.deps.authentication import get_current_active_admin, get_current_active_user
+from app.deps.authentication import (
+    authenticated,
+    get_current_active_admin,
+    get_current_active_user,
+)
 from app.deps.db import get_db
 from app.models.user import User
 from app.schemas.request_params import DefaultResponse
@@ -28,6 +32,14 @@ def get_user(
     return current_user
 
 
+@router.get("/role", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
+def get_user_role(access_token: str) -> Any:
+    if authenticated(access_token):
+        return DefaultResponse(message="Authenticated")
+    else:
+        return DefaultResponse(message="Not Authenticated")
+
+
 @router.get(
     "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
 )
@@ -35,15 +47,6 @@ def get_user_shipping_address(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user
-
-
-@router.get("/all", response_model=List[GetUser], status_code=status.HTTP_200_OK)
-def get_all_user(
-    session: Generator = Depends(get_db),
-) -> Any:
-    user = session.query(User).all()
-
-    return user
 
 
 @router.put(

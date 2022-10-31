@@ -8,14 +8,12 @@ type Props = {
   onLogin: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  setSuccessMsg: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ForgotPassword: React.FC<Props> = ({
   onLogin,
   errorMsg,
   setErrorMsg,
-  setSuccessMsg,
 }) => {
   const auth = useAuth();
 
@@ -26,7 +24,6 @@ const ForgotPassword: React.FC<Props> = ({
     const forgotPasswordResponse = await auth.forgotPassword!(email);
     console.log(forgotPasswordResponse);
     if (forgotPasswordResponse.success) {
-      setSuccessMsg('login_successful');
     } else {
       setErrorMsg('incorrect_email_password');
     }

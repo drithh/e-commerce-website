@@ -8,15 +8,9 @@ type Props = {
   onLogin: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  setSuccessMsg: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Register: React.FC<Props> = ({
-  onLogin,
-  errorMsg,
-  setErrorMsg,
-  setSuccessMsg,
-}) => {
+const Register: React.FC<Props> = ({ onLogin, errorMsg, setErrorMsg }) => {
   const auth = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -34,7 +28,6 @@ const Register: React.FC<Props> = ({
       phone
     );
     if (regResponse.success) {
-      setSuccessMsg('register_successful');
     } else {
       if (regResponse.message === 'alreadyExists') {
         setErrorMsg('email_already_exists');

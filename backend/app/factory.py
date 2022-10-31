@@ -17,7 +17,7 @@ from app.api import (
     products,
     sales,
     users,
-    wishlist,
+    wishlists,
 )
 from app.core.config import settings
 from app.core.logger import logger
@@ -74,7 +74,7 @@ def setup_routers(app: FastAPI) -> None:
         tags=["User"],
     )
     app.include_router(
-        wishlist.router,
+        wishlists.router,
         prefix=f"{settings.API_PATH}/wishlist",
         tags=["Wishlist"],
     )
