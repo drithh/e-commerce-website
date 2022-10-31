@@ -18,10 +18,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 
 const queryClient = new QueryClient();
 
-OpenAPI.TOKEN = async () => {
-  const token = Cookies.get('token');
-  return token ? token : '';
-};
+OpenAPI.TOKEN = Cookies.get('token') || '';
 
 function App() {
   return (

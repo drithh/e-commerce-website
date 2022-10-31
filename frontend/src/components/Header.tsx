@@ -6,20 +6,35 @@ import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { UserService } from '../api';
+import { AuthenticationService } from '../api';
 import { useQuery } from 'react-query';
-import { ApiError, OpenAPI } from '../api';
+import { OpenAPI } from '../api';
 import { toast } from 'react-toastify';
 import PopoverMenu from './PopoverMenu';
 import Cookies from 'js-cookie';
 const Header = () => {
-  try {
-    const fetchUser = useQuery('user', UserService.getA, {
-      retry: 0,
-    });
-  } catch (error) {
-    toast.error('Error fetching user');
-  }
+  useQuery(
+    'authentication',
+    () =>
+      AuthenticationService.checkAuthentication({
+        access_token: Cookies.get('token') || '',
+      }),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
+      onSuccess: (data) => {
+        toast.success(data.message);
+        if (data.message === 'Authenticated') {
+          OpenAPI.TOKEN = async () => {
+            const token = Cookies.get('token');
+            return token ? token : '';
+          };
+        }
+      },
+    }
+  );
 
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
