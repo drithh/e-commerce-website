@@ -1,7 +1,7 @@
 import { Fragment, useState, FC } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { IoCloseOutline } from 'react-icons/io5';
-import { useAuth } from '../../context/AuthContext';
+// import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Login from './Login';
 import Register from './Register';

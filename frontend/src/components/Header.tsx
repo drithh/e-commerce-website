@@ -6,43 +6,17 @@ import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { AuthenticationService } from '../api';
-import { useQuery } from 'react-query';
-import { OpenAPI } from '../api';
-import { toast } from 'react-toastify';
+import { useRole } from '../context/RoleContext';
 import PopoverMenu from './PopoverMenu';
-import Cookies from 'js-cookie';
-const Header = () => {
-  useQuery(
-    'authentication',
-    () =>
-      AuthenticationService.checkAuthentication({
-        access_token: Cookies.get('token') || '',
-      }),
-    {
-      retry: false,
-      refetchOnWindowFocus: false,
-      refetchOnMount: false,
-      staleTime: Infinity,
-      onSuccess: (data) => {
-        toast.success(data.message);
-        if (data.message === 'Authenticated') {
-          OpenAPI.TOKEN = async () => {
-            const token = Cookies.get('token');
-            return token ? token : '';
-          };
-        }
-      },
-    }
-  );
 
+const Header = () => {
+  const { role }: any = useRole();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();
   const [animate, setAnimate] = useState('');
 
   let noOfWishlist = wishlist.length;
-
   // Animate Wishlist Number
   const handleAnimate = useCallback(() => {
     if (noOfWishlist === 0) return;
@@ -135,10 +109,17 @@ const Header = () => {
                 <SearchIcon />
               </li>
               <li className="opacity-100">
-                <AuthForm>
-                  <UserIcon />
-                </AuthForm>
+                {role !== 'public' ? (
+                  <Link to="/profile">
+                    <UserIcon />
+                  </Link>
+                ) : (
+                  <AuthForm>
+                    <UserIcon />
+                  </AuthForm>
+                )}
               </li>
+
               <li>
                 <Link to="/wishlist">
                   {/* <a className="relative" aria-label="Wishlist"> */}

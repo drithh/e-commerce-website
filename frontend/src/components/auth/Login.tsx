@@ -7,7 +7,7 @@ import { AuthenticationService, ApiError } from '../../api';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-
+import { useRole } from '../../context/RoleContext';
 type Props = {
   onRegister: () => void;
   onForgotPassword: () => void;
@@ -19,6 +19,7 @@ const Login: React.FC<Props> = ({
   onForgotPassword,
   closeModal,
 }) => {
+  const { refetch }: any = useRole();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -30,8 +31,8 @@ const Login: React.FC<Props> = ({
       }),
     {
       onSuccess: (data) => {
-        toast.success(data.message);
         Cookies.set('token', data.access_token);
+        refetch();
         closeModal();
       },
       onError: (error: ApiError) => {

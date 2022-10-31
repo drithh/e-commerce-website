@@ -8,51 +8,53 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { OpenAPI } from './api';
-import Cookies from 'js-cookie';
-// import { isTokenExpired, refreshToken, getToken } from './api/token';
-// import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
-
+import UserRoutes from './util/UserRoutes';
+import AdminRoutes from './util/AdminRoutes';
+import { RoleProvider } from './context/RoleContext';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 const queryClient = new QueryClient();
 
-OpenAPI.TOKEN = Cookies.get('token') || '';
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="App relative font-poppins ">
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-        />
-        <BrowserRouter>
-          {/* ===== Head Section ===== */}
-          <Header />
+      <RoleProvider>
+        <div className="App relative font-poppins ">
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
+          <BrowserRouter>
+            {/* ===== Head Section ===== */}
+            <Header />
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="*" element={<div>404 Not Found</div>} />
-          </Routes>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route element={<UserRoutes />}>
+                <Route path="/wishlist" element={<Wishlist />} />
+                <Route path="/checkout" element={<Checkout />} />
+              </Route>
+              <Route element={<AdminRoutes />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+              <Route path="*" element={<div>404 Not Found</div>} />
+            </Routes>
 
-          {/* ===== Footer Section ===== */}
-          <Footer />
-        </BrowserRouter>
-      </div>
-      <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+            {/* ===== Footer Section ===== */}
+            <Footer />
+          </BrowserRouter>
+        </div>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+      </RoleProvider>
     </QueryClientProvider>
   );
 }

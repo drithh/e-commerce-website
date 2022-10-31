@@ -32,15 +32,17 @@ from app.schemas.request_params import DefaultResponse
 router = APIRouter()
 
 
-@router.post(
-    "/is-authenticated", response_model=DefaultResponse, status_code=status.HTTP_200_OK
-)
-def check_authentication(
+@router.post("/role", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
+def get_role(
     request: AccessToken,
 ) -> Any:
-    message = "Not authenticated"
-    if is_authenticated(token=request.access_token):
-        message = "Authenticated"
+    role = is_authenticated(request.access_token)
+    message = "public"
+    if role is not None:
+        if role is False:
+            message = "user"
+        else:
+            message = "admin"
     return DefaultResponse(message=message)
 
 

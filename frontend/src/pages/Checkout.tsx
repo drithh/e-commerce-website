@@ -6,7 +6,6 @@ import { roundDecimal } from '../components/util/utilFunc';
 import { useCart } from '../context/cart/CartProvider';
 import Input from '../components/input/Input';
 import { itemType } from '../context/wishlist/wishlist-type';
-import { useAuth } from '../context/AuthContext';
 
 // let w = window.innerWidth;
 type PaymentType = 'CASH_ON_DELIVERY' | 'BANK_TRANSFER';
@@ -29,7 +28,8 @@ type Order = {
 
 const ShoppingCart = () => {
   const { cart, clearCart } = useCart();
-  const auth = useAuth();
+  let auth: any;
+  // const auth = useAuth();
   const [deli, setDeli] = useState<DeliveryType>('STORE_PICKUP');
   const [paymentMethod, setPaymentMethod] =
     useState<PaymentType>('CASH_ON_DELIVERY');

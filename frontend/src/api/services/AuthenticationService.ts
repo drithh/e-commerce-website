@@ -16,17 +16,17 @@ import { request as __request } from '../core/request';
 export class AuthenticationService {
 
     /**
-     * Check Authentication
+     * Get Role
      * @param requestBody
      * @returns DefaultResponse Successful Response
      * @throws ApiError
      */
-    public static checkAuthentication(
+    public static getRole(
         requestBody: AccessToken,
     ): CancelablePromise<DefaultResponse> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/api/v1/is-authenticated',
+            url: '/api/v1/role',
             body: requestBody,
             mediaType: 'application/json',
             errors: {

@@ -2,7 +2,7 @@ import Banner from '../components/Banner';
 import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
-import { HomeService, AuthenticationService, OpenAPI } from '../api';
+import { HomeService } from '../api';
 import { useQuery } from 'react-query';
 const pluralize = require('pluralize');
 
@@ -33,13 +33,6 @@ const Home = () => {
 
   if (fetchBestSellers.isLoading) return <div>Loading...</div>;
   if (fetchBestSellers.error) return <div>Error</div>;
-
-  // if (fetchAuth.isLoading) return <div>Loading...</div>;
-  // if (fetchAuth.error) return <div>Error</div>;
-  // else {
-  //   OpenAPI.TOKEN = fetchAuth.data?.access_token;
-  //   console.log(fetchAuth.data);
-  // }
 
   return (
     <main id="main-content" className="min-h-[60vh]">

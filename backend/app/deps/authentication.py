@@ -43,10 +43,10 @@ def is_authenticated(token: str):
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         email: str = payload.get("sub")
         if email is None:
-            return False
+            return None
         token_data = TokenData(email=email)
     except JWTError:
-        return False
+        return None
     user = (
         SessionLocal()
         .execute(
@@ -55,8 +55,8 @@ def is_authenticated(token: str):
         .fetchone()
     )
     if user is None:
-        return False
-    return True
+        return None
+    return user.is_admin
 
 
 def create_access_token(data: dict):
