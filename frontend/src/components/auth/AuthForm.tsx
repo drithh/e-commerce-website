@@ -1,8 +1,6 @@
 import { Fragment, useState, FC } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { IoCloseOutline } from 'react-icons/io5';
-// import { useAuth } from '../../context/AuthContext';
-import Button from '../button/Button';
 import Login from './Login';
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
@@ -32,8 +30,7 @@ const LoginForm: FC<Props> = ({ extraClass, children }) => {
     modalBox = (
       <Register
         onLogin={() => setCurrentPage('login')}
-        errorMsg={errorMsg}
-        setErrorMsg={setErrorMsg}
+        closeModal={closeModal}
       />
     );
   } else {

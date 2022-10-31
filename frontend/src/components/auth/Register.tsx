@@ -2,42 +2,51 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import Button from '../button/Button';
 import Input from '../input/Input';
+import { useMutation } from 'react-query';
+import { AuthenticationService, ApiError } from '../../api';
+import Cookies from 'js-cookie';
+import { useRole } from '../../context/RoleContext';
 
 type Props = {
   onLogin: () => void;
-  errorMsg: string;
-  setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+  closeModal: () => void;
 };
 
-const Register: React.FC<Props> = ({ onLogin, errorMsg, setErrorMsg }) => {
-  // const auth = useAuth();
-  let auth: any;
+const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
+  const { refetch }: any = useRole();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
-
+  const [errorMsg, setErrorMsg] = useState('');
+  const registerResponse = useMutation(
+    (variables: {
+      name: string;
+      email: string;
+      password: string;
+      phone: string;
+    }) =>
+      AuthenticationService.signUp({
+        name: variables.name,
+        email: variables.email,
+        password: variables.password,
+        phone_number: variables.phone,
+      }),
+    {
+      onSuccess: (data) => {
+        Cookies.set('token', data.access_token);
+        refetch();
+        closeModal();
+      },
+      onError: (error: ApiError) => {
+        setErrorMsg(error.body.message);
+      },
+    }
+  );
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const regResponse = await auth.register!(
-      email,
-      name,
-      password,
-      address,
-      phone
-    );
-    if (regResponse.success) {
-    } else {
-      if (regResponse.message === 'alreadyExists') {
-        setErrorMsg('email_already_exists');
-      } else {
-        setErrorMsg('error_occurs');
-      }
-    }
+    registerResponse.mutate({ name, email, password, phone });
   };
-
-  // auth.user ? console.log(auth.user) : console.log('No User');
 
   return (
     <>
@@ -80,15 +89,6 @@ const Register: React.FC<Props> = ({ onLogin, errorMsg, setErrorMsg }) => {
         />
         <Input
           type="text"
-          placeholder={'Shipping Address *'}
-          name="shipping_address"
-          extraClass="w-full focus:border-gray-500"
-          border="border-2 border-gray-300 mb-4"
-          onChange={(e) => setAddress((e.target as HTMLInputElement).value)}
-          value={address}
-        />
-        <Input
-          type="text"
           placeholder={'Phone *'}
           name="phone"
           extraClass="w-full focus:border-gray-500"
@@ -97,7 +97,7 @@ const Register: React.FC<Props> = ({ onLogin, errorMsg, setErrorMsg }) => {
           value={phone}
         />
         {errorMsg !== '' && (
-          <div className="text-red mb-2 whitespace-nowrap text-sm">
+          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}

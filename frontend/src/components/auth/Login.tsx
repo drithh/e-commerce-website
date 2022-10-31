@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-// import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import { AuthenticationService, ApiError } from '../../api';
 import { useMutation } from 'react-query';
-import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useRole } from '../../context/RoleContext';
 type Props = {
