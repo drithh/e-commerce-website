@@ -2,8 +2,7 @@ import Banner from '../components/Banner';
 import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
-import { HomeApiFactory } from '../generated/api';
-
+import { HomeService, AuthenticationService, OpenAPI } from '../api';
 import { useQuery } from 'react-query';
 const pluralize = require('pluralize');
 
@@ -11,23 +10,34 @@ const Home = () => {
   let categories;
   const fetchCategories = useQuery(
     'categories',
-    HomeApiFactory().getCategoryWithImage,
+    HomeService.getCategoryWithImage,
     {
       staleTime: 1000 * 60,
     }
   );
-  const fetchBestSellers = useQuery(
-    'bestSellers',
-    HomeApiFactory().getBestSeller,
+  const fetchBestSellers = useQuery('bestSellers', HomeService.getBestSeller, {
+    staleTime: 1000 * 60,
+  });
+  // fetchAuth with formdata
+  const fetchAuth = useQuery(
+    'auth',
+    () =>
+      AuthenticationService.signIn({
+        username: 'admin@admin.com',
+        password: 'admin',
+      }),
     {
       staleTime: 1000 * 60,
     }
   );
+  // const fetchUser = useQuery('user', UserApiFactory().getUser, {
+  //   staleTime: 1000 * 60,
+  // });
 
   if (fetchCategories.isLoading) return <div>Loading...</div>;
   if (fetchCategories.error) return <div>Error</div>;
   if (fetchCategories.data) {
-    categories = fetchCategories.data.data.data.map((category: any) => {
+    categories = fetchCategories.data.data.map((category: any) => {
       const title = pluralize.singular(category.title);
       return {
         image: category.image,
@@ -38,6 +48,13 @@ const Home = () => {
 
   if (fetchBestSellers.isLoading) return <div>Loading...</div>;
   if (fetchBestSellers.error) return <div>Error</div>;
+
+  if (fetchAuth.isLoading) return <div>Loading...</div>;
+  if (fetchAuth.error) return <div>Error</div>;
+  else {
+    OpenAPI.TOKEN = fetchAuth.data?.access_token;
+    console.log(fetchAuth.data);
+  }
 
   return (
     <main id="main-content" className="min-h-[60vh]">
@@ -79,7 +96,7 @@ const Home = () => {
             </div>
           </div>
           <div className="app-x-padding mb-10 grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 lg:gap-x-12">
-            {fetchBestSellers.data?.data.data.map((item) => (
+            {fetchBestSellers.data?.data.map((item) => (
               <Card key={item.id} item={item} />
             ))}
           </div>

@@ -4,6 +4,8 @@ import GhostButton from '../components/button/GhostButton';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/cart/CartProvider';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
+import { UserService } from '../api';
+import { useQuery } from 'react-query';
 
 // let w = window.innerWidth;
 
@@ -11,6 +13,18 @@ const Wishlist = () => {
   // const t = useTranslations('CartWishlist');
   const { addOne } = useCart();
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
+
+  const fetchUser = useQuery('user', () => UserService.getUser());
+
+  if (fetchUser.isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (fetchUser.error) {
+    return <div>Error</div>;
+  }
+  if (fetchUser.data) {
+    console.log(fetchUser.data);
+  }
 
   let subtotal = 0;
 

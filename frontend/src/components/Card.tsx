@@ -8,7 +8,7 @@ import Heart from '../assets/icons/Heart';
 import HeartSolid from '../assets/icons/HeartSolid';
 // import { useCart } from '../context/cart/CartProvider';
 // import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { BestSeller } from '../generated/models/best-seller';
+import { BestSeller } from '../api';
 
 interface Props {
   item: BestSeller;
