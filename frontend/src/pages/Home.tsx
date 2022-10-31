@@ -18,21 +18,6 @@ const Home = () => {
   const fetchBestSellers = useQuery('bestSellers', HomeService.getBestSeller, {
     staleTime: 1000 * 60,
   });
-  // fetchAuth with formdata
-  // const fetchAuth = useQuery(
-  //   'auth',
-  //   () =>
-  //     AuthenticationService.signIn({
-  //       username: 'admin@admin.com',
-  //       password: 'admin',
-  //     }),
-  //   {
-  //     staleTime: 1000 * 60,
-  //   }
-  // );
-  // const fetchUser = useQuery('user', UserApiFactory().getUser, {
-  //   staleTime: 1000 * 60,
-  // });
 
   if (fetchCategories.isLoading) return <div>Loading...</div>;
   if (fetchCategories.error) return <div>Error</div>;

@@ -6,6 +6,7 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export type { AccessToken } from './models/AccessToken';
 export type { app__schemas__authentication__GetUser } from './models/app__schemas__authentication__GetUser';
 export type { app__schemas__category__Category } from './models/app__schemas__category__Category';
 export type { app__schemas__home__Category } from './models/app__schemas__home__Category';

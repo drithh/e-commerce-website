@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime, timedelta
-from typing import Generator
+from typing import Any, Generator
 
 import pytz
 from fastapi import Depends, HTTPException, status
@@ -12,6 +12,7 @@ from app.deps.authentication import (
     create_access_token,
     email_validation,
     get_current_active_user,
+    is_authenticated,
     password_validation,
 )
 from app.deps.db import get_db
@@ -19,6 +20,7 @@ from app.deps.email import send_forgot_password_email
 from app.models.forgot_password import ForgotPassword
 from app.models.user import User
 from app.schemas.authentication import (
+    AccessToken,
     ChangePassword,
     GetUser,
     ResetPassword,
@@ -28,6 +30,18 @@ from app.schemas.authentication import (
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
+
+
+@router.post(
+    "/is-authenticated", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def check_authentication(
+    request: AccessToken,
+) -> Any:
+    message = "Not authenticated"
+    if is_authenticated(token=request.access_token):
+        message = "Authenticated"
+    return DefaultResponse(message=message)
 
 
 @router.post("/sign-in", response_model=UserRead, status_code=status.HTTP_200_OK)

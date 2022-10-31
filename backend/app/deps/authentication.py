@@ -6,6 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 from app.core.config import settings
+from app.db import SessionLocal
 from app.deps.db import get_db
 from app.models.user import User
 from app.schemas.authentication import TokenData
@@ -22,10 +23,14 @@ async def get_current_active_user(
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"},
     )
-    token_data = verify_token(token)
-    if token_data is None | False:
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+        token_data = TokenData(email=email)
+    except JWTError:
         raise credentials_exception
-
     user = session.query(User).filter(User.email == token_data.email).first()
 
     if user is None:
@@ -33,7 +38,7 @@ async def get_current_active_user(
     return user
 
 
-def verify_token(token: str):
+def is_authenticated(token: str):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
         email: str = payload.get("sub")
@@ -42,18 +47,15 @@ def verify_token(token: str):
         token_data = TokenData(email=email)
     except JWTError:
         return False
-    return token_data
-
-
-def authenticated(session: Generator, token: str = Depends(oauth2_scheme)):
-    token_data = verify_token(token)
-    if token_data is None | False:
-        return False
-
-    user = session.query(User).filter(User.email == token_data.email).first()
+    user = (
+        SessionLocal()
+        .execute(
+            "SELECT * FROM users WHERE email = :email", {"email": token_data.email}
+        )
+        .fetchone()
+    )
     if user is None:
         return False
-
     return True
 
 

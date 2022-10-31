@@ -43,7 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "genapi": "openapi-generator-cli generate -i <(curl -s 'http://localhost:8000/api/v1/openapi.json') -g typescript-axios -o src/generated -p withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,useSingleRequestParameter=true"
+    "genapi": "npx openapi -i http://localhost:8000/api/v1/openapi.json -o src/api -c axios"
   },
   "eslintConfig": {
     "extends": [

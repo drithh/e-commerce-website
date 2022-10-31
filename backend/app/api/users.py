@@ -6,11 +6,7 @@ from sqlalchemy.exc import DatabaseError
 from starlette.responses import Response
 
 from app.core.logger import logger
-from app.deps.authentication import (
-    authenticated,
-    get_current_active_admin,
-    get_current_active_user,
-)
+from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
 from app.models.user import User
 from app.schemas.request_params import DefaultResponse
@@ -30,14 +26,6 @@ def get_user(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user
-
-
-@router.get("/role", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
-def get_user_role(access_token: str) -> Any:
-    if authenticated(access_token):
-        return DefaultResponse(message="Authenticated")
-    else:
-        return DefaultResponse(message="Not Authenticated")
 
 
 @router.get(

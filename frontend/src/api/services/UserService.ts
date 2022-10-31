@@ -79,18 +79,6 @@ export class UserService {
     }
 
     /**
-     * Get All User
-     * @returns app__schemas__user__GetUser Successful Response
-     * @throws ApiError
-     */
-    public static getAllUser(): CancelablePromise<Array<app__schemas__user__GetUser>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1/user/all',
-        });
-    }
-
-    /**
      * Get User Balance
      * @returns GetUserBalance Successful Response
      * @throws ApiError

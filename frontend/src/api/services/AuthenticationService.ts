@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AccessToken } from '../models/AccessToken';
 import type { Body_sign_in_api_v1_sign_in_post } from '../models/Body_sign_in_api_v1_sign_in_post';
 import type { ChangePassword } from '../models/ChangePassword';
 import type { DefaultResponse } from '../models/DefaultResponse';
@@ -13,6 +14,26 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class AuthenticationService {
+
+    /**
+     * Check Authentication
+     * @param requestBody
+     * @returns DefaultResponse Successful Response
+     * @throws ApiError
+     */
+    public static checkAuthentication(
+        requestBody: AccessToken,
+    ): CancelablePromise<DefaultResponse> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/api/v1/is-authenticated',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 
     /**
      * Sign In
