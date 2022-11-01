@@ -2,9 +2,11 @@ import Banner from '../components/Banner';
 import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
-import { HomeService } from '../api';
+import { HomeService, OpenAPI } from '../api';
 import { useQuery } from 'react-query';
+import Cookies from 'js-cookie';
 const pluralize = require('pluralize');
+OpenAPI.TOKEN = Cookies.get('token');
 
 const Home = () => {
   let categories;

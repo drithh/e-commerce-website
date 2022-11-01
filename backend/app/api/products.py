@@ -1,5 +1,5 @@
 import base64
-from typing import Any, Generator, List, Union
+from typing import Any, Generator, List
 from uuid import UUID
 
 from fastapi import File, Form, Query, Response, UploadFile, status
@@ -109,66 +109,51 @@ def delete_product(
     return DefaultResponse(message="Product deleted")
 
 
-@router.get("", response_model=Any, status_code=status.HTTP_200_OK)
+@router.get("", response_model=GetProducts, status_code=status.HTTP_200_OK)
 def get_products(
     session: Generator = Depends(get_db),
-    category: List[UUID] = Query(),
+    category: List[UUID] = Query([]),
     page: int = Query(1, ge=1),
     page_size: int = Query(100, ge=1),
     sort_by: str = Query("a_z", regex="^(a_z|z_a)$"),
-    price: List[int] = Query([1, 1000000], ge=0),
-    condition: str = Query("new", regex="^(new|used)$"),
-    product_name: Union[str, None] = Query(None),
+    price: List[int] = Query([], ge=0),
+    condition: str = Query("", regex="^(new|used)$"),
+    product_name: str = "",
 ) -> Any:
 
     if sort_by == "a_z":
-        sort = Product.price.asc()
+        sort = "ASC"
     else:
-        sort = Product.price.desc()
-    if product_name:
-        products = (
-            session.query(Product)
-            .filter(
-                Product.title == product_name,
-                Product.category_id.in_(category),
-                Product.price.in_(range(price[0], price[1])),
-                Product.condition == condition,
-            )
-            .order_by(sort)
-            .offset((page - 1) * page_size)
-            .limit(page_size)
-            .all()
-        )
+        sort = "DESC"
 
-    else:
-        products = session.execute(
-            """
-                SELECT * FROM only products WHERE category_id IN :category AND
-                price BETWEEN :price1 AND :price2 AND condition = :condition
-                ORDER BY price ASC OFFSET :offset LIMIT :limit
-            """,
-            {
-                "category": tuple(category),
-                "price1": price[0],
-                "price2": price[1],
-                "condition": condition,
-                "offset": (page - 1) * page_size,
-                "limit": page_size,
-            },
-        ).all()
-        # products = (
-        #     session.query(Product)
-        #     .filter(
-        #         Product.category_id.in_(category),
-        #         Product.price.in_(range(price[0], price[1])),
-        #         Product.condition == condition,
-        #     )
-        #     .order_by(sort)
-        #     .offset((page - 1) * page_size)
-        #     .limit(page_size)
-        #     .all()
-        # )
-    return products
+    query = "SELECT * FROM only products "
+    if category:
+        query += "AND category_id IN :category "
+    if product_name != "":
+        query += "AND title LIKE :product_name "
+    if price:
+        query += "AND price BETWEEN :price_min AND :price_max "
+    if condition != "":
+        query += "AND condition = :condition "
+    query += f"ORDER BY title {sort} LIMIT :limit OFFSET :offset"
+
+    # replace first AND with WHERE
+    query = query.replace("AND", "WHERE", 1)
+
+    logger.info(query)
+    products = session.execute(
+        query,
+        {
+            "category": tuple(category),
+            "product_name": f"%{product_name}%",
+            "price_min": price[0] if price.__len__() > 0 else 0,
+            "price_max": price[1] if price.__len__() > 1 else 100000000,
+            "condition": condition,
+            "offset": (page - 1) * page_size,
+            "limit": page_size,
+        },
+    ).fetchall()
+
     total_rows = len(products)
 
     return GetProducts(data=products, total_rows=total_rows)

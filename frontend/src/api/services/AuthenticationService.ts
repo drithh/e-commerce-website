@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AccessToken } from '../models/AccessToken';
 import type { Body_sign_in_api_v1_sign_in_post } from '../models/Body_sign_in_api_v1_sign_in_post';
 import type { ChangePassword } from '../models/ChangePassword';
 import type { DefaultResponse } from '../models/DefaultResponse';
@@ -17,21 +16,13 @@ export class AuthenticationService {
 
     /**
      * Get Role
-     * @param requestBody
-     * @returns DefaultResponse Successful Response
+     * @returns DefaultResponse Return current user role
      * @throws ApiError
      */
-    public static getRole(
-        requestBody: AccessToken,
-    ): CancelablePromise<DefaultResponse> {
+    public static getRole(): CancelablePromise<DefaultResponse> {
         return __request(OpenAPI, {
-            method: 'POST',
+            method: 'GET',
             url: '/api/v1/role',
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                422: `Validation Error`,
-            },
         });
     }
 

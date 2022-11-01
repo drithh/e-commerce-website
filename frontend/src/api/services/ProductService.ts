@@ -6,6 +6,7 @@ import type { Body_search_image_api_v1_products_search_image_post } from '../mod
 import type { Body_search_image_upload_api_v1_products_search_image_upload_post } from '../models/Body_search_image_upload_api_v1_products_search_image_upload_post';
 import type { CreateProduct } from '../models/CreateProduct';
 import type { DefaultResponse } from '../models/DefaultResponse';
+import type { GetProducts } from '../models/GetProducts';
 import type { UpdateProduct } from '../models/UpdateProduct';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -23,18 +24,18 @@ export class ProductService {
      * @param price
      * @param condition
      * @param productName
-     * @returns any Successful Response
+     * @returns GetProducts Successful Response
      * @throws ApiError
      */
     public static getProducts(
-        category: Array<string>,
+        category?: Array<string>,
         page: number = 1,
         pageSize: number = 100,
         sortBy: string = 'a_z',
         price?: Array<number>,
-        condition: string = 'new',
-        productName?: string,
-    ): CancelablePromise<any> {
+        condition: string = '',
+        productName: string = '',
+    ): CancelablePromise<GetProducts> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/products',

@@ -49,10 +49,7 @@ const useProvideAuth = () => {
 
   const { refetch } = useQuery(
     'authentication',
-    () =>
-      AuthenticationService.getRole({
-        access_token: Cookies.get('token') || '',
-      }),
+    () => AuthenticationService.getRole(),
     {
       retry: false,
       refetchOnWindowFocus: false,
@@ -61,9 +58,7 @@ const useProvideAuth = () => {
       onSuccess: (data) => {
         toast.success(data.message);
         setRole(data.message);
-        if (data.message === 'user' || data.message === 'admin') {
-          OpenAPI.TOKEN = Cookies.get('token') || '';
-        }
+        OpenAPI.TOKEN = Cookies.get('token');
       },
     }
   );
