@@ -15,7 +15,8 @@ import { AuthProvider } from './context/AuthContext';
 import { WishlistProvider } from './context/WishlistContext';
 import 'react-toastify/dist/ReactToastify.min.css';
 import 'animate.css';
-
+import Custom404 from './pages/404';
+import ComingSoon from './pages/ComingSoon';
 const queryClient = new QueryClient();
 
 function App() {
@@ -45,10 +46,12 @@ function App() {
                 <Route element={<UserRoutes />}>
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />
+                </Route>
+                <Route element={<AdminRoutes />}>
                   <Route path="/dashboard" element={<Dashboard />} />
                 </Route>
-                <Route element={<AdminRoutes />}></Route>
-                <Route path="*" element={<div>404 Not Found</div>} />
+                <Route path="/coming-soon" element={<ComingSoon />} />
+                <Route path="*" element={<Custom404 />} />
               </Routes>
 
               {/* ===== Footer Section ===== */}
