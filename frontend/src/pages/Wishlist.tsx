@@ -5,8 +5,6 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/cart/CartProvider';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
 
-// let w = window.innerWidth;
-
 const Wishlist = () => {
   // const t = useTranslations('CartWishlist');
   const { addOne } = useCart();

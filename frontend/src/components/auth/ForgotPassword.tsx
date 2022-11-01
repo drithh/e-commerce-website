@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
 
@@ -8,17 +7,15 @@ type Props = {
   onLogin: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  setSuccessMsg: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ForgotPassword: React.FC<Props> = ({
   onLogin,
   errorMsg,
   setErrorMsg,
-  setSuccessMsg,
 }) => {
-  const auth = useAuth();
-
+  // const auth = useAuth();
+  let auth: any;
   const [email, setEmail] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,7 +23,6 @@ const ForgotPassword: React.FC<Props> = ({
     const forgotPasswordResponse = await auth.forgotPassword!(email);
     console.log(forgotPasswordResponse);
     if (forgotPasswordResponse.success) {
-      setSuccessMsg('login_successful');
     } else {
       setErrorMsg('incorrect_email_password');
     }

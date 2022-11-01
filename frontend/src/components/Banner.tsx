@@ -5,13 +5,13 @@ import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 import { useQuery } from 'react-query';
-import { HomeApiFactory } from '../generated/api';
+import { HomeService } from '../api';
 SwiperCore.use([Pagination, Navigation, Autoplay]);
 
 const Slideshow = () => {
   const { data, isLoading, error } = useQuery(
     'banners',
-    HomeApiFactory().getBanner,
+    HomeService.getBanner,
     {
       staleTime: 1000 * 60,
     }
@@ -44,7 +44,7 @@ const Slideshow = () => {
         }}
         className="mySwiper"
       >
-        {data?.data.data.map((slider: any) => (
+        {data?.data.map((slider: any) => (
           <SwiperSlide key={slider.id}>
             <div className="block">
               <img

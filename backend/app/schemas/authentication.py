@@ -3,8 +3,12 @@ from typing import Union
 from pydantic import BaseModel
 
 
-class Token(BaseModel):
+class AccessToken(BaseModel):
     access_token: str
+
+
+class Token(BaseModel):
+    access_token: AccessToken
     token_type: str
 
 

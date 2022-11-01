@@ -1,50 +1,31 @@
 import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
-import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
+import { useAuth, authType } from '../../context/AuthContext';
+import { ApiError } from '../../api';
 
 type Props = {
   onLogin: () => void;
-  errorMsg: string;
-  setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  setSuccessMsg: React.Dispatch<React.SetStateAction<string>>;
+  closeModal: () => void;
 };
 
-const Register: React.FC<Props> = ({
-  onLogin,
-  errorMsg,
-  setErrorMsg,
-  setSuccessMsg,
-}) => {
-  const auth = useAuth();
+const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
+  const { register }: authType = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const regResponse = await auth.register!(
-      email,
-      name,
-      password,
-      address,
-      phone
-    );
-    if (regResponse.success) {
-      setSuccessMsg('register_successful');
-    } else {
-      if (regResponse.message === 'alreadyExists') {
-        setErrorMsg('email_already_exists');
-      } else {
-        setErrorMsg('error_occurs');
-      }
+    await register.mutate({ name, email, password, phone });
+    if (register.error) {
+      const error = register.error as ApiError;
+      setErrorMsg(error.body.message);
     }
   };
-
-  // auth.user ? console.log(auth.user) : console.log('No User');
 
   return (
     <>
@@ -87,15 +68,6 @@ const Register: React.FC<Props> = ({
         />
         <Input
           type="text"
-          placeholder={'Shipping Address *'}
-          name="shipping_address"
-          extraClass="w-full focus:border-gray-500"
-          border="border-2 border-gray-300 mb-4"
-          onChange={(e) => setAddress((e.target as HTMLInputElement).value)}
-          value={address}
-        />
-        <Input
-          type="text"
           placeholder={'Phone *'}
           name="phone"
           extraClass="w-full focus:border-gray-500"
@@ -104,7 +76,7 @@ const Register: React.FC<Props> = ({
           value={phone}
         />
         {errorMsg !== '' && (
-          <div className="text-red mb-2 whitespace-nowrap text-sm">
+          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}

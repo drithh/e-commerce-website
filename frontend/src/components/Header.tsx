@@ -6,18 +6,17 @@ import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
-// import DownArrow from '../assets/icons/DownArrow';
-// import InstagramLogo from '../assets/icons/InstagramLogo';
-// import FacebookLogo from '../assets/icons/FacebookLogo';
+import { useAuth, authType } from '../context/AuthContext';
 import PopoverMenu from './PopoverMenu';
+
 const Header = () => {
+  const { role }: authType = useAuth();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();
   const [animate, setAnimate] = useState('');
 
   let noOfWishlist = wishlist.length;
-
   // Animate Wishlist Number
   const handleAnimate = useCallback(() => {
     if (noOfWishlist === 0) return;
@@ -50,6 +49,7 @@ const Header = () => {
   if (!didMount) {
     return null;
   }
+
   return (
     <>
       <nav
@@ -109,10 +109,17 @@ const Header = () => {
                 <SearchIcon />
               </li>
               <li className="opacity-100">
-                <AuthForm>
-                  <UserIcon />
-                </AuthForm>
+                {role !== 'public' ? (
+                  <Link to="/profile">
+                    <UserIcon />
+                  </Link>
+                ) : (
+                  <AuthForm>
+                    <UserIcon />
+                  </AuthForm>
+                )}
               </li>
+
               <li>
                 <Link to="/wishlist">
                   {/* <a className="relative" aria-label="Wishlist"> */}

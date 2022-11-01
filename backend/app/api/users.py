@@ -1,4 +1,4 @@
-from typing import Any, Generator, List
+from typing import Any, Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
@@ -35,15 +35,6 @@ def get_user_shipping_address(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user
-
-
-@router.get("/all", response_model=List[GetUser], status_code=status.HTTP_200_OK)
-def get_all_user(
-    session: Generator = Depends(get_db),
-) -> Any:
-    user = session.query(User).all()
-
-    return user
 
 
 @router.put(

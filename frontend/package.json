@@ -14,7 +14,6 @@
     "@types/react-dom": "^18.0.6",
     "axios": "^1.1.3",
     "js-cookie": "^3.0.1",
-    "plural-rules": "^2.0.0",
     "pluralize": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -22,6 +21,7 @@
     "react-query": "^3.39.2",
     "react-router-dom": "^6.4.2",
     "react-scripts": "5.0.1",
+    "react-toastify": "^9.0.8",
     "swiper": "^8.4.4",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4",
@@ -43,7 +43,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "genapi": "openapi-generator-cli generate -i <(curl -s 'http://localhost:8000/api/v1/openapi.json') -g typescript-axios -o src/generated -p withSeparateModelsAndApi=true,apiPackage=api,modelPackage=models,useSingleRequestParameter=true"
+    "genapi": "npx openapi -i http://localhost:8000/api/v1/openapi.json -o src/api -c axios"
   },
   "eslintConfig": {
     "extends": [
@@ -68,6 +68,7 @@
     "@types/pluralize": "^0.0.29",
     "autoprefixer": "^10.4.12",
     "concurrently": "^7.5.0",
+    "openapi-typescript-codegen": "^0.23.0",
     "postcss": "^8.4.18",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwindcss": "^0.1.13",
