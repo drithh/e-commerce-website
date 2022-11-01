@@ -31,7 +31,7 @@ export type authType = {
   >;
 };
 
-const AuthContext = createContext<authType>({ role: 'public' });
+const AuthContext = createContext<authType>({ role: 'none' });
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 };
 
 const useProvideAuth = () => {
-  const [role, setRole] = useState('public');
+  const [role, setRole] = useState('none');
 
   const { refetch } = useQuery(
     'authentication',

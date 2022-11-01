@@ -5,6 +5,7 @@ from fastapi import status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
@@ -25,8 +26,8 @@ def get_wishlist(
     current_user: User = Depends(get_current_active_user),
 ):
     wishlists = session.execute(
-        """
-        SELECT *, images.image_url as image FROM only wishlists
+        f"""
+        SELECT *, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image FROM only wishlists
         JOIN products ON products.id = wishlists.product_id
         JOIN product_images ON product_images.product_id = products.id
         JOIN images ON images.id = product_images.image_id
@@ -72,3 +73,16 @@ def delete_wishlist(
     logger.info(f"User {current_user.name} removed product {id} from wishlist")
 
     return DefaultResponse(message="Wishlist deleted")
+
+
+@router.delete("/all", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
+def clear_wishlist(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    session.query(Wishlist).filter(Wishlist.user_id == current_user.id).delete()
+    session.commit()
+
+    logger.info(f"User {current_user.name} cleared wishlist")
+
+    return DefaultResponse(message="Wishlist cleared")

@@ -37,7 +37,7 @@ def get_role(
     request: AccessToken,
 ) -> Any:
     role = is_authenticated(request.access_token)
-    message = "public"
+    message = "guest"
     if role is not None:
         if role is False:
             message = "user"

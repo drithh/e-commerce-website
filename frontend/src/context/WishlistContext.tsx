@@ -25,6 +25,7 @@ export type wishlistType = {
     },
     unknown
   >;
+  clearWishlist?: UseMutationResult<DefaultResponse, unknown, void, unknown>;
 };
 
 const WishlistContext = createContext<wishlistType>({
@@ -59,11 +60,21 @@ const useProvideWishlist = () => {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     staleTime: Infinity,
-    enabled: role !== 'public',
+    enabled: role === 'user' || role === 'admin',
     onSuccess: (data) => {
       setWishlist(data);
     },
   });
+
+  const addWishlistItem = useMutation(
+    (variables: { id: string }) => WishlistService.createWishlist(variables.id),
+    {
+      onSuccess: () => {
+        refetch();
+        // setWishlist((prev) => [...prev, data.data]);
+      },
+    }
+  );
 
   const deleteWishlistItem = useMutation(
     (variables: { product_id: string }) =>
@@ -76,20 +87,19 @@ const useProvideWishlist = () => {
     }
   );
 
-  const addWishlistItem = useMutation(
-    (variables: { id: string }) => WishlistService.createWishlist(variables.id),
-    {
-      onSuccess: () => {
-        refetch();
-        // setWishlist((prev) => [...prev, data.data]);
-      },
-    }
-  );
+  const clearWishlist = useMutation(() => WishlistService.clearWishlist(), {
+    onSuccess: () => {
+      refetch();
+      // setWishlist([]);
+    },
+  });
+
   return {
     wishlist,
     setWishlist,
     refetch,
     deleteWishlistItem,
     addWishlistItem,
+    clearWishlist,
   };
 };

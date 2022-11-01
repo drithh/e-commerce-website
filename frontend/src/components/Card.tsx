@@ -2,18 +2,17 @@ import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Heart from '../assets/icons/Heart';
 import HeartSolid from '../assets/icons/HeartSolid';
-import { BestSeller, WishlistService } from '../api';
+import { BestSeller } from '../api';
 import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 interface Props {
   item: BestSeller;
 }
 
 const Card: FC<Props> = ({ item }) => {
-  const { wishlist, addWishlistItem, deleteWishlistItem, refetch } =
-    useWishlist();
+  const { wishlist, addWishlistItem, deleteWishlistItem } = useWishlist();
+  const { role } = useAuth();
 
-  // const { wishlist, addToWishlist, deleteWishlistItem } = useWishlist();
-  // const { addOne } = useCart();
   const [isHovered, setIsHovered] = useState(false);
   const [isWLHovered, setIsWLHovered] = useState(false);
 
@@ -25,15 +24,12 @@ const Card: FC<Props> = ({ item }) => {
     (item) => item.product_id === id
   );
   const handleWishlist = () => {
-    alreadyWishlisted
-      ? deleteWishlistItem!.mutate({ product_id: id })
-      : addWishlistItem!.mutate({ id });
+    if (role !== 'guest') {
+      alreadyWishlisted
+        ? deleteWishlistItem!.mutate({ product_id: id })
+        : addWishlistItem!.mutate({ id });
+    }
   };
-
-  // if (wishlist.isLoading) {
-  //   return <div>Loading...</div>;
-  // }
-  // const alreadyWishlisted = true;
 
   return (
     <div className="w-full">

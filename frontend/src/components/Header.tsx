@@ -109,7 +109,7 @@ const Header = () => {
                 <SearchIcon />
               </li>
               <li className="opacity-100">
-                {role !== 'public' ? (
+                {role !== 'guest' ? (
                   <Link to="/profile">
                     <UserIcon />
                   </Link>
