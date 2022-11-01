@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { useAuth, authType } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { ApiError } from '../../api';
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
 };
 
 const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
-  const { register }: authType = useAuth();
+  const { register } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,9 +20,9 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await register.mutate({ name, email, password, phone });
-    if (register.error) {
-      const error = register.error as ApiError;
+    register!.mutate({ name, email, password, phone });
+    if (register!.error) {
+      const error = register!.error as ApiError;
       setErrorMsg(error.body.message);
     }
   };

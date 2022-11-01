@@ -1,20 +1,17 @@
 import { FC, useState } from 'react';
-// import Link from 'next/link';
-// import Image from 'next/image';
-// import { useTranslations } from 'next-intl';
 import { Link } from 'react-router-dom';
 import Heart from '../assets/icons/Heart';
-// import styles from './Card.module.css';
 import HeartSolid from '../assets/icons/HeartSolid';
-// import { useCart } from '../context/cart/CartProvider';
-// import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { BestSeller } from '../api';
-
+import { BestSeller, WishlistService } from '../api';
+import { useWishlist } from '../context/WishlistContext';
 interface Props {
   item: BestSeller;
 }
 
 const Card: FC<Props> = ({ item }) => {
+  const { wishlist, addWishlistItem, deleteWishlistItem, refetch } =
+    useWishlist();
+
   // const { wishlist, addToWishlist, deleteWishlistItem } = useWishlist();
   // const { addOne } = useCart();
   const [isHovered, setIsHovered] = useState(false);
@@ -24,21 +21,28 @@ const Card: FC<Props> = ({ item }) => {
 
   const itemLink = `/products/${encodeURIComponent(id)}`;
 
-  const alreadyWishlisted = true;
-
+  const alreadyWishlisted = wishlist.data!.find(
+    (item) => item.product_id === id
+  );
   const handleWishlist = () => {
-    // alreadyWishlisted ? deleteWishlistItem!(item) : addToWishlist!(item);
+    alreadyWishlisted
+      ? deleteWishlistItem!.mutate({ product_id: id })
+      : addWishlistItem!.mutate({ id });
   };
+
+  // if (wishlist.isLoading) {
+  //   return <div>Loading...</div>;
+  // }
+  // const alreadyWishlisted = true;
 
   return (
     <div className="w-full">
-      <div className="relative mb-1 overflow-hidden group">
-        <Link
-          to={itemLink}
-          tabIndex={-1}
-          onMouseOver={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
+      <div
+        className="relative mb-1 overflow-hidden group"
+        onMouseOver={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <Link to={itemLink} tabIndex={-1}>
           {!isHovered && <img src={images[0] as string} alt={title} />}
           {isHovered && (
             <img

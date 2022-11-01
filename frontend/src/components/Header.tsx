@@ -5,18 +5,18 @@ import UserIcon from '../assets/icons/UserIcon';
 import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
-import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { useAuth, authType } from '../context/AuthContext';
+import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 import PopoverMenu from './PopoverMenu';
 
 const Header = () => {
-  const { role }: authType = useAuth();
+  const { role } = useAuth();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();
   const [animate, setAnimate] = useState('');
 
-  let noOfWishlist = wishlist.length;
+  let noOfWishlist = wishlist.data?.length || 0;
   // Animate Wishlist Number
   const handleAnimate = useCallback(() => {
     if (noOfWishlist === 0) return;

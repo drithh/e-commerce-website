@@ -26,7 +26,7 @@ def get_wishlist(
 ):
     wishlists = session.execute(
         """
-        SELECT *, images.image_url as image FROM wishlists
+        SELECT *, images.image_url as image FROM only wishlists
         JOIN products ON products.id = wishlists.product_id
         JOIN product_images ON product_images.product_id = products.id
         JOIN images ON images.id = product_images.image_id
