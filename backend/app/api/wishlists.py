@@ -44,12 +44,18 @@ def create_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    session.add(Wishlist(user_id=current_user.id, product_id=id))
-    session.commit()
-
-    logger.info(f"User {current_user.name} added product {id} to wishlist")
-
-    return DefaultResponse(message="Wishlist created")
+    try:
+        wishlist = Wishlist(
+            user_id=current_user.id,
+            product_id=id,
+        )
+        session.add(wishlist)
+        session.commit()
+        return DefaultResponse(message="Wishlist Created")
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        return DefaultResponse(message="Failed to create wishlist")
 
 
 @router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)

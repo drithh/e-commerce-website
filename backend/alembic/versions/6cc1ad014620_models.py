@@ -1,8 +1,8 @@
 """models
 
-Revision ID: e0eb92f7a02e
+Revision ID: 6cc1ad014620
 Revises: 
-Create Date: 2022-10-31 16:38:29.805105
+Create Date: 2022-11-01 04:25:03.276163
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = 'e0eb92f7a02e'
+revision = '6cc1ad014620'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -147,7 +147,8 @@ def upgrade():
     sa.Column('product_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
-    sa.PrimaryKeyConstraint('id')
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('user_id', 'product_id')
     )
     op.create_table('carts',
     sa.Column('id', fastapi_users_db_sqlalchemy.generics.GUID(), server_default=sa.text('uuid_generate_v4()'), nullable=False),
