@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { AuthenticationService, ApiError } from '../../api';
-import { useMutation } from 'react-query';
-import Cookies from 'js-cookie';
-import { useRole } from '../../context/RoleContext';
+import { useAuth, authType } from '../../context/AuthContext';
+import { ApiError } from '../../api';
 type Props = {
   onRegister: () => void;
   onForgotPassword: () => void;
@@ -17,31 +15,18 @@ const Login: React.FC<Props> = ({
   onForgotPassword,
   closeModal,
 }) => {
-  const { refetch }: any = useRole();
+  const { login }: authType = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const loginResponse = useMutation(
-    (variables: { email: string; password: string }) =>
-      AuthenticationService.signIn({
-        username: variables.email,
-        password: variables.password,
-      }),
-    {
-      onSuccess: (data) => {
-        Cookies.set('token', data.access_token);
-        refetch();
-        closeModal();
-      },
-      onError: (error: ApiError) => {
-        setErrorMsg(error.body.message);
-      },
-    }
-  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    loginResponse.mutate({ email, password });
+    login.mutate({ email, password });
+    if (login.error) {
+      const error = login.error as ApiError;
+      setErrorMsg(error.body.message);
+    }
   };
 
   return (

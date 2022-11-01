@@ -11,7 +11,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { ToastContainer } from 'react-toastify';
 import UserRoutes from './util/UserRoutes';
 import AdminRoutes from './util/AdminRoutes';
-import { RoleProvider } from './context/RoleContext';
+import { AuthProvider } from './context/AuthContext';
 import 'react-toastify/dist/ReactToastify.min.css';
 
 const queryClient = new QueryClient();
@@ -19,7 +19,7 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <RoleProvider>
+      <AuthProvider>
         <div className="App relative font-poppins ">
           <ToastContainer
             position="top-center"
@@ -54,7 +54,7 @@ function App() {
           </BrowserRouter>
         </div>
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
-      </RoleProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

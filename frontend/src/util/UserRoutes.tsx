@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import { useRole } from '../context/RoleContext';
+import { authType, useAuth } from '../context/AuthContext';
 const UserRoutes = () => {
-  const { role }: any = useRole();
+  const { role }: authType = useAuth();
   return role === 'user' || role === 'admin' ? <Outlet /> : <Navigate to="/" />;
 };
 

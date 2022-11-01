@@ -6,11 +6,11 @@ import SearchIcon from '../assets/icons/SearchIcon';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
 import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { useRole } from '../context/RoleContext';
+import { useAuth, authType } from '../context/AuthContext';
 import PopoverMenu from './PopoverMenu';
 
 const Header = () => {
-  const { role }: any = useRole();
+  const { role }: authType = useAuth();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();

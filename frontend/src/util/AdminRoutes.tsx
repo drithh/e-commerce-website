@@ -1,7 +1,7 @@
 import { Outlet, Navigate } from 'react-router-dom';
-import { useRole } from '../context/RoleContext';
+import { useAuth, authType } from '../context/AuthContext';
 const AdminRoutes = () => {
-  const { role }: any = useRole();
+  const { role }: authType = useAuth();
   return role === 'admin' ? <Outlet /> : <Navigate to="/" />;
 };
 

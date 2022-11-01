@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { useMutation } from 'react-query';
-import { AuthenticationService, ApiError } from '../../api';
-import Cookies from 'js-cookie';
-import { useRole } from '../../context/RoleContext';
+import { useAuth, authType } from '../../context/AuthContext';
+import { ApiError } from '../../api';
 
 type Props = {
   onLogin: () => void;
@@ -13,39 +11,20 @@ type Props = {
 };
 
 const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
-  const { refetch }: any = useRole();
+  const { register }: authType = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
-  const registerResponse = useMutation(
-    (variables: {
-      name: string;
-      email: string;
-      password: string;
-      phone: string;
-    }) =>
-      AuthenticationService.signUp({
-        name: variables.name,
-        email: variables.email,
-        password: variables.password,
-        phone_number: variables.phone,
-      }),
-    {
-      onSuccess: (data) => {
-        Cookies.set('token', data.access_token);
-        refetch();
-        closeModal();
-      },
-      onError: (error: ApiError) => {
-        setErrorMsg(error.body.message);
-      },
-    }
-  );
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    registerResponse.mutate({ name, email, password, phone });
+    await register.mutate({ name, email, password, phone });
+    if (register.error) {
+      const error = register.error as ApiError;
+      setErrorMsg(error.body.message);
+    }
   };
 
   return (
