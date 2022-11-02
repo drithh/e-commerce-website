@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { app__schemas__wishlist__GetProduct } from './app__schemas__wishlist__GetProduct';
+import type { GetProduct } from './GetProduct';
 
 export type GetWishlist = {
-    data: Array<app__schemas__wishlist__GetProduct>;
+    data: Array<GetProduct>;
 };

@@ -55,7 +55,7 @@ class GetProduct(BaseModel):
     title: str
     brand: str
     product_detail: str
-    images_url: List[str]
+    images: List[str]
     price: int
     category_id: UUID
     condition: str
@@ -73,6 +73,7 @@ class Product(BaseModel):
     price: int
     category_id: UUID
     condition: str
+    images: List[str]
 
     class Config:
         orm_mode = True

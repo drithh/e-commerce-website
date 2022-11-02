@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'animate.css';
 import Custom404 from './pages/404';
 import ComingSoon from './pages/ComingSoon';
+import Product from './pages/Product';
 const queryClient = new QueryClient();
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
 
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/product" element={<Product />} />
                 <Route element={<UserRoutes />}>
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />

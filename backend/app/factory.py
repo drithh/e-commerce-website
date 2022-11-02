@@ -148,7 +148,7 @@ def setup_cors_middleware(app):
 
 
 def setup_gzip_middleware(app):
-    app.add_middleware(GZipMiddleware, minimum_size=1000)
+    app.add_middleware(GZipMiddleware, minimum_size=500)
 
 
 def use_route_names_as_operation_ids(app: FastAPI) -> None:

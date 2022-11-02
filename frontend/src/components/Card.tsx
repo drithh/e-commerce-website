@@ -2,11 +2,11 @@ import { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Heart from '../assets/icons/Heart';
 import HeartSolid from '../assets/icons/HeartSolid';
-import { BestSeller } from '../api';
+import { Product, BestSeller } from '../api';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 interface Props {
-  item: BestSeller;
+  item: BestSeller | Product;
 }
 
 const Card: FC<Props> = ({ item }) => {
@@ -32,26 +32,31 @@ const Card: FC<Props> = ({ item }) => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-60">
       <div
         className="relative mb-1 overflow-hidden group"
         onMouseOver={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <Link to={itemLink} tabIndex={-1}>
-          {!isHovered && <img src={images[0] as string} alt={title} />}
-          {isHovered && (
-            <img
-              className="transform transition-transform duration-1000 hover:scale-110"
-              src={(images[1] as string) || (images[0] as string)}
-              alt={title}
-            />
-          )}
+          <img
+            src={images[0] as string}
+            alt={title}
+            loading="lazy"
+            className={`${isHovered ? 'hidden' : 'animate__fadeIn'}`}
+          />
+          <img
+            className={`${
+              !isHovered ? 'hidden' : ''
+            } transform transition-transform duration-1000 hover:scale-110`}
+            src={(images[1] as string) || (images[0] as string)}
+            alt={title}
+          />
         </Link>
         <button
           type="button"
-          className="absolute top-2 right-2 rounded-full p-1"
-          aria-label="Wishlist"
+          className="absolute top-2 right-2 rounded-full p-1 text-red-500"
+          aria-label="Wishlist "
           onClick={handleWishlist}
           onMouseOver={() => setIsWLHovered(true)}
           onMouseLeave={() => setIsWLHovered(false)}

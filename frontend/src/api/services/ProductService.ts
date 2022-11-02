@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { app__schemas__product__GetProduct } from '../models/app__schemas__product__GetProduct';
 import type { Body_search_image_api_v1_products_search_image_post } from '../models/Body_search_image_api_v1_products_search_image_post';
 import type { Body_search_image_upload_api_v1_products_search_image_upload_post } from '../models/Body_search_image_upload_api_v1_products_search_image_upload_post';
 import type { CreateProduct } from '../models/CreateProduct';
@@ -30,7 +29,7 @@ export class ProductService {
     public static getProducts(
         category?: Array<string>,
         page: number = 1,
-        pageSize: number = 100,
+        pageSize: number = 20,
         sortBy: string = 'a_z',
         price?: Array<number>,
         condition: string = '',
@@ -118,12 +117,12 @@ export class ProductService {
     /**
      * Get Product
      * @param id
-     * @returns app__schemas__product__GetProduct Successful Response
+     * @returns any Successful Response
      * @throws ApiError
      */
     public static getProduct(
         id: string,
-    ): CancelablePromise<app__schemas__product__GetProduct> {
+    ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/api/v1/products/{id}',

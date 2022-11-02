@@ -10,4 +10,5 @@ export type Product = {
     price: number;
     category_id: string;
     condition: string;
+    images: Array<string>;
 };

@@ -6,7 +6,9 @@ from fastapi import File, Form, Query, Response, UploadFile, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
+from app.db import engine
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
 from app.models.image import Image
@@ -114,10 +116,10 @@ def get_products(
     session: Generator = Depends(get_db),
     category: List[UUID] = Query([]),
     page: int = Query(1, ge=1),
-    page_size: int = Query(100, ge=1),
-    sort_by: str = Query("a_z", regex="^(a_z|z_a)$"),
+    page_size: int = Query(20, ge=1),
+    sort_by: str = Query("a_z", regex="^(a_z|z_a|)$"),
     price: List[int] = Query([], ge=0),
-    condition: str = Query("", regex="^(new|used)$"),
+    condition: str = Query("", regex="^(new|used|)$"),
     product_name: str = "",
 ) -> Any:
 
@@ -126,7 +128,14 @@ def get_products(
     else:
         sort = "DESC"
 
-    query = "SELECT * FROM only products "
+    query = f"""
+        SELECT products.id, products.title, products.brand, products.product_detail,
+        products.price, products.condition, products.category_id,
+        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images
+        FROM only products
+        LEFT JOIN product_images ON products.id = product_images.product_id
+        LEFT JOIN images ON product_images.image_id = images.id
+        """
     if category:
         query += "AND category_id IN :category "
     if product_name != "":
@@ -135,12 +144,10 @@ def get_products(
         query += "AND price BETWEEN :price_min AND :price_max "
     if condition != "":
         query += "AND condition = :condition "
-    query += f"ORDER BY title {sort} LIMIT :limit OFFSET :offset"
+    query += f"GROUP BY products.id  ORDER BY title {sort} LIMIT :limit OFFSET :offset"
 
-    # replace first AND with WHERE
     query = query.replace("AND", "WHERE", 1)
 
-    logger.info(query)
     products = session.execute(
         query,
         {
@@ -153,36 +160,45 @@ def get_products(
             "limit": page_size,
         },
     ).fetchall()
+    # get total row count for pagination with psycopg2 cursor get engine
+    # total =
+    with engine.connect() as conn:
+        # get cursor
+        cursor = conn.connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM products")
+        logger.info(cursor.rowcount)
 
-    total_rows = len(products)
+    # import psycopg2
+    # from sqlalchemy import create_engine
 
-    return GetProducts(data=products, total_rows=total_rows)
+    # total = cursor.rowcount
+    return GetProducts(
+        data=products,
+        total_rows=len(products),
+    )
 
 
-@router.get("/{id}", response_model=GetProduct, status_code=status.HTTP_200_OK)
+@router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_product(
     id: UUID,
     session: Generator = Depends(get_db),
 ) -> Any:
-
-    product_image = (
-        session.query(Image)
-        .join(ProductImage)
-        .filter(ProductImage.product_id == id)
-        .all()
-    )
-    product = session.query(Product).filter(Product.id == id).first()
-    product_size = (
-        session.query(Size.size)
-        .join(ProductSizeQuantity)
-        .filter(ProductSizeQuantity.product_id == id)
-        .all()
-    )
-
-    product.images_url = [image.image_url for image in product_image]
-    product.size = [size.size for size in product_size]
-
-    return product
+    return session.execute(
+        f"""
+        SELECT products.id, products.title, products.brand, products.product_detail,
+        products.price, products.condition, products.category_id,
+        array_agg(DISTINCT  CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
+        array_agg(DISTINCT  sizes.size) as size
+        FROM only products
+        JOIN product_images ON products.id = product_images.product_id
+        JOIN images ON product_images.image_id = images.id
+        JOIN product_size_quantities ON products.id = product_size_quantities.product_id
+        JOIN sizes ON product_size_quantities.size_id = sizes.id
+        WHERE products.id = :id
+        GROUP BY products.id
+        """,
+        {"id": id},
+    ).fetchone()
 
 
 @router.post("/search_image/upload", status_code=status.HTTP_200_OK)
