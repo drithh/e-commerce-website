@@ -10,7 +10,7 @@ from app.deps.authentication import get_current_active_admin, get_current_active
 from app.deps.db import get_db
 from app.models.order import Order
 from app.models.user import User
-from app.schemas.order import GetUserOrders
+from app.schemas.order import GetAdminOrders, GetUserOrders
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -92,47 +92,43 @@ def update_order(
     session.commit()
     logger.info(f"Order {id} updated by {current_user.email}")
 
-    return {"message": "Order updated successfully"}
+    return DefaultResponse(message="Order updated")
 
 
-# @router.get("/orders", status_code=status.HTTP_200_OK)
-# def get_orders_admin(
-#     request: RequestOrders = Depends(RequestOrders),
-#     session: Generator = Depends(get_db),
-#     current_user: User = Depends(get_current_active_admin),
-# ):
-#     sort = "ASC" if request.sort_by == "Price a_z" else "DESC"
-#     orders = session.execute(
-#         f"""
-#         select id, created_at, shipping_method, status, shipping_address, user_id, array_agg(product) products
-#         from (
-#             SELECT orders.id, orders.created_at, orders.shipping_method, orders.status,
-#                   orders.address as shipping_address, orders.user_id,
-#             json_build_object(
-#                 'id', products.id,
-#                 'details', array_agg(
-#                         json_build_object(
-#                             'quantity', order_items.quantity,
-#                             'size', sizes.size
-#                     )
-#                 ),
-#                 'price', products.price,
-#                 'name', products.title
-#             ) product
-#             FROM only orders
-#             JOIN order_items ON orders.id = order_items.order_id
-#             JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
-#             JOIN sizes ON product_size_quantities.size_id = sizes.id
-#             JOIN products ON product_size_quantities.product_id = products.id
-#             GROUP BY orders.id, products.id
-#         ) order_product
-#         group by order_product.id, order_product.created_at, order_product.shipping_method, order_product.status,
-#           order_product.shipping_address, order_product.user_id
-#         ORDER BY order_product.products.price {sort}
-#         OFFSET :offset
-#         LIMIT :limit
-#         """,
-#         {"offset": (request.page - 1) * request.page_size, "limit": request.page_size},
-#     ).fetchall()
+@router.get("/orders", status_code=status.HTTP_200_OK)
+def get_orders_admin(
+    sort_by: str = Query("Price a_z", regex="^(Price a_z|Price z_a)$"),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(25, ge=1, le=100),
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+):
+    sort = "ASC" if sort_by == "Price a_z" else "DESC"
+    orders = session.execute(
+        f"""
+        SELECT id, title, sizes, created_at, product_detail,
+        email, images_url, user_id, total
+        FROM (
+            SELECT DISTINCT ON (products.id) orders.id, products.title,
+            array_agg( DISTINCT sizes.size) sizes, orders.created_at,
+            products.product_detail, users.email, array_agg( DISTINCT images.image_url) images_url,
+            orders.user_id, SUM(products.price) total
+            FROM only orders
+            JOIN order_items ON orders.id = order_items.order_id
+            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
+            JOIN sizes ON product_size_quantities.size_id = sizes.id
+            JOIN products ON product_size_quantities.product_id = products.id
+            JOIN product_images ON products.id = product_images.product_id
+            JOIN images ON product_images.image_id = images.id
+            JOIN users ON orders.user_id = users.id
+            GROUP BY orders.id, products.id, users.id
+        ) order_product
+        GROUP BY order_product.id, order_product.title, order_product.created_at, order_product.product_detail,
+        order_product.email, order_product.user_id, order_product.total, sizes, images_url
+        ORDER BY total {sort}
+        LIMIT :page_size OFFSET :offset
+    """,
+        {"page_size": page_size, "offset": (page - 1) * page_size},
+    ).fetchall()
 
-#     return GetUserOrders(data=orders)
+    return GetAdminOrders(data=orders)

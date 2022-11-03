@@ -30,3 +30,18 @@ class GetUserOrder(BaseModel):
 
 class GetUserOrders(BaseModel):
     data: List[GetUserOrder]
+
+
+class GetAdminOrder(BaseModel):
+    id: UUID
+    title: str
+    sizes: List[str]
+    created_at: datetime.datetime
+    product_detail: str
+    email: str
+    images_url: List[str]
+    total: int
+
+
+class GetAdminOrders(BaseModel):
+    data: List[GetAdminOrder]
