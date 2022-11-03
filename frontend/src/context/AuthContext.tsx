@@ -8,8 +8,8 @@ import { useMutation } from 'react-query';
 
 export type authType = {
   role: string;
-  setRole: React.Dispatch<React.SetStateAction<string>>;
-  login: UseMutationResult<
+  setRole?: React.Dispatch<React.SetStateAction<string>>;
+  login?: UseMutationResult<
     UserRead,
     unknown,
     {
@@ -18,7 +18,7 @@ export type authType = {
     },
     unknown
   >;
-  register: UseMutationResult<
+  register?: UseMutationResult<
     UserRead,
     unknown,
     {
@@ -31,28 +31,25 @@ export type authType = {
   >;
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+const AuthContext = createContext<authType>({ role: 'none' });
+
+export const useAuth = () => useContext(AuthContext);
 
 interface AuthProviderProps {
   children: React.ReactNode;
 }
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const auth = ProvideAuth();
+  const auth = useProvideAuth();
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-const ProvideAuth = () => {
-  const [role, setRole] = useState('public');
+const useProvideAuth = () => {
+  const [role, setRole] = useState('none');
 
   const { refetch } = useQuery(
     'authentication',
-    () =>
-      AuthenticationService.getRole({
-        access_token: Cookies.get('token') || '',
-      }),
+    () => AuthenticationService.getRole(),
     {
       retry: false,
       refetchOnWindowFocus: false,
@@ -61,9 +58,7 @@ const ProvideAuth = () => {
       onSuccess: (data) => {
         toast.success(data.message);
         setRole(data.message);
-        if (data.message === 'user' || data.message === 'admin') {
-          OpenAPI.TOKEN = Cookies.get('token') || '';
-        }
+        OpenAPI.TOKEN = Cookies.get('token');
       },
     }
   );
@@ -111,4 +106,3 @@ const ProvideAuth = () => {
     register,
   };
 };
-const AuthContext = createContext<authType>(ProvideAuth());

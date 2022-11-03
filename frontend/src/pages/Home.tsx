@@ -2,9 +2,11 @@ import Banner from '../components/Banner';
 import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
-import { HomeService } from '../api';
+import { HomeService, OpenAPI } from '../api';
 import { useQuery } from 'react-query';
+import Cookies from 'js-cookie';
 const pluralize = require('pluralize');
+OpenAPI.TOKEN = Cookies.get('token');
 
 const Home = () => {
   let categories;
@@ -73,7 +75,7 @@ const Home = () => {
               </span>
             </div>
           </div>
-          <div className="app-x-padding mb-10 grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-4 lg:gap-x-12">
+          <div className="mb-10 grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-5 lg:gap-x-8">
             {fetchBestSellers.data?.data.map((item) => (
               <Card key={item.id} item={item} />
             ))}

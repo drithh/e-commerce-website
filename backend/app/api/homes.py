@@ -35,7 +35,6 @@ def get_banner(
 def get_category_with_image(
     session: Generator = Depends(get_db),
 ) -> Any:
-    # Get all categories and get images from first product in each category
     return GetCategories(
         data=session.execute(
             f"""
@@ -61,10 +60,11 @@ def get_category_with_image(
 def get_best_seller(
     session: Generator = Depends(get_db),
 ) -> Any:
-
-    best_seller = session.execute(
-        f"""
-            SELECT products.id, products.title, products.price, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image
+    return GetBestSeller(
+        data=session.execute(
+            f"""
+            SELECT products.id, products.title, products.price,
+            array_agg(DISTINCT CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images
             FROM only products
             JOIN product_images ON products.id = product_images.product_id
             JOIN images ON product_images.image_id = images.id
@@ -72,21 +72,8 @@ def get_best_seller(
             JOIN order_items ON product_size_quantities.id = order_items.product_size_quantity_id
             JOIN orders ON order_items.order_id = orders.id
             WHERE orders.status = 'finished'
-            GROUP BY products.id, image, products.title, products.price
+            GROUP BY products.id
             ORDER BY COUNT(order_items.id) DESC
             """
-    ).fetchall()
-
-    # combine best_seller if has same product
-    best_seller_dict = {}
-    for product in best_seller:
-        if product.id in best_seller_dict:
-            best_seller_dict[product.id]["images"] += [product.image]
-        else:
-            best_seller_dict[product.id] = {
-                "id": product.id,
-                "title": product.title,
-                "images": [product.image],
-                "price": product.price,
-            }
-    return GetBestSeller(data=[best_seller_dict[key] for key in best_seller_dict])
+        ).fetchall()
+    )

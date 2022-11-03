@@ -1,9 +1,10 @@
+-- Create Archive Table
 DO $$
 DECLARE
     t text;
 BEGIN
     FOR t IN
-        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%'
+        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%' AND table_name NOT LIKE 'wishlists'
     LOOP
         EXECUTE format('CREATE TABLE %I
                     (CHECK (deleted_at IS NOT NULL))
@@ -12,6 +13,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
+-- Create Function to Archive
 CREATE OR REPLACE FUNCTION archive_record()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -31,12 +33,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Create Trigger to Archive
 DO $$
 DECLARE
     t text;
 BEGIN
     FOR t IN
-        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%'
+        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%' AND table_name NOT LIKE 'wishlists'
     LOOP
         EXECUTE format('CREATE TRIGGER trigger_archive_record
                     AFTER UPDATE OF deleted_at OR DELETE ON %I
@@ -45,7 +48,7 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
-
+-- Create Function to Restore from Archive
 CREATE OR REPLACE FUNCTION dearchive_record()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -58,6 +61,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Create Trigger to Restore from Archive
 DO $$
 DECLARE
     t text;

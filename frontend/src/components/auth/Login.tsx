@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Dialog } from '@headlessui/react';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { useAuth, authType } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 import { ApiError } from '../../api';
 type Props = {
   onRegister: () => void;
@@ -15,16 +15,16 @@ const Login: React.FC<Props> = ({
   onForgotPassword,
   closeModal,
 }) => {
-  const { login }: authType = useAuth();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login.mutate({ email, password });
-    if (login.error) {
-      const error = login.error as ApiError;
+    login!.mutate({ email, password });
+    if (login!.error) {
+      const error = login!.error as ApiError;
       setErrorMsg(error.body.message);
     }
   };

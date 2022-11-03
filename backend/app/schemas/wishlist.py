@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class GetProduct(BaseModel):
     id: UUID
+    product_id: UUID
     title: str
     price: int
     image: str

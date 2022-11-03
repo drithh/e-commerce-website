@@ -3,14 +3,11 @@ import Button from '../components/button/Button';
 import GhostButton from '../components/button/GhostButton';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/cart/CartProvider';
-import { useWishlist } from '../context/wishlist/WishlistProvider';
+import { useWishlist } from '../context/WishlistContext';
 
 const Wishlist = () => {
-  // const t = useTranslations('CartWishlist');
-  const { addOne } = useCart();
+  // const { addOne } = useCart();
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
-
-  let subtotal = 0;
 
   return (
     <main id="main-content" className="mx-auto mt-20 min-h-[60vh] max-w-7xl">
@@ -43,7 +40,7 @@ const Wishlist = () => {
                 </th>
                 <th
                   className={`py-2 font-normal ${
-                    wishlist.length === 0 ? 'text-center' : 'text-right'
+                    wishlist.data.length === 0 ? 'text-center' : 'text-right'
                   }`}
                 >
                   Unit Price
@@ -60,29 +57,28 @@ const Wishlist = () => {
               </tr>
             </thead>
             <tbody>
-              {wishlist.length === 0 ? (
+              {wishlist.data.length === 0 ? (
                 <tr className="h-60 w-full border-b-2 border-gray-200 text-center">
                   <td colSpan={5}>Whislist is empty!</td>
                 </tr>
               ) : (
-                wishlist.map((item) => {
-                  subtotal += item.price * item.qty!;
+                wishlist.data.map((item) => {
                   return (
                     <tr className="border-b-2 border-gray-200" key={item.id}>
                       <td className="my-3 flex flex-col items-start justify-center sm:items-center">
                         <Link to={`/products/${encodeURIComponent(item.id)}`}>
                           <img
-                            src={item.img1 as string}
-                            alt={item.name}
+                            src={item.image}
+                            alt={item.title}
                             width={95}
                             height={128}
                             className="h-32 xl:mr-4"
                           />
                         </Link>
-                        <span className="text-xs md:hidden">{item.name}</span>
+                        <span className="text-xs md:hidden">{item.title}</span>
                       </td>
                       <td className="hidden text-center md:table-cell">
-                        {item.name}
+                        {item.title}
                       </td>
                       <td className="text-right text-gray-400">
                         $ {item.price}
@@ -91,7 +87,7 @@ const Wishlist = () => {
                         <Button
                           value={'Add To Cart'}
                           extraClass="hidden sm:block m-auto"
-                          onClick={() => addOne!(item)}
+                          // onClick={() => addOne!(item)}
                         />
                       </td>
                       <td
@@ -100,11 +96,15 @@ const Wishlist = () => {
                       >
                         <Button
                           value={'add'}
-                          onClick={() => addOne!(item)}
+                          // onClick={() => addOne!(item)}
                           extraClass="sm:hidden mb-4 whitespace-nowrap"
                         />
                         <button
-                          onClick={() => deleteWishlistItem!(item)}
+                          onClick={() =>
+                            deleteWishlistItem!.mutate({
+                              product_id: item.product_id,
+                            })
+                          }
                           type="button"
                           className="text-4xl text-gray-300 outline-none hover:text-gray-500 focus:outline-none sm:text-2xl"
                         >
@@ -119,7 +119,7 @@ const Wishlist = () => {
           </table>
           <div>
             <GhostButton
-              onClick={clearWishlist}
+              onClick={() => clearWishlist!.mutate()}
               extraClass="w-full sm:w-48 whitespace-nowrap"
             >
               Clear Wishlist
