@@ -31,7 +31,9 @@ const Product: React.FC = () => {
 
       {/* ===== Product Section ===== */}
       <div className="flex gap-x-4 min-h-screen">
-        <section className="border-r-gray-100 border-r w-60">a</section>
+        <section className="border-x-gray-100 border-x w-72">
+          <div>Showing 1-8 of 200 products</div>
+        </section>
         <section className="grid grid-cols-4 gap-4">
           {fetchProducts.data?.data.map((product) => (
             <Card key={product.id} item={product} />

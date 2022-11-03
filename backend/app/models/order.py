@@ -15,12 +15,10 @@ class Order(DefaultModel, Base):
     user_id = Column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
 
     @classmethod
-    def seed(cls, fake, user_id):
+    def seed(cls, fake, user_id, status):
         order = Order(
             id=fake.uuid4(),
-            status=fake.random_element(
-                elements=("pending", "delivered", "cancelled", "finished")
-            ),
+            status=status,
             address=fake.address(),
             city=fake.city(),
             shipping_price=fake.pyint(min_value=1000),

@@ -8,8 +8,36 @@ import CartItem from './cart/CartItem';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
 import PopoverMenu from './PopoverMenu';
+import { useQuery } from 'react-query';
+import { CategoryService, app__schemas__category__Category } from '../api';
+import * as changeCase from 'change-case';
 
 const Header = () => {
+  let categories = new Array<{
+    type: string;
+    items: app__schemas__category__Category[];
+  }>();
+  // let categories = [
+  //   {
+  //     type: 'Tops',
+  //     item: new Array<app__schemas__category__Category>(),
+  //   },
+  //   {
+  //     type: 'Bottoms',
+  //     item: new Array<app__schemas__category__Category>(),
+  //   },
+  //   {
+  //     type: 'Shoes & Accessories',
+  //     item: new Array<app__schemas__category__Category>(),
+  //   },
+  // ];
+  const fetchCategories = useQuery(
+    'categories',
+    () => CategoryService.getCategory(),
+    {
+      staleTime: Infinity,
+    }
+  );
   const { role } = useAuth();
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
@@ -49,6 +77,33 @@ const Header = () => {
   if (!didMount) {
     return null;
   }
+  if (fetchCategories.isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (fetchCategories.isError) {
+    return <div>Error...</div>;
+  }
+  if (fetchCategories.data) {
+    fetchCategories.data.data.forEach((category) => {
+      categories.forEach((cat) => {
+        if (cat.type === category.type) {
+          cat.items.push(category);
+        }
+      });
+      if (!categories.some((cat) => cat.type === category.type)) {
+        categories.push({
+          type: category.type,
+          items: [category],
+        });
+      }
+    });
+  }
+  categories = categories.map((category) => {
+    return {
+      type: changeCase.capitalCase(category.type, { delimiter: ' & ' }),
+      items: category.items,
+    };
+  });
 
   return (
     <>
@@ -61,36 +116,18 @@ const Header = () => {
           <div className="justify-content-center flex h-full justify-between align-baseline">
             {/* Left Nav */}
             <ul className="flex-0 flex place-items-center gap-x-4 lg:flex-1 ">
-              <li className="relative h-6">
-                <PopoverMenu
-                  menuTitle="Tops"
-                  linksArray={[
-                    ['T-Shirts', '/'],
-                    ['Shirts', '/about'],
-                    ['Coats', '/blog'],
-                    ['Dresses', '/blog'],
-                    ['Pullovers', '/blog'],
-                  ]}
-                />
-              </li>
-              <li className="relative h-6">
-                <PopoverMenu
-                  menuTitle="Bottoms"
-                  linksArray={[['Trousers', '/']]}
-                />
-              </li>
-              <li className="relative h-6">
-                <PopoverMenu
-                  menuTitle="Shoes & Accessories"
-                  linksArray={[
-                    ['Bags', '/'],
-                    ['Hats', '/about'],
-                    ['Sneakers', '/blog'],
-                    ['Sandals', '/blog'],
-                    ['Angkle Boots', '/blog'],
-                  ]}
-                />
-              </li>
+              {/* iterate over categories */}
+              {categories?.map((category, index) => (
+                <li key={index} className="relative h-6">
+                  <PopoverMenu
+                    menuTitle={category.type}
+                    linksArray={category.items.map((item) => [
+                      changeCase.capitalCase(item.title),
+                      `/category/${item.id}`,
+                    ])}
+                  />
+                </li>
+              ))}
             </ul>
 
             {/* Tutu Logo */}

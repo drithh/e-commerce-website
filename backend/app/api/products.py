@@ -117,16 +117,23 @@ def get_products(
     category: List[UUID] = Query([]),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1),
-    sort_by: str = Query("a_z", regex="^(a_z|z_a|)$"),
+    sort_by: str = Query(
+        "Title a_z", regex="^(Title a_z|Title z_a|Price a_z|Price z_a|Newest|Oldest|)$"
+    ),
     price: List[int] = Query([], ge=0),
     condition: str = Query("", regex="^(new|used|)$"),
     product_name: str = "",
 ) -> Any:
-
-    if sort_by == "a_z":
-        sort = "ASC"
-    else:
+    sorts = sort_by.split(" ")
+    if sorts[0] == "Newest":
+        order = "products.created_at"
         sort = "DESC"
+    elif sorts[0] == "Oldest":
+        order = "products.created_at"
+        sort = "ASC"
+    elif sorts.__len__() == 2:
+        order = sorts[0].lower()
+        sort = "ASC" if sorts[1] == "a_z" else "DESC"
 
     query = f"""
         SELECT products.id, products.title, products.brand, products.product_detail,
@@ -140,11 +147,15 @@ def get_products(
         query += "AND category_id IN :category "
     if product_name != "":
         query += "AND title LIKE :product_name "
-    if price:
-        query += "AND price BETWEEN :price_min AND :price_max "
+    if price.__len__() > 0:
+        query += "AND price >= :min_price "
+    if price.__len__() > 1:
+        query += "AND price <= :max_price "
     if condition != "":
         query += "AND condition = :condition "
-    query += f"GROUP BY products.id  ORDER BY title {sort} LIMIT :limit OFFSET :offset"
+    query += (
+        f"GROUP BY products.id  ORDER BY {order} {sort} LIMIT :limit OFFSET :offset"
+    )
 
     query = query.replace("AND", "WHERE", 1)
 
@@ -154,7 +165,7 @@ def get_products(
             "category": tuple(category),
             "product_name": f"%{product_name}%",
             "price_min": price[0] if price.__len__() > 0 else 0,
-            "price_max": price[1] if price.__len__() > 1 else 100000000,
+            "price_max": price[1] if price.__len__() > 1 else 0,
             "condition": condition,
             "offset": (page - 1) * page_size,
             "limit": page_size,

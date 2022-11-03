@@ -30,7 +30,7 @@ export class ProductService {
         category?: Array<string>,
         page: number = 1,
         pageSize: number = 20,
-        sortBy: string = 'a_z',
+        sortBy: string = 'Title a_z',
         price?: Array<number>,
         condition: string = '',
         productName: string = '',
