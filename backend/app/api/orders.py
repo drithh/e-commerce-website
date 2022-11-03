@@ -10,7 +10,7 @@ from app.deps.authentication import get_current_active_admin, get_current_active
 from app.deps.db import get_db
 from app.models.order import Order
 from app.models.user import User
-from app.schemas.order import GetUserOrders, RequestOrders
+from app.schemas.order import GetUserOrders
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -26,7 +26,8 @@ def get_orders_user(
         """
         select id, created_at, shipping_method, status, shipping_address, array_agg(product) products
         from (
-            SELECT orders.id, orders.created_at, orders.shipping_method, orders.status, orders.address as shipping_address,
+            SELECT DISTINCT ON (products.id) orders.id, orders.created_at,
+            orders.shipping_method, orders.status, orders.address as shipping_address,
             json_build_object(
                 'id', products.id,
                 'details', array_agg(
@@ -36,15 +37,18 @@ def get_orders_user(
                     )
                 ),
                 'price', products.price,
-                'name', products.title
+                'name', products.title,
+                'image', images.image_url
             ) product
             FROM only orders
             JOIN order_items ON orders.id = order_items.order_id
             JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
             JOIN sizes ON product_size_quantities.size_id = sizes.id
             JOIN products ON product_size_quantities.product_id = products.id
+            JOIN product_images ON products.id = product_images.product_id
+            JOIN images ON product_images.image_id = images.id
             WHERE orders.user_id = :user_id
-            GROUP BY orders.id, products.id
+            GROUP BY orders.id, products.id, images.id
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
         order_product.status, order_product.shipping_address
