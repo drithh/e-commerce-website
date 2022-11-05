@@ -1,15 +1,23 @@
-// import { useRouter } from "next/router";
 import NextArrow from '../assets/icons/NextArrow';
 import PrevArrow from '../assets/icons/PrevArrow';
+
+interface TypeParams {
+  category: Array<string>;
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  price: Array<number>;
+  condition: string;
+  productName: string;
+}
 
 type Props = {
   lastPage: number;
   currentPage: number;
+  setParams: React.Dispatch<React.SetStateAction<TypeParams>>;
 };
 
-const Pagination: React.FC<Props> = ({ lastPage, currentPage }) => {
-  // const { category } = router.query;
-
+const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
   let pageNumbers: number[] = [];
 
   for (let i = 1; i <= lastPage; i++) {
@@ -53,24 +61,25 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage }) => {
 
   return (
     <div className="w-full">
-      <ul className="flex justify-center">
+      <ul className="flex mx-auto justify-center">
         <li>
           <button
             type="button"
             aria-label="Navigate to Previous Page"
-            onClick={
-              () => {}
-              // router.push(
-              //   `/product-category/${category}?page=${
-              //     currentPage - 1
-              //   }&orderby=${orderby}`
-              // )
-            }
+            onClick={() => {
+              if (currentPage > 1) {
+                setParams((prevParams) => ({
+                  ...prevParams,
+                  page: prevParams.page - 1,
+                }));
+              }
+            }}
+            disabled={currentPage === 1}
             className={`${
               currentPage === 1
-                ? 'pointer-events-none cursor-not-allowed text-gray400'
+                ? 'pointer-events-none cursor-not-allowed text-gray-400'
                 : 'cursor-pointer'
-            } focus:outline-none flex justify-center items-center h-10 w-16 px-3 border mx-1 hover:bg-gray500 hover:text-gray100`}
+            } focus:outline-none flex justify-center items-center h-10 w-16 px-3 border mx-1 hover:bg-gray-500 hover:text-gray-100`}
           >
             <PrevArrow />
           </button>
@@ -85,15 +94,15 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage }) => {
             <li key={num} className="">
               <button
                 type="button"
-                onClick={
-                  () => {}
-                  // router.push(
-                  //   `/product-category/${category}?page=${num}&orderby=${orderby}`
-                  // )
-                }
+                onClick={() => {
+                  setParams((prevParams) => ({
+                    ...prevParams,
+                    page: num,
+                  }));
+                }}
                 className={`${
-                  num === currentPage && 'bg-gray500 text-gray100'
-                } focus:outline-none cursor-pointer flex justify-center items-center w-10 h-10 border mx-1 hover:bg-gray500 hover:text-gray100`}
+                  num === currentPage && 'bg-gray-500 text-gray-100'
+                } focus:outline-none cursor-pointer flex justify-center items-center w-10 h-10 border mx-1 hover:bg-gray-500 hover:text-gray-100`}
               >
                 {num}
               </button>
@@ -109,19 +118,19 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage }) => {
           <button
             type="button"
             aria-label="Navigate to Next Page"
-            onClick={
-              () => {}
-              // router.push(
-              //   `/product-category/${category}?page=${
-              //     currentPage + 1
-              //   }&orderby=${orderby}`
-              // )
-            }
+            onClick={() => {
+              if (currentPage < lastPage) {
+                setParams((prevParams) => ({
+                  ...prevParams,
+                  page: prevParams.page + 1,
+                }));
+              }
+            }}
             className={`${
               currentPage >= lastPage
-                ? 'pointer-events-none cursor-not-allowed text-gray400'
+                ? 'pointer-events-none cursor-not-allowed text-gray-400'
                 : 'cursor-pointer'
-            } focus:outline-none flex justify-center items-center h-10 w-16 px-3 border mx-1 hover:bg-gray500 hover:text-gray100`}
+            } focus:outline-none flex justify-center items-center h-10 w-16 px-3 border mx-1 hover:bg-gray-500 hover:text-gray-100`}
           >
             <NextArrow />
           </button>

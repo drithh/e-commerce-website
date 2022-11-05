@@ -1,4 +1,5 @@
 import base64
+import math
 from typing import Any, Generator, List
 from uuid import UUID
 
@@ -17,7 +18,7 @@ from app.models.product_image import ProductImage
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.size import Size
 from app.models.user import User
-from app.schemas.product import CreateProduct, GetProduct, GetProducts, UpdateProduct
+from app.schemas.product import CreateProduct, GetProducts, Pagination, UpdateProduct
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -138,7 +139,8 @@ def get_products(
     query = f"""
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
-        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images
+        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
+        COUNT(*) OVER() totalrow_count
         FROM only products
         LEFT JOIN product_images ON products.id = product_images.product_id
         LEFT JOIN images ON product_images.image_id = images.id
@@ -171,21 +173,18 @@ def get_products(
             "limit": page_size,
         },
     ).fetchall()
-    # get total row count for pagination with psycopg2 cursor get engine
-    # total =
-    with engine.connect() as conn:
-        # get cursor
-        cursor = conn.connection.cursor()
-        cursor.execute("SELECT COUNT(*) FROM products")
-        logger.info(cursor.rowcount)
 
-    # import psycopg2
-    # from sqlalchemy import create_engine
-
-    # total = cursor.rowcount
     return GetProducts(
         data=products,
         total_rows=len(products),
+        pagination=Pagination(
+            page=page,
+            page_size=page_size,
+            total_item=products[0].totalrow_count if products else 0,
+            total_page=math.ceil(products[0].totalrow_count / page_size)
+            if products
+            else 1,
+        ),
     )
 
 

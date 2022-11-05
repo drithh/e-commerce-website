@@ -79,9 +79,17 @@ class Product(BaseModel):
         orm_mode = True
 
 
+class Pagination(BaseModel):
+    page: int
+    page_size: int
+    total_page: int
+    total_item: int
+
+
 class GetProducts(BaseModel):
     data: List[Product]
     total_rows: int
+    pagination: Pagination
 
     class Config:
         orm_mode = True

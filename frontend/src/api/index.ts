@@ -36,6 +36,7 @@ export type { GetUserProductDetails } from './models/GetUserProductDetails';
 export type { GetUserProducts } from './models/GetUserProducts';
 export type { GetWishlist } from './models/GetWishlist';
 export type { HTTPValidationError } from './models/HTTPValidationError';
+export type { Pagination } from './models/Pagination';
 export type { Product } from './models/Product';
 export type { PutUserBalance } from './models/PutUserBalance';
 export type { ResetPassword } from './models/ResetPassword';
