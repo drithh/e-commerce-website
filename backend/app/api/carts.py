@@ -6,12 +6,12 @@ from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
-from app.deps.db import get_db
-from app.models.user import User
-from app.models.cart import Cart
-from app.schemas.request_params import DefaultResponse
-from app.schemas.cart import GetCart, CreateCart
 from app.deps.authentication import get_current_active_user
+from app.deps.db import get_db
+from app.models.cart import Cart
+from app.models.user import User
+from app.schemas.cart import CreateCart, GetCart
+from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
 
@@ -23,7 +23,8 @@ def get_cart(
 ):
     carts = session.execute(
         """
-        SELECT products.id, array_agg(json_build_object('size', sizes.size, 'quantity', carts.quantity)) as details, products.price, images.image_url as image, products.title as name FROM only carts
+        SELECT products.id, array_agg(json_build_object('size', sizes.size, 'quantity', carts.quantity)) as details,
+        products.price, images.image_url as image, products.title as name FROM only carts
         JOIN product_size_quantities ON product_size_quantities.id = product_size_quantity_id
         JOIN sizes ON sizes.id  = product_size_quantities.size_id
         JOIN products ON products.id = product_size_quantities.product_id
@@ -67,8 +68,6 @@ def create_cart(
         return DefaultResponse(message=f"Cart updated {existed_cart.cart_id}")
 
     else:
-        # session.add(Cart(user_id=current_user.id, product_size_quantity_id=existed_cart.product_size_quantity_id, quantity=request.quantity))
-        # session.commit()
         session.execute(
             """
             INSERT INTO carts (user_id, product_size_quantity_id, quantity)
