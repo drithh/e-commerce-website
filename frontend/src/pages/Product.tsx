@@ -1,5 +1,4 @@
 import Card from '../components/Card';
-import { Link } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { CategoryService, ProductService } from '../api';
 import { useSearchParams } from 'react-router-dom';
@@ -20,17 +19,39 @@ interface TypeParams {
 }
 
 const Product: React.FC = () => {
+  const [searchParams] = useSearchParams();
+  const [params, setParams] = useState<TypeParams>({
+    category: [],
+    page: 1,
+    pageSize: 20,
+    sortBy: 'Title a_z',
+    price: [],
+    condition: '',
+    productName: '',
+  });
+
   const fetchProducts = useQuery(
-    'products',
-    () => ProductService.getProducts(),
+    ['products', params],
+    () =>
+      ProductService.getProducts(
+        params.category,
+        params.page,
+        params.pageSize,
+        params.sortBy,
+        params.price,
+        params.condition,
+        params.productName
+      ),
     {
       staleTime: Infinity,
     }
   );
+  // if searchParams changes, fetchProducts will be enabled
+  useEffect(() => {
+    console.log('searchParams changed');
+    // fetchProducts.refetch();
+  }, [searchParams]);
 
-  if (fetchProducts.isLoading) {
-    return <div>Loading...</div>;
-  }
   if (fetchProducts.isError) {
     return <div>Error...</div>;
   }
@@ -47,19 +68,33 @@ const Product: React.FC = () => {
       {/* ===== Product Section ===== */}
       <div className="flex gap-x-4 min-h-screen">
         <section className="border-x-gray-100 border-x w-72 h-fit  ">
-          <SortMenu />
+          <SortMenu params={params} setParams={setParams} />
         </section>
-        <section className="grid grid-cols-4 gap-4">
-          {fetchProducts.data?.data.map((product) => (
-            <Card key={product.id} item={product} />
-          ))}
-        </section>
+        {fetchProducts.data && fetchProducts.data?.data.length > 0 ? (
+          <section className="grid grid-cols-4 gap-4">
+            {fetchProducts.data?.data.map((product) => (
+              <Card key={product.id} item={product} />
+            ))}
+          </section>
+        ) : (
+          <div className="not-found flex flex-col gap-y-4 items-center  w-full text-2xl h-full py-[10%]">
+            <strong>Oops! No product found</strong>
+            <div>Please try again with different keywords or filters</div>
+          </div>
+        )}
       </div>
     </main>
   );
 };
 
-const SortMenu: React.FC = () => {
+interface SortMenuProps {
+  params: TypeParams;
+  setParams: React.Dispatch<React.SetStateAction<TypeParams>>;
+}
+
+const SortMenu: React.FC<SortMenuProps> = ({ params, setParams }) => {
+  const [, setSearchParams] = useSearchParams();
+
   const fetchCategories = useQuery(
     'categories',
     () => CategoryService.getCategory(),
@@ -70,24 +105,28 @@ const SortMenu: React.FC = () => {
 
   const conditions = ['new', 'used'];
 
-  const [params, setParams] = useState<TypeParams>({
-    category: [],
-    page: 1,
-    pageSize: 20,
-    sortBy: 'Title a_z',
-    price: [],
-    condition: '',
-    productName: '',
-  });
-
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      console.log(params);
-      // Send Axios request here
-    }, 1000);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [params]);
+    console.log(params);
+    const requestParams = new URLSearchParams();
+    requestParams.append('page', params.page.toString());
+    requestParams.append('page_size', params.pageSize.toString());
+    requestParams.append('sort_by', params.sortBy);
+    params.category.forEach((single_category) => {
+      requestParams.append('category', single_category);
+    });
+    params.price.forEach((single_price) => {
+      if (single_price) {
+        requestParams.append('price', single_price.toString());
+      }
+    });
+    if (params.condition.length > 0) {
+      requestParams.append('condition', params.condition);
+    }
+    if (params.productName.length > 0) {
+      requestParams.append('product_name', params.productName);
+    }
+    setSearchParams(requestParams);
+  }, [params, setSearchParams]);
 
   if (fetchCategories.isLoading) {
     return <div>Loading...</div>;
@@ -166,14 +205,15 @@ const SortMenu: React.FC = () => {
               id="min-price"
               className="w-full h-5"
               placeholder="0"
-              onChange={(e) => {
+              onBlur={(e) => {
                 const value = e.target.value;
-                setParams((prev) => ({
-                  ...prev,
-                  price: [Number(value), prev.price[1]],
-                }));
+                if (value) {
+                  setParams((prev) => ({
+                    ...prev,
+                    price: [Number(value), prev.price[1]],
+                  }));
+                }
               }}
-              min={0}
             />
           </div>
         </fieldset>
@@ -186,12 +226,14 @@ const SortMenu: React.FC = () => {
               name="max-price"
               id="max-price"
               className="w-full h-5"
-              onChange={(e) => {
+              onBlur={(e) => {
                 const value = e.target.value;
-                setParams((prev) => ({
-                  ...prev,
-                  price: [prev.price[0], Number(value)],
-                }));
+                if (value) {
+                  setParams((prev) => ({
+                    ...prev,
+                    price: [prev.price[0] || 0, Number(value)],
+                  }));
+                }
               }}
               placeholder="999999"
             />
@@ -213,11 +255,6 @@ const SortMenu: React.FC = () => {
                     setParams((prev) => ({
                       ...prev,
                       condition: value,
-                    }));
-                  } else {
-                    setParams((prev) => ({
-                      ...prev,
-                      condition: '',
                     }));
                   }
                 }}

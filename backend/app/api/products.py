@@ -164,8 +164,8 @@ def get_products(
         {
             "category": tuple(category),
             "product_name": f"%{product_name}%",
-            "price_min": price[0] if price.__len__() > 0 else 0,
-            "price_max": price[1] if price.__len__() > 1 else 0,
+            "min_price": price[0] if price.__len__() > 0 else 0,
+            "max_price": price[1] if price.__len__() > 1 else 0,
             "condition": condition,
             "offset": (page - 1) * page_size,
             "limit": page_size,
