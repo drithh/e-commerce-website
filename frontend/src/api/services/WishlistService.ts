@@ -64,4 +64,16 @@ export class WishlistService {
         });
     }
 
+    /**
+     * Clear Wishlist
+     * @returns DefaultResponse Successful Response
+     * @throws ApiError
+     */
+    public static clearWishlist(): CancelablePromise<DefaultResponse> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/api/v1/wishlist/all',
+        });
+    }
+
 }

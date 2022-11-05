@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Any, Generator
 
 import pytz
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -32,12 +32,23 @@ from app.schemas.request_params import DefaultResponse
 router = APIRouter()
 
 
-@router.post("/role", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
-def get_role(
-    request: AccessToken,
-) -> Any:
-    role = is_authenticated(request.access_token)
-    message = "public"
+@router.get(
+    "/role",
+    response_model=DefaultResponse,
+    status_code=status.HTTP_200_OK,
+    responses={
+        200: {
+            "description": "Return current user role",
+            "content": {"application/json": {"example": {"message": "guest"}}},
+        },
+    },
+)
+def get_role(request: Request) -> Any:
+    access_token = request.headers.get("Authorization") or ""
+    access_token = access_token.replace("Bearer ", "")
+    logger.info(f"access_token: {access_token}")
+    role = is_authenticated(access_token)
+    message = "guest"
     if role is not None:
         if role is False:
             message = "user"

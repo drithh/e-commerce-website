@@ -1,22 +1,18 @@
 import { FC, useState } from 'react';
-// import Link from 'next/link';
-// import Image from 'next/image';
-// import { useTranslations } from 'next-intl';
 import { Link } from 'react-router-dom';
 import Heart from '../assets/icons/Heart';
-// import styles from './Card.module.css';
 import HeartSolid from '../assets/icons/HeartSolid';
-// import { useCart } from '../context/cart/CartProvider';
-// import { useWishlist } from '../context/wishlist/WishlistProvider';
-import { BestSeller } from '../api';
-
+import { Product, BestSeller } from '../api';
+import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 interface Props {
-  item: BestSeller;
+  item: BestSeller | Product;
 }
 
 const Card: FC<Props> = ({ item }) => {
-  // const { wishlist, addToWishlist, deleteWishlistItem } = useWishlist();
-  // const { addOne } = useCart();
+  const { wishlist, addWishlistItem, deleteWishlistItem } = useWishlist();
+  const { role } = useAuth();
+
   const [isHovered, setIsHovered] = useState(false);
   const [isWLHovered, setIsWLHovered] = useState(false);
 
@@ -24,34 +20,43 @@ const Card: FC<Props> = ({ item }) => {
 
   const itemLink = `/products/${encodeURIComponent(id)}`;
 
-  const alreadyWishlisted = true;
-
+  const alreadyWishlisted = wishlist.data!.find(
+    (item) => item.product_id === id
+  );
   const handleWishlist = () => {
-    // alreadyWishlisted ? deleteWishlistItem!(item) : addToWishlist!(item);
+    if (role !== 'guest') {
+      alreadyWishlisted
+        ? deleteWishlistItem!.mutate({ product_id: id })
+        : addWishlistItem!.mutate({ id });
+    }
   };
 
   return (
-    <div className="w-full">
-      <div className="relative mb-1 overflow-hidden group">
-        <Link
-          to={itemLink}
-          tabIndex={-1}
-          onMouseOver={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {!isHovered && <img src={images[0] as string} alt={title} />}
-          {isHovered && (
-            <img
-              className="transform transition-transform duration-1000 hover:scale-110"
-              src={(images[1] as string) || (images[0] as string)}
-              alt={title}
-            />
-          )}
+    <div className="w-60">
+      <div
+        className="relative mb-1 overflow-hidden group"
+        onMouseOver={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        <Link to={itemLink} tabIndex={-1}>
+          <img
+            src={images[0] as string}
+            alt={title}
+            loading="lazy"
+            className={`${isHovered ? 'hidden' : 'animate__fadeIn'}`}
+          />
+          <img
+            className={`${
+              !isHovered ? 'hidden' : ''
+            } transform transition-transform duration-1000 hover:scale-110`}
+            src={(images[1] as string) || (images[0] as string)}
+            alt={title}
+          />
         </Link>
         <button
           type="button"
-          className="absolute top-2 right-2 rounded-full p-1"
-          aria-label="Wishlist"
+          className="absolute top-2 right-2 rounded-full p-1 text-red-500"
+          aria-label="Wishlist "
           onClick={handleWishlist}
           onMouseOver={() => setIsWLHovered(true)}
           onMouseLeave={() => setIsWLHovered(false)}

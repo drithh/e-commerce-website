@@ -1,12 +1,14 @@
 import base64
-from typing import Any, Generator, List, Union
+from typing import Any, Generator, List
 from uuid import UUID
 
 from fastapi import File, Form, Query, Response, UploadFile, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
+from app.db import engine
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
 from app.models.image import Image
@@ -109,95 +111,105 @@ def delete_product(
     return DefaultResponse(message="Product deleted")
 
 
-@router.get("", response_model=Any, status_code=status.HTTP_200_OK)
+@router.get("", response_model=GetProducts, status_code=status.HTTP_200_OK)
 def get_products(
     session: Generator = Depends(get_db),
-    category: List[UUID] = Query(),
+    category: List[UUID] = Query([]),
     page: int = Query(1, ge=1),
-    page_size: int = Query(100, ge=1),
-    sort_by: str = Query("a_z", regex="^(a_z|z_a)$"),
-    price: List[int] = Query([1, 1000000], ge=0),
-    condition: str = Query("new", regex="^(new|used)$"),
-    product_name: Union[str, None] = Query(None),
+    page_size: int = Query(20, ge=1),
+    sort_by: str = Query(
+        "Title a_z", regex="^(Title a_z|Title z_a|Price a_z|Price z_a|Newest|Oldest|)$"
+    ),
+    price: List[int] = Query([], ge=0),
+    condition: str = Query("", regex="^(new|used|)$"),
+    product_name: str = "",
 ) -> Any:
+    sorts = sort_by.split(" ")
+    if sorts[0] == "Newest":
+        order = "products.created_at"
+        sort = "DESC"
+    elif sorts[0] == "Oldest":
+        order = "products.created_at"
+        sort = "ASC"
+    elif sorts.__len__() == 2:
+        order = sorts[0].lower()
+        sort = "ASC" if sorts[1] == "a_z" else "DESC"
 
-    if sort_by == "a_z":
-        sort = Product.price.asc()
-    else:
-        sort = Product.price.desc()
-    if product_name:
-        products = (
-            session.query(Product)
-            .filter(
-                Product.title == product_name,
-                Product.category_id.in_(category),
-                Product.price.in_(range(price[0], price[1])),
-                Product.condition == condition,
-            )
-            .order_by(sort)
-            .offset((page - 1) * page_size)
-            .limit(page_size)
-            .all()
-        )
+    query = f"""
+        SELECT products.id, products.title, products.brand, products.product_detail,
+        products.price, products.condition, products.category_id,
+        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images
+        FROM only products
+        LEFT JOIN product_images ON products.id = product_images.product_id
+        LEFT JOIN images ON product_images.image_id = images.id
+        """
+    if category:
+        query += "AND category_id IN :category "
+    if product_name != "":
+        query += "AND title LIKE :product_name "
+    if price.__len__() > 0:
+        query += "AND price >= :min_price "
+    if price.__len__() > 1:
+        query += "AND price <= :max_price "
+    if condition != "":
+        query += "AND condition = :condition "
+    query += (
+        f"GROUP BY products.id  ORDER BY {order} {sort} LIMIT :limit OFFSET :offset"
+    )
 
-    else:
-        products = session.execute(
-            """
-                SELECT * FROM only products WHERE category_id IN :category AND
-                price BETWEEN :price1 AND :price2 AND condition = :condition
-                ORDER BY price ASC OFFSET :offset LIMIT :limit
-            """,
-            {
-                "category": tuple(category),
-                "price1": price[0],
-                "price2": price[1],
-                "condition": condition,
-                "offset": (page - 1) * page_size,
-                "limit": page_size,
-            },
-        ).all()
-        # products = (
-        #     session.query(Product)
-        #     .filter(
-        #         Product.category_id.in_(category),
-        #         Product.price.in_(range(price[0], price[1])),
-        #         Product.condition == condition,
-        #     )
-        #     .order_by(sort)
-        #     .offset((page - 1) * page_size)
-        #     .limit(page_size)
-        #     .all()
-        # )
-    return products
-    total_rows = len(products)
+    query = query.replace("AND", "WHERE", 1)
 
-    return GetProducts(data=products, total_rows=total_rows)
+    products = session.execute(
+        query,
+        {
+            "category": tuple(category),
+            "product_name": f"%{product_name}%",
+            "price_min": price[0] if price.__len__() > 0 else 0,
+            "price_max": price[1] if price.__len__() > 1 else 0,
+            "condition": condition,
+            "offset": (page - 1) * page_size,
+            "limit": page_size,
+        },
+    ).fetchall()
+    # get total row count for pagination with psycopg2 cursor get engine
+    # total =
+    with engine.connect() as conn:
+        # get cursor
+        cursor = conn.connection.cursor()
+        cursor.execute("SELECT COUNT(*) FROM products")
+        logger.info(cursor.rowcount)
+
+    # import psycopg2
+    # from sqlalchemy import create_engine
+
+    # total = cursor.rowcount
+    return GetProducts(
+        data=products,
+        total_rows=len(products),
+    )
 
 
-@router.get("/{id}", response_model=GetProduct, status_code=status.HTTP_200_OK)
+@router.get("/{id}", status_code=status.HTTP_200_OK)
 def get_product(
     id: UUID,
     session: Generator = Depends(get_db),
 ) -> Any:
-
-    product_image = (
-        session.query(Image)
-        .join(ProductImage)
-        .filter(ProductImage.product_id == id)
-        .all()
-    )
-    product = session.query(Product).filter(Product.id == id).first()
-    product_size = (
-        session.query(Size.size)
-        .join(ProductSizeQuantity)
-        .filter(ProductSizeQuantity.product_id == id)
-        .all()
-    )
-
-    product.images_url = [image.image_url for image in product_image]
-    product.size = [size.size for size in product_size]
-
-    return product
+    return session.execute(
+        f"""
+        SELECT products.id, products.title, products.brand, products.product_detail,
+        products.price, products.condition, products.category_id,
+        array_agg(DISTINCT  CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
+        array_agg(DISTINCT  sizes.size) as size
+        FROM only products
+        JOIN product_images ON products.id = product_images.product_id
+        JOIN images ON product_images.image_id = images.id
+        JOIN product_size_quantities ON products.id = product_size_quantities.product_id
+        JOIN sizes ON product_size_quantities.size_id = sizes.id
+        WHERE products.id = :id
+        GROUP BY products.id
+        """,
+        {"id": id},
+    ).fetchone()
 
 
 @router.post("/search_image/upload", status_code=status.HTTP_200_OK)

@@ -48,7 +48,26 @@
 │   ├── pyproject.toml -> Package manager
 │   ├── sql -> SQL scripts
 │   └── tests -> Unit tests
-└── frontend -> Frontend
+├── frontend -> Frontend
+│   ├── package.json -> package manager
+│   └── src
+│       ├── api -> Generated API client
+│       ├── App.tsx  -> Main app
+│       ├── assets  -> Assets
+│       │   ├── fonts
+│       │   └── icons
+│       ├── components
+│       │   ├── Banner.tsx
+│       │   ├── ...
+│       │   └── PopoverMenu.tsx
+│       ├── context
+│       └── pages
+│           ├── Checkout.tsx
+│           ├── ...
+│           └── Wishlist.tsx
+├── Makefile  -> Macros for running commands
+└── README.md
+
 ```
 
 ### Step 1: Getting started
@@ -113,6 +132,9 @@ make seed
 
 # Dearchive Soft Deleted Field
 make dearchive
+
+# Drop all tables
+make drop-tables
 
 ```
 

@@ -475,10 +475,50 @@ product_items = [
     },
 ]
 
-category_items = []
+category_items = [
+    {
+        "title": "shirts",
+        "type": "tops",
+    },
+    {
+        "title": "t-shirts",
+        "type": "tops",
+    },
+    {
+        "title": "sandals",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "sneakers",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "ankle-boots",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "trousers",
+        "type": "bottoms",
+    },
+    {
+        "title": "pullovers",
+        "type": "tops",
+    },
+    {
+        "title": "dresses",
+        "type": "tops",
+    },
+    {
+        "title": "coats",
+        "type": "tops",
+    },
+    {
+        "title": "bags",
+        "type": "shoes & accessories",
+    },
+]
 product_urls = []
 for product_item in product_items:
-    category_items.append(product_item["category"])
     for item in product_item["item"]:
         for i in range(1, 3):
             product_urls.append(
@@ -512,10 +552,8 @@ def seed():
         session.commit()
 
         # change product_items category to category_id
-        for product_item in product_items:
-            product_item["category"] = category_id[
-                category_items.index(product_item["category"])
-            ]
+        for product_item, category in zip(product_items, category_id):
+            product_item["category"] = category
 
         logger.info("Seeding Table Products")
         product_id = product_seed(fake, session, product_items)

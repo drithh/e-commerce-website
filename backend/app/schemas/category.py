@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class Category(BaseModel):
     id: UUID
     title: str
+    type: str
 
     class Config:
         orm_mode = True

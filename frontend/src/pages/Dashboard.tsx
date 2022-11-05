@@ -7,52 +7,50 @@ import { IoShirtOutline } from 'react-icons/io5';
 import { AiOutlineUser } from 'react-icons/ai';
 import Orders from '../components/dashboard/Orders';
 
-const Home = () => {
+const Dashboard = () => {
   return (
-    <>
-      <main
-        id="main-content"
-        className=" mt-20 flex min-h-[60vh]  border-y border-gray-400"
-      >
-        {/* ===== Side Panel Section ===== */}
-        <section className="side-panel inset-0 flex w-52 flex-col gap-y-[2px] border-r border-gray-400 pl-2  pt-4 font-medium">
-          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
-            <span className="text-xl">
-              <SlGraph />
-            </span>
-            Dashboard
-          </div>
-          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
-            <span className="text-xl">
-              <MdOutlineAttachMoney />
-            </span>
-            Orders
-          </div>
-          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
-            <span className="text-xl">
-              <IoShirtOutline />
-            </span>
-            Products
-          </div>
-          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
-            <span className="text-xl">
-              <BsBookmark />
-            </span>
-            Categories
-          </div>
-          <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
-            <span className="text-xl">
-              <AiOutlineUser />
-            </span>
-            Customers
-          </div>
-        </section>
-        <section className="wrapper px-5 pt-7">
-          <Orders />
-        </section>
-      </main>
-    </>
+    <main
+      id="main-content"
+      className=" mt-20 flex min-h-[60vh]  border-y border-gray-400"
+    >
+      {/* ===== Side Panel Section ===== */}
+      <section className="side-panel inset-0 flex w-52 flex-col gap-y-[2px] border-r border-gray-400 pl-2  pt-4 font-medium">
+        <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
+          <span className="text-xl">
+            <SlGraph />
+          </span>
+          Dashboard
+        </div>
+        <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
+          <span className="text-xl">
+            <MdOutlineAttachMoney />
+          </span>
+          Orders
+        </div>
+        <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
+          <span className="text-xl">
+            <IoShirtOutline />
+          </span>
+          Products
+        </div>
+        <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
+          <span className="text-xl">
+            <BsBookmark />
+          </span>
+          Categories
+        </div>
+        <div className="flex cursor-pointer place-items-center  gap-x-3 py-4 pl-4 hover:text-gray-500">
+          <span className="text-xl">
+            <AiOutlineUser />
+          </span>
+          Customers
+        </div>
+      </section>
+      <section className="wrapper px-5 pt-7">
+        <Orders />
+      </section>
+    </main>
   );
 };
 
-export default Home;
+export default Dashboard;

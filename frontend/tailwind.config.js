@@ -8,6 +8,13 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
         lato: ['Lato', 'sans-serif'],
       },
+      colors: {
+        'gray-100': '#EEEEEE',
+        'gray-200': '#ECECEC',
+        'gray-300': '#C1C1C1',
+        'gray-400': '#686868',
+        'gray-500': '#282828',
+      },
     },
   },
   plugins: [],

@@ -12,48 +12,56 @@ import { ToastContainer } from 'react-toastify';
 import UserRoutes from './util/UserRoutes';
 import AdminRoutes from './util/AdminRoutes';
 import { AuthProvider } from './context/AuthContext';
+import { WishlistProvider } from './context/WishlistContext';
 import 'react-toastify/dist/ReactToastify.min.css';
-
+import 'animate.css';
+import Custom404 from './pages/404';
+import ComingSoon from './pages/ComingSoon';
+import Product from './pages/Product';
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="App relative font-poppins ">
-          <ToastContainer
-            position="top-center"
-            autoClose={5000}
-            hideProgressBar={false}
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="light"
-          />
-          <BrowserRouter>
-            {/* ===== Head Section ===== */}
-            <Header />
+        <WishlistProvider>
+          <div className="App relative font-poppins ">
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+            <BrowserRouter>
+              {/* ===== Head Section ===== */}
+              <Header />
 
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route element={<UserRoutes />}>
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/checkout" element={<Checkout />} />
-              </Route>
-              <Route element={<AdminRoutes />}>
-                <Route path="/dashboard" element={<Dashboard />} />
-              </Route>
-              <Route path="*" element={<div>404 Not Found</div>} />
-            </Routes>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/product" element={<Product />} />
+                <Route element={<UserRoutes />}>
+                  <Route path="/wishlist" element={<Wishlist />} />
+                  <Route path="/checkout" element={<Checkout />} />
+                </Route>
+                <Route element={<AdminRoutes />}>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                </Route>
+                <Route path="/coming-soon" element={<ComingSoon />} />
+                <Route path="*" element={<Custom404 />} />
+              </Routes>
 
-            {/* ===== Footer Section ===== */}
-            <Footer />
-          </BrowserRouter>
-        </div>
-        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+              {/* ===== Footer Section ===== */}
+              <Footer />
+            </BrowserRouter>
+          </div>
+          <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
+        </WishlistProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
