@@ -15,6 +15,7 @@ from app.deps.authentication import get_current_active_user
 
 router = APIRouter()
 
+
 @router.get("", response_model=GetCart, status_code=status.HTTP_200_OK)
 def get_cart(
     session: Generator = Depends(get_db),
@@ -36,6 +37,7 @@ def get_cart(
 
     return GetCart(data=carts)
 
+
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
 def create_cart(
     request: CreateCart,
@@ -50,7 +52,11 @@ def create_cart(
         product_size_quantities.size_id = (SELECT sizes.id FROM sizes WHERE sizes.size = :size)
         WHERE carts.user_id = :user_id AND carts.product_size_quantity_id = product_size_quantities.id
         """,
-        {"user_id": current_user.id, "product_id": request.product_id, "size": request.size},
+        {
+            "user_id": current_user.id,
+            "product_id": request.product_id,
+            "size": request.size,
+        },
     ).fetchone()
 
     if existed_cart:
@@ -71,13 +77,20 @@ def create_cart(
             JOIN sizes ON sizes.id = product_size_quantities.size_id
             WHERE products.id = :product_id AND sizes.size = :size), :quantity)
             """,
-            {"user_id": current_user.id, "product_id": request.product_id, "size": request.size, "quantity": request.quantity}, 
-        )   
+            {
+                "user_id": current_user.id,
+                "product_id": request.product_id,
+                "size": request.size,
+                "quantity": request.quantity,
+            },
+        )
 
-
-        logger.info(f"User {current_user.name} added product {request.product_id} to cart")
+        logger.info(
+            f"User {current_user.name} added product {request.product_id} to cart"
+        )
 
         return DefaultResponse(message="Cart created")
+
 
 @router.delete(
     "/{cart_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
