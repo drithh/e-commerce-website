@@ -68,7 +68,7 @@ const Card: FC<Props> = ({ item }) => {
           // onClick={() => addOne!(item)}
           className="absolute font-lato left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 group-hover:bottom-8 font-semibold text-gray-700  transition-all duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 sm:block md:-bottom-10"
         >
-          Add To Cart
+          See Details
         </button>
       </div>
 
@@ -85,7 +85,7 @@ const Card: FC<Props> = ({ item }) => {
           // onClick={() => addOne!(item)}
           className="text-sm font-bold uppercase sm:hidden"
         >
-          Add to cart
+          See Details
         </button>
       </div>
     </div>

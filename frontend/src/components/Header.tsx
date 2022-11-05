@@ -10,27 +10,13 @@ import { useAuth } from '../context/AuthContext';
 import PopoverMenu from './PopoverMenu';
 import { useQuery } from 'react-query';
 import { CategoryService, app__schemas__category__Category } from '../api';
-import * as changeCase from 'change-case';
+import { capitalCase } from 'change-case';
 
 const Header = () => {
   let categories = new Array<{
     type: string;
     items: app__schemas__category__Category[];
   }>();
-  // let categories = [
-  //   {
-  //     type: 'Tops',
-  //     item: new Array<app__schemas__category__Category>(),
-  //   },
-  //   {
-  //     type: 'Bottoms',
-  //     item: new Array<app__schemas__category__Category>(),
-  //   },
-  //   {
-  //     type: 'Shoes & Accessories',
-  //     item: new Array<app__schemas__category__Category>(),
-  //   },
-  // ];
   const fetchCategories = useQuery(
     'categories',
     () => CategoryService.getCategory(),
@@ -84,26 +70,37 @@ const Header = () => {
     return <div>Error...</div>;
   }
   if (fetchCategories.data) {
-    fetchCategories.data.data.forEach((category) => {
-      categories.forEach((cat) => {
-        if (cat.type === category.type) {
-          cat.items.push(category);
+    categories = fetchCategories.data.data.reduce(
+      (acc, curr) => {
+        const type = capitalCase(curr.type, { delimiter: ' & ' });
+        const existing = acc.find((item) => item.type === type);
+        if (existing) {
+          existing.items.push(curr);
+        } else {
+          acc.push({ type, items: [curr] });
         }
-      });
-      if (!categories.some((cat) => cat.type === category.type)) {
-        categories.push({
-          type: category.type,
-          items: [category],
-        });
-      }
-    });
+        return acc;
+      },
+      [] as {
+        type: string;
+        items: app__schemas__category__Category[];
+      }[]
+    );
+
+    // fetchCategories.data.data.forEach((category) => {
+    //   categories.forEach((cat) => {
+    //     if (cat.type === category.type) {
+    //       cat.items.push(category);
+    //     }
+    //   });
+    //   if (!categories.some((cat) => cat.type === category.type)) {
+    //     categories.push({
+    //       type: category.type,
+    //       items: [category],
+    //     });
+    //   }
+    // });
   }
-  categories = categories.map((category) => {
-    return {
-      type: changeCase.capitalCase(category.type, { delimiter: ' & ' }),
-      items: category.items,
-    };
-  });
 
   return (
     <>
@@ -122,7 +119,7 @@ const Header = () => {
                   <PopoverMenu
                     menuTitle={category.type}
                     linksArray={category.items.map((item) => [
-                      changeCase.capitalCase(item.title),
+                      capitalCase(item.title),
                       `/category/${item.id}`,
                     ])}
                   />
@@ -147,7 +144,7 @@ const Header = () => {
               </li>
               <li className="opacity-100">
                 {role !== 'guest' ? (
-                  <Link to="/profile">
+                  <Link to="/profile" aria-label="Profile">
                     <UserIcon />
                   </Link>
                 ) : (
@@ -158,7 +155,7 @@ const Header = () => {
               </li>
 
               <li>
-                <Link to="/wishlist">
+                <Link to="/wishlist" aria-label="Wishlist">
                   {/* <a className="relative" aria-label="Wishlist"> */}
                   <button
                     type="button"

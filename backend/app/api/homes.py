@@ -74,6 +74,7 @@ def get_best_seller(
             WHERE orders.status = 'finished'
             GROUP BY products.id
             ORDER BY COUNT(order_items.id) DESC
+            LIMIT 10
             """
         ).fetchall()
     )

@@ -25,7 +25,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <WishlistProvider>
-          <div className="App relative font-poppins ">
+          <div className="App relative font-lato ">
             <ToastContainer
               position="top-center"
               autoClose={5000}

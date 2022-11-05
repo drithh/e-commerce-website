@@ -2,16 +2,17 @@ import Banner from '../components/Banner';
 import Card from '../components/Card';
 import LinkButton from '../components/button/LinkButton';
 import OverlayContainer from '../components/OverlayContainer';
-import { HomeService, OpenAPI } from '../api';
+import { app__schemas__home__Category, HomeService, OpenAPI } from '../api';
 import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
+import { capitalCase } from 'change-case';
 const pluralize = require('pluralize');
 OpenAPI.TOKEN = Cookies.get('token');
 
 const Home = () => {
-  let categories;
+  let categories: app__schemas__home__Category[] = [];
   const fetchCategories = useQuery(
-    'categories',
+    'category_images',
     HomeService.getCategoryWithImage,
     {
       staleTime: 1000 * 60,
@@ -24,13 +25,16 @@ const Home = () => {
   if (fetchCategories.isLoading) return <div>Loading...</div>;
   if (fetchCategories.error) return <div>Error</div>;
   if (fetchCategories.data) {
-    categories = fetchCategories.data.data.map((category: any) => {
-      const title = pluralize.singular(category.title);
-      return {
-        image: category.image,
-        title: `${title.charAt(0).toUpperCase()}${title.slice(1)} Collection`,
-      };
-    });
+    categories = fetchCategories.data.data.map(
+      (category: app__schemas__home__Category) => {
+        const title = capitalCase(pluralize.singular(category.title));
+        return {
+          id: category.id,
+          image: category.image,
+          title: `${title.charAt(0).toUpperCase()}${title.slice(1)} Collection`,
+        };
+      }
+    );
   }
 
   if (fetchBestSellers.isLoading) return <div>Loading...</div>;
@@ -47,14 +51,17 @@ const Home = () => {
         </div>
         <div className="wrapper mx-auto max-w-7xl">
           <div className="grid h-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {categories?.map((item: any, index: number) => (
-              <div className="relative w-full" key={index}>
-                <OverlayContainer imgSrc={item.image} imgAlt={item.title}>
+            {categories?.map((category) => (
+              <div className="relative w-full" key={category.id}>
+                <OverlayContainer
+                  imgSrc={category.image}
+                  imgAlt={category.title}
+                >
                   <LinkButton
                     href="/product-category/women"
                     extraClass="absolute bottom-[10%] z-20"
                   >
-                    {item.title}
+                    {category.title}
                   </LinkButton>
                 </OverlayContainer>
               </div>
