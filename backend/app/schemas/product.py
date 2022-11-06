@@ -50,6 +50,14 @@ class UpdateProduct(BaseModel):
         orm_mode = True
 
 
+class Stock(BaseModel):
+    size: str
+    quantity: int
+
+    class Config:
+        orm_mode = True
+
+
 class GetProduct(BaseModel):
     id: UUID
     title: str
@@ -58,8 +66,10 @@ class GetProduct(BaseModel):
     images: List[str]
     price: int
     category_id: UUID
+    category_name: str
     condition: str
-    size: list
+    size: List[str]
+    stock: List[Stock]
 
     class Config:
         orm_mode = True
@@ -79,9 +89,17 @@ class Product(BaseModel):
         orm_mode = True
 
 
+class Pagination(BaseModel):
+    page: int
+    page_size: int
+    total_page: int
+    total_item: int
+
+
 class GetProducts(BaseModel):
     data: List[Product]
     total_rows: int
+    pagination: Pagination
 
     class Config:
         orm_mode = True

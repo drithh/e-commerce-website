@@ -1,4 +1,5 @@
 import base64
+import math
 from typing import Any, Generator, List
 from uuid import UUID
 
@@ -17,7 +18,13 @@ from app.models.product_image import ProductImage
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.size import Size
 from app.models.user import User
-from app.schemas.product import CreateProduct, GetProduct, GetProducts, UpdateProduct
+from app.schemas.product import (
+    CreateProduct,
+    GetProduct,
+    GetProducts,
+    Pagination,
+    UpdateProduct,
+)
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -138,7 +145,8 @@ def get_products(
     query = f"""
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
-        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images
+        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
+        COUNT(*) OVER() totalrow_count
         FROM only products
         LEFT JOIN product_images ON products.id = product_images.product_id
         LEFT JOIN images ON product_images.image_id = images.id
@@ -164,32 +172,29 @@ def get_products(
         {
             "category": tuple(category),
             "product_name": f"%{product_name}%",
-            "price_min": price[0] if price.__len__() > 0 else 0,
-            "price_max": price[1] if price.__len__() > 1 else 0,
+            "min_price": price[0] if price.__len__() > 0 else 0,
+            "max_price": price[1] if price.__len__() > 1 else 0,
             "condition": condition,
             "offset": (page - 1) * page_size,
             "limit": page_size,
         },
     ).fetchall()
-    # get total row count for pagination with psycopg2 cursor get engine
-    # total =
-    with engine.connect() as conn:
-        # get cursor
-        cursor = conn.connection.cursor()
-        cursor.execute("SELECT COUNT(*) FROM products")
-        logger.info(cursor.rowcount)
 
-    # import psycopg2
-    # from sqlalchemy import create_engine
-
-    # total = cursor.rowcount
     return GetProducts(
         data=products,
         total_rows=len(products),
+        pagination=Pagination(
+            page=page,
+            page_size=page_size,
+            total_item=products[0].totalrow_count if products else 0,
+            total_page=math.ceil(products[0].totalrow_count / page_size)
+            if products
+            else 1,
+        ),
     )
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=GetProduct, status_code=status.HTTP_200_OK)
 def get_product(
     id: UUID,
     session: Generator = Depends(get_db),
@@ -199,14 +204,16 @@ def get_product(
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
         array_agg(DISTINCT  CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
-        array_agg(DISTINCT  sizes.size) as size
+        array_agg(DISTINCT  sizes.size) as size, categories.title as category_name,
+        array_agg(DISTINCT jsonb_build_object('size', sizes.size, 'quantity', product_size_quantities.quantity)) as stock
         FROM only products
         JOIN product_images ON products.id = product_images.product_id
         JOIN images ON product_images.image_id = images.id
         JOIN product_size_quantities ON products.id = product_size_quantities.product_id
         JOIN sizes ON product_size_quantities.size_id = sizes.id
+        JOIN categories ON products.category_id = categories.id
         WHERE products.id = :id
-        GROUP BY products.id
+        GROUP BY products.id, categories.title
         """,
         {"id": id},
     ).fetchone()

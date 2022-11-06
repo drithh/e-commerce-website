@@ -17,6 +17,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import 'animate.css';
 import Custom404 from './pages/404';
 import ComingSoon from './pages/ComingSoon';
+import Products from './pages/Products';
 import Product from './pages/Product';
 const queryClient = new QueryClient();
 
@@ -25,7 +26,7 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <WishlistProvider>
-          <div className="App relative font-poppins ">
+          <div className="App relative font-lato ">
             <ToastContainer
               position="top-center"
               autoClose={5000}
@@ -44,7 +45,8 @@ function App() {
 
               <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/product" element={<Product />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/products/:id" element={<Product />} />
                 <Route element={<UserRoutes />}>
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />
