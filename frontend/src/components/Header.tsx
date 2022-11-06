@@ -86,20 +86,6 @@ const Header = () => {
         items: app__schemas__category__Category[];
       }[]
     );
-
-    // fetchCategories.data.data.forEach((category) => {
-    //   categories.forEach((cat) => {
-    //     if (cat.type === category.type) {
-    //       cat.items.push(category);
-    //     }
-    //   });
-    //   if (!categories.some((cat) => cat.type === category.type)) {
-    //     categories.push({
-    //       type: category.type,
-    //       items: [category],
-    //     });
-    //   }
-    // });
   }
 
   return (
@@ -120,7 +106,7 @@ const Header = () => {
                     menuTitle={category.type}
                     linksArray={category.items.map((item) => [
                       capitalCase(item.title),
-                      `/category/${item.id}`,
+                      `products?category=${item.id}`,
                     ])}
                   />
                 </li>

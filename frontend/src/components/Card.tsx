@@ -63,13 +63,12 @@ const Card: FC<Props> = ({ item }) => {
         >
           {isWLHovered || alreadyWishlisted ? <HeartSolid /> : <Heart />}
         </button>
-        <button
-          type="button"
-          // onClick={() => addOne!(item)}
+        <Link
+          to={itemLink}
           className="absolute font-lato left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 group-hover:bottom-8 font-semibold text-gray-700  transition-all duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 sm:block md:-bottom-10"
         >
           See Details
-        </button>
+        </Link>
       </div>
 
       <div className="content font-lato">
@@ -80,13 +79,9 @@ const Card: FC<Props> = ({ item }) => {
           {title}
         </Link>
         <div className="text-gray-400">$ {price}</div>
-        <button
-          type="button"
-          // onClick={() => addOne!(item)}
-          className="text-sm font-bold uppercase sm:hidden"
-        >
+        <Link to={itemLink} className="text-sm font-bold uppercase sm:hidden">
           See Details
-        </button>
+        </Link>
       </div>
     </div>
   );

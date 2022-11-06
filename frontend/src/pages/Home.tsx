@@ -58,7 +58,7 @@ const Home = () => {
                   imgAlt={category.title}
                 >
                   <LinkButton
-                    href="/product-category/women"
+                    href={`products?category=${category.id}`}
                     extraClass="absolute bottom-[10%] z-20"
                   >
                     {category.title}

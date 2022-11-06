@@ -18,7 +18,13 @@ from app.models.product_image import ProductImage
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.size import Size
 from app.models.user import User
-from app.schemas.product import CreateProduct, GetProducts, Pagination, UpdateProduct
+from app.schemas.product import (
+    CreateProduct,
+    GetProduct,
+    GetProducts,
+    Pagination,
+    UpdateProduct,
+)
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -188,7 +194,7 @@ def get_products(
     )
 
 
-@router.get("/{id}", status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=GetProduct, status_code=status.HTTP_200_OK)
 def get_product(
     id: UUID,
     session: Generator = Depends(get_db),
@@ -198,14 +204,16 @@ def get_product(
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
         array_agg(DISTINCT  CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
-        array_agg(DISTINCT  sizes.size) as size
+        array_agg(DISTINCT  sizes.size) as size, categories.title as category_name,
+        array_agg(DISTINCT jsonb_build_object('size', sizes.size, 'quantity', product_size_quantities.quantity)) as stock
         FROM only products
         JOIN product_images ON products.id = product_images.product_id
         JOIN images ON product_images.image_id = images.id
         JOIN product_size_quantities ON products.id = product_size_quantities.product_id
         JOIN sizes ON product_size_quantities.size_id = sizes.id
+        JOIN categories ON products.category_id = categories.id
         WHERE products.id = :id
-        GROUP BY products.id
+        GROUP BY products.id, categories.title
         """,
         {"id": id},
     ).fetchone()
