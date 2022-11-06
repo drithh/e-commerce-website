@@ -1,13 +1,14 @@
 from typing import Any, Generator
 from uuid import UUID
 
-from fastapi import status
+from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_user
 from app.deps.db import get_db
+from app.deps.sql_error import format_error
 from app.models.cart import Cart
 from app.models.user import User
 from app.schemas.cart import CreateCart, GetCart
@@ -61,28 +62,58 @@ def create_cart(
     ).fetchone()
 
     if existed_cart:
-        cart = session.query(Cart).filter(Cart.id == existed_cart.cart_id).first()
-        cart.quantity += request.quantity
-        session.commit()
-
+        try:
+            cart = session.query(Cart).filter(Cart.id == existed_cart.cart_id).first()
+            cart.quantity += request.quantity
+            session.commit()
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=format_error(e),
+            )
         return DefaultResponse(message=f"Cart updated {existed_cart.cart_id}")
 
     else:
-        session.execute(
+        product_size_quantity_id = session.execute(
             """
-            INSERT INTO carts (user_id, product_size_quantity_id, quantity)
-            VALUES (:user_id, (SELECT product_size_quantities.id FROM product_size_quantities
-            JOIN products ON products.id = product_size_quantities.product_id
+            SELECT product_size_quantities.id FROM product_size_quantities
             JOIN sizes ON sizes.id = product_size_quantities.size_id
-            WHERE products.id = :product_id AND sizes.size = :size), :quantity)
+            WHERE product_size_quantities.product_id = :product_id AND sizes.size = :size
             """,
             {
-                "user_id": current_user.id,
                 "product_id": request.product_id,
                 "size": request.size,
-                "quantity": request.quantity,
             },
-        )
+        ).fetchone()
+
+        if product_size_quantity_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Product ID or Size not found",
+            )
+
+        try:
+            session.execute(
+                """
+                INSERT INTO carts (user_id, product_size_quantity_id, quantity)
+                VALUES (:user_id, :product_size_quantity_id, :quantity)
+                """,
+                {
+                    "user_id": current_user.id,
+                    "product_size_quantity_id": product_size_quantity_id[0],
+                    "quantity": request.quantity,
+                },
+            )
+            session.commit()
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=format_error(e),
+            )
 
         logger.info(
             f"User {current_user.name} added product {request.product_id} to cart"
@@ -99,10 +130,17 @@ def delete_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
-
-    cart = session.query(Cart).filter(Cart.id == cart_id).first()
-    session.delete(cart)
-    session.commit()
+    try:
+        cart = session.query(Cart).filter(Cart.id == cart_id).first()
+        session.delete(cart)
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
 
     logger.info(f"Cart {cart_id} deleted by {current_user.name}")
 

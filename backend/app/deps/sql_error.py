@@ -20,7 +20,6 @@ def format_integrity_error(error: IntegrityError):
         .replace("\\", "")
         .replace('"', "")
         .replace("  ", " ")
-        .split("(psycopg2.errors.ForeignKeyViolation)")[1]
         .split("\n\n")[0]
         .replace("\n", ". ")
         .strip()

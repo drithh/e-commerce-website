@@ -1,12 +1,13 @@
 from typing import Generator
 
-from fastapi import Query, status
+from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
+from app.deps.sql_error import format_error
 from app.models.category import Category
 from app.models.image import Image
 from app.models.user import User
@@ -44,10 +45,18 @@ def update_category(
     category_id: UpdateCategory = Depends(UpdateCategory),
     category_name: str = Query(..., min_length=2, max_length=100),
 ):
-    session.query(Category).filter(Category.id == category_id.id).update(
-        {"title": category_name}
-    )
-    session.commit()
+    try:
+        session.query(Category).filter(Category.id == category_id.id).update(
+            {"title": category_name}
+        )
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
+
     logger.info(f"Category {category_name} updated by {current_user.name}")
 
     return DefaultResponse(message="Category updated")
@@ -59,8 +68,16 @@ def delete_category(
     current_user: User = Depends(get_current_active_admin),
     category_id: DeleteCategory = Depends(DeleteCategory),
 ):
-    session.query(Category).filter(Category.id == category_id.id).delete()
-    session.commit()
+    try:
+        session.query(Category).filter(Category.id == category_id.id).delete()
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
+
     logger.info(f"Category {Category.title} deleted by {current_user.name}")
 
     return DefaultResponse(message="Category deleted")

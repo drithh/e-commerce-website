@@ -2,12 +2,12 @@ from typing import Any, Generator
 
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
-from sqlalchemy.exc import DatabaseError
 from starlette.responses import Response
 
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
+from app.deps.sql_error import format_error
 from app.models.user import User
 from app.schemas.request_params import DefaultResponse
 from app.schemas.user import (
@@ -89,16 +89,9 @@ def delete_user(
     try:
         session.query(User).filter(User.id == request.id).delete()
         session.commit()
-    except DatabaseError as e:
-        error = (
-            e.orig.args[0]
-            .split("DETAIL:")[1]
-            .strip()
-            .replace('"', "")
-            .replace("\\", "")
-        )
-        logger.error(error)
+    except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"{error}"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
         )
     logger.info(f"User {request.id} deleted by {current_user.User.email}")

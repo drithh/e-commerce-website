@@ -69,7 +69,7 @@ def update_order(
 ):
     order = session.execute(
         """
-        SELECT * FROM only orders
+        SELECT status FROM only orders
         WHERE id = :id
         """,
         {"id": id},

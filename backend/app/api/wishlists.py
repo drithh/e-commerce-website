@@ -1,14 +1,15 @@
 from typing import Generator
 from uuid import UUID
 
-from fastapi import status
+from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
 from app.core.logger import logger
-from app.deps.authentication import get_current_active_admin, get_current_active_user
+from app.deps.authentication import get_current_active_user
 from app.deps.db import get_db
+from app.deps.sql_error import format_error
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.user import User
@@ -61,7 +62,10 @@ def create_wishlist(
     except Exception as e:
         logger.error(e)
         session.rollback()
-        return DefaultResponse(message="Failed to create wishlist")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
 
 
 @router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
@@ -70,10 +74,18 @@ def delete_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    session.query(Wishlist).filter(
-        Wishlist.user_id == current_user.id, Wishlist.product_id == id
-    ).delete()
-    session.commit()
+    try:
+        session.query(Wishlist).filter(
+            Wishlist.user_id == current_user.id, Wishlist.product_id == id
+        ).delete()
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
 
     logger.info(f"User {current_user.name} removed product {id} from wishlist")
 

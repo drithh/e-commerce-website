@@ -5,7 +5,6 @@ from uuid import UUID
 from fastapi import File, HTTPException, Query, Response, UploadFile, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
-from google.cloud import storage
 
 from app.core.config import settings
 from app.core.logger import logger

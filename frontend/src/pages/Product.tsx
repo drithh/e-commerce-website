@@ -26,7 +26,10 @@ const Product = () => {
     () => ProductService.getProduct(id as string),
     {
       refetchOnWindowFocus: false,
-      onSuccess: (data) => setMainImage(data.images[0] as string),
+      onSuccess: (data) => {
+        setMainImage(data.images[0] as string);
+        setSize(data.stock[0].size);
+      },
     }
   );
 
@@ -146,19 +149,28 @@ const Product = () => {
           </span>
           <span className="mb-2">Size: {size}</span>
           <div className="sizeContainer flex space-x-4 text-sm mb-4">
-            {fetchProduct.data!.size?.map((singleSize: string) => (
-              <button
-                key={singleSize}
-                className={`${
-                  size === singleSize
-                    ? 'border-gray-500'
-                    : 'border-gray-300 text-gray-400'
-                } w-8 h-8 flex items-center justify-center border hover:bg-gray-500 hover:text-gray-100`}
-                onClick={() => setSize(singleSize)}
-              >
-                {singleSize}
-              </button>
-            ))}
+            {fetchProduct
+              .data!.size.map((singleSize) => ({
+                singleSize,
+                points:
+                  singleSize === 'M'
+                    ? 0
+                    : singleSize.length * (singleSize.includes('S') ? -1 : 1),
+              }))
+              .sort((a, b) => a.points - b.points)
+              .map(({ singleSize }) => (
+                <button
+                  key={singleSize}
+                  className={`${
+                    size === singleSize
+                      ? 'border-gray-500'
+                      : 'border-gray-300 text-gray-400'
+                  } w-8 h-8 flex items-center justify-center border hover:bg-gray-500 hover:text-gray-100`}
+                  onClick={() => setSize(singleSize)}
+                >
+                  {singleSize}
+                </button>
+              ))}
           </div>
           <div className="addToCart flex flex-col sm:flex-row md:flex-col lg:flex-row space-y-4 sm:space-y-0 mb-4">
             <div className="plusOrMinus h-12 flex border justify-center border-gray-300 divide-x-2 divide-gray-300 mb-4 mr-0 sm:mr-4 md:mr-0 lg:mr-4">
