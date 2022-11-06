@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -60,8 +60,8 @@ class GetProduct(BaseModel):
     category_id: UUID
     category_name: str
     condition: str
-    size: List[str]
-    stock: List[Stock]
+    size: Optional[List[str]]
+    stock: Optional[List[Stock]]
 
     class Config:
         orm_mode = True

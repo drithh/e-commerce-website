@@ -516,6 +516,10 @@ category_items = [
         "title": "bags",
         "type": "shoes & accessories",
     },
+    {
+        "title": "hats",
+        "type": "shoes & accessories",
+    },
 ]
 product_urls = []
 for product_item in product_items:

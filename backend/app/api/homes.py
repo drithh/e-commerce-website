@@ -23,7 +23,7 @@ def get_banner(
     return GetBanners(
         data=session.execute(
             f"""
-            SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image
+            SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image
             FROM only banners
             JOIN images ON banners.image_id = images.id
             """
@@ -38,17 +38,18 @@ def get_category_with_image(
     return GetCategories(
         data=session.execute(
             f"""
-            SELECT categories.id, categories.title, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image
+            SELECT categories.id, categories.title, CONCAT('{settings.CLOUD_STORAGE}/',
+            COALESCE(image_url, 'image-not-available.webp')) AS image
             FROM only categories
-            JOIN products ON categories.id = products.category_id
+            LEFT JOIN products ON categories.id = products.category_id
             AND products.id = (
                 SELECT id FROM products WHERE category_id = categories.id LIMIT 1
             )
-            JOIN product_images ON products.id = product_images.product_id
+            LEFT JOIN product_images ON products.id = product_images.product_id
             AND product_images.id = (
                 SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
             )
-            JOIN images ON product_images.image_id = images.id
+            LEFT JOIN images ON product_images.image_id = images.id
             """
         ).fetchall()
     )
@@ -64,7 +65,8 @@ def get_best_seller(
         data=session.execute(
             f"""
             SELECT products.id, products.title, products.price,
-            array_agg(DISTINCT CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images
+            array_agg(DISTINCT CONCAT('{settings.CLOUD_STORAGE}/',
+            COALESCE(images.image_url, 'image-not-available.webp'))) as images
             FROM only products
             JOIN product_images ON products.id = product_images.product_id
             JOIN images ON product_images.image_id = images.id

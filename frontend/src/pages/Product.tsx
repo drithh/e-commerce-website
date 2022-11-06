@@ -74,30 +74,19 @@ const Product = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
         <div className="imgSection w-full md:w-1/2 h-full flex">
           <div className="hidden sm:block w-full sm:w-1/4 h-full space-y-4 my-4">
-            <img
-              className={`cursor-pointer ${
-                mainImage === fetchProduct.data!.images[0]
-                  ? 'opacity-100 border border-gray-300'
-                  : 'opacity-50'
-              }`}
-              onClick={() => setMainImage(fetchProduct.data!.images[0])}
-              src={fetchProduct.data!.images[0] as string}
-              alt={fetchProduct.data!.title}
-              width={1000}
-              height={1282}
-            />
-            <img
-              className={`cursor-pointer ${
-                mainImage === fetchProduct.data!.images[1]
-                  ? 'opacity-100 border border-gray-300'
-                  : 'opacity-50'
-              }`}
-              onClick={() => setMainImage(fetchProduct.data!.images[1])}
-              src={fetchProduct.data!.images[1] as string}
-              alt={fetchProduct.data!.title}
-              width={1000}
-              height={1282}
-            />
+            {fetchProduct.data!.images.map((image: string, index: number) => (
+              <img
+                key={index}
+                src={image}
+                alt={fetchProduct.data!.title}
+                className={`cursor-pointer ${
+                  mainImage === image
+                    ? 'opacity-100 border border-gray-300'
+                    : 'opacity-50'
+                }`}
+                onClick={() => setMainImage(image)}
+              />
+            ))}
           </div>
           <div className="w-full sm:w-3/4 h-full m-0 sm:m-4">
             <Swiper
@@ -140,8 +129,11 @@ const Product = () => {
           </div>
         </div>
         <div className="infoSection w-full md:w-1/2 h-auto py-8 sm:pl-4 flex flex-col">
-          <h1 className="text-3xl mb-4">{fetchProduct.data!.title}</h1>
-          <span className="text-2xl text-gray-400 mb-2">
+          <h1 className="text-3xl">{fetchProduct.data!.title}</h1>
+          <span className="text-lg text-gray-400 mb-4">
+            {fetchProduct.data!.brand}
+          </span>
+          <span className="text-xl text-gray-400 mb-2">
             $ {fetchProduct.data!.price}
           </span>
           <span className="mb-2 text-justify">
@@ -149,14 +141,12 @@ const Product = () => {
           </span>
           <span className="mb-2">
             Availability: {/* find quantity in current size */}
-            {
-              fetchProduct.data!.stock.find((item) => item.size === size)
-                ?.quantity
-            }
+            {fetchProduct.data!.stock?.find((item) => item.size === size)
+              ?.quantity || 0}
           </span>
           <span className="mb-2">Size: {size}</span>
           <div className="sizeContainer flex space-x-4 text-sm mb-4">
-            {fetchProduct.data!.size.map((singleSize: string) => (
+            {fetchProduct.data!.size?.map((singleSize: string) => (
               <button
                 key={singleSize}
                 className={`${

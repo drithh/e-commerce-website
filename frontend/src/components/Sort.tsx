@@ -78,11 +78,9 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
       searchParams.toString() === requestParams.toString() ||
       popping.current
     ) {
-      console.log('same');
       navigate(`?${requestParams.toString()}`, { replace: true });
       popping.current = false;
     } else {
-      console.log('different');
       navigate(`?${requestParams.toString()}`, {
         state: { params },
       });

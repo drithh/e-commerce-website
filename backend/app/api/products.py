@@ -32,7 +32,7 @@ from app.schemas.request_params import DefaultResponse
 router = APIRouter()
 
 
-@router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", status_code=status.HTTP_201_CREATED)
 def create_product(
     request: CreateProduct,
     session: Generator = Depends(get_db),
@@ -58,24 +58,55 @@ def create_product(
             status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
         )
 
-    # upload_image(file)
+    category = session.execute(
+        "SELECT title FROM categories WHERE id = :id",
+        {"id": request.category_id},
+    ).fetchone()[0]
 
-    # for image in request.images:
-    #     image = Image(
-    #         name=image.name,
-    #         image_url=image.image_url,
-    #     )
-    #     session.add(image)
-    #     session.commit()
+    title_slug = product.title.lower().replace(" ", "-")
 
-    #     product_image = ProductImage(
-    #         product_id=product.id,
-    #         image_id=image.id,
-    #     )
+    for image in request.images:
+        if not image.startswith("data:image"):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid image format. Please use base64 format with data:image",
+            )
 
-    #     session.add(product_image)
+    for image in request.images:
+        image_data, image_type = base64_to_image(image)
+        file = {
+            "file": image_data,
+            "media_type": image_type,
+            "file_name": title_slug,
+        }
+        image_url = upload_image(file, category)
+        name = image_url.split("/")[-1].split(".")[0]
+        image = Image(name=name, image_url=image_url)
+        try:
+            session.add(image)
+            session.commit()
+            session.refresh(image)
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+            )
 
-    session.commit()
+        product_image = ProductImage(
+            product_id=product.id,
+            image_id=image.id,
+        )
+        try:
+            session.add(product_image)
+            session.commit()
+            session.refresh(product_image)
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+            )
 
     logger.info(f"Product {product.title} created by {current_user.name}")
 
@@ -157,7 +188,7 @@ def get_products(
     query = f"""
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
-        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
+        array_agg(CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) as images,
         COUNT(*) OVER() totalrow_count
         FROM only products
         LEFT JOIN product_images ON products.id = product_images.product_id
@@ -215,15 +246,16 @@ def get_product(
         f"""
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
-        array_agg(DISTINCT  CONCAT('{settings.CLOUD_STORAGE}/', images.image_url)) as images,
-        array_agg(DISTINCT  sizes.size) as size, categories.title as category_name,
-        array_agg(DISTINCT jsonb_build_object('size', sizes.size, 'quantity', product_size_quantities.quantity)) as stock
+        array_agg(DISTINCT  CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) as images,
+        array_agg(DISTINCT  sizes.size) FILTER (WHERE sizes.size IS NOT NULL) as size, categories.title as category_name,
+        array_agg(DISTINCT jsonb_build_object('size', sizes.size, 'quantity', product_size_quantities.quantity))
+        FILTER (WHERE sizes.size IS NOT NULL) as stock
         FROM only products
-        JOIN product_images ON products.id = product_images.product_id
-        JOIN images ON product_images.image_id = images.id
-        JOIN product_size_quantities ON products.id = product_size_quantities.product_id
-        JOIN sizes ON product_size_quantities.size_id = sizes.id
-        JOIN categories ON products.category_id = categories.id
+        LEFT JOIN product_images ON products.id = product_images.product_id
+        LEFT JOIN images ON product_images.image_id = images.id
+        LEFT JOIN product_size_quantities ON products.id = product_size_quantities.product_id
+        LEFT JOIN sizes ON product_size_quantities.size_id = sizes.id
+        LEFT JOIN categories ON products.category_id = categories.id
         WHERE products.id = :id
         GROUP BY products.id, categories.title
         """,

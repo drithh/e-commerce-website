@@ -27,11 +27,16 @@ def get_wishlist(
 ):
     wishlists = session.execute(
         f"""
-        SELECT *, CONCAT('{settings.CLOUD_STORAGE}/', image_url) AS image FROM only wishlists
-        JOIN products ON products.id = wishlists.product_id
-        JOIN product_images ON product_images.product_id = products.id
-        JOIN images ON images.id = product_images.image_id
-        WHERE user_id = :user_id AND images.image_url LIKE '%-1.webp'
+        SELECT wishlists.id, wishlists.product_id, products.title, products.price,
+        CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp')) AS image
+        FROM only wishlists
+        LEFT JOIN products ON products.id = wishlists.product_id
+        LEFT JOIN product_images ON products.id = product_images.product_id
+        AND product_images.id = (
+            SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
+        )
+        LEFT JOIN images ON images.id = product_images.image_id
+        WHERE user_id = :user_id
         """,
         {"user_id": current_user.id},
     ).fetchall()

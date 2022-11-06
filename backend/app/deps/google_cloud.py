@@ -12,14 +12,18 @@ bucket_name = "startup-campus"
 bucket = storage_client.bucket(bucket_name)
 
 
-def upload_image(file):
-    blob = bucket.blob(file.filename)
-    # get list uploaded files with prefix name file
-    blobs = bucket.list_blobs(prefix="products/bags/buckle", delimiter="/")
-    # check if file already exists
-    logger.info(f"file: {file.filename}")
-    for blob in blobs:
-        logger.info(f"blob: {blob.name}")
-    # blob.upload_from_file(file.file)
-    # blob.make_public()
-    # return blob.public_url
+def upload_image(file, category):
+    prefix = f"products/{category}/{file['file_name']}"
+    images = bucket.list_blobs(prefix=prefix, delimiter="/")
+    last_image_name = list(images)
+    if last_image_name:
+        last_image_name = last_image_name[-1].name.split(".")[0].split("-")[-1]
+    else:
+        last_image_name = 0
+    file["file_name"] = f"{prefix}-{int(last_image_name) + 1}.{file['media_type']}"
+
+    blob = bucket.blob(file["file_name"])
+    blob.upload_from_string(file["file"], content_type=f"image/{file['media_type']}")
+
+    logger.info(f"Image {file['file_name']} uploaded to {bucket_name}")
+    return file["file_name"]
