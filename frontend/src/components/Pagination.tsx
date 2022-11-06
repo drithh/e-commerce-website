@@ -45,15 +45,8 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
     endPageNumbers = false;
   }
 
-  if (lastPage === 3) {
-    pageNumbers = [1, 2, 3];
-    startPageNumbers = false;
-    midPageNumbers = false;
-    endPageNumbers = false;
-  }
-
-  if (lastPage === 1) {
-    pageNumbers = [1];
+  if (lastPage <= 3) {
+    pageNumbers = [...Array(lastPage)].map((_, i) => i + 1);
     startPageNumbers = false;
     midPageNumbers = false;
     endPageNumbers = false;

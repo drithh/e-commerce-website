@@ -1,10 +1,11 @@
 import { useQuery } from 'react-query';
 import { CategoryService, Pagination } from '../api';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { capitalCase } from 'change-case';
 import { CiDollar } from 'react-icons/ci';
 import Dropdown from '../components/Dropdown';
+import { useRef } from 'react';
 const pluralize = require('pluralize');
 
 interface TypeParams {
@@ -24,7 +25,24 @@ interface SortProps {
 }
 
 const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
-  const [, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const popping = useRef(false);
+  useEffect(() => {
+    window.onpopstate = () => {
+      if (!window.location.pathname.includes('product')) return;
+      setParams({
+        category: searchParams.getAll('category'),
+        page: Number(searchParams.get('page')) || 1,
+        pageSize: Number(searchParams.get('page_size')) || 12,
+        sortBy: searchParams.get('sort_by') || 'Title a_z',
+        price: searchParams.getAll('price').map((price) => Number(price)),
+        condition: searchParams.get('condition') || '',
+        productName: searchParams.get('product_name') || '',
+      });
+    };
+    popping.current = true;
+  }, [setParams, searchParams]);
 
   const fetchCategories = useQuery(
     'categories',
@@ -55,8 +73,21 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
     if (params.productName.length > 0) {
       requestParams.append('product_name', params.productName);
     }
-    setSearchParams(requestParams);
-  }, [params, setSearchParams]);
+    if (
+      searchParams.toString() === '' ||
+      searchParams.toString() === requestParams.toString() ||
+      popping.current
+    ) {
+      console.log('same');
+      navigate(`?${requestParams.toString()}`, { replace: true });
+      popping.current = false;
+    } else {
+      console.log('different');
+      navigate(`?${requestParams.toString()}`, {
+        state: { params },
+      });
+    }
+  }, [params, navigate, searchParams]);
 
   if (fetchCategories.isLoading) {
     return <div>Loading...</div>;
@@ -82,13 +113,15 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
         {pagination && pagination.total_item > 0 ? (
           <span>
             Showing {1 + (pagination.page - 1) * pagination.page_size} -{' '}
-            {pagination.page * pagination.page_size} of {pagination.total_item}{' '}
-            Results
+            {Math.min(
+              pagination.page * pagination.page_size,
+              pagination.total_item
+            )}{' '}
+            of {pagination.total_item} Results
           </span>
         ) : (
           <span>No results</span>
         )}
-        {/* Showing 1-12 of 100 results */}
       </div>
       <div className="flex flex-col gap-y-4 border-b-gray-100 border-b px-4 pt-3 pb-4 ">
         {Object.entries(categoriesByType).map(([type, categories]) => (
@@ -110,11 +143,13 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
                       if (checked) {
                         setParams((prev) => ({
                           ...prev,
+                          page: 1,
                           category: [...prev.category, value],
                         }));
                       } else {
                         setParams((prev) => ({
                           ...prev,
+                          page: 1,
                           category: prev.category.filter(
                             (item) => item !== value
                           ),
@@ -151,6 +186,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
                 if (value || params.price[0] !== parseInt(value)) {
                   setParams((prev) => ({
                     ...prev,
+                    page: 1,
                     price: [Number(value), prev.price[1]],
                   }));
                 }
@@ -173,11 +209,13 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
                 if (!value) {
                   setParams((prev) => ({
                     ...prev,
+                    page: 1,
                     price: [prev.price[0]],
                   }));
                 } else {
                   setParams((prev) => ({
                     ...prev,
+                    page: 1,
                     price: [prev.price[0] || 0, Number(value)],
                   }));
                 }
@@ -202,6 +240,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
                   if (checked) {
                     setParams((prev) => ({
                       ...prev,
+                      page: 1,
                       condition: value,
                     }));
                   }

@@ -2,7 +2,7 @@ import Card from '../components/Card';
 import { useQuery } from 'react-query';
 import { ProductService } from '../api';
 import { useSearchParams } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Sort from '../components/Sort';
 import Pagination from '../components/Pagination';
 interface TypeParams {
@@ -17,6 +17,15 @@ interface TypeParams {
 
 const Product: React.FC = () => {
   const [searchParams] = useSearchParams();
+
+  // listen for back button
+  // useEffect(() => {
+  //   window.onpopstate = () => {
+  //     console.log(window.location);
+  //     return;
+  //   };
+  // }, [searchParams]);
+
   const [params, setParams] = useState<TypeParams>({
     category: searchParams.getAll('category'),
     page: Number(searchParams.get('page')) || 1,
