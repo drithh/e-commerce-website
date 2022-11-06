@@ -7,7 +7,7 @@ from app.models.default import DefaultModel
 class Product(DefaultModel, Base):
     __tablename__ = "products"
 
-    title = Column(String(length=128), nullable=False)
+    title = Column(String(length=128), nullable=False, unique=True)
     brand = Column(String(length=128), nullable=False)
     product_detail = Column(String(length=256), nullable=False)
     price = Column(Integer, nullable=False)

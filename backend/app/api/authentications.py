@@ -16,7 +16,7 @@ from app.deps.authentication import (
     password_validation,
 )
 from app.deps.db import get_db
-from app.deps.email import send_forgot_password_email
+from app.deps.send_email import send_forgot_password_email
 from app.models.forgot_password import ForgotPassword
 from app.models.user import User
 from app.schemas.authentication import (

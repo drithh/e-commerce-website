@@ -1,21 +1,22 @@
-import base64
 import math
 from typing import Any, Generator, List
 from uuid import UUID
 
-from fastapi import File, Form, Query, Response, UploadFile, status
+from fastapi import File, HTTPException, Query, Response, UploadFile, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
+from google.cloud import storage
 
 from app.core.config import settings
 from app.core.logger import logger
-from app.db import engine
-from app.deps.authentication import get_current_active_admin, get_current_active_user
+from app.deps.authentication import get_current_active_admin
 from app.deps.db import get_db
+from app.deps.google_cloud import upload_image
+from app.deps.image_base64 import base64_to_image
+from app.deps.sql_error import format_error
 from app.models.image import Image
 from app.models.product import Product
 from app.models.product_image import ProductImage
-from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.size import Size
 from app.models.user import User
 from app.schemas.product import (
@@ -23,6 +24,7 @@ from app.schemas.product import (
     GetProduct,
     GetProducts,
     Pagination,
+    SearchImageRequest,
     UpdateProduct,
 )
 from app.schemas.request_params import DefaultResponse
@@ -45,23 +47,33 @@ def create_product(
         condition=request.condition,
         category_id=request.category_id,
     )
-
-    session.add(product)
-
-    for image in request.images:
-        image = Image(
-            name=image.name,
-            image_url=image.image_url,
-        )
-        session.add(image)
+    try:
+        session.add(product)
         session.commit()
-
-        product_image = ProductImage(
-            product_id=product.id,
-            image_id=image.id,
+        session.refresh(product)
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
         )
 
-        session.add(product_image)
+    # upload_image(file)
+
+    # for image in request.images:
+    #     image = Image(
+    #         name=image.name,
+    #         image_url=image.image_url,
+    #     )
+    #     session.add(image)
+    #     session.commit()
+
+    #     product_image = ProductImage(
+    #         product_id=product.id,
+    #         image_id=image.id,
+    #     )
+
+    #     session.add(product_image)
 
     session.commit()
 
@@ -227,7 +239,6 @@ def search_image_upload(
     if file:
         try:
             contents = file.file.read()
-            logger.info(file.filename)
             with open(file.filename, "wb") as f:
                 f.write(contents)
             return Response(content=contents, media_type="image/png")
@@ -240,18 +251,18 @@ def search_image_upload(
 
 @router.post("/search_image", status_code=status.HTTP_200_OK)
 def search_image(
-    filedata: str = Form(...),
+    request: SearchImageRequest,
     session: Generator = Depends(get_db),
 ) -> Any:
-    filename = "test.png"
-    image_as_bytes = str.encode(filedata)  # convert string to bytes
-    img_recovered = base64.b64decode(image_as_bytes)
-    return Response(content=img_recovered, media_type="image/png")
-    # decode base64string
-    try:
-        with open("uploaded_" + filename, "wb") as f:
-            f.write(img_recovered)
-    except Exception:
-        return {"message": "There was an error uploading the file"}
+    # filename = "test.png"
+    # decode base64 but split it first
+    img_data, image_type = base64_to_image(request.image)
+    return Response(content=img_data, media_type=f"image/{image_type}")
 
-    return {"message": f"Successfuly uploaded {filename}"}
+    # try:
+    #     with open("uploaded_" + filename, "wb") as f:
+    #         f.write(img_recovered)
+    # except Exception:
+    #     return {"message": "There was an error uploading the file"}
+
+    # return {"message": f"Successfuly uploaded {filename}"}

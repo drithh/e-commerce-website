@@ -72,7 +72,7 @@ product_items = [
         "category": "t-shirts",
         "item": [
             {
-                "name": "Skeleteon Tee",
+                "name": "Skeleton Tee",
                 "price": 90000,
             },
             {
@@ -80,7 +80,7 @@ product_items = [
                 "price": 120000,
             },
             {
-                "name": "Slogan Graphic Oversizde Tee",
+                "name": "Slogan Graphic Oversized Tee",
                 "price": 140000,
             },
             {
@@ -88,7 +88,7 @@ product_items = [
                 "price": 110000,
             },
             {
-                "name": "Reflective ExpressionTee",
+                "name": "Reflective Expression Tee",
                 "price": 150000,
             },
             {
@@ -423,7 +423,7 @@ product_items = [
                 "price": 480000,
             },
             {
-                "name": "Men Plaid & Letter Graphic Flap Pocket Zipper Coat",
+                "name": "Men Plaid Letter Graphic Flap Pocket Zipper Coat",
                 "price": 550000,
             },
         ],

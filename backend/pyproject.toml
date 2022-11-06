@@ -22,11 +22,17 @@ bcrypt = "^4.0.1"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 fastapi-mail = "^1.2.0"
 pytz = "^2022.4"
+cffi = "^1.15.0"
+google-cloud-storage = "^1.42.3"
 
 [tool.poetry.dev-dependencies]
 black = "^22.10.0"
 pytest = "^7.2.0"
 ipython = "^8.5.0"
+
+[[tool.poetry.source]]
+name = "nogil"
+url = "https://pypi.org/simple"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

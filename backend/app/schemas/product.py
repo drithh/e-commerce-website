@@ -6,19 +6,11 @@ from pydantic import BaseModel
 from app.models.category import Category
 
 
-class CreateImage(BaseModel):
-    name: str
-    image_url: str
-
-    class Config:
-        orm_mode = True
-
-
 class CreateProduct(BaseModel):
     title: str
     brand: str
     product_detail: str
-    images: List[CreateImage]
+    images: List[str]
     price: int
     category_id: UUID
     condition: str
@@ -100,6 +92,13 @@ class GetProducts(BaseModel):
     data: List[Product]
     total_rows: int
     pagination: Pagination
+
+    class Config:
+        orm_mode = True
+
+
+class SearchImageRequest(BaseModel):
+    image: str
 
     class Config:
         orm_mode = True
