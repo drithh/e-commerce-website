@@ -24,6 +24,8 @@ class GetUserOrder(BaseModel):
     created_at: datetime.datetime
     products: List[GetUserProducts]
     shipping_method: str
+    shipping_price: int
+    city: str
     status: str
     shipping_address: str
 

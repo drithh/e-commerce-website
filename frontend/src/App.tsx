@@ -51,7 +51,7 @@ function App() {
                 <Route element={<UserRoutes />}>
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />
-                  <Route path="/profile" element={<Profile />} />
+                  <Route path="/profile/*" element={<Profile />} />
                 </Route>
                 <Route element={<AdminRoutes />}>
                   <Route path="/dashboard" element={<Dashboard />} />

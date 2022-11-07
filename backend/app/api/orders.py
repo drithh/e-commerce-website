@@ -23,10 +23,10 @@ def get_orders_user(
 ):
     orders = session.execute(
         """
-        select id, created_at, shipping_method, status, shipping_address, array_agg(product) products
+        select id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products
         from (
-            SELECT DISTINCT ON (products.id) orders.id, orders.created_at,
-            orders.shipping_method, orders.status, orders.address as shipping_address,
+            SELECT DISTINCT ON (products.id) orders.id, orders.city, orders.created_at,
+            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
             json_build_object(
                 'id', products.id,
                 'details', array_agg(
@@ -50,7 +50,7 @@ def get_orders_user(
             GROUP BY orders.id, products.id, images.id
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
-        order_product.status, order_product.shipping_address
+        order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
 
     """,
         {"user_id": current_user.id},

@@ -5,12 +5,26 @@ import { useQuery } from 'react-query';
 import { UserService } from '../api';
 import PersonalData from '../components/profile/PersonalData';
 import Order from '../components/profile/Order';
-import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useAuth } from '../context/AuthContext';
 const Profile = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const fetchUser = useQuery('user', () => UserService.getUser(), {
     staleTime: Infinity,
   });
-  const [currentTab, setCurrentTab] = useState('personalData');
+
+  useEffect(() => {
+    if (
+      location.pathname !== '/profile/personal-data' &&
+      location.pathname !== '/profile/order'
+    ) {
+      navigate('/profile/personal-data', { replace: true });
+    }
+  }, [location.pathname, navigate]);
+
   if (fetchUser.isError) {
     return <div>Error...</div>;
   }
@@ -18,8 +32,9 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
-  const logout = () => {
-    console.log('logout');
+  const logoutAccount = () => {
+    logout && logout();
+    navigate('0', { replace: true });
   };
 
   return (
@@ -40,7 +55,7 @@ const Profile = () => {
             <span>Howdy, {fetchUser.data?.name}</span>
           </div>
           <button
-            onClick={() => setCurrentTab('personalData')}
+            onClick={() => navigate('personal-data')}
             className="flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100"
           >
             <span className="text-xl">
@@ -49,7 +64,7 @@ const Profile = () => {
             <span>Personal Data</span>
           </button>
           <button
-            onClick={() => setCurrentTab('order')}
+            onClick={() => navigate('order')}
             className="flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100"
           >
             <span className="text-xl">
@@ -58,7 +73,7 @@ const Profile = () => {
             <span>Orders</span>
           </button>
           <button
-            onClick={() => logout()}
+            onClick={() => logoutAccount()}
             className="flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100"
           >
             <span className="text-xl">
@@ -68,8 +83,8 @@ const Profile = () => {
           </button>
         </section>
         <section className="wrapper w-full mb-8">
-          {currentTab === 'personalData' && <PersonalData />}
-          {currentTab === 'order' && <Order />}
+          {location.pathname === '/profile/personal-data' && <PersonalData />}
+          {location.pathname === '/profile/order' && <Order />}
         </section>
       </div>
     </main>

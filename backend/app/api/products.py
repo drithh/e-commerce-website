@@ -241,7 +241,7 @@ def get_product(
     id: UUID,
     session: Generator = Depends(get_db),
 ) -> Any:
-    return session.execute(
+    result = session.execute(
         f"""
         SELECT products.id, products.title, products.brand, products.product_detail,
         products.price, products.condition, products.category_id,
@@ -260,6 +260,11 @@ def get_product(
         """,
         {"id": id},
     ).fetchone()
+    if result:
+        result
+    raise HTTPException(
+        status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+    )
 
 
 @router.post("/search_image/upload", status_code=status.HTTP_200_OK)

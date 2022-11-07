@@ -29,6 +29,7 @@ export type authType = {
     },
     unknown
   >;
+  logout?: () => void;
 };
 
 const AuthContext = createContext<authType>({ role: 'none' });
@@ -100,11 +101,18 @@ const useProvideAuth = () => {
     }
   );
 
+  const logout = () => {
+    Cookies.remove('token');
+    OpenAPI.TOKEN = '';
+    refetch();
+  };
+
   return {
     role,
     setRole,
     login,
     refetch,
     register,
+    logout,
   };
 };
