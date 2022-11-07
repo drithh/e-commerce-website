@@ -134,7 +134,7 @@ export default function CartItem() {
                   <div className="btnContainer mt-4 mb-20 flex h-1/3 w-full flex-col px-4 ">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span>$ {roundDecimal(subtotal)}</span>
+                      <span>Rp{roundDecimal(subtotal)}</span>
                     </div>
                     <LinkButton
                       href="/shopping-cart"

@@ -28,7 +28,7 @@ const Product = () => {
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
         setMainImage(data.images[0] as string);
-        setSize(data.stock[0].size);
+        setSize((data.size as string[])[0]);
       },
     }
   );
@@ -137,7 +137,7 @@ const Product = () => {
             {fetchProduct.data!.brand}
           </span>
           <span className="text-xl text-gray-400 mb-2">
-            $ {fetchProduct.data!.price}
+            Rp{fetchProduct.data!.price}
           </span>
           <span className="mb-2 text-justify">
             {fetchProduct.data!.product_detail}
@@ -150,7 +150,7 @@ const Product = () => {
           <span className="mb-2">Size: {size}</span>
           <div className="sizeContainer flex space-x-4 text-sm mb-4">
             {fetchProduct
-              .data!.size.map((singleSize) => ({
+              .data!.size?.map((singleSize) => ({
                 singleSize,
                 points:
                   singleSize === 'M'

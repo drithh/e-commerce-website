@@ -6,6 +6,7 @@ import type { DefaultResponse } from '../models/DefaultResponse';
 import type { DeleteUser } from '../models/DeleteUser';
 import type { GetUserAddress } from '../models/GetUserAddress';
 import type { GetUserBalance } from '../models/GetUserBalance';
+import type { PutUserAddress } from '../models/PutUserAddress';
 import type { PutUserBalance } from '../models/PutUserBalance';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -65,7 +66,7 @@ export class UserService {
      * @throws ApiError
      */
     public static putUserShippingAddress(
-        requestBody: GetUserAddress,
+        requestBody: PutUserAddress,
     ): CancelablePromise<DefaultResponse> {
         return __request(OpenAPI, {
             method: 'PUT',

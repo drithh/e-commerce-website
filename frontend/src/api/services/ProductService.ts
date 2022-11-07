@@ -2,11 +2,11 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { app__schemas__product__GetProduct } from '../models/app__schemas__product__GetProduct';
-import type { Body_search_image_api_v1_products_search_image_post } from '../models/Body_search_image_api_v1_products_search_image_post';
 import type { Body_search_image_upload_api_v1_products_search_image_upload_post } from '../models/Body_search_image_upload_api_v1_products_search_image_upload_post';
 import type { CreateProduct } from '../models/CreateProduct';
 import type { DefaultResponse } from '../models/DefaultResponse';
 import type { GetProducts } from '../models/GetProducts';
+import type { SearchImageRequest } from '../models/SearchImageRequest';
 import type { UpdateProduct } from '../models/UpdateProduct';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -77,12 +77,12 @@ export class ProductService {
     /**
      * Create Product
      * @param requestBody
-     * @returns DefaultResponse Successful Response
+     * @returns any Successful Response
      * @throws ApiError
      */
     public static createProduct(
         requestBody: CreateProduct,
-    ): CancelablePromise<DefaultResponse> {
+    ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/products',
@@ -158,18 +158,18 @@ export class ProductService {
 
     /**
      * Search Image
-     * @param formData
+     * @param requestBody
      * @returns any Successful Response
      * @throws ApiError
      */
     public static searchImage(
-        formData: Body_search_image_api_v1_products_search_image_post,
+        requestBody: SearchImageRequest,
     ): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/api/v1/products/search_image',
-            formData: formData,
-            mediaType: 'application/x-www-form-urlencoded',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 422: `Validation Error`,
             },

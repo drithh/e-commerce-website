@@ -7,7 +7,7 @@ const AdminRoutes = () => {
   ) : role === 'admin' ? (
     <Outlet />
   ) : (
-    <Navigate to="/" />
+    <Navigate to="/" replace={true} />
   );
 };
 

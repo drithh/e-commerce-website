@@ -63,7 +63,7 @@ const Product: React.FC = () => {
 
   return (
     <main id="main-content" className="mx-auto mt-20 min-h-[60vh] max-w-7xl">
-      {/* ===== Heading & Continue Shopping */}
+      {/* ===== Heading ===== */}
       <div className="w-full border-t-2 border-gray-100 ">
         <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Product

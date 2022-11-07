@@ -81,7 +81,7 @@ const Wishlist = () => {
                         {item.title}
                       </td>
                       <td className="text-right text-gray-400">
-                        $ {item.price}
+                        Rp{item.price}
                       </td>
                       <td className="hidden max-w-xs text-center text-gray-400 sm:table-cell">
                         <Button

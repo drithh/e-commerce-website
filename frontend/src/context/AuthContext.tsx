@@ -72,6 +72,7 @@ const useProvideAuth = () => {
     {
       onSuccess: (data) => {
         Cookies.set('token', data.access_token);
+        OpenAPI.TOKEN = data.access_token;
         refetch();
       },
     }
@@ -93,6 +94,7 @@ const useProvideAuth = () => {
     {
       onSuccess: (data) => {
         Cookies.set('token', data.access_token);
+        OpenAPI.TOKEN = data.access_token;
         refetch();
       },
     }

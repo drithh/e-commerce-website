@@ -14,6 +14,6 @@ export type app__schemas__product__GetProduct = {
     category_id: string;
     category_name: string;
     condition: string;
-    size: Array<string>;
-    stock: Array<Stock>;
+    size?: Array<string>;
+    stock?: Array<Stock>;
 };

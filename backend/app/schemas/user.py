@@ -29,6 +29,16 @@ class GetUserAddress(BaseModel):
         orm_mode = True
 
 
+class PutUserAddress(BaseModel):
+    address_name: str
+    phone_number: str
+    address: str
+    city: str
+
+    class Config:
+        orm_mode = True
+
+
 class GetUserBalance(BaseModel):
     id: UUID
     balance: int

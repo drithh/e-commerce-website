@@ -19,6 +19,7 @@ import Custom404 from './pages/404';
 import ComingSoon from './pages/ComingSoon';
 import Products from './pages/Products';
 import Product from './pages/Product';
+import Profile from './pages/Profile';
 const queryClient = new QueryClient();
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
                 <Route element={<UserRoutes />}>
                   <Route path="/wishlist" element={<Wishlist />} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/profile" element={<Profile />} />
                 </Route>
                 <Route element={<AdminRoutes />}>
                   <Route path="/dashboard" element={<Dashboard />} />

@@ -78,7 +78,7 @@ const Card: FC<Props> = ({ item }) => {
         >
           {title}
         </Link>
-        <div className="text-gray-400">$ {price}</div>
+        <div className="text-gray-400">Rp{price}</div>
         <Link to={itemLink} className="text-sm font-bold uppercase sm:hidden">
           See Details
         </Link>
