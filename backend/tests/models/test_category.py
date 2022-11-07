@@ -3,7 +3,6 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.session import Session
 
 from app.models.category import Category
-from app.models.product import Product
 
 fake = Faker("id_ID")
 
@@ -41,32 +40,6 @@ def test_unique_category_title(db: Session):
     )
     db.add(category2)
 
-    try:
-        db.commit()
-    except IntegrityError:
-        assert True
-
-
-def test_foreign_key_product_id(db: Session):
-    category = Category.seed(
-        fake,
-        {
-            "title": "category_3",
-            "type": "product",
-        },
-    )
-    db.add(category)
-    db.commit()
-
-    product = Product.seed(
-        fake,
-        {
-            "name": "product_category_3",
-            "price": 10000,
-        },
-        category.id,
-    )
-    db.add(product)
     try:
         db.commit()
     except IntegrityError:
