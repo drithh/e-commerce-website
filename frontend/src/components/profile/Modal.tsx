@@ -14,7 +14,6 @@ const Modal: FC<Props> = ({ buttonText, refetch }) => {
 
   const closeModal = () => {
     refetch && refetch();
-    console.log(refetch);
     setOpen(false);
   };
 

@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DefaultResponse } from '../models/DefaultResponse';
 import type { GetUserOrders } from '../models/GetUserOrders';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -22,13 +23,34 @@ export class OrderService {
     }
 
     /**
-     * Update Order
+     * Update Order Status
+     * @param orderId
+     * @returns DefaultResponse Successful Response
+     * @throws ApiError
+     */
+    public static updateOrderStatus(
+        orderId: string,
+    ): CancelablePromise<DefaultResponse> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/api/v1/order/{order_id}',
+            path: {
+                'order_id': orderId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+
+    /**
+     * Update Orders
      * @param id
      * @param status
      * @returns any Successful Response
      * @throws ApiError
      */
-    public static updateOrder(
+    public static updateOrders(
         id: string,
         status: string,
     ): CancelablePromise<any> {

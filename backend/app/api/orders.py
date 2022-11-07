@@ -21,7 +21,6 @@ def get_orders_user(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-
     orders = session.execute(
         """
         select id, created_at, shipping_method, status, shipping_address, array_agg(product) products
@@ -60,8 +59,40 @@ def get_orders_user(
     return GetUserOrders(data=orders)
 
 
+@router.put(
+    "/order/{order_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def update_order_status(
+    order_id: UUID,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    order = (
+        session.query(Order)
+        .filter(Order.id == order_id)
+        .filter(Order.user_id == current_user.id)
+        .first()
+    )
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Order does not exist",
+        )
+
+    if order.status != "delivered":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Order status is not delivered",
+        )
+
+    order.status = "finished"
+    session.commit()
+
+    return DefaultResponse(message="Order status updated")
+
+
 @router.put("/orders/{id}", status_code=status.HTTP_200_OK)
-def update_order(
+def update_orders(
     id: UUID,
     status: str = Query(regex="^(pending|delivered|cancelled|finished)$"),
     session: Generator = Depends(get_db),

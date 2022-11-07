@@ -64,7 +64,7 @@ const PersonalData = () => {
     return <div>Loading...</div>;
   }
   return (
-    <>
+    <div className="pl-5 pt-3">
       {/*  ===== General Information ===== */}
       <h2 className="text-2xl font-medium w-full">General Information</h2>
       <div className="information flex flex-col gap-y-4 w-full py-4 text-lg text-gray-700">
@@ -145,7 +145,7 @@ const PersonalData = () => {
           />
         </div>
       </form>
-    </>
+    </div>
   );
 };
 
