@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type ResetPassword = {
-    token: string;
-    password: string;
+  token: string;
+  password: string;
 };

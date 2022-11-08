@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type GetUserBalance = {
-    id: string;
-    balance: number;
+  id: string;
+  balance: number;
 };

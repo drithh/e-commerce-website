@@ -15,7 +15,7 @@ const OrderProducts = ({ order }: props) => {
       <AnimateHeight
         duration={500}
         height={showMore ? 'auto' : 100}
-        className=" py-2 my-4 border-t border-y-gray-100 transition-all duration-500  relative"
+        className=" relative my-4 border-t border-y-gray-100 py-2 transition-all  duration-500"
       >
         <div>
           {order.products.map((product) => (
@@ -23,9 +23,9 @@ const OrderProducts = ({ order }: props) => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-20 h-20 object-cover"
+                className="h-20 w-20 object-cover"
               />
-              <div className="flex justify-between w-full pl-2 pr-6">
+              <div className="flex w-full justify-between pl-2 pr-6">
                 <div className="left-product">
                   <span className="font-semibold">{product.name}</span>
                   {product.details.map((detail, index) => (
@@ -36,7 +36,7 @@ const OrderProducts = ({ order }: props) => {
                     </div>
                   ))}
                 </div>
-                <div className="border-l border-gray-100   w-40 pl-4 place-content-center flex flex-col">
+                <div className="flex w-40   flex-col place-content-center border-l border-gray-100 pl-4">
                   <div>Price</div>
                   <div className="font-semibold">
                     Rp.
@@ -53,23 +53,23 @@ const OrderProducts = ({ order }: props) => {
         <div
           className={`${
             showMore ? 'hidden' : 'absolute'
-          } bottom-0 w-full h-10 bg-gradient-to-t from-white to-transparent`}
+          } bottom-0 h-10 w-full bg-gradient-to-t from-white to-transparent`}
         ></div>
       </AnimateHeight>
-      <div className="flex  place-content-end flex-col w-full mt-4 ">
+      <div className="mt-4  flex w-full flex-col place-content-end ">
         <button
-          className="flex min-w-[8rem] text-sm flex-row place-items-center justify-end gap-x-2 border-0 px-1 pb-2 text-gray-300 outline-0 transition duration-500 ease-in-out hover:text-black hover:outline-0 hover:ring-0 focus:outline-0 w-full border-b boder-b-gray-100 pr-[5.5rem] mb-4"
+          className="boder-b-gray-100 mb-4 flex w-full min-w-[8rem] flex-row place-items-center justify-end gap-x-2 border-0 border-b px-1 pb-2 pr-[5.5rem] text-sm text-gray-300 outline-0 transition duration-500 ease-in-out hover:text-black hover:outline-0 hover:ring-0 focus:outline-0"
           onClick={() => setShowMore(!showMore)}
         >
           <div>{showMore ? 'Show Less' : 'Show More'}</div>
           <HiOutlineChevronDown
             className={`transform ${
               showMore ? 'rotate-180' : 'rotate-0'
-            } transition duration-500 ease-in-out inline-block transform text-[1.5rem] opacity-60 `}
+            } inline-block transform text-[1.5rem] opacity-60 transition duration-500 ease-in-out `}
             aria-hidden="true"
           />
         </button>
-        <div className="w-full text-right pr-[5.5rem]">
+        <div className="w-full pr-[5.5rem] text-right">
           <span>Total </span>
           <span className="font-semibold">
             Rp.

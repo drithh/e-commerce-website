@@ -36,11 +36,11 @@ const Order = () => {
   }
 
   return (
-    <div className="flex gap-y-4 pl-4 flex-col">
+    <div className="flex flex-col gap-y-4 pl-4">
       {fetchOrder.data?.data.map((order) => (
         <div key={order.id}>
-          <div className="border border-gray-300 rounded-md w-full pt-4 pb-8 px-5  text-gray-600">
-            <div className="flex place-content-between w-full  pb-4 text-gray-400 text-sm">
+          <div className="w-full rounded-md border border-gray-300 px-5 pt-4 pb-8  text-gray-600">
+            <div className="flex w-full place-content-between  pb-4 text-sm text-gray-400">
               <span>
                 {dayjs(order.created_at).format('dddd, MMMM D YYYY, h:mm A')}
               </span>
@@ -54,23 +54,23 @@ const Order = () => {
                 <div>Method: {order.shipping_method}</div>
                 <div>Price: {order.shipping_price}</div>
               </div>
-              <div className="flex flex-col w-52">
+              <div className="flex w-52 flex-col">
                 <strong>Address</strong>
                 <div>{order.shipping_address}</div>
               </div>
             </div>
             <OrderProducts order={order} />
-            <div className="order-status py-2 mt-16 flex place-content-between place-items-center mx-auto max-w-[44rem] ">
+            <div className="order-status mx-auto mt-16 flex max-w-[44rem] place-content-between place-items-center py-2 ">
               <div
                 className={`${
                   order.status === 'processed' ||
                   order.status === 'shipped' ||
                   order.status === 'finished'
-                    ? 'text-emerald-300 border-emerald-300'
-                    : 'text-gray-200 border-gray-200'
+                    ? 'border-emerald-300 text-emerald-300'
+                    : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
               >
-                <div className="text-4xl border-current rounded-full border-[3px]  p-4">
+                <div className="rounded-full border-[3px] border-current p-4  text-4xl">
                   <BsBoxSeam />
                 </div>
                 <div className="">Processed</div>
@@ -82,16 +82,16 @@ const Order = () => {
                   order.status === 'finished'
                     ? 'bg-emerald-300'
                     : 'bg-gray-200'
-                } line h-1 w-full mb-7`}
+                } line mb-7 h-1 w-full`}
               ></div>
               <div
                 className={`${
                   order.status === 'shipped' || order.status === 'finished'
-                    ? 'text-emerald-300 border-emerald-300'
-                    : 'text-gray-200 border-gray-200'
+                    ? 'border-emerald-300 text-emerald-300'
+                    : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
               >
-                <div className="text-4xl border-current rounded-full border-[3px]  p-4">
+                <div className="rounded-full border-[3px] border-current p-4  text-4xl">
                   <BsTruck />
                 </div>
                 <div className="">Shipped</div>
@@ -101,16 +101,16 @@ const Order = () => {
                   order.status === 'shipped' || order.status === 'finished'
                     ? 'bg-emerald-300'
                     : 'bg-gray-200'
-                } line h-1 w-full mb-7 `}
+                } line mb-7 h-1 w-full `}
               ></div>
               <div
                 className={`${
                   order.status === 'finished'
-                    ? 'text-emerald-300 border-emerald-300'
-                    : 'text-gray-200 border-gray-200'
+                    ? 'border-emerald-300 text-emerald-300'
+                    : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
               >
-                <div className="text-4xl border-current rounded-full border-[3px]  p-4">
+                <div className="rounded-full border-[3px] border-current p-4  text-4xl">
                   <IoMdCheckmark />
                 </div>
                 <div className="">Finished</div>

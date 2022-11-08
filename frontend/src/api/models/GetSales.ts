@@ -5,5 +5,5 @@
 import type { Sales } from './Sales';
 
 export type GetSales = {
-    data: Sales;
+  data: Sales;
 };

@@ -73,7 +73,7 @@ const ChangePassword: React.FC<Props> = ({ closeModal }) => {
           value={newPassword}
         />
         {errorMsg !== '' && (
-          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
+          <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
         )}

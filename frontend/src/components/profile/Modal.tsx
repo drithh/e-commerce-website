@@ -27,7 +27,7 @@ const Modal: FC<Props> = ({ buttonText, refetch }) => {
       <div>
         <button
           onClick={() => setOpen(true)}
-          className=" w-full sm:w-52 py-2 px-4 flex justify-center items-center cursor-pointer hover:bg-gray-500 hover:text-gray-100 border border-gray-300 "
+          className=" flex w-full cursor-pointer items-center justify-center border border-gray-300 py-2 px-4 hover:bg-gray-500 hover:text-gray-100 sm:w-52 "
           aria-label={buttonText}
         >
           {buttonText}

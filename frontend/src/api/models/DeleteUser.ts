@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type DeleteUser = {
-    id: string;
+  id: string;
 };

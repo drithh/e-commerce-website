@@ -37,18 +37,18 @@ const Profile = () => {
   return (
     <main
       id="main-content"
-      className=" mt-20  min-h-[60vh]  border-t border-gray-100 max-w-7xl mx-auto"
+      className="mx-auto mt-20 min-h-[60vh] max-w-7xl border-t border-gray-100"
     >
       {/* ===== Heading ===== */}
       <div className="w-full  ">
-        <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="  animatee__animated mt-6  animate__bounce mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           My Account
         </h1>
       </div>
       {/* ===== Side Panel Section ===== */}
-      <div className="profile flex w-full mt-4">
-        <section className="side-panel inset-0 flex w-52 flex-col gap-y-[2px] border-x border-gray-100 rounded  h-fit font-medium text-gray-400">
-          <div className="place-items-center w-full  font-bold text-[1.1rem ] gap-x-3 py-4 pl-4 border-y  border-gray-100">
+      <div className="profile mt-4 flex w-full">
+        <section className="side-panel inset-0 flex h-fit w-52 flex-col gap-y-[2px] rounded border-x  border-gray-100 font-medium text-gray-400">
+          <div className="text-[1.1rem ]  w-full place-items-center gap-x-3 border-y border-gray-100 py-4 pl-4  font-bold">
             <span>Howdy, {fetchUser.data?.name}</span>
           </div>
           <button
@@ -56,7 +56,7 @@ const Profile = () => {
             className={`${
               location.pathname === '/profile/personal-data' && 'text-black'
             }
-            flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100`}
+            flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black`}
           >
             <span className="text-xl">
               <AiOutlineUser />
@@ -68,7 +68,7 @@ const Profile = () => {
             className={`${
               location.pathname === '/profile/order' && 'text-black'
             }
-            flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100`}
+            flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black`}
           >
             <span className="text-xl">
               <BsBoxSeam />
@@ -77,7 +77,7 @@ const Profile = () => {
           </button>
           <button
             onClick={() => logoutAccount()}
-            className="flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100"
+            className="flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black"
           >
             <span className="text-xl">
               <FiPower />
@@ -85,7 +85,7 @@ const Profile = () => {
             <span>Log Out</span>
           </button>
         </section>
-        <section className="wrapper w-full mb-8">
+        <section className="wrapper mb-8 w-full">
           {location.pathname === '/profile/personal-data' && <PersonalData />}
           {location.pathname === '/profile/order' && <Order />}
         </section>

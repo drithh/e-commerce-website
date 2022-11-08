@@ -59,7 +59,7 @@ const TopUp: React.FC<Props> = ({ closeModal }) => {
           value={balance.toString()}
         />
         {errorMsg !== '' && (
-          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
+          <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
         )}

@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type PutUserBalance = {
-    balance: number;
+  balance: number;
 };

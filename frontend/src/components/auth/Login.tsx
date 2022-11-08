@@ -65,7 +65,7 @@ const Login: React.FC<Props> = ({
           value={password}
         />
         {errorMsg !== '' && (
-          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
+          <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
         )}

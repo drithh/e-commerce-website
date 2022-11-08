@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type SearchImageRequest = {
-    image: string;
+  image: string;
 };

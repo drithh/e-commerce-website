@@ -54,10 +54,10 @@ const Product = () => {
     }
   };
   return (
-    <main id="main-content" className="min-h-[60vh] my-20">
+    <main id="main-content" className="my-20 min-h-[60vh]">
       {/* ===== Breadcrumb Section ===== */}
-      <div className="bg-lightgreen h-16 w-full flex items-center border-t-2 border-gray-200 bg-gray-50">
-        <div className="w-[80rem] mx-auto">
+      <div className="bg-lightgreen flex h-16 w-full items-center border-t-2 border-gray-200 bg-gray-50">
+        <div className="mx-auto w-[80rem]">
           <div className="breadcrumb w=full text-left">
             <Link to="/" className="text-gray-400">
               Home
@@ -65,7 +65,7 @@ const Product = () => {
             /{' '}
             <Link
               to={`/products?category=${fetchProduct.data!.category_id}`}
-              className="text-gray-400 capitalize"
+              className="capitalize text-gray-400"
             >
               {fetchProduct.data!.category_name}
             </Link>{' '}
@@ -74,9 +74,9 @@ const Product = () => {
         </div>
       </div>
       {/* ===== Main Content Section ===== */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row">
-        <div className="imgSection w-full md:w-1/2 h-full flex">
-          <div className="hidden sm:block w-full sm:w-1/4 h-full space-y-4 my-4">
+      <div className="mx-auto flex max-w-7xl flex-col md:flex-row">
+        <div className="imgSection flex h-full w-full md:w-1/2">
+          <div className="my-4 hidden h-full w-full space-y-4 sm:block sm:w-1/4">
             {fetchProduct.data!.images.map((image: string, index: number) => (
               <img
                 key={index}
@@ -84,14 +84,14 @@ const Product = () => {
                 alt={fetchProduct.data!.title}
                 className={`cursor-pointer ${
                   mainImage === image
-                    ? 'opacity-100 border border-gray-300'
+                    ? 'border border-gray-300 opacity-100'
                     : 'opacity-50'
                 }`}
                 onClick={() => setMainImage(image)}
               />
             ))}
           </div>
-          <div className="w-full sm:w-3/4 h-full m-0 sm:m-4">
+          <div className="m-0 h-full w-full sm:m-4 sm:w-3/4">
             <Swiper
               slidesPerView={1}
               spaceBetween={0}
@@ -120,7 +120,7 @@ const Product = () => {
                 />
               </SwiperSlide>
             </Swiper>
-            <div className="hidden sm:block h-full">
+            <div className="hidden h-full sm:block">
               <img
                 className="w-full"
                 src={mainImage}
@@ -131,12 +131,12 @@ const Product = () => {
             </div>
           </div>
         </div>
-        <div className="infoSection w-full md:w-1/2 h-auto py-8 sm:pl-4 flex flex-col">
+        <div className="infoSection flex h-auto w-full flex-col py-8 sm:pl-4 md:w-1/2">
           <h1 className="text-3xl">{fetchProduct.data!.title}</h1>
-          <span className="text-lg text-gray-400 mb-4">
+          <span className="mb-4 text-lg text-gray-400">
             {fetchProduct.data!.brand}
           </span>
-          <span className="text-xl text-gray-400 mb-2">
+          <span className="mb-2 text-xl text-gray-400">
             Rp{fetchProduct.data!.price}
           </span>
           <span className="mb-2 text-justify">
@@ -148,7 +148,7 @@ const Product = () => {
               ?.quantity || 0}
           </span>
           <span className="mb-2">Size: {size}</span>
-          <div className="sizeContainer flex space-x-4 text-sm mb-4">
+          <div className="sizeContainer mb-4 flex space-x-4 text-sm">
             {fetchProduct
               .data!.size?.map((singleSize) => ({
                 singleSize,
@@ -165,34 +165,34 @@ const Product = () => {
                     size === singleSize
                       ? 'border-gray-500'
                       : 'border-gray-300 text-gray-400'
-                  } w-8 h-8 flex items-center justify-center border hover:bg-gray-500 hover:text-gray-100`}
+                  } flex h-8 w-8 items-center justify-center border hover:bg-gray-500 hover:text-gray-100`}
                   onClick={() => setSize(singleSize)}
                 >
                   {singleSize}
                 </button>
               ))}
           </div>
-          <div className="addToCart flex flex-col sm:flex-row md:flex-col lg:flex-row space-y-4 sm:space-y-0 mb-4">
-            <div className="plusOrMinus h-12 flex border justify-center border-gray-300 divide-x-2 divide-gray-300 mb-4 mr-0 sm:mr-4 md:mr-0 lg:mr-4">
+          <div className="addToCart mb-4 flex flex-col space-y-4 sm:flex-row sm:space-y-0 md:flex-col lg:flex-row">
+            <div className="plusOrMinus mb-4 mr-0 flex h-12 justify-center divide-x-2 divide-gray-300 border border-gray-300 sm:mr-4 md:mr-0 lg:mr-4">
               <div
                 onClick={() => setQuantity((prevState) => prevState - 1)}
                 className={`${
                   quantity === 1 && 'pointer-events-none'
-                } h-full w-full sm:w-12 flex justify-center items-center cursor-pointer hover:bg-gray-500 hover:text-gray-100`}
+                } flex h-full w-full cursor-pointer items-center justify-center hover:bg-gray-500 hover:text-gray-100 sm:w-12`}
               >
                 -
               </div>
-              <div className="h-full w-28 sm:w-12 flex justify-center items-center pointer-events-none">
+              <div className="pointer-events-none flex h-full w-28 items-center justify-center sm:w-12">
                 {quantity}
               </div>
               <div
                 onClick={() => setQuantity((prevState) => prevState + 1)}
-                className="h-full w-full sm:w-12 flex justify-center items-center cursor-pointer hover:bg-gray-500 hover:text-gray-100"
+                className="flex h-full w-full cursor-pointer items-center justify-center hover:bg-gray-500 hover:text-gray-100 sm:w-12"
               >
                 +
               </div>
             </div>
-            <div className="flex h-12 space-x-4 w-full">
+            <div className="flex h-12 w-full space-x-4">
               <Button
                 value="Add to Cart"
                 size="lg"
@@ -204,7 +204,7 @@ const Product = () => {
               </GhostButton>
             </div>
           </div>
-          <div className="flex items-center space-x-4 mt-4">
+          <div className="mt-4 flex items-center space-x-4">
             <span>Share</span>
             <SlSocialFacebook className="h-4 cursor-pointer text-gray-400 hover:text-gray-500" />
             <SiInstagram className="h-4 cursor-pointer text-gray-400 hover:text-gray-500" />

@@ -66,14 +66,14 @@ const PersonalData = () => {
   return (
     <div className="pl-5 pt-3">
       {/*  ===== General Information ===== */}
-      <h2 className="text-2xl font-medium w-full">General Information</h2>
-      <div className="information flex flex-col gap-y-4 w-full py-4 text-lg text-gray-700">
-        <fieldset className="border border-gray-200 rounded-md w-full">
-          <legend className="font-semibold pr-2 pl-1 ml-2">Full Name</legend>
+      <h2 className="w-full text-2xl font-medium">General Information</h2>
+      <div className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700">
+        <fieldset className="w-full rounded-md border border-gray-200">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">Full Name</legend>
           <div className="pl-6 pb-2">{fetchUser.data?.name}</div>
         </fieldset>
-        <fieldset className="border border-gray-200 rounded-md w-full">
-          <legend className="font-semibold pr-2 pl-1 ml-2">Email</legend>
+        <fieldset className="w-full rounded-md border border-gray-200">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">Email</legend>
           <div className="pl-6 pb-2">{fetchUser.data?.email}</div>
         </fieldset>
         <div className="flex place-content-end">
@@ -82,10 +82,10 @@ const PersonalData = () => {
       </div>
 
       {/*  ===== Your Balance ===== */}
-      <h2 className="text-2xl font-medium w-full">Your Balance</h2>
-      <div className="information flex flex-col gap-y-4 w-full py-4 text-lg text-gray-700">
-        <fieldset className="border border-gray-200 rounded-md w-full">
-          <legend className="font-semibold pr-2 pl-1 ml-2">Balance</legend>
+      <h2 className="w-full text-2xl font-medium">Your Balance</h2>
+      <div className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700">
+        <fieldset className="w-full rounded-md border border-gray-200">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">Balance</legend>
           <div className="pl-6 pb-2">{fetchUser.data?.balance}</div>
         </fieldset>
 
@@ -95,48 +95,48 @@ const PersonalData = () => {
       </div>
 
       {/*  ===== Your Address ===== */}
-      <h2 className="text-2xl font-medium w-full">Your Address</h2>
+      <h2 className="w-full text-2xl font-medium">Your Address</h2>
       <form
-        className="information flex flex-col gap-y-4 w-full py-4 text-lg text-gray-700 "
+        className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 "
         onSubmit={handleSubmit}
       >
-        <fieldset className="border pb-2 border-gray-200 rounded-md w-full focus-within:border-gray-700">
-          <legend className="font-semibold pr-2 pl-1 ml-2">Address Name</legend>
+        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">Address Name</legend>
           <input
-            className="pl-6  w-full"
+            className="w-full  pl-6"
             onChange={(e) =>
               setAddressName((e.target as HTMLInputElement).value)
             }
             value={addressName}
           />
         </fieldset>
-        <fieldset className="border pb-2 border-gray-200 rounded-md w-full focus-within:border-gray-700">
-          <legend className="font-semibold pr-2 pl-1 ml-2">Phone Number</legend>
+        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">Phone Number</legend>
           <input
-            className="pl-6  w-full"
+            className="w-full  pl-6"
             onChange={(e) =>
               setPhoneNumber((e.target as HTMLInputElement).value)
             }
             value={phoneNumber}
           />
         </fieldset>
-        <fieldset className="border pb-2 border-gray-200 rounded-md w-full focus-within:border-gray-700">
-          <legend className="font-semibold pr-2 pl-1 ml-2">Address</legend>
+        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">Address</legend>
           <input
-            className="pl-6  w-full"
+            className="w-full  pl-6"
             onChange={(e) => setAddress((e.target as HTMLInputElement).value)}
             value={address}
           />
         </fieldset>
-        <fieldset className="border pb-2 border-gray-200 rounded-md w-full focus-within:border-gray-700">
-          <legend className="font-semibold pr-2 pl-1 ml-2">City</legend>
+        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+          <legend className="ml-2 pr-2 pl-1 font-semibold">City</legend>
           <input
-            className="pl-6  w-full"
+            className="w-full  pl-6"
             onChange={(e) => setCity((e.target as HTMLInputElement).value)}
             value={city}
           />
         </fieldset>
-        <div className="flex place-content-end mt-8">
+        <div className="mt-8 flex place-content-end">
           <Button
             type="submit"
             value="Update Address"

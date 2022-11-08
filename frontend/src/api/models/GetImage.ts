@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type GetImage = {
-    name: string;
-    image_url: string;
+  name: string;
+  image_url: string;
 };

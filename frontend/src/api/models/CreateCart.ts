@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 export type CreateCart = {
-    product_id: string;
-    quantity: number;
-    size: string;
+  product_id: string;
+  quantity: number;
+  size: string;
 };

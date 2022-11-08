@@ -30,9 +30,9 @@ const Dropdown = ({ params, setParams }: props) => {
   const selectedSort = sorts.find((sort) => sort.value === params.sortBy);
 
   return (
-    <Menu as="div" className="relative inline-block text-left w-full">
+    <Menu as="div" className="relative inline-block w-full text-left">
       <div>
-        <Menu.Button className="inline-flex w-full justify-between h-10 rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50  ">
+        <Menu.Button className="inline-flex h-10 w-full justify-between rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700  hover:bg-gray-50  ">
           {selectedSort?.name}
           <HiOutlineChevronDown
             className="-mr-1 ml-2 h-5 w-5"
@@ -57,7 +57,7 @@ const Dropdown = ({ params, setParams }: props) => {
                 <button
                   className={`${
                     active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                  } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                  } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   onClick={() => {
                     setParams((prev) => ({
                       ...prev,
