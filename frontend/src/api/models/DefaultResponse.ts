@@ -3,5 +3,5 @@
 /* eslint-disable */
 
 export type DefaultResponse = {
-    message: string;
+  message: string;
 };

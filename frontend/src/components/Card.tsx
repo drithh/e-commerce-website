@@ -34,7 +34,7 @@ const Card: FC<Props> = ({ item }) => {
   return (
     <div className="w-60">
       <div
-        className="relative mb-1 overflow-hidden group"
+        className="group relative mb-1 overflow-hidden"
         onMouseOver={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -65,7 +65,7 @@ const Card: FC<Props> = ({ item }) => {
         </button>
         <Link
           to={itemLink}
-          className="absolute font-lato left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 group-hover:bottom-8 font-semibold text-gray-700  transition-all duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 sm:block md:-bottom-10"
+          className="absolute left-0 right-1/2 z-10 mx-auto translate-x-1/2 transform whitespace-nowrap bg-white px-4 py-2 font-lato font-semibold text-gray-700 transition-all  duration-500 hover:bg-gray-500 hover:text-gray-100 focus:bottom-8 focus:duration-75 group-hover:bottom-8 sm:block md:-bottom-10"
         >
           See Details
         </Link>
@@ -78,7 +78,7 @@ const Card: FC<Props> = ({ item }) => {
         >
           {title}
         </Link>
-        <div className="text-gray-400">$ {price}</div>
+        <div className="text-gray-400">Rp{price}</div>
         <Link to={itemLink} className="text-sm font-bold uppercase sm:hidden">
           See Details
         </Link>

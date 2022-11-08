@@ -222,14 +222,15 @@ def change_password(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    password_validation(request.new_password)
 
     if not User.verify_password(request.old_password, current_user):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect password",
+            detail="Your old password is incorrect",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    password_validation(request.new_password)
+
     hashed_password, salt = User.encrypt_password(request.new_password)
     current_user.password = hashed_password
     current_user.salt = salt

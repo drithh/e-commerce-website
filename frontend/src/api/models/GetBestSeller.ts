@@ -5,5 +5,5 @@
 import type { BestSeller } from './BestSeller';
 
 export type GetBestSeller = {
-    data: Array<BestSeller>;
+  data: Array<BestSeller>;
 };

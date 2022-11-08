@@ -5,6 +5,7 @@ from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
@@ -21,13 +22,12 @@ def get_orders_user(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-
     orders = session.execute(
-        """
-        select id, created_at, shipping_method, status, shipping_address, array_agg(product) products
+        f"""
+        select id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products
         from (
-            SELECT DISTINCT ON (products.id) orders.id, orders.created_at,
-            orders.shipping_method, orders.status, orders.address as shipping_address,
+            SELECT DISTINCT ON (products.id) orders.id, orders.city, orders.created_at,
+            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
             json_build_object(
                 'id', products.id,
                 'details', array_agg(
@@ -38,7 +38,7 @@ def get_orders_user(
                 ),
                 'price', products.price,
                 'name', products.title,
-                'image', images.image_url
+                'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
             ) product
             FROM only orders
             JOIN order_items ON orders.id = order_items.order_id
@@ -51,7 +51,7 @@ def get_orders_user(
             GROUP BY orders.id, products.id, images.id
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
-        order_product.status, order_product.shipping_address
+        order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
 
     """,
         {"user_id": current_user.id},
@@ -60,10 +60,42 @@ def get_orders_user(
     return GetUserOrders(data=orders)
 
 
+@router.put(
+    "/order/{order_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def update_order_status(
+    order_id: UUID,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    order = (
+        session.query(Order)
+        .filter(Order.id == order_id)
+        .filter(Order.user_id == current_user.id)
+        .first()
+    )
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Order does not exist",
+        )
+
+    if order.status != "shipped":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Order status is not shipped",
+        )
+
+    order.status = "finished"
+    session.commit()
+
+    return DefaultResponse(message="Order status updated")
+
+
 @router.put("/orders/{id}", status_code=status.HTTP_200_OK)
-def update_order(
+def update_orders(
     id: UUID,
-    status: str = Query(regex="^(pending|delivered|cancelled|finished)$"),
+    status: str = Query(regex="^(processed|shipped|cancelled|finished)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):

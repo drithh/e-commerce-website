@@ -54,7 +54,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
 
   return (
     <div className="w-full">
-      <ul className="flex mx-auto justify-center">
+      <ul className="mx-auto flex justify-center">
         <li>
           <button
             type="button"
@@ -72,7 +72,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
               currentPage === 1
                 ? 'pointer-events-none cursor-not-allowed text-gray-400'
                 : 'cursor-pointer'
-            } focus:outline-none flex justify-center items-center h-10 w-16 px-3 border mx-1 hover:bg-gray-500 hover:text-gray-100`}
+            } mx-1 flex h-10 w-16 items-center justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <PrevArrow />
           </button>
@@ -95,7 +95,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                 }}
                 className={`${
                   num === currentPage && 'bg-gray-500 text-gray-100'
-                } focus:outline-none cursor-pointer flex justify-center items-center w-10 h-10 border mx-1 hover:bg-gray-500 hover:text-gray-100`}
+                } mx-1 flex h-10 w-10 cursor-pointer items-center justify-center border hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
               >
                 {num}
               </button>
@@ -123,7 +123,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
               currentPage >= lastPage
                 ? 'pointer-events-none cursor-not-allowed text-gray-400'
                 : 'cursor-pointer'
-            } focus:outline-none flex justify-center items-center h-10 w-16 px-3 border mx-1 hover:bg-gray-500 hover:text-gray-100`}
+            } mx-1 flex h-10 w-16 items-center justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <NextArrow />
           </button>

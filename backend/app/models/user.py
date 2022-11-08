@@ -1,5 +1,5 @@
 import bcrypt
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import BigInteger, Boolean, Column, String
 
 from app.db import Base
 from app.models.default import DefaultModel
@@ -18,7 +18,7 @@ class User(DefaultModel, Base):
     address_name = Column(String(length=64), nullable=True)
     address = Column(String(length=128), nullable=True)
     city = Column(String(length=64), nullable=True)
-    balance = Column(Integer, nullable=False, server_default="0")
+    balance = Column(BigInteger, nullable=False, server_default="0")
 
     is_admin = Column(Boolean, nullable=False, server_default="false")
 

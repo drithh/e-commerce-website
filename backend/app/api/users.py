@@ -15,6 +15,7 @@ from app.schemas.user import (
     GetUser,
     GetUserAddress,
     GetUserBalance,
+    PutUserAddress,
     PutUserBalance,
 )
 
@@ -41,7 +42,7 @@ def get_user_shipping_address(
     "/shipping_address", response_model=DefaultResponse, status_code=status.HTTP_200_OK
 )
 def put_user_shipping_address(
-    request: GetUserAddress,
+    request: PutUserAddress,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
@@ -73,10 +74,19 @@ def put_user_balance(
 ):
     new_balance = int(current_user.balance) + request.balance
     current_user.balance = new_balance
-    session.commit()
-    logger.info(f"User {current_user.User.email} updated balance")
+    try:
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Integer value out of range"
+            if "integer out of range" in format_error(e)
+            else format_error(e),
+        )
+    logger.info(f"User {current_user.email} updated balance")
     return DefaultResponse(
-        message=f"Your balance has been updated, current_balance:{new_balance}"
+        message=f"Your balance has been updated, Current Balance: {new_balance}"
     )
 
 
@@ -94,4 +104,4 @@ def delete_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=format_error(e),
         )
-    logger.info(f"User {request.id} deleted by {current_user.User.email}")
+    logger.info(f"User {request.id} deleted by {current_user.email}")

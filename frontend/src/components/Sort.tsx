@@ -106,8 +106,8 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
   }, {} as Record<string, Array<any>>);
 
   return (
-    <div className="flex flex-col  w-full text-gray-600">
-      <div className="border-y-gray-100 border-y px-4 py-5 ">
+    <div className="flex w-full  flex-col text-gray-600">
+      <div className="border-y border-y-gray-100 px-4 py-5 ">
         {pagination && pagination.total_item > 0 ? (
           <span>
             Showing {1 + (pagination.page - 1) * pagination.page_size} -{' '}
@@ -121,7 +121,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           <span>No results</span>
         )}
       </div>
-      <div className="flex flex-col gap-y-4 border-b-gray-100 border-b px-4 pt-3 pb-4 ">
+      <div className="flex flex-col gap-y-4 border-b border-b-gray-100 px-4 pt-3 pb-4 ">
         {Object.entries(categoriesByType).map(([type, categories]) => (
           <div key={type}>
             <h2 className="mb-2 text-xl text-black">
@@ -154,7 +154,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
                         }));
                       }
                     }}
-                    className="mx-2 text-gray-600 border-gray-300 accent-gray-600  h-4 w-4"
+                    className="mx-2 h-4 w-4 border-gray-300  text-gray-600 accent-gray-600"
                   />
                   {pluralize.singular(capitalCase(category.title))}
                 </li>
@@ -163,20 +163,20 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           </div>
         ))}
       </div>
-      <div className="sort px-4 py-3 border-b-gray-100 border-b">
+      <div className="sort border-b border-b-gray-100 px-4 py-3">
         <h2 className="mb-2 text-xl text-black">Sort By</h2>
         <Dropdown params={params} setParams={setParams} />
       </div>
-      <div className="price px-4 py-3 gap-y-4 flex flex-col border-b-gray-100 border-b">
+      <div className="price flex flex-col gap-y-4 border-b border-b-gray-100 px-4 py-3">
         <fieldset className="price-wrapper">
           <legend className="mb-3 text-xl text-black">Minimum Price</legend>
-          <div className="input-price flex rounded px-3 py-1 border-gray-300 border items-center gap-x-2">
+          <div className="input-price flex items-center gap-x-2 rounded border border-gray-300 px-3 py-1">
             <CiDollar className="text-3xl text-gray-400" />
             <input
               type="number"
               name="min-price"
               id="min-price"
-              className="w-full h-5"
+              className="h-5 w-full"
               placeholder="0"
               defaultValue={params.price[0]}
               onBlur={(e) => {
@@ -194,14 +194,14 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
         </fieldset>
         <fieldset className="price-wrapper">
           <legend className="mb-3 text-xl text-black">Maximum Price</legend>
-          <div className="input-price flex rounded px-3 py-1 border-gray-300 border items-center gap-x-2">
+          <div className="input-price flex items-center gap-x-2 rounded border border-gray-300 px-3 py-1">
             <CiDollar className="text-3xl text-gray-400" />
             <input
               type="number"
               name="max-price"
               id="max-price"
               defaultValue={params.price[1]}
-              className="w-full h-5"
+              className="h-5 w-full"
               onBlur={(e) => {
                 let value = e.target.value;
                 if (!value) {
@@ -223,7 +223,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           </div>
         </fieldset>
       </div>
-      <div className="flex flex-col gap-y-3 border-b-gray-100 border-b px-4 py-3 ">
+      <div className="flex flex-col gap-y-3 border-b border-b-gray-100 px-4 py-3 ">
         <h2 className="text-xl text-black">Condition</h2>
         <ul className="flex flex-col gap-y-2">
           {conditions.map((condition, index) => (
@@ -243,7 +243,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
                     }));
                   }
                 }}
-                className="mx-2 text-gray-600 border-gray-300 accent-gray-600  h-4 w-4"
+                className="mx-2 h-4 w-4 border-gray-300  text-gray-600 accent-gray-600"
               />
               {capitalCase(condition)}
             </li>

@@ -22,10 +22,12 @@ const Login: React.FC<Props> = ({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login!.mutate({ email, password });
-    if (login!.error) {
-      const error = login!.error as ApiError;
-      setErrorMsg(error.body.message);
+    try {
+      await login!.mutateAsync({ email, password });
+      closeModal();
+    } catch (err) {
+      console.log(err);
+      setErrorMsg((err as ApiError).body.message);
     }
   };
 
@@ -63,7 +65,7 @@ const Login: React.FC<Props> = ({
           value={password}
         />
         {errorMsg !== '' && (
-          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
+          <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
         )}

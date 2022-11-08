@@ -103,18 +103,3 @@ def password_validation(password: str):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one letter",
         )
-    if password.isalnum():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must contain at least one special character",
-        )
-    if password.islower():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must contain at least one uppercase letter",
-        )
-    if password.isupper():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must contain at least one lowercase letter",
-        )

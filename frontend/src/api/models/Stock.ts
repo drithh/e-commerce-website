@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type Stock = {
-    size: string;
-    quantity: number;
+  size: string;
+  quantity: number;
 };

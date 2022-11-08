@@ -49,7 +49,7 @@ const Slideshow = () => {
             <div className="block">
               <img
                 src={slider.image}
-                className="w-screen object-strecth h-screen"
+                className="object-strecth h-screen w-screen"
                 alt={slider.title}
               />
             </div>

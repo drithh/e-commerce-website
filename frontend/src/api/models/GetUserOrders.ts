@@ -5,5 +5,5 @@
 import type { GetUserOrder } from './GetUserOrder';
 
 export type GetUserOrders = {
-    data: Array<GetUserOrder>;
+  data: Array<GetUserOrder>;
 };

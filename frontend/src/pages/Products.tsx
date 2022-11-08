@@ -71,8 +71,8 @@ const Product: React.FC = () => {
       </div>
 
       {/* ===== Product Section ===== */}
-      <div className="flex gap-x-4 min-h-screen mb-16">
-        <section className="border-x-gray-100 border-x w-72 h-fit  ">
+      <div className="mb-16 flex min-h-screen gap-x-4">
+        <section className="h-fit w-72 border-x border-x-gray-100  ">
           <Sort
             params={params}
             setParams={setParams}
@@ -80,13 +80,13 @@ const Product: React.FC = () => {
           />
         </section>
         {fetchProducts.isLoading ? (
-          <div className="not-found flex flex-col gap-y-4 items-center  w-full text-2xl h-full py-[10%]">
+          <div className="not-found flex h-full w-full flex-col  items-center gap-y-4 py-[10%] text-2xl">
             <strong>Loading...</strong>
             <div>Please wait a moment</div>
           </div>
         ) : fetchProducts.data && fetchProducts.data?.data.length > 0 ? (
           <div className="flex flex-col justify-between gap-y-12">
-            <section className="grid xl:grid-cols-4  lg:grid-cols-3 grid-cols-2 gap-4">
+            <section className="grid grid-cols-2  gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {fetchProducts.data?.data.map((product) => (
                 <Card key={product.id} item={product} />
               ))}
@@ -98,7 +98,7 @@ const Product: React.FC = () => {
             />
           </div>
         ) : (
-          <div className="not-found flex flex-col gap-y-4 items-center  w-full text-2xl h-full py-[10%]">
+          <div className="not-found flex h-full w-full flex-col  items-center gap-y-4 py-[10%] text-2xl">
             <strong>Oops! No product found</strong>
             <div>Please try again with different keywords or filters</div>
           </div>

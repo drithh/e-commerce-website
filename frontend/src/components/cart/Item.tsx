@@ -51,7 +51,7 @@ const Item: FC<Props> = ({
         >
           &#10005;
         </button>
-        <span>$ {roundDecimal(price)}</span>
+        <span>Rp{roundDecimal(price)}</span>
       </div>
     </div>
   );

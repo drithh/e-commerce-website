@@ -8,17 +8,15 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class SalesService {
-
-    /**
-     * Get Sales
-     * @returns GetSales Successful Response
-     * @throws ApiError
-     */
-    public static getSales(): CancelablePromise<GetSales> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/api/v1',
-        });
-    }
-
+  /**
+   * Get Sales
+   * @returns GetSales Successful Response
+   * @throws ApiError
+   */
+  public static getSales(): CancelablePromise<GetSales> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/v1',
+    });
+  }
 }

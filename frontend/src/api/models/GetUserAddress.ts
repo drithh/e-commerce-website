@@ -3,9 +3,9 @@
 /* eslint-disable */
 
 export type GetUserAddress = {
-    id: string;
-    address_name: string;
-    phone_number: string;
-    address: string;
-    city: string;
+  id: string;
+  address_name: string;
+  phone_number: string;
+  address: string;
+  city: string;
 };
