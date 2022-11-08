@@ -10,8 +10,10 @@ from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
 from app.models.order import Order
+from app.models.order_item import OrderItem
+from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
-from app.schemas.order import GetAdminOrders, GetUserOrders
+from app.schemas.order import CreateOrder, GetAdminOrders, GetUserOrders
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -64,6 +66,98 @@ def get_orders_user(
         )
 
     return GetUserOrders(data=orders)
+
+
+@router.post("/order", status_code=status.HTTP_201_CREATED)
+def create_order(
+    request: CreateOrder,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+):
+    cart = session.execute(
+        """
+        SELECT product_size_quantities.id, product_size_quantities.quantity as stock,
+        carts.quantity, products.price, products.title
+        FROM carts
+        JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
+        JOIN products ON product_size_quantities.product_id = products.id
+        WHERE user_id = :user_id
+    """,
+        {"user_id": current_user.id},
+    ).fetchall()
+    if not cart:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cart is empty",
+        )
+
+    #  Regular:
+    #  If total price of items < 200k: Shipping price is 15% of the total price of items purchased
+    #  If total price of items >= 200k: Shipping price is 20% of the total price of items purchased
+    #  Next Day:
+    #  If total price of items < 300k: Shipping price is 20% of the total price of items purchased
+    #  If total price of items >= 300k: Shipping price is 25% of the total price of items purchased
+    total_price = sum([item.price * item.quantity for item in cart])
+    if request.shipping_method == "regular":
+        shipping_price = int(
+            total_price * 0.15 if total_price < 200000 else total_price * 0.2
+        )
+    else:
+        shipping_price = int(
+            total_price * 0.2 if total_price < 300000 else total_price * 0.25
+        )
+
+    if total_price + shipping_price > current_user.balance:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Not enough balance, you need {total_price + shipping_price - current_user.balance} more",
+        )
+
+    try:
+        order = Order(
+            user_id=current_user.id,
+            address_name=request.shipping_address.address_name,
+            address=request.shipping_address.address,
+            city=request.shipping_address.city,
+            shipping_method=request.shipping_method,
+            shipping_price=shipping_price,
+        )
+        session.add(order)
+        session.commit()
+        logger.info(f"User {current_user.name} created order {order.id}")
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong, when creating order",
+        )
+
+    for item in cart:
+        if item.quantity > item.stock:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Product {item.title} is out of stock, please remove it from cart",
+            )
+        OrderItem(
+            order_id=order.id,
+            product_size_quantity_id=item.id,
+            quantity=item.quantity,
+        )
+        session.add(order)
+        session.commit()
+        logger.info(
+            f"User {current_user.name} added product {item.title} to order {order.id}"
+        )
+
+        product_size_quantity = session.query(ProductSizeQuantity).get(item.id)
+        product_size_quantity.quantity -= item.quantity
+        logger.info(
+            f"Stock of product {item.title} updated to {product_size_quantity.quantity}"
+        )
+        session.commit()
+
+    return DefaultResponse(message="Order created successfully")
 
 
 @router.put(

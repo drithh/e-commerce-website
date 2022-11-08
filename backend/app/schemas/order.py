@@ -47,3 +47,15 @@ class GetAdminOrder(BaseModel):
 
 class GetAdminOrders(BaseModel):
     data: List[GetAdminOrder]
+
+
+class OrderAddress(BaseModel):
+    address_name: str
+    address: str
+    city: str
+    phone_number: str
+
+
+class CreateOrder(BaseModel):
+    shipping_method: str = Query("", regex="^(Next Day|Standard)$")
+    shipping_address: OrderAddress

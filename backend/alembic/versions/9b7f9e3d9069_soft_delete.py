@@ -12,7 +12,7 @@ import fastapi_users_db_sqlalchemy
 
 # revision identifiers, used by Alembic.
 revision = "9b7f9e3d9069"
-down_revision = "a6a9427fd204"
+down_revision = "a77e8da39eb4"
 branch_labels = None
 depends_on = None
 
