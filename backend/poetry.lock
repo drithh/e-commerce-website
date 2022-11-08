@@ -211,14 +211,14 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 
 [[package]]
 name = "databases"
-version = "0.6.1"
+version = "0.6.2"
 description = "Async database support for Python."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-sqlalchemy = ">=1.4,<1.5"
+sqlalchemy = ">=1.4,<=1.4.41"
 
 [package.extras]
 aiomysql = ["aiomysql"]
@@ -1011,6 +1011,7 @@ lock-version = "1.1"
 python-versions = "^3.9"
 content-hash = "d8b19e2b128d3c44c89a15081dfd3e16647240cd63252ffc35675b266da691de"
 
+
 [metadata.files]
 aiosmtplib = [
     {file = "aiosmtplib-1.1.7-py3-none-any.whl", hash = "sha256:c1403e70fce769643820cb2c5bf0bd4f7ea83a01c60e854c81a6f5d7ccff2656"},
@@ -1239,8 +1240,8 @@ cryptography = [
     {file = "cryptography-38.0.1.tar.gz", hash = "sha256:1db3d807a14931fa317f96435695d9ec386be7b84b618cc61cfa5d08b0ae33d7"},
 ]
 databases = [
-    {file = "databases-0.6.1-py3-none-any.whl", hash = "sha256:47fae85d82d8227049f08b154019913c3ad2f6057ceb0b5ebb36703be6f5666b"},
-    {file = "databases-0.6.1.tar.gz", hash = "sha256:0a69c6983a27e10a5b75ffa094486f1febadd9d5a8db016e69b8c2f6a354dc30"},
+    {file = "databases-0.6.2-py3-none-any.whl", hash = "sha256:ff4010136ac2bb9da2322a2ffda4ef9185ae1c365e5891e52924dd9499d33dc4"},
+    {file = "databases-0.6.2.tar.gz", hash = "sha256:b09c370ad7c2f64c7f4316c096e265dc2e28304732639889272390decda2f893"},
 ]
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
