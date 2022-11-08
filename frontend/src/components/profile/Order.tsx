@@ -65,7 +65,7 @@ const Order = () => {
                 className={`${
                   order.status === 'processed' ||
                   order.status === 'shipped' ||
-                  order.status === 'finished'
+                  order.status === 'completed'
                     ? 'border-emerald-300 text-emerald-300'
                     : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
@@ -77,16 +77,14 @@ const Order = () => {
               </div>
               <div
                 className={`${
-                  order.status === 'processed' ||
-                  order.status === 'shipped' ||
-                  order.status === 'finished'
+                  order.status === 'shipped' || order.status === 'completed'
                     ? 'bg-emerald-300'
                     : 'bg-gray-200'
                 } line mb-7 h-1 w-full`}
               ></div>
               <div
                 className={`${
-                  order.status === 'shipped' || order.status === 'finished'
+                  order.status === 'shipped' || order.status === 'completed'
                     ? 'border-emerald-300 text-emerald-300'
                     : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
@@ -98,14 +96,14 @@ const Order = () => {
               </div>
               <div
                 className={`${
-                  order.status === 'shipped' || order.status === 'finished'
+                  order.status === 'completed'
                     ? 'bg-emerald-300'
                     : 'bg-gray-200'
                 } line mb-7 h-1 w-full `}
               ></div>
               <div
                 className={`${
-                  order.status === 'finished'
+                  order.status === 'completed'
                     ? 'border-emerald-300 text-emerald-300'
                     : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
@@ -113,7 +111,7 @@ const Order = () => {
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
                   <IoMdCheckmark />
                 </div>
-                <div className="">Finished</div>
+                <div className="">Completed</div>
               </div>
             </div>
             <div

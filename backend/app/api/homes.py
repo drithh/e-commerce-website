@@ -1,6 +1,6 @@
 from typing import Any, Generator
 
-from fastapi import status
+from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
@@ -20,24 +20,27 @@ router = APIRouter()
 def get_banner(
     session: Generator = Depends(get_db),
 ) -> Any:
-    return GetBanners(
-        data=session.execute(
-            f"""
+    banners = session.execute(
+        f"""
             SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image
             FROM only banners
             JOIN images ON banners.image_id = images.id
             """
-        ).fetchall()
-    )
+    ).fetchall()
+    if not banners:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="There are no banners",
+        )
+    return GetBanners(data=banners)
 
 
 @router.get("/category", response_model=GetCategories, status_code=status.HTTP_200_OK)
 def get_category_with_image(
     session: Generator = Depends(get_db),
 ) -> Any:
-    return GetCategories(
-        data=session.execute(
-            f"""
+    categories = session.execute(
+        f"""
             SELECT categories.id, categories.title, CONCAT('{settings.CLOUD_STORAGE}/',
             COALESCE(image_url, 'image-not-available.webp')) AS image
             FROM only categories
@@ -51,8 +54,15 @@ def get_category_with_image(
             )
             LEFT JOIN images ON product_images.image_id = images.id
             """
-        ).fetchall()
-    )
+    ).fetchall()
+
+    if not categories:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="There are no categories",
+        )
+
+    return GetCategories(data=categories)
 
 
 @router.get(
@@ -61,9 +71,8 @@ def get_category_with_image(
 def get_best_seller(
     session: Generator = Depends(get_db),
 ) -> Any:
-    return GetBestSeller(
-        data=session.execute(
-            f"""
+    best_seller = session.execute(
+        f"""
             SELECT products.id, products.title, products.price,
             array_agg(DISTINCT CONCAT('{settings.CLOUD_STORAGE}/',
             COALESCE(images.image_url, 'image-not-available.webp'))) as images
@@ -73,10 +82,17 @@ def get_best_seller(
             JOIN product_size_quantities ON products.id = product_size_quantities.product_id
             JOIN order_items ON product_size_quantities.id = order_items.product_size_quantity_id
             JOIN orders ON order_items.order_id = orders.id
-            WHERE orders.status = 'finished'
+            WHERE orders.status = 'completed'
             GROUP BY products.id
             ORDER BY COUNT(order_items.id) DESC
             LIMIT 10
             """
-        ).fetchall()
-    )
+    ).fetchall()
+
+    if not best_seller:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="There are no best seller",
+        )
+
+    return GetBestSeller(data=best_seller)

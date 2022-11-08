@@ -57,6 +57,12 @@ def get_orders_user(
         {"user_id": current_user.id},
     ).fetchall()
 
+    if not orders:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="You have no orders",
+        )
+
     return GetUserOrders(data=orders)
 
 
@@ -86,7 +92,7 @@ def update_order_status(
             detail="Order status is not shipped",
         )
 
-    order.status = "finished"
+    order.status = "completed"
     session.commit()
 
     return DefaultResponse(message="Order status updated")
@@ -95,7 +101,7 @@ def update_order_status(
 @router.put("/orders/{id}", status_code=status.HTTP_200_OK)
 def update_orders(
     id: UUID,
-    status: str = Query(regex="^(processed|shipped|cancelled|finished)$"),
+    status: str = Query(regex="^(processed|shipped|cancelled|completed)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):
@@ -162,5 +168,11 @@ def get_orders_admin(
     """,
         {"page_size": page_size, "offset": (page - 1) * page_size},
     ).fetchall()
+
+    if not orders:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No orders found",
+        )
 
     return GetAdminOrders(data=orders)

@@ -118,24 +118,39 @@ def update_product(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> Any:
+    try:
+        product = session.query(Product).filter(Product.id == request.id).first()
 
-    product = session.query(Product).filter(Product.id == request.id).first()
+        product.title = request.title
+        product.brand = request.brand
+        product.product_detail = request.product_detail
+        product.price = request.price
+        product.condition = request.condition
+        product.category_id = request.category_id
 
-    product.title = request.title
-    product.brand = request.brand
-    product.product_detail = request.product_detail
-    product.price = request.price
-    product.condition = request.condition
-    product.category_id = request.category_id
-
-    session.commit()
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+        )
 
     if request.images:
-        for image in request.images:
-            updated_image = session.query(Image).filter(Image.id == image.id).first()
-            updated_image.name = image.name
-            updated_image.image_url = image.image_url
-            session.commit()
+        try:
+            for image in request.images:
+                updated_image = (
+                    session.query(Image).filter(Image.id == image.id).first()
+                )
+                updated_image.name = image.name
+                updated_image.image_url = image.image_url
+                session.commit()
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+            )
 
     logger.info(f"Product {product.title} updated by {current_user.name}")
 
@@ -150,10 +165,16 @@ def delete_product(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> Any:
-
-    product = session.query(Product).filter(Product.id == product_id).first()
-    session.delete(product)
-    session.commit()
+    try:
+        product = session.query(Product).filter(Product.id == product_id).first()
+        session.delete(product)
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+        )
 
     logger.info(f"Product {product.title} deleted by {current_user.name}")
 

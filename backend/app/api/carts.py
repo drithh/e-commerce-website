@@ -37,6 +37,12 @@ def get_cart(
         {"user_id": current_user.id},
     ).fetchall()
 
+    if not carts:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cart is empty",
+        )
+
     return GetCart(data=carts)
 
 
@@ -47,79 +53,62 @@ def create_cart(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
 
+    product_size_quantity = session.execute(
+        """
+            SELECT product_size_quantities.id, products.title, product_size_quantities.quantity FROM only product_size_quantities
+            JOIN sizes ON sizes.id = product_size_quantities.size_id
+            JOIN products ON products.id = product_size_quantities.product_id
+            WHERE product_id = :product_id AND size = :size
+        """,
+        {"product_id": request.product_id, "size": request.size},
+    ).fetchone()
+
+    if product_size_quantity is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Product ID or Size is not valid",
+        )
+
     existed_cart = session.execute(
         """
-        SELECT carts.id as cart_id, * FROM carts
-        JOIN product_size_quantities ON product_size_quantities.product_id = :product_id AND
-        product_size_quantities.size_id = (SELECT sizes.id FROM sizes WHERE sizes.size = :size)
-        WHERE carts.user_id = :user_id AND carts.product_size_quantity_id = product_size_quantities.id
+        SELECT carts.id, product_size_quantities.quantity FROM only carts
+        JOIN product_size_quantities ON product_size_quantities.id = carts.product_size_quantity_id
+        WHERE carts.user_id = :user_id AND product_size_quantities.id = :product_size_quantity_id
         """,
         {
             "user_id": current_user.id,
-            "product_id": request.product_id,
-            "size": request.size,
+            "product_size_quantity_id": product_size_quantity.id,
         },
     ).fetchone()
 
     if existed_cart:
-        try:
-            cart = session.query(Cart).filter(Cart.id == existed_cart.cart_id).first()
-            cart.quantity += request.quantity
-            session.commit()
-        except Exception as e:
-            logger.error(e)
-            session.rollback()
+        cart = session.query(Cart).filter(Cart.id == existed_cart.id).first()
+        if existed_cart.quantity < request.quantity + cart.quantity:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=format_error(e),
+                detail=f"Out of stock, please reduce quantity, current stock is {existed_cart.quantity}",
             )
-        return DefaultResponse(message=f"Cart updated {existed_cart.cart_id}")
-
+        cart.quantity += request.quantity
+        session.commit()
     else:
-        product_size_quantity_id = session.execute(
-            """
-            SELECT product_size_quantities.id FROM product_size_quantities
-            JOIN sizes ON sizes.id = product_size_quantities.size_id
-            WHERE product_size_quantities.product_id = :product_id AND sizes.size = :size
-            """,
-            {
-                "product_id": request.product_id,
-                "size": request.size,
-            },
-        ).fetchone()
-
-        if product_size_quantity_id is None:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Product ID or Size not found",
-            )
-
-        try:
-            session.execute(
-                """
-                INSERT INTO carts (user_id, product_size_quantity_id, quantity)
-                VALUES (:user_id, :product_size_quantity_id, :quantity)
-                """,
-                {
-                    "user_id": current_user.id,
-                    "product_size_quantity_id": product_size_quantity_id[0],
-                    "quantity": request.quantity,
-                },
-            )
-            session.commit()
-        except Exception as e:
-            logger.error(e)
-            session.rollback()
+        if product_size_quantity.quantity < request.quantity:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=format_error(e),
+                detail=f"Out of stock, please reduce quantity, current stock is {product_size_quantity.quantity}",
             )
-
-        logger.info(
-            f"User {current_user.name} added product {request.product_id} to cart"
+        cart = Cart(
+            user_id=current_user.id,
+            product_size_quantity_id=product_size_quantity.id,
+            quantity=request.quantity,
         )
+        session.add(cart)
+        session.commit()
 
-        return DefaultResponse(message="Cart created")
+    logger.info(f"User {current_user.name} added product {request.product_id} to cart")
+
+    return DefaultResponse(
+        message=f"Added {request.quantity} {product_size_quantity.title} to cart"
+    )
 
 
 @router.delete(

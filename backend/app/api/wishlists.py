@@ -42,6 +42,12 @@ def get_wishlist(
         {"user_id": current_user.id},
     ).fetchall()
 
+    if not wishlists:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="You have no wishlists",
+        )
+
     return GetWishlist(data=wishlists)
 
 
@@ -97,8 +103,16 @@ def clear_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    session.query(Wishlist).filter(Wishlist.user_id == current_user.id).delete()
-    session.commit()
+    try:
+        session.query(Wishlist).filter(Wishlist.user_id == current_user.id).delete()
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
 
     logger.info(f"User {current_user.name} cleared wishlist")
 

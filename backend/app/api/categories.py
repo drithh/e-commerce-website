@@ -21,7 +21,15 @@ router = APIRouter()
 def get_category(
     session: Generator = Depends(get_db),
 ):
-    return GetCategory(data=session.query(Category).all())
+    categories = session.query(Category).all()
+
+    if not categories:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="There are no categories",
+        )
+
+    return GetCategory(data=categories)
 
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
@@ -30,9 +38,15 @@ def create_category(
     current_user: User = Depends(get_current_active_admin),
     category_name: str = Query(..., min_length=2, max_length=100),
 ):
-
-    session.add(Category(title=category_name))
-    session.commit()
+    try:
+        session.add(Category(title=category_name))
+        session.commit()
+    except Exception as e:
+        logger.error(format_error(e))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
     logger.info(f"Category {category_name} created by {current_user.name}")
 
     return DefaultResponse(message="Category added")

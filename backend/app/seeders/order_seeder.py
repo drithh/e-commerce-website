@@ -3,7 +3,7 @@ from app.models.order import Order
 
 def order_seed(fake, session, user_id):
     order_id = []
-    statuses = ["processed", "shipped", "cancelled", "finished"]
+    statuses = ["processed", "shipped", "cancelled", "completed"]
     for user in user_id:
         for status in statuses:
             if status == "processed":
@@ -12,7 +12,7 @@ def order_seed(fake, session, user_id):
                 iteration = fake.pyint(min_value=1, max_value=2)
             if status == "cancelled":
                 iteration = fake.pyint(min_value=1, max_value=4)
-            if status == "finished":
+            if status == "completed":
                 iteration = fake.pyint(min_value=1, max_value=5)
             for _ in range(iteration):
                 order = Order.seed(fake, user, status)
