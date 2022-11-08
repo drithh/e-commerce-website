@@ -9,22 +9,14 @@ fake = Faker("id_ID")
 
 
 def test_product_model(db: Session):
-    category = Category.seed(
-        fake,
-        {
-            "title": "category_product_1",
-            "type": "product",
-        },
-    )
+    category = Category.seed(fake, "category_product_1", "product")
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_1",
-            "price": 10000,
-        },
+        "product_1",
+        10000,
         category.id,
     )
     db.add(product)
@@ -36,10 +28,8 @@ def test_product_model(db: Session):
 def test_foreign_key_category_id(db: Session):
     product = Product.seed(
         fake,
-        {
-            "name": "product_2",
-            "price": 10000,
-        },
+        "product_2",
+        10000,
         fake.uuid4(),
     )
     db.add(product)
@@ -52,20 +42,16 @@ def test_foreign_key_category_id(db: Session):
 def test_delete_product(db: Session):
     category = Category.seed(
         fake,
-        {
-            "title": "category_product_3",
-            "type": "product",
-        },
+        "category_product_3",
+        "product",
     )
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_3",
-            "price": 10000,
-        },
+        "product_3",
+        10000,
         category.id,
     )
     db.add(product)

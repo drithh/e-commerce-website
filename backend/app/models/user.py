@@ -24,6 +24,10 @@ class User(DefaultModel, Base):
 
     @classmethod
     def default_seed(cls, fake):
+        return User.default_user_seed(fake), User.default_admin_seed(fake)
+
+    @classmethod
+    def default_user_seed(cls, fake):
         password, salt = cls.encrypt_password("user")
         user = User(
             id=fake.uuid4(),
@@ -37,6 +41,10 @@ class User(DefaultModel, Base):
             city=fake.city(),
             balance=fake.pyint(),
         )
+        return user
+
+    @classmethod
+    def default_admin_seed(cls, fake):
         password, salt = cls.encrypt_password("admin")
         admin = User(
             id=fake.uuid4(),
@@ -51,7 +59,7 @@ class User(DefaultModel, Base):
             balance=fake.pyint(),
             is_admin=True,
         )
-        return user, admin
+        return admin
 
     @classmethod
     def seed(cls, fake):

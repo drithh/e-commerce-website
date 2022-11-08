@@ -11,18 +11,14 @@ fake = Faker("id_ID")
 
 
 def test_product_size_quantity_model(db: Session):
-    category = Category.seed(
-        fake, {"title": "category_product_size_quantity_1", "type": "product"}
-    )
+    category = Category.seed(fake, "category_product_size_quantity_1", "product")
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_product_size_quantity_1",
-            "price": 10000,
-        },
+        "product_product_size_quantity_1",
+        10000,
         category.id,
     )
     db.add(product)
@@ -58,18 +54,14 @@ def test_foreign_key_product_id(db: Session):
 
 
 def test_foreign_key_size_id(db: Session):
-    category = Category.seed(
-        fake, {"title": "category_product_size_quantity_3", "type": "product"}
-    )
+    category = Category.seed(fake, "category_product_size_quantity_3", "product")
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_product_size_quantity_3",
-            "price": 10000,
-        },
+        "product_product_size_quantity_3",
+        10000,
         category.id,
     )
     db.add(product)
@@ -84,18 +76,14 @@ def test_foreign_key_size_id(db: Session):
 
 
 def test_delete_product_size_quantity(db: Session):
-    category = Category.seed(
-        fake, {"title": "category_product_size_quantity_4", "type": "product"}
-    )
+    category = Category.seed(fake, "category_product_size_quantity_4", "product")
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_product_size_quantity_4",
-            "price": 10000,
-        },
+        "product_product_size_quantity_4",
+        10000,
         category.id,
     )
     db.add(product)

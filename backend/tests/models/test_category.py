@@ -10,10 +10,8 @@ fake = Faker("id_ID")
 def test_category_model(db: Session):
     category = Category.seed(
         fake,
-        {
-            "title": "category_1",
-            "type": "product",
-        },
+        "category_1",
+        "product",
     )
     db.add(category)
     db.commit()
@@ -23,20 +21,16 @@ def test_category_model(db: Session):
 def test_unique_category_title(db: Session):
     category = Category.seed(
         fake,
-        {
-            "title": "category_2",
-            "type": "product",
-        },
+        "category_2",
+        "product",
     )
     db.add(category)
     db.commit()
 
     category2 = Category.seed(
         fake,
-        {
-            "title": "category_2",
-            "type": "product",
-        },
+        "category_2",
+        "product",
     )
     db.add(category2)
 
@@ -50,10 +44,8 @@ def test_delete_category(db: Session):
 
     category = Category.seed(
         fake,
-        {
-            "title": "category_4",
-            "type": "product",
-        },
+        "category_4",
+        "product",
     )
     db.add(category)
     db.commit()

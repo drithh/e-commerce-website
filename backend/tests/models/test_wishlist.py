@@ -17,20 +17,16 @@ def test_wishlist_model(db: Session):
 
     category = Category.seed(
         fake,
-        {
-            "title": "category_product_wishlist_1",
-            "type": "product",
-        },
+        "category_product_wishlist_1",
+        "product",
     )
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_wishlist_1",
-            "price": 10000,
-        },
+        "product_wishlist_1",
+        10000,
         category.id,
     )
     db.add(product)
@@ -51,20 +47,16 @@ def test_wishlist_model(db: Session):
 def test_foreign_key_user_id(db: Session):
     category = Category.seed(
         fake,
-        {
-            "title": "category_product_wishlist_2",
-            "type": "product",
-        },
+        "category_product_wishlist_2",
+        "product",
     )
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_wishlist_2",
-            "price": 10000,
-        },
+        "product_wishlist_2",
+        10000,
         category.id,
     )
     db.add(product)
@@ -98,20 +90,16 @@ def test_delete_wishlist(db: Session):
 
     category = Category.seed(
         fake,
-        {
-            "title": "category_product_wishlist_4",
-            "type": "product",
-        },
+        "category_product_wishlist_4",
+        "product",
     )
     db.add(category)
     db.commit()
 
     product = Product.seed(
         fake,
-        {
-            "name": "product_wishlist_4",
-            "price": 10000,
-        },
+        "product_wishlist_4",
+        10000,
         category.id,
     )
     db.add(product)

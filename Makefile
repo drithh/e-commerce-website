@@ -15,6 +15,12 @@ create-apptest:
 	docker compose exec postgres createdb apptest -U postgres
 	docker compose exec postgres psql -U postgres -d apptest -f docker-entrypoint-initdb.d/extension.sql
 
+test-api:
+	docker compose exec backend pytest tests/api
+
+test-model:
+	docker compose exec backend pytest tests/models
+
 test:
 	docker compose exec backend pytest
 

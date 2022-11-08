@@ -92,7 +92,7 @@ def get_best_seller(
     if not best_seller:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="There are no best seller",
+            detail="There are no best seller items",
         )
 
     return GetBestSeller(data=best_seller)

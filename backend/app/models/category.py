@@ -12,10 +12,10 @@ class Category(DefaultModel, Base):
     type = Column(String(length=64), nullable=False, default="Other")
 
     @classmethod
-    def seed(cls, fake, category):
+    def seed(cls, fake, category_title, category_type):
         category = Category(
             id=fake.uuid4(),
-            title=category["title"],
-            type=category["type"],
+            title=category_title,
+            type=category_type,
         )
         return category
