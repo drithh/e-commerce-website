@@ -99,14 +99,13 @@ const Header = () => {
           <div className="justify-content-center flex h-full justify-between align-baseline">
             {/* Left Nav */}
             <ul className="flex-0 flex place-items-center gap-x-4 lg:flex-1 ">
-              {/* iterate over categories */}
               {categories?.map((category, index) => (
                 <li key={index} className="relative h-6">
                   <PopoverMenu
                     menuTitle={category.type}
                     linksArray={category.items.map((item) => [
                       capitalCase(item.title),
-                      `products?category=${item.id}`,
+                      `/products?category=${item.id}`,
                     ])}
                   />
                 </li>

@@ -5,6 +5,7 @@ from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
@@ -22,7 +23,7 @@ def get_orders_user(
     current_user: User = Depends(get_current_active_user),
 ):
     orders = session.execute(
-        """
+        f"""
         select id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products
         from (
             SELECT DISTINCT ON (products.id) orders.id, orders.city, orders.created_at,
@@ -37,7 +38,7 @@ def get_orders_user(
                 ),
                 'price', products.price,
                 'name', products.title,
-                'image', images.image_url
+                'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
             ) product
             FROM only orders
             JOIN order_items ON orders.id = order_items.order_id
@@ -79,10 +80,10 @@ def update_order_status(
             detail="Order does not exist",
         )
 
-    if order.status != "delivered":
+    if order.status != "shipped":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Order status is not delivered",
+            detail="Order status is not shipped",
         )
 
     order.status = "finished"
@@ -94,7 +95,7 @@ def update_order_status(
 @router.put("/orders/{id}", status_code=status.HTTP_200_OK)
 def update_orders(
     id: UUID,
-    status: str = Query(regex="^(pending|delivered|cancelled|finished)$"),
+    status: str = Query(regex="^(processed|shipped|cancelled|finished)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):

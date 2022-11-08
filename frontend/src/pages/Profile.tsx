@@ -17,10 +17,7 @@ const Profile = () => {
   });
 
   useEffect(() => {
-    if (
-      location.pathname !== '/profile/personal-data' &&
-      location.pathname !== '/profile/order'
-    ) {
+    if (location.pathname === '/profile') {
       navigate('/profile/personal-data', { replace: true });
     }
   }, [location.pathname, navigate]);
@@ -56,7 +53,10 @@ const Profile = () => {
           </div>
           <button
             onClick={() => navigate('personal-data')}
-            className="flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100"
+            className={`${
+              location.pathname === '/profile/personal-data' && 'text-black'
+            }
+            flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100`}
           >
             <span className="text-xl">
               <AiOutlineUser />
@@ -65,7 +65,10 @@ const Profile = () => {
           </button>
           <button
             onClick={() => navigate('order')}
-            className="flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100"
+            className={`${
+              location.pathname === '/profile/order' && 'text-black'
+            }
+            flex cursor-pointer place-items-center w-full  font-medium gap-x-3 py-4 pl-6 hover:text-black border-b border-gray-100`}
           >
             <span className="text-xl">
               <BsBoxSeam />
