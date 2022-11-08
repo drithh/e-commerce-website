@@ -7,9 +7,8 @@ from app.models.user import User
 fake = Faker("id_ID")
 
 
-def test_user_model(db: Session):
-    user = User.seed(fake)
-    db.add(user)
+def test_user_model(db: Session, create_user):
+    user = create_user()
     db.commit()
     assert db.query(User).filter(User.id == user.id).first()
 
@@ -28,19 +27,17 @@ def test_unique_user_email(db: Session):
         assert True
 
 
-def test_delete_user(db: Session):
-    user = User.seed(fake)
-    db.add(user)
-    db.commit()
+def test_delete_user(db: Session, create_user):
+    user = create_user()
+    assert db.query(User).filter(User.id == user.id).first()
+
     db.delete(user)
     db.commit()
     assert not db.query(User).filter(User.id == user.id).first()
 
 
-def test_update_user(db: Session):
-    user = User.seed(fake)
-    db.add(user)
-    db.commit()
+def test_update_user(db: Session, create_user):
+    user = create_user()
     user.phone_number = fake.phone_number()
     db.commit()
     current_phone_number = (

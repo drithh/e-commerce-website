@@ -10,31 +10,9 @@ from app.models.wishlist import Wishlist
 fake = Faker("id_ID")
 
 
-def test_wishlist_model(db: Session):
-    user = User.seed(fake)
-    db.add(user)
-    db.commit()
+def test_wishlist_model(db: Session, create_wishlist):
+    wishlist = create_wishlist()
 
-    category = Category.seed(
-        fake,
-        "category_product_wishlist_1",
-        "product",
-    )
-    db.add(category)
-    db.commit()
-
-    product = Product.seed(
-        fake,
-        "product_wishlist_1",
-        10000,
-        category.id,
-    )
-    db.add(product)
-    db.commit()
-
-    wishlist = Wishlist.seed(fake, user.id, product.id)
-    db.add(wishlist)
-    db.commit()
     assert (
         db.query(Wishlist)
         .join(User)
@@ -44,23 +22,8 @@ def test_wishlist_model(db: Session):
     )
 
 
-def test_foreign_key_user_id(db: Session):
-    category = Category.seed(
-        fake,
-        "category_product_wishlist_2",
-        "product",
-    )
-    db.add(category)
-    db.commit()
-
-    product = Product.seed(
-        fake,
-        "product_wishlist_2",
-        10000,
-        category.id,
-    )
-    db.add(product)
-    db.commit()
+def test_foreign_key_user_id(db: Session, create_product):
+    product = create_product()
 
     wishlist = Wishlist.seed(fake, fake.uuid4(), product.id)
     db.add(wishlist)
@@ -70,10 +33,8 @@ def test_foreign_key_user_id(db: Session):
         assert True
 
 
-def test_foreign_key_product_id(db: Session):
-    user = User.seed(fake)
-    db.add(user)
-    db.commit()
+def test_foreign_key_product_id(db: Session, create_user):
+    user = create_user()
 
     wishlist = Wishlist.seed(fake, user.id, fake.uuid4())
     db.add(wishlist)
@@ -83,31 +44,15 @@ def test_foreign_key_product_id(db: Session):
         assert True
 
 
-def test_delete_wishlist(db: Session):
-    user = User.seed(fake)
-    db.add(user)
-    db.commit()
-
-    category = Category.seed(
-        fake,
-        "category_product_wishlist_4",
-        "product",
+def test_delete_wishlist(db: Session, create_wishlist):
+    wishlist = create_wishlist()
+    assert (
+        db.query(Wishlist)
+        .join(User)
+        .join(Product)
+        .filter(Wishlist.id == wishlist.id)
+        .first()
     )
-    db.add(category)
-    db.commit()
-
-    product = Product.seed(
-        fake,
-        "product_wishlist_4",
-        10000,
-        category.id,
-    )
-    db.add(product)
-    db.commit()
-
-    wishlist = Wishlist.seed(fake, user.id, product.id)
-    db.add(wishlist)
-    db.commit()
 
     db.delete(wishlist)
     db.commit()

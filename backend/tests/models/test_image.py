@@ -7,10 +7,8 @@ from app.models.image import Image
 fake = Faker("id_ID")
 
 
-def test_image_model(db: Session):
-    image = Image.seed(fake, "image_1", "image_url_1")
-    db.add(image)
-    db.commit()
+def test_image_model(db: Session, create_image):
+    image = create_image()
     assert db.query(Image).filter(Image.id == image.id).first()
 
 
@@ -26,10 +24,9 @@ def test_unique_image_name(db: Session):
         assert True
 
 
-def test_delete_image(db: Session):
-    image = Image.seed(fake, "image_3", "image_url_3")
-    db.add(image)
-    db.commit()
+def test_delete_image(db: Session, create_image):
+    image = create_image()
+    assert db.query(Image).filter(Image.id == image.id).first()
     db.delete(image)
     db.commit()
     assert not db.query(Image).filter(Image.id == image.id).first()

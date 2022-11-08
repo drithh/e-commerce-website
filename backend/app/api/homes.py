@@ -77,9 +77,9 @@ def get_best_seller(
             array_agg(DISTINCT CONCAT('{settings.CLOUD_STORAGE}/',
             COALESCE(images.image_url, 'image-not-available.webp'))) as images
             FROM only products
-            JOIN product_images ON products.id = product_images.product_id
-            JOIN images ON product_images.image_id = images.id
-            JOIN product_size_quantities ON products.id = product_size_quantities.product_id
+            LEFT JOIN product_images ON products.id = product_images.product_id
+            LEFT JOIN images ON product_images.image_id = images.id
+            LEFT JOIN product_size_quantities ON products.id = product_size_quantities.product_id
             JOIN order_items ON product_size_quantities.id = order_items.product_size_quantity_id
             JOIN orders ON order_items.order_id = orders.id
             WHERE orders.status = 'completed'

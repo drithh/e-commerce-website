@@ -1,6 +1,7 @@
 from typing import Generator
 
 import pytest
+from faker import Faker
 from fastapi_users.password import PasswordHelper
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm.session import Session, sessionmaker
@@ -13,6 +14,12 @@ from app.factory import create_app
 from app.models.user import User
 from tests.utils import generate_random_string
 
+pytest_plugins = [
+    "tests.fixtures.insert_data",
+]
+
+fake = Faker("id_ID")
+
 engine = create_engine(
     settings.DATABASE_URL,
 )
@@ -21,11 +28,6 @@ TestingSessionLocal = sessionmaker(
     autoflush=False,
     bind=engine,
 )
-
-
-@pytest.fixture(scope="session")
-def default_password():
-    return generate_random_string(32)
 
 
 @pytest.fixture(scope="session")
@@ -66,23 +68,6 @@ def override_get_db(app):
 @pytest.fixture(scope="function", autouse=True)
 def auto_rollback(db: Session):
     db.rollback()
-
-
-# @pytest.fixture(scope="session")
-# def create_user(db: Session, default_password: str):
-#     user_manager = next(get_user_manager())
-
-#     def inner():
-#         user = User(
-#             id=uuid.uuid4(),
-#             email=f"{generate_random_string(20)}@{generate_random_string(10)}.com",
-#             hashed_password=user_manager.password_helper.hash(default_password),
-#         )
-#         db.add(user)
-#         db.commit()
-#         return user
-
-#     return inner
 
 
 # @pytest.fixture(scope="session")
