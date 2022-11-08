@@ -14,7 +14,7 @@ alembic = "^1.8.1"
 psycopg2-binary = "^2.9.5"
 asyncpg = "^0.27.0"
 SQLAlchemy = "^1.4.41"
-databases = "^0.6.1"
+databases = "^0.6.2"
 gunicorn = "^20.1.0"
 fastapi-users = {extras = ["sqlalchemy"], version = "^10.1.4"}
 Faker = "^15.1.3"
