@@ -19,6 +19,15 @@ export type cartType = {
     },
     unknown
   >;
+  updateCartItem?: UseMutationResult<
+    DefaultResponse,
+    unknown,
+    {
+      cart_id: string;
+      quantity: number;
+    },
+    unknown
+  >;
   deleteCartItem?: UseMutationResult<
     DefaultResponse,
     unknown,
@@ -69,7 +78,16 @@ const useProvideCart = () => {
     {
       onSuccess: () => {
         refetch();
-        // setWishlist((prev) => [...prev, data.data]);
+      },
+    }
+  );
+
+  const updateCartItem = useMutation(
+    (variables: { cart_id: string; quantity: number }) =>
+      CartService.updateCart({ ...variables }),
+    {
+      onSuccess: () => {
+        refetch();
       },
     }
   );
@@ -79,17 +97,9 @@ const useProvideCart = () => {
     {
       onSuccess: () => {
         refetch();
-        // setWishlist((prev) => prev.filter((item) => item.id !== variables.id));
       },
     }
   );
-
-  // const clearWishlist = useMutation(() => WishlistService.clearWishlist(), {
-  //   onSuccess: () => {
-  //     refetch();
-  //     // setWishlist([]);
-  //   },
-  // });
 
   return {
     cart,
@@ -97,5 +107,6 @@ const useProvideCart = () => {
     refetch,
     addCartItem,
     deleteCartItem,
+    updateCartItem,
   };
 };

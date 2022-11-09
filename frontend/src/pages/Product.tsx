@@ -11,6 +11,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { ProductService } from "../api";
 import Button from "../components/button/Button";
+import { useCart } from "../context/CartContext";
 
 const Product = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const Product = () => {
   const [mainImage, setMainImage] = useState("");
   const { wishlist, addWishlistItem, deleteWishlistItem } = useWishlist();
   const { role } = useAuth();
+  const { addCartItem } = useCart();
 
   const fetchProduct = useQuery(
     ["product", id],
@@ -197,7 +199,15 @@ const Product = () => {
                 value="Add to Cart"
                 size="lg"
                 extraClass={`flex-grow text-center whitespace-nowrap`}
-                // onClick={() => addItem!(currentItem)}
+                onClick={() => {
+                  if (quantity > 0) {
+                    addCartItem?.mutate({
+                      product_id: fetchProduct.data!.id,
+                      quantity,
+                      size,
+                    });
+                  }
+                }}
               />
               <GhostButton onClick={handleWishlist}>
                 {alreadyWishlisted ? <HeartSolid /> : <Heart />}

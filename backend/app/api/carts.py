@@ -5,6 +5,7 @@ from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_user
 from app.deps.db import get_db
@@ -23,18 +24,21 @@ def get_cart(
     current_user: User = Depends(get_current_active_user),
 ):
     carts = session.execute(
-        """
-        SELECT products.id, carts.id as cart_id,
-        array_agg(json_build_object('size', sizes.size, 'quantity', carts.quantity)) as details,
-        products.price, images.image_url as image, products.title as name FROM only carts
+        f"""
+        SELECT DISTINCT ON (carts.id) products.id as product_id, carts.id,
+        (json_build_object('size', sizes.size, 'quantity', carts.quantity)) as details,
+        products.price, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
+        products.title as name FROM only carts
         JOIN product_size_quantities ON product_size_quantities.id = product_size_quantity_id
         JOIN sizes ON sizes.id  = product_size_quantities.size_id
         JOIN products ON products.id = product_size_quantities.product_id
-        JOIN product_images ON product_images.product_id = products.id
+        LEFT JOIN product_images ON products.id = product_images.product_id
+        AND product_images.id = (
+            SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
+        )
         JOIN images ON images.id = product_images.image_id
-        WHERE user_id = :user_id AND
-        images.image_url = (SELECT image_url FROM only product_images WHERE product_id = products.id LIMIT 1)
-        GROUP BY products.id, products.price, image, name, carts.id
+        WHERE user_id = :user_id
+        GROUP BY products.id, products.price, image, name, carts.id, sizes.size, carts.quantity
         """,
         {"user_id": current_user.id},
     ).fetchall()
