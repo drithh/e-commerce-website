@@ -47,42 +47,39 @@ const Profile = () => {
       </div>
       {/* ===== Side Panel Section ===== */}
       <div className="profile mt-4 flex w-full">
-        <section className="side-panel inset-0 flex h-fit w-52 flex-col gap-y-[2px] rounded border-x  border-gray-100 font-medium text-gray-400">
-          <div className="text-[1.1rem ]  w-full place-items-center gap-x-3 border-y border-gray-100 py-4 pl-4  font-bold">
-            <span>Howdy, {fetchUser.data?.name}</span>
-          </div>
+        <section className="side-panel inset-0 flex h-fit w-72 flex-col gap-y-[2px]  border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
           <button
             onClick={() => navigate("personal-data")}
             className={`${
               location.pathname === "/profile/personal-data" && "text-black"
             }
-            flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black`}
+            flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 p-4 font-medium hover:text-black`}
           >
             <span className="text-xl">
               <AiOutlineUser />
             </span>
-            <span>Personal Data</span>
+            <span className="uppercase">Personal Data</span>
           </button>
           <button
             onClick={() => navigate("order")}
             className={`${
               location.pathname === "/profile/order" && "text-black"
             }
-            flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black`}
+            flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 p-4 font-medium hover:text-black`}
           >
             <span className="text-xl">
               <BsBoxSeam />
             </span>
-            <span>Orders</span>
+            <span className="uppercase">Orders</span>
           </button>
           <button
             onClick={() => logoutAccount()}
-            className="flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black"
+            className="flex w-full cursor-pointer place-items-center  gap-x-3  p-4 font-medium hover:text-black"
           >
             <span className="text-xl">
               <FiPower />
             </span>
-            <span>Log Out</span>
+            <span className="uppercase">Log Out</span>
           </button>
         </section>
         <section className="wrapper mb-8 w-full">

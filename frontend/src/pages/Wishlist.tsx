@@ -1,7 +1,7 @@
-import LeftArrow from "../assets/icons/LeftArrow";
 import GhostButton from "../components/button/GhostButton";
 import { Link } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
+import { HiOutlineChevronLeft } from "react-icons/hi";
 
 const Wishlist = () => {
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
@@ -14,8 +14,8 @@ const Wishlist = () => {
           Wishlist
         </h1>
         <div className="mt-6 mb-3 flex ">
-          <Link to="/products" className="inline-block">
-            <LeftArrow size="sm" extraClass="inline-block" /> Continue Shopping
+          <Link to="/products" className="flex place-items-center  gap-x-2">
+            <HiOutlineChevronLeft className="text-xl" /> Continue Shopping
           </Link>
         </div>
       </div>

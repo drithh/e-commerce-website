@@ -68,11 +68,11 @@ const PersonalData = () => {
       {/*  ===== General Information ===== */}
       <h2 className="w-full text-2xl font-medium">General Information</h2>
       <div className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700">
-        <fieldset className="w-full rounded-md border border-gray-200">
+        <fieldset className="w-full border border-gray-300">
           <legend className="ml-2 pr-2 pl-1 font-semibold">Full Name</legend>
           <div className="pl-6 pb-2">{fetchUser.data?.name}</div>
         </fieldset>
-        <fieldset className="w-full rounded-md border border-gray-200">
+        <fieldset className="w-full border border-gray-300">
           <legend className="ml-2 pr-2 pl-1 font-semibold">Email</legend>
           <div className="pl-6 pb-2">{fetchUser.data?.email}</div>
         </fieldset>
@@ -84,7 +84,7 @@ const PersonalData = () => {
       {/*  ===== Your Balance ===== */}
       <h2 className="w-full text-2xl font-medium">Your Balance</h2>
       <div className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700">
-        <fieldset className="w-full rounded-md border border-gray-200">
+        <fieldset className="w-full border border-gray-300">
           <legend className="ml-2 pr-2 pl-1 font-semibold">Balance</legend>
           <div className="pl-6 pb-2">{fetchUser.data?.balance}</div>
         </fieldset>
@@ -100,7 +100,7 @@ const PersonalData = () => {
         className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 "
         onSubmit={handleSubmit}
       >
-        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
           <legend className="ml-2 pr-2 pl-1 font-semibold">Address Name</legend>
           <input
             className="w-full  pl-6"
@@ -110,7 +110,7 @@ const PersonalData = () => {
             value={addressName}
           />
         </fieldset>
-        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
           <legend className="ml-2 pr-2 pl-1 font-semibold">Phone Number</legend>
           <input
             className="w-full  pl-6"
@@ -120,7 +120,7 @@ const PersonalData = () => {
             value={phoneNumber}
           />
         </fieldset>
-        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
           <legend className="ml-2 pr-2 pl-1 font-semibold">Address</legend>
           <input
             className="w-full  pl-6"
@@ -128,7 +128,7 @@ const PersonalData = () => {
             value={address}
           />
         </fieldset>
-        <fieldset className="w-full rounded-md border border-gray-200 pb-2 focus-within:border-gray-700">
+        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
           <legend className="ml-2 pr-2 pl-1 font-semibold">City</legend>
           <input
             className="w-full  pl-6"

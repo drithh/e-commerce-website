@@ -26,7 +26,6 @@ const Login: React.FC<Props> = ({
       await login!.mutateAsync({ email, password });
       closeModal();
     } catch (err) {
-      console.log(err);
       setErrorMsg((err as ApiError).body.message);
     }
   };

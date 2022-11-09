@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback, Fragment } from "react";
 import { Link } from "react-router-dom";
-import WhistlistIcon from "../assets/icons/WhistlistIcon";
-import UserIcon from "../assets/icons/UserIcon";
-import SearchIcon from "../assets/icons/SearchIcon";
+import { AiOutlineUser } from "react-icons/ai";
+import { HiOutlineHeart, HiOutlineSearch } from "react-icons/hi";
 import AuthForm from "./auth/AuthForm";
 import CartItem from "./cart/CartItem";
 import { useWishlist } from "../context/WishlistContext";
@@ -125,16 +124,16 @@ const Header = () => {
             <ul className="mr-4 flex flex-1 place-items-center justify-start gap-x-8 lg:justify-end 2xl:mr-0">
               <li>
                 {/* <SearchForm /> */}
-                <SearchIcon />
+                <HiOutlineSearch className="text-2xl"></HiOutlineSearch>
               </li>
-              <li className="opacity-100">
+              <li className="opacity-100 text-2xl">
                 {role !== "guest" ? (
                   <Link to="/profile" aria-label="Profile">
-                    <UserIcon />
+                    <AiOutlineUser />
                   </Link>
                 ) : (
                   <AuthForm>
-                    <UserIcon />
+                    <AiOutlineUser />
                   </AuthForm>
                 )}
               </li>
@@ -147,7 +146,7 @@ const Header = () => {
                     className="relative"
                     aria-label="Wishlist"
                   >
-                    <WhistlistIcon />
+                    <HiOutlineHeart className="text-2xl" />
                     {noOfWishlist > 0 && (
                       <span
                         className={`${animate} absolute -top-3 -right-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}

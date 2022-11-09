@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
 import { Link } from "react-router-dom";
-import Heart from "../assets/icons/Heart";
-import HeartSolid from "../assets/icons/HeartSolid";
+import { HiOutlineHeart, HiHeart } from "react-icons/hi";
 import { Product, BestSeller } from "../api";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
@@ -55,13 +54,17 @@ const Card: FC<Props> = ({ item }) => {
         </Link>
         <button
           type="button"
-          className="absolute top-2 right-2 rounded-full p-1 text-red-500"
+          className="absolute top-2 right-2 rounded-full p-1 text-2xl"
           aria-label="Wishlist "
           onClick={handleWishlist}
           onMouseOver={() => setIsWLHovered(true)}
           onMouseLeave={() => setIsWLHovered(false)}
         >
-          {isWLHovered || alreadyWishlisted ? <HeartSolid /> : <Heart />}
+          {isWLHovered || alreadyWishlisted ? (
+            <HiHeart className="text-red-500" />
+          ) : (
+            <HiOutlineHeart className="text-gray-500" />
+          )}
         </button>
         <Link
           to={itemLink}

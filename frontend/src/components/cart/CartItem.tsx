@@ -2,7 +2,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useCallback, useEffect, useState } from "react";
 
 import Button from "../button/Button";
-import BagIcon from "../../assets/icons/BagIcon";
+import { HiOutlineShoppingBag } from "react-icons/hi";
 import Item from "./Item";
 import { roundDecimal } from "../util/utilFunc";
 import { useCart } from "../../context/CartContext";
@@ -50,7 +50,7 @@ export default function CartItem() {
     <>
       <div className="relative">
         <button type="button" onClick={openModal} aria-label="Cart">
-          <BagIcon extraClass="h-8 w-8 sm:h-6 sm:w-6" />
+          <HiOutlineShoppingBag className="h-8 w-8 sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
               className={`${animate} absolute -top-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
@@ -114,7 +114,7 @@ export default function CartItem() {
                 </div>
 
                 <div className="h-full flex flex-col place-content-between">
-                  <div className="itemContainer w-full flex-shrink flex-grow overflow-y-auto px-4">
+                  <div className="itemContainer w-full flex-shrink flex-grow px-4 overflow-y-scroll">
                     {cart.data.map((item) => {
                       subtotal += item.price * item.details.quantity!;
                       return (

@@ -81,4 +81,16 @@ export class CartService {
       },
     });
   }
+
+  /**
+   * Clear Cart
+   * @returns DefaultResponse Successful Response
+   * @throws ApiError
+   */
+  public static clearCart(): CancelablePromise<DefaultResponse> {
+    return __request(OpenAPI, {
+      method: "DELETE",
+      url: "/api/v1/cart/clear",
+    });
+  }
 }

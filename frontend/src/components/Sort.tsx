@@ -107,7 +107,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
 
   return (
     <div className="flex w-full  flex-col text-gray-600">
-      <div className="border-y border-y-gray-100 px-4 py-5 ">
+      <div className="border-b border-b-gray-100 px-4 py-5 ">
         {pagination && pagination.total_item > 0 ? (
           <span>
             Showing {1 + (pagination.page - 1) * pagination.page_size} -{" "}
@@ -163,11 +163,11 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           </div>
         ))}
       </div>
-      <div className="sort border-b border-b-gray-100 px-4 py-3">
+      <div className="sort border-b border-b-gray-100 px-4 pt-3 pb-6">
         <h2 className="mb-2 text-xl text-black">Sort By</h2>
         <Dropdown params={params} setParams={setParams} />
       </div>
-      <div className="price flex flex-col gap-y-4 border-b border-b-gray-100 px-4 py-3">
+      <div className="price flex flex-col gap-y-4 border-b border-b-gray-100 px-4 pt-3 pb-6">
         <fieldset className="price-wrapper">
           <legend className="mb-3 text-xl text-black">Minimum Price</legend>
           <div className="input-price flex items-center gap-x-2 rounded border border-gray-300 px-3 py-1">
@@ -223,7 +223,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           </div>
         </fieldset>
       </div>
-      <div className="flex flex-col gap-y-3 border-b border-b-gray-100 px-4 py-3 ">
+      <div className="flex flex-col gap-y-3 px-4 py-3 ">
         <h2 className="text-xl text-black">Condition</h2>
         <ul className="flex flex-col gap-y-2">
           {conditions.map((condition, index) => (

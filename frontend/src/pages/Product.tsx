@@ -3,8 +3,7 @@ import { useQuery } from "react-query";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useState } from "react";
 import GhostButton from "../components/button/GhostButton";
-import Heart from "../assets/icons/Heart";
-import HeartSolid from "../assets/icons/HeartSolid";
+import { HiOutlineHeart, HiHeart } from "react-icons/hi";
 import { SlSocialFacebook } from "react-icons/sl";
 import { SiInstagram } from "react-icons/si";
 import { useWishlist } from "../context/WishlistContext";
@@ -209,8 +208,12 @@ const Product = () => {
                   }
                 }}
               />
-              <GhostButton onClick={handleWishlist}>
-                {alreadyWishlisted ? <HeartSolid /> : <Heart />}
+              <GhostButton onClick={handleWishlist} extraClass="text-4xl">
+                {alreadyWishlisted ? (
+                  <HiHeart className="text-gray-500 text-4xl w-7 h-7" />
+                ) : (
+                  <HiOutlineHeart className="text-gray-500 text-4xl w-7 h-7" />
+                )}
               </GhostButton>
             </div>
           </div>

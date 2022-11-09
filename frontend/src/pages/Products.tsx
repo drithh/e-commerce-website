@@ -72,7 +72,7 @@ const Product: React.FC = () => {
 
       {/* ===== Product Section ===== */}
       <div className="mb-16 flex min-h-screen gap-x-4">
-        <section className="h-fit w-72 border-x border-x-gray-100  ">
+        <section className="h-fit w-72 border border-gray-400 p-4 ">
           <Sort
             params={params}
             setParams={setParams}

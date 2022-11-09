@@ -7,6 +7,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import GhostButton from "../button/GhostButton";
 import { toast } from "react-toastify";
 import OrderProducts from "./OrderProducts";
+
 const Order = () => {
   const fetchOrder = useQuery("order", () => OrderService.getOrdersUser(), {
     staleTime: Infinity,
@@ -31,16 +32,13 @@ const Order = () => {
   if (fetchOrder.isLoading) {
     return <div>Loading...</div>;
   }
-  if (fetchOrder.data) {
-    console.log(fetchOrder.data);
-  }
 
   return (
     <div className="flex flex-col gap-y-4 pl-4">
       {fetchOrder.data?.data.map((order) => (
         <div key={order.id}>
-          <div className="w-full rounded-md border border-gray-300 px-5 pt-4 pb-8  text-gray-600">
-            <div className="flex w-full place-content-between  pb-4 text-sm text-gray-400">
+          <div className="w-full border-2 border-gray-400 p-8  text-gray-600">
+            <div className="flex w-full place-content-between mb-4 pb-4  text-gray-400 uppercase text-[1.05rem]">
               <span>
                 {dayjs(order.created_at).format("dddd, MMMM D YYYY, h:mm A")}
               </span>
@@ -50,12 +48,13 @@ const Order = () => {
             </div>
             <div className="grid grid-cols-2 text-gray-400">
               <div className="flex flex-col ">
-                <strong>Shipping</strong>
+                <strong className="uppercase">Shipping</strong>
                 <div>Method: {order.shipping_method}</div>
                 <div>Price: {order.shipping_price}</div>
               </div>
               <div className="flex w-52 flex-col">
-                <strong>Address</strong>
+                <strong className="uppercase">Address</strong>
+                {/* <div>{order.address_name}</div> */}
                 <div>{order.shipping_address}</div>
               </div>
             </div>
@@ -117,7 +116,7 @@ const Order = () => {
             <div
               className={`${
                 order.status === "shipped" ? "flex" : "hidden"
-              } mt-12 place-content-end pr-8 `}
+              } mt-12 place-content-end`}
             >
               <GhostButton onClick={() => completeOrder(order.id)}>
                 Complete Order

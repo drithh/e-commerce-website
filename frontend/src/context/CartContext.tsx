@@ -36,6 +36,7 @@ export type cartType = {
     },
     unknown
   >;
+  clearCart?: UseMutationResult<DefaultResponse, unknown, void, unknown>;
 };
 
 const CartContext = createContext<cartType>({
@@ -101,6 +102,12 @@ const useProvideCart = () => {
     }
   );
 
+  const clearCart = useMutation(() => CartService.clearCart(), {
+    onSuccess: () => {
+      refetch();
+    },
+  });
+
   return {
     cart,
     setCart,
@@ -108,5 +115,6 @@ const useProvideCart = () => {
     addCartItem,
     deleteCartItem,
     updateCartItem,
+    clearCart,
   };
 };
