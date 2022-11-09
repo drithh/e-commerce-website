@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { UpdateImage } from './UpdateImage';
+import type { UpdateImage } from "./UpdateImage";
 
 export type UpdateProduct = {
   id: string;

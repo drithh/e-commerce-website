@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { GetUserProductDetails } from './GetUserProductDetails';
+import type { GetUserProductDetails } from "./GetUserProductDetails";
 
 export type GetUserProducts = {
   id: string;

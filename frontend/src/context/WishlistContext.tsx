@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
-import { WishlistService, GetWishlist, DefaultResponse } from '../api';
-import { UseMutationResult, useQuery } from 'react-query';
-import { useMutation } from 'react-query';
-import { useAuth } from './AuthContext';
+import { WishlistService, GetWishlist, DefaultResponse } from "../api";
+import { UseMutationResult, useQuery } from "react-query";
+import { useMutation } from "react-query";
+import { useAuth } from "./AuthContext";
 
 export type wishlistType = {
   wishlist: GetWishlist;
@@ -55,12 +55,12 @@ const useProvideWishlist = () => {
     data: [],
   });
 
-  const { refetch } = useQuery('wishlist', WishlistService.getWishlist, {
+  const { refetch } = useQuery("wishlist", WishlistService.getWishlist, {
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     staleTime: Infinity,
-    enabled: role === 'user' || role === 'admin',
+    enabled: role === "user" || role === "admin",
     onSuccess: (data) => {
       setWishlist(data);
     },

@@ -1,14 +1,15 @@
-import { useMutation, useQuery } from 'react-query';
-import { OrderService } from '../../api';
-import dayjs from 'dayjs';
-import { capitalCase } from 'change-case';
-import { BsTruck, BsBoxSeam } from 'react-icons/bs';
-import { IoMdCheckmark } from 'react-icons/io';
-import GhostButton from '../button/GhostButton';
-import { toast } from 'react-toastify';
-import OrderProducts from './OrderProducts';
+import { useMutation, useQuery } from "react-query";
+import { OrderService } from "../../api";
+import dayjs from "dayjs";
+import { capitalCase } from "change-case";
+import { BsTruck, BsBoxSeam } from "react-icons/bs";
+import { IoMdCheckmark } from "react-icons/io";
+import GhostButton from "../button/GhostButton";
+import { toast } from "react-toastify";
+import OrderProducts from "./OrderProducts";
+
 const Order = () => {
-  const fetchOrder = useQuery('order', () => OrderService.getOrdersUser(), {
+  const fetchOrder = useQuery("order", () => OrderService.getOrdersUser(), {
     staleTime: Infinity,
   });
   const updateOrder = useMutation(
@@ -31,18 +32,15 @@ const Order = () => {
   if (fetchOrder.isLoading) {
     return <div>Loading...</div>;
   }
-  if (fetchOrder.data) {
-    console.log(fetchOrder.data);
-  }
 
   return (
     <div className="flex flex-col gap-y-4 pl-4">
       {fetchOrder.data?.data.map((order) => (
         <div key={order.id}>
-          <div className="w-full rounded-md border border-gray-300 px-5 pt-4 pb-8  text-gray-600">
-            <div className="flex w-full place-content-between  pb-4 text-sm text-gray-400">
+          <div className="w-full border-2 border-gray-400 p-8  text-gray-600">
+            <div className="flex w-full place-content-between mb-4 pb-4  text-gray-400 uppercase text-[1.05rem]">
               <span>
-                {dayjs(order.created_at).format('dddd, MMMM D YYYY, h:mm A')}
+                {dayjs(order.created_at).format("dddd, MMMM D YYYY, h:mm A")}
               </span>
               <span className="tracking-wider">
                 {capitalCase(order.status)}
@@ -50,12 +48,13 @@ const Order = () => {
             </div>
             <div className="grid grid-cols-2 text-gray-400">
               <div className="flex flex-col ">
-                <strong>Shipping</strong>
+                <strong className="uppercase">Shipping</strong>
                 <div>Method: {order.shipping_method}</div>
                 <div>Price: {order.shipping_price}</div>
               </div>
               <div className="flex w-52 flex-col">
-                <strong>Address</strong>
+                <strong className="uppercase">Address</strong>
+                {/* <div>{order.address_name}</div> */}
                 <div>{order.shipping_address}</div>
               </div>
             </div>
@@ -63,11 +62,11 @@ const Order = () => {
             <div className="order-status mx-auto mt-16 flex max-w-[44rem] place-content-between place-items-center py-2 ">
               <div
                 className={`${
-                  order.status === 'processed' ||
-                  order.status === 'shipped' ||
-                  order.status === 'completed'
-                    ? 'border-emerald-300 text-emerald-300'
-                    : 'border-gray-200 text-gray-200'
+                  order.status === "processed" ||
+                  order.status === "shipped" ||
+                  order.status === "completed"
+                    ? "border-emerald-300 text-emerald-300"
+                    : "border-gray-200 text-gray-200"
                 } status flex flex-col gap-y-2`}
               >
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
@@ -77,16 +76,16 @@ const Order = () => {
               </div>
               <div
                 className={`${
-                  order.status === 'shipped' || order.status === 'completed'
-                    ? 'bg-emerald-300'
-                    : 'bg-gray-200'
+                  order.status === "shipped" || order.status === "completed"
+                    ? "bg-emerald-300"
+                    : "bg-gray-200"
                 } line mb-7 h-1 w-full`}
               ></div>
               <div
                 className={`${
-                  order.status === 'shipped' || order.status === 'completed'
-                    ? 'border-emerald-300 text-emerald-300'
-                    : 'border-gray-200 text-gray-200'
+                  order.status === "shipped" || order.status === "completed"
+                    ? "border-emerald-300 text-emerald-300"
+                    : "border-gray-200 text-gray-200"
                 } status flex flex-col gap-y-2`}
               >
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
@@ -96,16 +95,16 @@ const Order = () => {
               </div>
               <div
                 className={`${
-                  order.status === 'completed'
-                    ? 'bg-emerald-300'
-                    : 'bg-gray-200'
+                  order.status === "completed"
+                    ? "bg-emerald-300"
+                    : "bg-gray-200"
                 } line mb-7 h-1 w-full `}
               ></div>
               <div
                 className={`${
-                  order.status === 'completed'
-                    ? 'border-emerald-300 text-emerald-300'
-                    : 'border-gray-200 text-gray-200'
+                  order.status === "completed"
+                    ? "border-emerald-300 text-emerald-300"
+                    : "border-gray-200 text-gray-200"
                 } status flex flex-col gap-y-2`}
               >
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
@@ -116,8 +115,8 @@ const Order = () => {
             </div>
             <div
               className={`${
-                order.status === 'shipped' ? 'flex' : 'hidden'
-              } mt-12 place-content-end pr-8 `}
+                order.status === "shipped" ? "flex" : "hidden"
+              } mt-12 place-content-end`}
             >
               <GhostButton onClick={() => completeOrder(order.id)}>
                 Complete Order

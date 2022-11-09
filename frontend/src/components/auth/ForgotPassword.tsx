@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import React, { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import Button from "../button/Button";
+import Input from "../input/Input";
 
 type Props = {
   onLogin: () => void;
@@ -16,7 +16,7 @@ const ForgotPassword: React.FC<Props> = ({
 }) => {
   // const auth = useAuth();
   let auth: any;
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ const ForgotPassword: React.FC<Props> = ({
     console.log(forgotPasswordResponse);
     if (forgotPasswordResponse.success) {
     } else {
-      setErrorMsg('incorrect_email_password');
+      setErrorMsg("incorrect_email_password");
     }
   };
 
@@ -39,7 +39,7 @@ const ForgotPassword: React.FC<Props> = ({
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
           type="email"
-          placeholder={'Email Address *'}
+          placeholder={"Email Address *"}
           name="email"
           required
           extraClass="w-full focus:border-gray-500"
@@ -47,19 +47,19 @@ const ForgotPassword: React.FC<Props> = ({
           onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
           value={email}
         />
-        {errorMsg !== '' && (
+        {errorMsg !== "" && (
           <div className="text-red mb-4 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}
         <Button
           type="submit"
-          value={'Submit'}
+          value={"Submit"}
           extraClass="w-full text-center text-xl mb-4"
           size="lg"
         />
         <div className="text-center text-gray-400">
-          Go back to{' '}
+          Go back to{" "}
           <span
             onClick={onLogin}
             className="cursor-pointer text-gray-500 focus:underline focus:outline-none"

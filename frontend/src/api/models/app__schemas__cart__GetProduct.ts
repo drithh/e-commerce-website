@@ -2,12 +2,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { GetProductDetail } from './GetProductDetail';
+import type { GetProductDetail } from "./GetProductDetail";
 
 export type app__schemas__cart__GetProduct = {
   id: string;
-  details: Array<GetProductDetail>;
+  details: GetProductDetail;
   price: number;
   image: string;
   name: string;
+  product_id: string;
 };

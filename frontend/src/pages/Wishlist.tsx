@@ -1,12 +1,9 @@
-import LeftArrow from '../assets/icons/LeftArrow';
-import Button from '../components/button/Button';
-import GhostButton from '../components/button/GhostButton';
-import { Link } from 'react-router-dom';
-import { useCart } from '../context/cart/CartProvider';
-import { useWishlist } from '../context/WishlistContext';
+import GhostButton from "../components/button/GhostButton";
+import { Link } from "react-router-dom";
+import { useWishlist } from "../context/WishlistContext";
+import { HiOutlineChevronLeft } from "react-icons/hi";
 
 const Wishlist = () => {
-  // const { addOne } = useCart();
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
 
   return (
@@ -16,9 +13,9 @@ const Wishlist = () => {
         <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Wishlist
         </h1>
-        <div className="mt-6 mb-3">
-          <Link to="/" className="inline-block">
-            <LeftArrow size="sm" extraClass="inline-block" /> Continue Shopping
+        <div className="mt-6 mb-3 flex ">
+          <Link to="/products" className="flex place-items-center  gap-x-2">
+            <HiOutlineChevronLeft className="text-xl" /> Continue Shopping
           </Link>
         </div>
       </div>
@@ -35,25 +32,18 @@ const Wishlist = () => {
                 <th className="hidden py-2 text-left font-normal sm:text-center md:table-cell xl:w-72">
                   Product Name
                 </th>
-                <th className="py-2 text-left font-normal sm:text-center md:hidden xl:w-72">
-                  Product Detail
-                </th>
-                <th
-                  className={`py-2 font-normal ${
-                    wishlist.data.length === 0 ? 'text-center' : 'text-right'
-                  }`}
-                >
+                <th className="py-2 font-normal text-center max-w-xs">
                   Unit Price
                 </th>
-                <th className="hidden max-w-xs py-2 font-normal sm:table-cell">
+                {/* <th className="hidden max-w-xs py-2 font-normal sm:table-cell">
                   Add
-                </th>
-                <th className="hidden w-10 whitespace-nowrap py-2 text-right font-normal sm:table-cell">
+                </th> */}
+                <th className="hidden  whitespace-nowrap py-2 text-center font-normal sm:table-cell">
                   Remove
                 </th>
-                <th className="w-10 py-2 text-right font-normal sm:hidden">
+                {/* <th className="w-10 py-2 text-right font-normal sm:hidden">
                   Actions
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -66,7 +56,11 @@ const Wishlist = () => {
                   return (
                     <tr className="border-b-2 border-gray-200" key={item.id}>
                       <td className="my-3 flex flex-col items-start justify-center sm:items-center">
-                        <Link to={`/products/${encodeURIComponent(item.id)}`}>
+                        <Link
+                          to={`/products/${encodeURIComponent(
+                            item.product_id
+                          )}`}
+                        >
                           <img
                             src={item.image}
                             alt={item.title}
@@ -74,31 +68,43 @@ const Wishlist = () => {
                             height={128}
                             className="h-32 xl:mr-4"
                           />
+                          <span className="text-xs md:hidden">
+                            {item.title}
+                          </span>
                         </Link>
-                        <span className="text-xs md:hidden">{item.title}</span>
                       </td>
                       <td className="hidden text-center md:table-cell">
-                        {item.title}
+                        <Link
+                          to={`/products/${encodeURIComponent(
+                            item.product_id
+                          )}`}
+                        >
+                          {item.title}
+                        </Link>
                       </td>
-                      <td className="text-right text-gray-400">
+                      <td className="text-center max-w-xs text-gray-400">
                         Rp{item.price}
                       </td>
-                      <td className="hidden max-w-xs text-center text-gray-400 sm:table-cell">
+                      {/* <td className="hidden max-w-xs text-center text-gray-400 sm:table-cell">
                         <Button
                           value={'Add To Cart'}
                           extraClass="hidden sm:block m-auto"
-                          // onClick={() => addOne!(item)}
+                          onClick={() => {
+                            // addCartItem?.mutate({
+                            //   product_id: item.id,
+                            //   quantity: 1,
+                            //   size: item.size,
+                            // });
+                          }}
                         />
-                      </td>
-                      <td
-                        className="pl-8 text-right"
-                        style={{ minWidth: '3rem' }}
-                      >
-                        <Button
+                        <AddToCart item={item} />
+                      </td> */}
+                      <td className="text-center">
+                        {/* <Button
                           value={'add'}
                           // onClick={() => addOne!(item)}
                           extraClass="sm:hidden mb-4 whitespace-nowrap"
-                        />
+                        /> */}
                         <button
                           onClick={() =>
                             deleteWishlistItem!.mutate({

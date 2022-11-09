@@ -1,12 +1,12 @@
-import { useQuery } from 'react-query';
-import { CategoryService, Pagination } from '../api';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { capitalCase } from 'change-case';
-import { CiDollar } from 'react-icons/ci';
-import Dropdown from '../components/Dropdown';
-import { useRef } from 'react';
-const pluralize = require('pluralize');
+import { useQuery } from "react-query";
+import { CategoryService, Pagination } from "../api";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
+import { capitalCase } from "change-case";
+import { CiDollar } from "react-icons/ci";
+import Dropdown from "../components/Dropdown";
+import { useRef } from "react";
+const pluralize = require("pluralize");
 
 interface TypeParams {
   category: Array<string>;
@@ -30,51 +30,51 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
   const popping = useRef(false);
   useEffect(() => {
     window.onpopstate = () => {
-      if (!window.location.pathname.includes('product')) return;
+      if (!window.location.pathname.includes("product")) return;
       setParams({
-        category: searchParams.getAll('category'),
-        page: Number(searchParams.get('page')) || 1,
-        pageSize: Number(searchParams.get('page_size')) || 12,
-        sortBy: searchParams.get('sort_by') || 'Title a_z',
-        price: searchParams.getAll('price').map((price) => Number(price)),
-        condition: searchParams.get('condition') || '',
-        productName: searchParams.get('product_name') || '',
+        category: searchParams.getAll("category"),
+        page: Number(searchParams.get("page")) || 1,
+        pageSize: Number(searchParams.get("page_size")) || 12,
+        sortBy: searchParams.get("sort_by") || "Title a_z",
+        price: searchParams.getAll("price").map((price) => Number(price)),
+        condition: searchParams.get("condition") || "",
+        productName: searchParams.get("product_name") || "",
       });
     };
     popping.current = true;
   }, [setParams, searchParams]);
 
   const fetchCategories = useQuery(
-    'categories',
+    "categories",
     () => CategoryService.getCategory(),
     {
       staleTime: Infinity,
     }
   );
 
-  const conditions = ['new', 'used'];
+  const conditions = ["new", "used"];
 
   useEffect(() => {
     const requestParams = new URLSearchParams();
-    requestParams.append('page', params.page.toString());
-    requestParams.append('page_size', params.pageSize.toString());
-    requestParams.append('sort_by', params.sortBy);
+    requestParams.append("page", params.page.toString());
+    requestParams.append("page_size", params.pageSize.toString());
+    requestParams.append("sort_by", params.sortBy);
     params.category.forEach((single_category) => {
-      requestParams.append('category', single_category);
+      requestParams.append("category", single_category);
     });
     params.price.forEach((single_price) => {
       if (single_price) {
-        requestParams.append('price', single_price.toString());
+        requestParams.append("price", single_price.toString());
       }
     });
     if (params.condition.length > 0) {
-      requestParams.append('condition', params.condition);
+      requestParams.append("condition", params.condition);
     }
     if (params.productName.length > 0) {
-      requestParams.append('product_name', params.productName);
+      requestParams.append("product_name", params.productName);
     }
     if (
-      searchParams.toString() === '' ||
+      searchParams.toString() === "" ||
       searchParams.toString() === requestParams.toString() ||
       popping.current
     ) {
@@ -107,14 +107,14 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
 
   return (
     <div className="flex w-full  flex-col text-gray-600">
-      <div className="border-y border-y-gray-100 px-4 py-5 ">
+      <div className="border-b border-b-gray-100 px-4 py-5 ">
         {pagination && pagination.total_item > 0 ? (
           <span>
-            Showing {1 + (pagination.page - 1) * pagination.page_size} -{' '}
+            Showing {1 + (pagination.page - 1) * pagination.page_size} -{" "}
             {Math.min(
               pagination.page * pagination.page_size,
               pagination.total_item
-            )}{' '}
+            )}{" "}
             of {pagination.total_item} Results
           </span>
         ) : (
@@ -125,7 +125,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
         {Object.entries(categoriesByType).map(([type, categories]) => (
           <div key={type}>
             <h2 className="mb-2 text-xl text-black">
-              {pluralize(capitalCase(type, { delimiter: ' & ' }))}
+              {pluralize(capitalCase(type, { delimiter: " & " }))}
             </h2>
             <ul className="flex flex-col gap-y-2">
               {categories.map((category) => (
@@ -163,11 +163,11 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           </div>
         ))}
       </div>
-      <div className="sort border-b border-b-gray-100 px-4 py-3">
+      <div className="sort border-b border-b-gray-100 px-4 pt-3 pb-6">
         <h2 className="mb-2 text-xl text-black">Sort By</h2>
         <Dropdown params={params} setParams={setParams} />
       </div>
-      <div className="price flex flex-col gap-y-4 border-b border-b-gray-100 px-4 py-3">
+      <div className="price flex flex-col gap-y-4 border-b border-b-gray-100 px-4 pt-3 pb-6">
         <fieldset className="price-wrapper">
           <legend className="mb-3 text-xl text-black">Minimum Price</legend>
           <div className="input-price flex items-center gap-x-2 rounded border border-gray-300 px-3 py-1">
@@ -223,7 +223,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
           </div>
         </fieldset>
       </div>
-      <div className="flex flex-col gap-y-3 border-b border-b-gray-100 px-4 py-3 ">
+      <div className="flex flex-col gap-y-3 px-4 py-3 ">
         <h2 className="text-xl text-black">Condition</h2>
         <ul className="flex flex-col gap-y-2">
           {conditions.map((condition, index) => (

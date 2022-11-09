@@ -3,13 +3,13 @@
 /* eslint-disable */
 export type ApiRequestOptions = {
   readonly method:
-    | 'GET'
-    | 'PUT'
-    | 'POST'
-    | 'DELETE'
-    | 'OPTIONS'
-    | 'HEAD'
-    | 'PATCH';
+    | "GET"
+    | "PUT"
+    | "POST"
+    | "DELETE"
+    | "OPTIONS"
+    | "HEAD"
+    | "PATCH";
   readonly url: string;
   readonly path?: Record<string, any>;
   readonly cookies?: Record<string, any>;

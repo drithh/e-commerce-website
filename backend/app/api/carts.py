@@ -5,13 +5,14 @@ from fastapi import HTTPException, status
 from fastapi.params import Depends
 from fastapi.routing import APIRouter
 
+from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_user
 from app.deps.db import get_db
 from app.deps.sql_error import format_error
 from app.models.cart import Cart
 from app.models.user import User
-from app.schemas.cart import CreateCart, GetCart
+from app.schemas.cart import CreateCart, GetCart, UpdateCart
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -23,25 +24,24 @@ def get_cart(
     current_user: User = Depends(get_current_active_user),
 ):
     carts = session.execute(
-        """
-        SELECT products.id, array_agg(json_build_object('size', sizes.size, 'quantity', carts.quantity)) as details,
-        products.price, images.image_url as image, products.title as name FROM only carts
+        f"""
+        SELECT DISTINCT ON (carts.id) products.id as product_id, carts.id,
+        (json_build_object('size', sizes.size, 'quantity', carts.quantity)) as details,
+        products.price, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
+        products.title as name FROM only carts
         JOIN product_size_quantities ON product_size_quantities.id = product_size_quantity_id
         JOIN sizes ON sizes.id  = product_size_quantities.size_id
         JOIN products ON products.id = product_size_quantities.product_id
-        JOIN product_images ON product_images.product_id = products.id
+        LEFT JOIN product_images ON products.id = product_images.product_id
+        AND product_images.id = (
+            SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
+        )
         JOIN images ON images.id = product_images.image_id
-        WHERE user_id = :user_id AND images.image_url LIKE '%-1.webp'
-        GROUP BY products.id, products.price, image, name
+        WHERE user_id = :user_id
+        GROUP BY products.id, products.price, image, name, carts.id, sizes.size, carts.quantity
         """,
         {"user_id": current_user.id},
     ).fetchall()
-
-    if not carts:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Cart is empty",
-        )
 
     return GetCart(data=carts)
 
@@ -111,6 +111,74 @@ def create_cart(
     )
 
 
+@router.put(
+    "/{cart_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
+)
+def update_cart(
+    request: UpdateCart,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+
+    cart = session.execute(
+        """
+        SELECT carts.id, product_size_quantities.quantity as stock, carts.quantity FROM only carts
+        JOIN product_size_quantities ON product_size_quantities.id = carts.product_size_quantity_id
+        WHERE carts.user_id = :user_id AND carts.id = :cart_id
+        """,
+        {"user_id": current_user.id, "cart_id": request.cart_id},
+    ).fetchone()
+
+    if not cart:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cart not found",
+        )
+
+    new_quantity = request.quantity + cart.quantity
+
+    if cart.stock < new_quantity:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Out of stock, please reduce quantity, current stock is {cart.stock}",
+        )
+
+    if new_quantity > 0:
+        try:
+            session.execute(
+                """
+                UPDATE carts SET quantity = :quantity WHERE id = :id
+                """,
+                {"quantity": cart.quantity + request.quantity, "id": cart.id},
+            )
+            session.commit()
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=format_error(e),
+            )
+        logger.info(f"User {current_user.name} updated cart {request.cart_id}")
+
+    else:
+        try:
+            session.execute(
+                """
+                DELETE FROM carts WHERE id = :id
+                """,
+                {"id": cart.id},
+            )
+            session.commit()
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=format_error(e),
+            )
+
+        logger.info(f"User {current_user.name} deleted cart {request.cart_id}")
+
+    return DefaultResponse(message="Cart updated")
+
+
 @router.delete(
     "/{cart_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
 )
@@ -134,3 +202,29 @@ def delete_cart(
     logger.info(f"Cart {cart_id} deleted by {current_user.name}")
 
     return DefaultResponse(message="Cart deleted")
+
+
+@router.delete("/clear", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
+def clear_cart(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    try:
+        session.execute(
+            """
+            DELETE FROM carts WHERE user_id = :user_id
+            """,
+            {"user_id": current_user.id},
+        )
+        session.commit()
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=format_error(e),
+        )
+
+    logger.info(f"Cart cleared by {current_user.name}")
+
+    return DefaultResponse(message="Cart cleared")

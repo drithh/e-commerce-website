@@ -26,9 +26,9 @@ def get_orders_user(
 ):
     orders = session.execute(
         f"""
-        select id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products
-        from (
-            SELECT DISTINCT ON (products.id) orders.id, orders.city, orders.created_at,
+        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products
+        FROM (
+            SELECT  orders.id, orders.city, orders.created_at,
             orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
             json_build_object(
                 'id', products.id,
@@ -47,13 +47,17 @@ def get_orders_user(
             JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
             JOIN sizes ON product_size_quantities.size_id = sizes.id
             JOIN products ON product_size_quantities.product_id = products.id
-            JOIN product_images ON products.id = product_images.product_id
-            JOIN images ON product_images.image_id = images.id
+            LEFT JOIN product_images ON products.id = product_images.product_id
+            AND product_images.id = (
+                SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
+            )
+            JOIN images ON images.id = product_images.image_id
             WHERE orders.user_id = :user_id
             GROUP BY orders.id, products.id, images.id
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
         order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
+        ORDER BY order_product.created_at DESC
 
     """,
         {"user_id": current_user.id},
@@ -74,11 +78,35 @@ def create_order(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
+    if request.shipping_address.address_name == "":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Address name is empty",
+        )
+
+    if request.shipping_address.address == "":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Address is empty",
+        )
+
+    if request.shipping_address.city == "":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="City is empty",
+        )
+
+    if request.shipping_address.phone_number == "":
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Phone number is empty",
+        )
+
     cart = session.execute(
         """
         SELECT product_size_quantities.id, product_size_quantities.quantity as stock,
         carts.quantity, products.price, products.title
-        FROM carts
+        FROM only carts
         JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
         JOIN products ON product_size_quantities.product_id = products.id
         WHERE user_id = :user_id
@@ -98,7 +126,7 @@ def create_order(
     #  If total price of items < 300k: Shipping price is 20% of the total price of items purchased
     #  If total price of items >= 300k: Shipping price is 25% of the total price of items purchased
     total_price = sum([item.price * item.quantity for item in cart])
-    if request.shipping_method == "regular":
+    if request.shipping_method == "Regular":
         shipping_price = int(
             total_price * 0.15 if total_price < 200000 else total_price * 0.2
         )
@@ -106,13 +134,15 @@ def create_order(
         shipping_price = int(
             total_price * 0.2 if total_price < 300000 else total_price * 0.25
         )
-
+    logger.info(f"Shipping price: {shipping_price}")
+    logger.info(f"Total price: {total_price}")
     if total_price + shipping_price > current_user.balance:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Not enough balance, you need {total_price + shipping_price - current_user.balance} more",
         )
 
+    # create order
     try:
         order = Order(
             user_id=current_user.id,
@@ -133,21 +163,23 @@ def create_order(
             detail="Something went wrong, when creating order",
         )
 
+    # create order items
     for item in cart:
         if item.quantity > item.stock:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Product {item.title} is out of stock, please remove it from cart",
             )
-        OrderItem(
+        order_item = OrderItem(
             order_id=order.id,
             product_size_quantity_id=item.id,
             quantity=item.quantity,
+            price=item.price,
         )
-        session.add(order)
+        session.add(order_item)
         session.commit()
         logger.info(
-            f"User {current_user.name} added product {item.title} to order {order.id}"
+            f"User {current_user.name} added {item.quantity} of product {item.title} to order {order.id}"
         )
 
         product_size_quantity = session.query(ProductSizeQuantity).get(item.id)
@@ -156,6 +188,39 @@ def create_order(
             f"Stock of product {item.title} updated to {product_size_quantity.quantity}"
         )
         session.commit()
+
+    # clear cart
+    try:
+        session.execute(
+            """
+            DELETE FROM only carts
+            WHERE user_id = :user_id
+        """,
+            {"user_id": current_user.id},
+        )
+        session.commit()
+        logger.info(f"User {current_user.name} cleared cart")
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong, when clearing cart",
+        )
+
+    # reduce balance
+    try:
+        user = session.query(User).get(current_user.id)
+        user.balance -= total_price + shipping_price
+        session.commit()
+        logger.info(f"User {current_user.name} reduced balance to {user.balance}")
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong, when reducing balance",
+        )
 
     return DefaultResponse(message="Order created successfully")
 

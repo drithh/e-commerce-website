@@ -275,7 +275,7 @@ def get_product(
         LEFT JOIN images ON product_images.image_id = images.id
         LEFT JOIN product_size_quantities ON products.id = product_size_quantities.product_id
         LEFT JOIN sizes ON product_size_quantities.size_id = sizes.id
-        categories ON products.category_id = categories.id
+        JOIN categories ON products.category_id = categories.id
         WHERE products.id = :id
         GROUP BY products.id, categories.title
         """,

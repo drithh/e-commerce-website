@@ -24,7 +24,7 @@ class Order(DefaultModel, Base):
             address_name=fake.text(max_nb_chars=24),
             city=fake.city(),
             shipping_price=fake.pyint(min_value=1000),
-            shipping_method=fake.random_element(elements=("Next Day", "Standard")),
+            shipping_method=fake.random_element(elements=("Next Day", "Regular")),
             user_id=user_id,
         )
         return order

@@ -11,10 +11,11 @@ class GetProductDetail(BaseModel):
 
 class GetProduct(BaseModel):
     id: UUID
-    details: List[GetProductDetail]
+    details: GetProductDetail
     price: int
     image: str
     name: str
+    product_id: UUID
 
     class Config:
         orm_mode = True
@@ -31,6 +32,14 @@ class CreateCart(BaseModel):
     product_id: UUID
     quantity: int
     size: str
+
+    class Config:
+        orm_mode = True
+
+
+class UpdateCart(BaseModel):
+    cart_id: UUID
+    quantity: int
 
     class Config:
         orm_mode = True

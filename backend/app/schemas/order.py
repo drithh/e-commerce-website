@@ -57,5 +57,5 @@ class OrderAddress(BaseModel):
 
 
 class CreateOrder(BaseModel):
-    shipping_method: str = Query("", regex="^(Next Day|Standard)$")
+    shipping_method: str = Query("", regex="^(Next Day|Regular)$")
     shipping_address: OrderAddress

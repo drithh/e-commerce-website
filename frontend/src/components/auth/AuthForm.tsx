@@ -1,10 +1,10 @@
-import { Fragment, useState, FC } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
-import { IoCloseOutline } from 'react-icons/io5';
-import Login from './Login';
-import Register from './Register';
-import ForgotPassword from './ForgotPassword';
-type CurrentPage = 'login' | 'register' | 'forgot-password';
+import { Fragment, useState, FC } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { IoCloseOutline } from "react-icons/io5";
+import Login from "./Login";
+import Register from "./Register";
+import ForgotPassword from "./ForgotPassword";
+type CurrentPage = "login" | "register" | "forgot-password";
 
 type Props = {
   extraClass?: string;
@@ -12,31 +12,31 @@ type Props = {
 };
 
 const LoginForm: FC<Props> = ({ extraClass, children }) => {
-  const [currentPage, setCurrentPage] = useState<CurrentPage>('login');
+  const [currentPage, setCurrentPage] = useState<CurrentPage>("login");
   const [open, setOpen] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
 
   let modalBox: JSX.Element;
 
-  if (currentPage === 'login') {
+  if (currentPage === "login") {
     modalBox = (
       <Login
-        onRegister={() => setCurrentPage('register')}
-        onForgotPassword={() => setCurrentPage('forgot-password')}
+        onRegister={() => setCurrentPage("register")}
+        onForgotPassword={() => setCurrentPage("forgot-password")}
         closeModal={closeModal}
       />
     );
-  } else if (currentPage === 'register') {
+  } else if (currentPage === "register") {
     modalBox = (
       <Register
-        onLogin={() => setCurrentPage('login')}
+        onLogin={() => setCurrentPage("login")}
         closeModal={closeModal}
       />
     );
   } else {
     modalBox = (
       <ForgotPassword
-        onLogin={() => setCurrentPage('login')}
+        onLogin={() => setCurrentPage("login")}
         errorMsg={errorMsg}
         setErrorMsg={setErrorMsg}
       />
@@ -45,7 +45,7 @@ const LoginForm: FC<Props> = ({ extraClass, children }) => {
 
   function closeModal() {
     setOpen(false);
-    setErrorMsg('');
+    setErrorMsg("");
   }
 
   function openModal() {
