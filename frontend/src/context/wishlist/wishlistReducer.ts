@@ -1,4 +1,4 @@
-import addWishlist from '../Util/addWishlist';
+import addWishlist from "../Util/addWishlist";
 import {
   ADD_TO_WISHLIST,
   DELETE_WISHLIST_ITEM,
@@ -6,7 +6,7 @@ import {
   wishlistType,
   itemType,
   SET_WISHLIST,
-} from './wishlist-type';
+} from "./wishlist-type";
 
 type actionType = {
   type: string;

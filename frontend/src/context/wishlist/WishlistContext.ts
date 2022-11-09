@@ -1,5 +1,5 @@
-import { createContext } from 'react';
-import { wishlistType } from './wishlist-type';
+import { createContext } from "react";
+import { wishlistType } from "./wishlist-type";
 
 export const initialContextValues: wishlistType = {
   wishlist: [],

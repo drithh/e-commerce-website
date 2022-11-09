@@ -1,12 +1,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DefaultResponse } from '../models/DefaultResponse';
-import type { GetWishlist } from '../models/GetWishlist';
+import type { DefaultResponse } from "../models/DefaultResponse";
+import type { GetWishlist } from "../models/GetWishlist";
 
-import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { CancelablePromise } from "../core/CancelablePromise";
+import { OpenAPI } from "../core/OpenAPI";
+import { request as __request } from "../core/request";
 
 export class WishlistService {
   /**
@@ -16,8 +16,8 @@ export class WishlistService {
    */
   public static getWishlist(): CancelablePromise<GetWishlist> {
     return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/v1/wishlist',
+      method: "GET",
+      url: "/api/v1/wishlist",
     });
   }
 
@@ -29,8 +29,8 @@ export class WishlistService {
    */
   public static createWishlist(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: 'POST',
-      url: '/api/v1/wishlist',
+      method: "POST",
+      url: "/api/v1/wishlist",
       query: {
         id: id,
       },
@@ -48,8 +48,8 @@ export class WishlistService {
    */
   public static deleteWishlist(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/api/v1/wishlist',
+      method: "DELETE",
+      url: "/api/v1/wishlist",
       query: {
         id: id,
       },
@@ -66,8 +66,8 @@ export class WishlistService {
    */
   public static clearWishlist(): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: 'DELETE',
-      url: '/api/v1/wishlist/all',
+      method: "DELETE",
+      url: "/api/v1/wishlist/all",
     });
   }
 }

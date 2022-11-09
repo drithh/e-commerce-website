@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-import Button from '../components/button/Button';
-import { roundDecimal } from '../components/util/utilFunc';
-import { useCart } from '../context/cart/CartProvider';
-import Input from '../components/input/Input';
-import { itemType } from '../context/wishlist/wishlist-type';
+import Button from "../components/button/Button";
+import { roundDecimal } from "../components/util/utilFunc";
+import { useCart } from "../context/cart/CartProvider";
+import Input from "../components/input/Input";
+import { itemType } from "../context/wishlist/wishlist-type";
 
 // let w = window.innerWidth;
-type PaymentType = 'CASH_ON_DELIVERY' | 'BANK_TRANSFER';
-type DeliveryType = 'STORE_PICKUP' | 'YANGON' | 'OTHERS';
+type PaymentType = "CASH_ON_DELIVERY" | "BANK_TRANSFER";
+type DeliveryType = "STORE_PICKUP" | "YANGON" | "OTHERS";
 
 type Order = {
   orderNumber: number;
@@ -30,22 +30,22 @@ const ShoppingCart = () => {
   const { cart, clearCart } = useCart();
   let auth: any;
   // const auth = useAuth();
-  const [deli, setDeli] = useState<DeliveryType>('STORE_PICKUP');
+  const [deli, setDeli] = useState<DeliveryType>("STORE_PICKUP");
   const [paymentMethod, setPaymentMethod] =
-    useState<PaymentType>('CASH_ON_DELIVERY');
+    useState<PaymentType>("CASH_ON_DELIVERY");
 
   // Form Fields
-  const [name, setName] = useState(auth.user?.fullname || '');
-  const [email, setEmail] = useState(auth.user?.email || '');
-  const [phone, setPhone] = useState(auth.user?.phone || '');
-  const [password, setPassword] = useState('');
+  const [name, setName] = useState(auth.user?.fullname || "");
+  const [email, setEmail] = useState(auth.user?.email || "");
+  const [phone, setPhone] = useState(auth.user?.phone || "");
+  const [password, setPassword] = useState("");
   const [diffAddr, setDiffAddr] = useState(false);
-  const [address, setAddress] = useState(auth.user?.shippingAddress || '');
-  const [shippingAddress, setShippingAddress] = useState('');
+  const [address, setAddress] = useState(auth.user?.shippingAddress || "");
+  const [shippingAddress, setShippingAddress] = useState("");
   const [isOrdering, setIsOrdering] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
   const [completedOrder, setCompletedOrder] = useState<Order | null>(null);
-  const [orderError, setOrderError] = useState('');
+  const [orderError, setOrderError] = useState("");
   const [sendEmail, setSendEmail] = useState(false);
 
   const products = cart.map((item) => ({
@@ -56,7 +56,7 @@ const ShoppingCart = () => {
   useEffect(() => {
     if (!isOrdering) return;
 
-    setErrorMsg('');
+    setErrorMsg("");
 
     // if not logged in, register the user
     const registerUser = async () => {
@@ -69,10 +69,10 @@ const ShoppingCart = () => {
       );
       if (!regResponse.success) {
         setIsOrdering(false);
-        if (regResponse.message === 'alreadyExists') {
-          setErrorMsg('email_already_exists');
+        if (regResponse.message === "alreadyExists") {
+          setErrorMsg("email_already_exists");
         } else {
-          setErrorMsg('error_occurs');
+          setErrorMsg("error_occurs");
         }
         return false;
       }
@@ -98,7 +98,7 @@ const ShoppingCart = () => {
         clearCart!();
         setIsOrdering(false);
       } else {
-        setOrderError('error_occurs');
+        setOrderError("error_occurs");
       }
     };
     if (auth.user) makeOrder();
@@ -109,13 +109,13 @@ const ShoppingCart = () => {
     if (auth.user) {
       setName(auth.user.fullname);
       setEmail(auth.user.email);
-      setAddress(auth.user.shippingAddress || '');
-      setPhone(auth.user.phone || '');
+      setAddress(auth.user.shippingAddress || "");
+      setPhone(auth.user.phone || "");
     } else {
-      setName('');
-      setEmail('');
-      setAddress('');
-      setPhone('');
+      setName("");
+      setEmail("");
+      setAddress("");
+      setPhone("");
     }
   }, [auth.user]);
 
@@ -123,16 +123,16 @@ const ShoppingCart = () => {
 
   if (!auth.user) {
     disableOrder =
-      name !== '' &&
-      email !== '' &&
-      phone !== '' &&
-      address !== '' &&
-      password !== ''
+      name !== "" &&
+      email !== "" &&
+      phone !== "" &&
+      address !== "" &&
+      password !== ""
         ? false
         : true;
   } else {
     disableOrder =
-      name !== '' && email !== '' && phone !== '' && address !== ''
+      name !== "" && email !== "" && phone !== "" && address !== ""
         ? false
         : true;
   }
@@ -148,9 +148,9 @@ const ShoppingCart = () => {
   );
 
   let deliFee = 0;
-  if (deli === 'YANGON') {
+  if (deli === "YANGON") {
     deliFee = 2.0;
-  } else if (deli === 'OTHERS') {
+  } else if (deli === "OTHERS") {
     deliFee = 7.0;
   }
 
@@ -166,7 +166,7 @@ const ShoppingCart = () => {
       {!completedOrder ? (
         <div className="app-max-width mb-14 flex flex-col px-4 sm:px-8 md:px-20 lg:flex-row">
           <div className="mr-8 h-full w-full lg:w-7/12">
-            {errorMsg !== '' && (
+            {errorMsg !== "" && (
               <span className="text-red text-sm font-semibold">- errorMsg</span>
             )}
             <div className="my-4">
@@ -193,7 +193,7 @@ const ShoppingCart = () => {
                 type="email"
                 readOnly={auth.user ? true : false}
                 extraClass={`w-full mt-1 mb-2 ${
-                  auth.user ? 'bg-gray-100 cursor-not-allowed' : ''
+                  auth.user ? "bg-gray-100 cursor-not-allowed" : ""
                 }`}
                 border="border-2 border-gray-400"
                 value={email}
@@ -272,7 +272,7 @@ const ShoppingCart = () => {
             {diffAddr && (
               <div className="my-4">
                 <label htmlFor="shipping_address" className="text-lg">
-                  {'shipping_address'}
+                  {"shipping_address"}
                 </label>
                 <textarea
                   id="shipping_address"
@@ -300,7 +300,7 @@ const ShoppingCart = () => {
                 {cart.map((item) => (
                   <div className="mb-2 flex justify-between" key={item.id}>
                     <span className="text-base font-medium">
-                      {item.name}{' '}
+                      {item.name}{" "}
                       <span className="text-gray-400">x {item.qty}</span>
                     </span>
                     <span className="text-base">
@@ -325,9 +325,9 @@ const ShoppingCart = () => {
                         name="deli"
                         value="STORE_PICKUP"
                         id="pickup"
-                        checked={deli === 'STORE_PICKUP'}
-                        onChange={() => setDeli('STORE_PICKUP')}
-                      />{' '}
+                        checked={deli === "STORE_PICKUP"}
+                        onChange={() => setDeli("STORE_PICKUP")}
+                      />{" "}
                       <label htmlFor="pickup" className="cursor-pointer">
                         Store Pickup
                       </label>
@@ -341,10 +341,10 @@ const ShoppingCart = () => {
                         name="deli"
                         value="YANGON"
                         id="ygn"
-                        checked={deli === 'YANGON'}
-                        onChange={() => setDeli('YANGON')}
+                        checked={deli === "YANGON"}
+                        onChange={() => setDeli("YANGON")}
                         // defaultChecked
-                      />{' '}
+                      />{" "}
                       <label htmlFor="ygn" className="cursor-pointer">
                         Within Yangon
                       </label>
@@ -358,9 +358,9 @@ const ShoppingCart = () => {
                         name="deli"
                         value="OTHERS"
                         id="others"
-                        checked={deli === 'OTHERS'}
-                        onChange={() => setDeli('OTHERS')}
-                      />{' '}
+                        checked={deli === "OTHERS"}
+                        onChange={() => setDeli("OTHERS")}
+                      />{" "}
                       <label htmlFor="others" className="cursor-pointer">
                         Other Cities
                       </label>
@@ -390,14 +390,14 @@ const ShoppingCart = () => {
                       id="plan-cash"
                       value="CASH_ON_DELIVERY"
                       className="absolute h-0 w-0 appearance-none"
-                      onChange={() => setPaymentMethod('CASH_ON_DELIVERY')}
+                      onChange={() => setPaymentMethod("CASH_ON_DELIVERY")}
                     />
                     <span
                       aria-hidden="true"
                       className={`${
-                        paymentMethod === 'CASH_ON_DELIVERY'
-                          ? 'block'
-                          : 'hidden'
+                        paymentMethod === "CASH_ON_DELIVERY"
+                          ? "block"
+                          : "hidden"
                       } absolute inset-0 rounded-lg border-2 border-gray-500 bg-opacity-10`}
                     >
                       <span className="absolute top-4 right-4 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
@@ -432,12 +432,12 @@ const ShoppingCart = () => {
                       id="plan-bank"
                       value="BANK_TRANSFER"
                       className="absolute h-0 w-0 appearance-none"
-                      onChange={() => setPaymentMethod('BANK_TRANSFER')}
+                      onChange={() => setPaymentMethod("BANK_TRANSFER")}
                     />
                     <span
                       aria-hidden="true"
                       className={`${
-                        paymentMethod === 'BANK_TRANSFER' ? 'block' : 'hidden'
+                        paymentMethod === "BANK_TRANSFER" ? "block" : "hidden"
                       } absolute inset-0 rounded-lg border-2 border-gray-500 bg-opacity-10`}
                     >
                       <span className="absolute top-4 right-4 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
@@ -483,7 +483,7 @@ const ShoppingCart = () => {
               </div>
 
               <Button
-                value={'Place Order'}
+                value={"Place Order"}
                 size="xl"
                 extraClass={`w-full`}
                 onClick={() => setIsOrdering(true)}
@@ -491,7 +491,7 @@ const ShoppingCart = () => {
               />
             </div>
 
-            {orderError !== '' && (
+            {orderError !== "" && (
               <span className="text-red text-sm font-semibold">
                 - {orderError}
               </span>
@@ -500,13 +500,13 @@ const ShoppingCart = () => {
         </div>
       ) : (
         <div className="app-max-width mb-14 mt-6 px-4 sm:px-8 md:px-20">
-          <div className="text-base text-gray-400">{'thank_you_note'}</div>
+          <div className="text-base text-gray-400">{"thank_you_note"}</div>
 
           <div className="flex flex-col md:flex-row">
             <div className="mt-2 h-full w-full md:w-1/2 lg:mt-4">
               <div className="divide-y-2 divide-gray-200 border border-gray-500 p-6">
                 <div className="flex justify-between">
-                  <span className="mb-3 text-base uppercase">{'order_id'}</span>
+                  <span className="mb-3 text-base uppercase">{"order_id"}</span>
                   <span className="mb-3 text-base uppercase">
                     {completedOrder.orderNumber}
                   </span>
@@ -523,7 +523,7 @@ const ShoppingCart = () => {
                     </span>
                   </div>
                   <div className="mb-2 flex justify-between">
-                    <span className="text-base">{'delivery_date'}</span>
+                    <span className="text-base">{"delivery_date"}</span>
                     <span className="text-base">
                       {new Date(
                         completedOrder.deliveryDate
@@ -554,20 +554,20 @@ const ShoppingCart = () => {
 
             <div className="mt-4 h-full w-full md:ml-8 md:mt-2 md:w-1/2 lg:mt-4">
               <div>
-                {'your_order_received'}
-                {completedOrder.paymentType === 'BANK_TRANSFER' &&
-                  'bank_transfer_note'}
-                {completedOrder.paymentType === 'CASH_ON_DELIVERY' &&
-                  completedOrder.deliveryType !== 'STORE_PICKUP' &&
-                  'cash_delivery_note'}
-                {completedOrder.deliveryType === 'STORE_PICKUP' &&
-                  'store_pickup_note'}
-                {'thank_you_for_purchasing'}
+                {"your_order_received"}
+                {completedOrder.paymentType === "BANK_TRANSFER" &&
+                  "bank_transfer_note"}
+                {completedOrder.paymentType === "CASH_ON_DELIVERY" &&
+                  completedOrder.deliveryType !== "STORE_PICKUP" &&
+                  "cash_delivery_note"}
+                {completedOrder.deliveryType === "STORE_PICKUP" &&
+                  "store_pickup_note"}
+                {"thank_you_for_purchasing"}
               </div>
 
-              {completedOrder.paymentType === 'BANK_TRANSFER' ? (
+              {completedOrder.paymentType === "BANK_TRANSFER" ? (
                 <div className="mt-6">
-                  <h2 className="text-xl font-bold">{'our_banking_details'}</h2>
+                  <h2 className="text-xl font-bold">{"our_banking_details"}</h2>
                   <span className="my-1 block uppercase">Sat Naing :</span>
 
                   <div className="flex w-full justify-between xl:w-1/2">

@@ -1,18 +1,18 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
-import Button from '../button/Button';
-import BagIcon from '../../assets/icons/BagIcon';
-import Item from './Item';
-import LinkButton from '../button/LinkButton';
-import { roundDecimal } from '../util/utilFunc';
-import { useCart } from '../../context/cart/CartProvider';
-import { useNavigate } from 'react-router-dom';
+import Button from "../button/Button";
+import BagIcon from "../../assets/icons/BagIcon";
+import Item from "./Item";
+import LinkButton from "../button/LinkButton";
+import { roundDecimal } from "../util/utilFunc";
+import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CartItem() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [animate, setAnimate] = useState('');
+  const [animate, setAnimate] = useState("");
   const { cart, addOne, removeItem, deleteItem } = useCart();
 
   let subtotal = 0;
@@ -24,7 +24,7 @@ export default function CartItem() {
 
   const handleAnimate = useCallback(() => {
     if (noOfItems === 0) return;
-    setAnimate('animate__animated animate__headShake');
+    setAnimate("animate__animated animate__headShake");
     // setTimeout(() => {
     //   setAnimate("");
     // }, 0.1);
@@ -34,7 +34,7 @@ export default function CartItem() {
   useEffect(() => {
     handleAnimate();
     setTimeout(() => {
-      setAnimate('');
+      setAnimate("");
     }, 1000);
   }, [handleAnimate]);
 
@@ -99,7 +99,7 @@ export default function CartItem() {
               leaveTo="translate-x-full"
             >
               <div
-                style={{ height: '100vh' }}
+                style={{ height: "100vh" }}
                 className="dur relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
               >
                 <div className="bg-lightgreen flex items-center justify-between p-6">
@@ -145,9 +145,9 @@ export default function CartItem() {
                       View Cart
                     </LinkButton>
                     <Button
-                      value={'Checkout'}
+                      value={"Checkout"}
                       onClick={() => {
-                        navigate('/checkout');
+                        navigate("/checkout");
                       }}
                       disabled={cart.length < 1 ? true : false}
                       extraClass="text-center"

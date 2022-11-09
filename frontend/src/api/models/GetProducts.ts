@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Pagination } from './Pagination';
-import type { Product } from './Product';
+import type { Pagination } from "./Pagination";
+import type { Product } from "./Product";
 
 export type GetProducts = {
   data: Array<Product>;

@@ -1,9 +1,9 @@
-import LeftArrow from '../assets/icons/LeftArrow';
-import Button from '../components/button/Button';
-import GhostButton from '../components/button/GhostButton';
-import { Link } from 'react-router-dom';
-import { useCart } from '../context/cart/CartProvider';
-import { useWishlist } from '../context/WishlistContext';
+import LeftArrow from "../assets/icons/LeftArrow";
+import Button from "../components/button/Button";
+import GhostButton from "../components/button/GhostButton";
+import { Link } from "react-router-dom";
+import { useCart } from "../context/cart/CartProvider";
+import { useWishlist } from "../context/WishlistContext";
 
 const Wishlist = () => {
   // const { addOne } = useCart();
@@ -40,7 +40,7 @@ const Wishlist = () => {
                 </th>
                 <th
                   className={`py-2 font-normal ${
-                    wishlist.data.length === 0 ? 'text-center' : 'text-right'
+                    wishlist.data.length === 0 ? "text-center" : "text-right"
                   }`}
                 >
                   Unit Price
@@ -85,17 +85,17 @@ const Wishlist = () => {
                       </td>
                       <td className="hidden max-w-xs text-center text-gray-400 sm:table-cell">
                         <Button
-                          value={'Add To Cart'}
+                          value={"Add To Cart"}
                           extraClass="hidden sm:block m-auto"
                           // onClick={() => addOne!(item)}
                         />
                       </td>
                       <td
                         className="pl-8 text-right"
-                        style={{ minWidth: '3rem' }}
+                        style={{ minWidth: "3rem" }}
                       >
                         <Button
-                          value={'add'}
+                          value={"add"}
                           // onClick={() => addOne!(item)}
                           extraClass="sm:hidden mb-4 whitespace-nowrap"
                         />

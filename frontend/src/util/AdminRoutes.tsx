@@ -1,10 +1,10 @@
-import { Outlet, Navigate } from 'react-router-dom';
-import { authType, useAuth } from '../context/AuthContext';
+import { Outlet, Navigate } from "react-router-dom";
+import { authType, useAuth } from "../context/AuthContext";
 const AdminRoutes = () => {
   const { role }: authType = useAuth();
-  return role === 'none' ? (
+  return role === "none" ? (
     <div>Loading...</div>
-  ) : role === 'admin' ? (
+  ) : role === "admin" ? (
     <Outlet />
   ) : (
     <Navigate to="/" replace={true} />

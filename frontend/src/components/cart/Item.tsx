@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import { roundDecimal } from '../util/utilFunc';
+import React, { FC } from "react";
+import { roundDecimal } from "../util/utilFunc";
 
 type Props = {
   img: string;

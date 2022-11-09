@@ -1,5 +1,5 @@
-import NextArrow from '../assets/icons/NextArrow';
-import PrevArrow from '../assets/icons/PrevArrow';
+import NextArrow from "../assets/icons/NextArrow";
+import PrevArrow from "../assets/icons/PrevArrow";
 
 interface TypeParams {
   category: Array<string>;
@@ -70,8 +70,8 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
             disabled={currentPage === 1}
             className={`${
               currentPage === 1
-                ? 'pointer-events-none cursor-not-allowed text-gray-400'
-                : 'cursor-pointer'
+                ? "pointer-events-none cursor-not-allowed text-gray-400"
+                : "cursor-pointer"
             } mx-1 flex h-10 w-16 items-center justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <PrevArrow />
@@ -94,7 +94,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                   }));
                 }}
                 className={`${
-                  num === currentPage && 'bg-gray-500 text-gray-100'
+                  num === currentPage && "bg-gray-500 text-gray-100"
                 } mx-1 flex h-10 w-10 cursor-pointer items-center justify-center border hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
               >
                 {num}
@@ -121,8 +121,8 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
             }}
             className={`${
               currentPage >= lastPage
-                ? 'pointer-events-none cursor-not-allowed text-gray-400'
-                : 'cursor-pointer'
+                ? "pointer-events-none cursor-not-allowed text-gray-400"
+                : "cursor-pointer"
             } mx-1 flex h-10 w-16 items-center justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <NextArrow />

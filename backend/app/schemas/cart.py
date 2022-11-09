@@ -15,6 +15,7 @@ class GetProduct(BaseModel):
     price: int
     image: str
     name: str
+    cart_id: UUID
 
     class Config:
         orm_mode = True
@@ -31,6 +32,14 @@ class CreateCart(BaseModel):
     product_id: UUID
     quantity: int
     size: str
+
+    class Config:
+        orm_mode = True
+
+
+class UpdateCart(BaseModel):
+    cart_id: UUID
+    quantity: int
 
     class Config:
         orm_mode = True

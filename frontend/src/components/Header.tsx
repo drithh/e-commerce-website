@@ -1,16 +1,16 @@
-import { useEffect, useState, useCallback, Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import WhistlistIcon from '../assets/icons/WhistlistIcon';
-import UserIcon from '../assets/icons/UserIcon';
-import SearchIcon from '../assets/icons/SearchIcon';
-import AuthForm from './auth/AuthForm';
-import CartItem from './cart/CartItem';
-import { useWishlist } from '../context/WishlistContext';
-import { useAuth } from '../context/AuthContext';
-import PopoverMenu from './PopoverMenu';
-import { useQuery } from 'react-query';
-import { CategoryService, app__schemas__category__Category } from '../api';
-import { capitalCase } from 'change-case';
+import { useEffect, useState, useCallback, Fragment } from "react";
+import { Link } from "react-router-dom";
+import WhistlistIcon from "../assets/icons/WhistlistIcon";
+import UserIcon from "../assets/icons/UserIcon";
+import SearchIcon from "../assets/icons/SearchIcon";
+import AuthForm from "./auth/AuthForm";
+import CartItem from "./cart/CartItem";
+import { useWishlist } from "../context/WishlistContext";
+import { useAuth } from "../context/AuthContext";
+import PopoverMenu from "./PopoverMenu";
+import { useQuery } from "react-query";
+import { CategoryService, app__schemas__category__Category } from "../api";
+import { capitalCase } from "change-case";
 
 const Header = () => {
   let categories = new Array<{
@@ -18,7 +18,7 @@ const Header = () => {
     items: app__schemas__category__Category[];
   }>();
   const fetchCategories = useQuery(
-    'categories',
+    "categories",
     () => CategoryService.getCategory(),
     {
       staleTime: Infinity,
@@ -28,20 +28,20 @@ const Header = () => {
   const [scrolled, setScrolled] = useState<boolean>(false);
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();
-  const [animate, setAnimate] = useState('');
+  const [animate, setAnimate] = useState("");
 
   let noOfWishlist = wishlist.data?.length || 0;
   // Animate Wishlist Number
   const handleAnimate = useCallback(() => {
     if (noOfWishlist === 0) return;
-    setAnimate('animate__animated animate__headShake');
+    setAnimate("animate__animated animate__headShake");
   }, [noOfWishlist, setAnimate]);
 
   // Set animate when no of wishlist changes
   useEffect(() => {
     handleAnimate();
     setTimeout(() => {
-      setAnimate('');
+      setAnimate("");
     }, 1000);
   }, [handleAnimate]);
 
@@ -56,7 +56,7 @@ const Header = () => {
 
   useEffect(() => {
     setDidMount(true);
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => setDidMount(false);
   }, [handleScroll]);
 
@@ -72,7 +72,7 @@ const Header = () => {
   if (fetchCategories.data) {
     categories = fetchCategories.data.data.reduce(
       (acc, curr) => {
-        const type = capitalCase(curr.type, { delimiter: ' & ' });
+        const type = capitalCase(curr.type, { delimiter: " & " });
         const existing = acc.find((item) => item.type === type);
         if (existing) {
           existing.items.push(curr);
@@ -92,7 +92,7 @@ const Header = () => {
     <>
       <nav
         className={`${
-          scrolled ? 'bg-white shadow-md' : 'bg-transparent'
+          scrolled ? "bg-white shadow-md" : "bg-transparent"
         } fixed top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
       >
         <div className="h-full w-full 2xl:max-w-[96rem]">
@@ -128,7 +128,7 @@ const Header = () => {
                 <SearchIcon />
               </li>
               <li className="opacity-100">
-                {role !== 'guest' ? (
+                {role !== "guest" ? (
                   <Link to="/profile" aria-label="Profile">
                     <UserIcon />
                   </Link>

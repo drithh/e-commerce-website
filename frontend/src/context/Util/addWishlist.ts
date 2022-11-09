@@ -1,4 +1,4 @@
-import { itemType } from '../wishlist/wishlist-type';
+import { itemType } from "../wishlist/wishlist-type";
 
 const addWishlist = (wishlistItems: itemType[], item: itemType) => {
   const duplicate = wishlistItems.some(

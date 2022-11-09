@@ -1,24 +1,24 @@
-import { BsBoxSeam } from 'react-icons/bs';
-import { AiOutlineUser } from 'react-icons/ai';
-import { FiPower } from 'react-icons/fi';
-import { useQuery } from 'react-query';
-import { UserService } from '../api';
-import PersonalData from '../components/profile/PersonalData';
-import Order from '../components/profile/Order';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { BsBoxSeam } from "react-icons/bs";
+import { AiOutlineUser } from "react-icons/ai";
+import { FiPower } from "react-icons/fi";
+import { useQuery } from "react-query";
+import { UserService } from "../api";
+import PersonalData from "../components/profile/PersonalData";
+import Order from "../components/profile/Order";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const fetchUser = useQuery('user', () => UserService.getUser(), {
+  const fetchUser = useQuery("user", () => UserService.getUser(), {
     staleTime: Infinity,
   });
 
   useEffect(() => {
-    if (location.pathname === '/profile') {
-      navigate('/profile/personal-data', { replace: true });
+    if (location.pathname === "/profile") {
+      navigate("/profile/personal-data", { replace: true });
     }
   }, [location.pathname, navigate]);
 
@@ -31,7 +31,7 @@ const Profile = () => {
 
   const logoutAccount = () => {
     logout && logout();
-    navigate('0', { replace: true });
+    navigate("0", { replace: true });
   };
 
   return (
@@ -52,9 +52,9 @@ const Profile = () => {
             <span>Howdy, {fetchUser.data?.name}</span>
           </div>
           <button
-            onClick={() => navigate('personal-data')}
+            onClick={() => navigate("personal-data")}
             className={`${
-              location.pathname === '/profile/personal-data' && 'text-black'
+              location.pathname === "/profile/personal-data" && "text-black"
             }
             flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black`}
           >
@@ -64,9 +64,9 @@ const Profile = () => {
             <span>Personal Data</span>
           </button>
           <button
-            onClick={() => navigate('order')}
+            onClick={() => navigate("order")}
             className={`${
-              location.pathname === '/profile/order' && 'text-black'
+              location.pathname === "/profile/order" && "text-black"
             }
             flex w-full cursor-pointer place-items-center  gap-x-3 border-b border-gray-100 py-4 pl-6 font-medium hover:text-black`}
           >
@@ -86,8 +86,8 @@ const Profile = () => {
           </button>
         </section>
         <section className="wrapper mb-8 w-full">
-          {location.pathname === '/profile/personal-data' && <PersonalData />}
-          {location.pathname === '/profile/order' && <Order />}
+          {location.pathname === "/profile/personal-data" && <PersonalData />}
+          {location.pathname === "/profile/order" && <Order />}
         </section>
       </div>
     </main>

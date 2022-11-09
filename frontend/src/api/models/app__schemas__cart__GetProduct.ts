@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { GetProductDetail } from './GetProductDetail';
+import type { GetProductDetail } from "./GetProductDetail";
 
 export type app__schemas__cart__GetProduct = {
   id: string;
@@ -10,4 +10,5 @@ export type app__schemas__cart__GetProduct = {
   price: number;
   image: string;
   name: string;
+  cart_id: string;
 };

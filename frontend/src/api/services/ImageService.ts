@@ -1,11 +1,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { GetImage } from '../models/GetImage';
+import type { GetImage } from "../models/GetImage";
 
-import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { CancelablePromise } from "../core/CancelablePromise";
+import { OpenAPI } from "../core/OpenAPI";
+import { request as __request } from "../core/request";
 
 export class ImageService {
   /**
@@ -16,8 +16,8 @@ export class ImageService {
    */
   public static getImage(imageName: string): CancelablePromise<GetImage> {
     return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/v1/image/{image_name}',
+      method: "GET",
+      url: "/api/v1/image/{image_name}",
       path: {
         image_name: imageName,
       },

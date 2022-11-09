@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
-import { SlGraph } from 'react-icons/sl';
-import { MdOutlineAttachMoney } from 'react-icons/md';
-import { BsBookmark } from 'react-icons/bs';
-import { IoShirtOutline } from 'react-icons/io5';
-import { AiOutlineUser } from 'react-icons/ai';
-import Orders from '../components/dashboard/Orders';
+import { SlGraph } from "react-icons/sl";
+import { MdOutlineAttachMoney } from "react-icons/md";
+import { BsBookmark } from "react-icons/bs";
+import { IoShirtOutline } from "react-icons/io5";
+import { AiOutlineUser } from "react-icons/ai";
+import Orders from "../components/dashboard/Orders";
 
 const Dashboard = () => {
   return (

@@ -1,10 +1,10 @@
-import Card from '../components/Card';
-import { useQuery } from 'react-query';
-import { ProductService } from '../api';
-import { useSearchParams } from 'react-router-dom';
-import { useRef, useState } from 'react';
-import Sort from '../components/Sort';
-import Pagination from '../components/Pagination';
+import Card from "../components/Card";
+import { useQuery } from "react-query";
+import { ProductService } from "../api";
+import { useSearchParams } from "react-router-dom";
+import { useRef, useState } from "react";
+import Sort from "../components/Sort";
+import Pagination from "../components/Pagination";
 interface TypeParams {
   category: Array<string>;
   page: number;
@@ -19,17 +19,17 @@ const Product: React.FC = () => {
   const [searchParams] = useSearchParams();
   const scrolledToTop = useRef(false);
   const [params, setParams] = useState<TypeParams>({
-    category: searchParams.getAll('category'),
-    page: Number(searchParams.get('page')) || 1,
-    pageSize: Number(searchParams.get('page_size')) || 12,
-    sortBy: searchParams.get('sort_by') || 'Title a_z',
-    price: searchParams.getAll('price').map((price) => Number(price)),
-    condition: searchParams.get('condition') || '',
-    productName: searchParams.get('product_name') || '',
+    category: searchParams.getAll("category"),
+    page: Number(searchParams.get("page")) || 1,
+    pageSize: Number(searchParams.get("page_size")) || 12,
+    sortBy: searchParams.get("sort_by") || "Title a_z",
+    price: searchParams.getAll("price").map((price) => Number(price)),
+    condition: searchParams.get("condition") || "",
+    productName: searchParams.get("product_name") || "",
   });
 
   const fetchProducts = useQuery(
-    ['products', params],
+    ["products", params],
     () =>
       ProductService.getProducts(
         params.category,
@@ -53,7 +53,7 @@ const Product: React.FC = () => {
     if (!scrolledToTop.current) {
       window.scrollTo({
         top: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
       scrolledToTop.current = true;
     }
