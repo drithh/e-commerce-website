@@ -13,6 +13,7 @@ def test_get_empty_banners(client: TestClient):
 
 def test_get_banners(client: TestClient, create_banner):
     banner = create_banner()
+
     resp = client.get(f"{prefix}/banner")
     assert resp.status_code == 200
     data = resp.json().get("data")

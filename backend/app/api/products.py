@@ -281,11 +281,11 @@ def get_product(
         """,
         {"id": id},
     ).fetchone()
-    if result:
-        result
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
-    )
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+        )
+    return result
 
 
 @router.post("/search_image/upload", status_code=status.HTTP_200_OK)
