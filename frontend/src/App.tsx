@@ -56,7 +56,7 @@ function App() {
                     <Route path="/profile/*" element={<Profile />} />
                   </Route>
                   <Route element={<AdminRoutes />}>
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/dashboard/*" element={<Dashboard />} />
                   </Route>
                   <Route path="/coming-soon" element={<ComingSoon />} />
                   <Route path="*" element={<Custom404 />} />
