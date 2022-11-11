@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { roundDecimal } from "../util/utilFunc";
+import { roundDecimal, convertToCurrency } from "../util/utilFunc";
 
 type Props = {
   img: string;
@@ -54,7 +54,7 @@ const Item: FC<Props> = ({
         >
           &#10005;
         </button>
-        <span>Rp{roundDecimal(price)}</span>
+        <span>{convertToCurrency(roundDecimal(price))}</span>
       </div>
     </div>
   );

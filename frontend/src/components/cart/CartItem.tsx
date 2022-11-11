@@ -4,7 +4,7 @@ import { Fragment, useCallback, useEffect, useState } from "react";
 import Button from "../button/Button";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import Item from "./Item";
-import { roundDecimal } from "../util/utilFunc";
+import { roundDecimal, convertToCurrency } from "../util/utilFunc";
 import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
@@ -149,7 +149,7 @@ export default function CartItem() {
                   <div className="btnContainer mt-4 mb-20 flex min-h-[6rem] w-full flex-col px-4 ">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span>Rp{roundDecimal(subtotal)}</span>
+                      <span>{convertToCurrency(roundDecimal(subtotal))}</span>
                     </div>
                     <Button
                       value={"Checkout"}

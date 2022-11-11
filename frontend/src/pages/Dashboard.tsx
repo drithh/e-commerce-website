@@ -7,6 +7,7 @@ import { IoShirtOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
 import Orders from "../components/dashboard/Orders";
 import { useLocation, useNavigate } from "react-router-dom";
+import Customers from "../components/dashboard/Customers";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -14,7 +15,7 @@ const Dashboard = () => {
   return (
     <main
       id="main-content"
-      className="mt-20  w-screen md:w-4/5 mx-auto  border-t border-gray-100 min-h-screen"
+      className="mt-20 relative w-screen 2xl:w-[90rem] overflow-hidden mx-auto  border-t border-gray-100 min-h-screen"
     >
       {/* ===== Heading ===== */}
       <div className="w-full  ">
@@ -22,9 +23,9 @@ const Dashboard = () => {
           Dashboard
         </h1>
       </div>
-      <div className="flex mt-4 ">
+      <div className="flex mt-4 gap-x-4">
         {/* ===== Side Panel Section ===== */}
-        <section className="side-panel inset-0 flex h-fit flex-col gap-y-[2px]  border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
+        <section className="side-panel inset-0 flex h-fit flex-col gap-y-[2px]   border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
           <button
             onClick={() => navigate("")}
             className={`${
@@ -81,8 +82,9 @@ const Dashboard = () => {
             Customers
           </button>
         </section>
-        <section className="wrapper px-5 pt-7">
-          <Orders />
+        <section className="wrapper overflow-hidden w-full">
+          {location.pathname === "/dashboard/orders" && <Orders />}
+          {location.pathname === "/dashboard/customers" && <Customers />}
         </section>
       </div>
     </main>

@@ -3,6 +3,7 @@
 /* eslint-disable */
 import type { CreateOrder } from "../models/CreateOrder";
 import type { DefaultResponse } from "../models/DefaultResponse";
+import type { GetAdminOrders } from "../models/GetAdminOrders";
 import type { GetUserOrders } from "../models/GetUserOrders";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -92,14 +93,14 @@ export class OrderService {
    * @param sortBy
    * @param page
    * @param pageSize
-   * @returns any Successful Response
+   * @returns GetAdminOrders Successful Response
    * @throws ApiError
    */
   public static getOrdersAdmin(
     sortBy: string = "Price a_z",
     page: number = 1,
     pageSize: number = 25
-  ): CancelablePromise<any> {
+  ): CancelablePromise<GetAdminOrders> {
     return __request(OpenAPI, {
       method: "GET",
       url: "/api/v1/orders",

@@ -292,7 +292,7 @@ def update_orders(
     return DefaultResponse(message="Order updated")
 
 
-@router.get("/orders", status_code=status.HTTP_200_OK)
+@router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)
 def get_orders_admin(
     sort_by: str = Query("Price a_z", regex="^(Price a_z|Price z_a)$"),
     page: int = Query(1, ge=1),

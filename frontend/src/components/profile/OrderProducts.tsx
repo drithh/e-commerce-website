@@ -2,7 +2,7 @@ import { GetUserOrder } from "../../api";
 import { HiOutlineChevronDown } from "react-icons/hi";
 import { useState } from "react";
 import AnimateHeight from "react-animate-height";
-
+import { convertToCurrency } from "../util/utilFunc";
 interface props {
   order: GetUserOrder;
 }
@@ -39,11 +39,12 @@ const OrderProducts = ({ order }: props) => {
                 <div className="flex w-40   flex-col place-content-center border-l border-gray-100 pl-4">
                   <div>Price</div>
                   <div className="font-semibold">
-                    Rp.
-                    {product.details.reduce(
-                      (acc, curr) => acc + curr.quantity,
-                      0
-                    ) * product.price}
+                    {convertToCurrency(
+                      product.details.reduce(
+                        (acc, curr) => acc + curr.quantity,
+                        0
+                      ) * product.price
+                    )}
                   </div>
                 </div>
               </div>
@@ -72,13 +73,14 @@ const OrderProducts = ({ order }: props) => {
         <div className="w-full pr-[5.5rem] text-right">
           <span>Total </span>
           <span className="font-semibold">
-            Rp.
-            {order.products.reduce(
-              (acc, curr) =>
-                acc +
-                curr.details.reduce((acc, curr) => acc + curr.quantity, 0) *
-                  curr.price,
-              0
+            {convertToCurrency(
+              order.products.reduce(
+                (acc, curr) =>
+                  acc +
+                  curr.details.reduce((acc, curr) => acc + curr.quantity, 0) *
+                    curr.price,
+                0
+              )
             )}
           </span>
         </div>

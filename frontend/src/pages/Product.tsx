@@ -11,6 +11,7 @@ import { useAuth } from "../context/AuthContext";
 import { ProductService } from "../api";
 import Button from "../components/button/Button";
 import { useCart } from "../context/CartContext";
+import { convertToCurrency } from "../components/util/utilFunc";
 
 const Product = () => {
   const { id } = useParams();
@@ -138,7 +139,7 @@ const Product = () => {
             {fetchProduct.data!.brand}
           </span>
           <span className="mb-2 text-xl text-gray-400">
-            Rp{fetchProduct.data!.price}
+            {convertToCurrency(fetchProduct.data!.price)}
           </span>
           <span className="mb-2 text-justify">
             {fetchProduct.data!.product_detail}

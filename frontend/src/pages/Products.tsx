@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import Sort from "../components/Sort";
 import Pagination from "../components/Pagination";
-interface TypeParams {
+interface ProductParams {
   category: Array<string>;
   page: number;
   pageSize: number;
@@ -18,7 +18,7 @@ interface TypeParams {
 const Product: React.FC = () => {
   const [searchParams] = useSearchParams();
   const scrolledToTop = useRef(false);
-  const [params, setParams] = useState<TypeParams>({
+  const [params, setParams] = useState<ProductParams>({
     category: searchParams.getAll("category"),
     page: Number(searchParams.get("page")) || 1,
     pageSize: Number(searchParams.get("page_size")) || 12,

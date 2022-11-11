@@ -4,6 +4,8 @@ import { HiOutlineHeart, HiHeart } from "react-icons/hi";
 import { Product, BestSeller } from "../api";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
+import { convertToCurrency } from "../components/util/utilFunc";
+
 interface Props {
   item: BestSeller | Product;
 }
@@ -81,7 +83,7 @@ const Card: FC<Props> = ({ item }) => {
         >
           {title}
         </Link>
-        <div className="text-gray-400">Rp{price}</div>
+        <div className="text-gray-400">{convertToCurrency(price)}</div>
         <Link to={itemLink} className="text-sm font-bold uppercase sm:hidden">
           See Details
         </Link>

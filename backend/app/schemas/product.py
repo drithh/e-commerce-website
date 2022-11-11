@@ -4,6 +4,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 from app.models.category import Category
+from app.schemas.request_params import Pagination
 
 
 class CreateProduct(BaseModel):
@@ -79,13 +80,6 @@ class Product(BaseModel):
 
     class Config:
         orm_mode = True
-
-
-class Pagination(BaseModel):
-    page: int
-    page_size: int
-    total_page: int
-    total_item: int
 
 
 class GetProducts(BaseModel):

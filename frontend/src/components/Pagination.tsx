@@ -3,7 +3,7 @@ import {
   HiOutlineArrowLongRight,
 } from "react-icons/hi2";
 
-interface TypeParams {
+interface ProductParams {
   category: Array<string>;
   page: number;
   pageSize: number;
@@ -13,10 +13,17 @@ interface TypeParams {
   productName: string;
 }
 
+interface DefaultParams {
+  page: number;
+  pageSize: number;
+}
+
 type Props = {
   lastPage: number;
   currentPage: number;
-  setParams: React.Dispatch<React.SetStateAction<TypeParams>>;
+  setParams:
+    | React.Dispatch<React.SetStateAction<ProductParams>>
+    | React.Dispatch<React.SetStateAction<DefaultParams>>;
 };
 
 const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
@@ -63,7 +70,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
             aria-label="Navigate to Previous Page"
             onClick={() => {
               if (currentPage > 1) {
-                setParams((prevParams) => ({
+                setParams((prevParams: any) => ({
                   ...prevParams,
                   page: prevParams.page - 1,
                 }));
@@ -90,7 +97,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
               <button
                 type="button"
                 onClick={() => {
-                  setParams((prevParams) => ({
+                  setParams((prevParams: any) => ({
                     ...prevParams,
                     page: num,
                   }));
@@ -115,7 +122,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
             aria-label="Navigate to Next Page"
             onClick={() => {
               if (currentPage < lastPage) {
-                setParams((prevParams) => ({
+                setParams((prevParams: any) => ({
                   ...prevParams,
                   page: prevParams.page + 1,
                 }));
