@@ -166,13 +166,15 @@ def create_size(db: Session):
 
 
 @pytest.fixture(scope="session")
-def create_cart(db: Session, create_user: Callable, create_product: Callable):
-    def inner(user=None, product=None) -> Cart:
+def create_cart(
+    db: Session, create_user: Callable, create_product_size_quantity: Callable
+):
+    def inner(user=None, product_size_quantity=None) -> Cart:
         if not user:
             user = create_user()
-        if not product:
-            product = create_product()
-        cart = Cart.seed(fake, user.id, product.id, 1)
+        if not product_size_quantity:
+            product_size_quantity = create_product_size_quantity()
+        cart = Cart.seed(fake, user.id, product_size_quantity.id)
         db.add(cart)
         db.commit()
         db.refresh(cart)
