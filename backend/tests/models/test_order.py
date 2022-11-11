@@ -10,12 +10,7 @@ fake = Faker("id_ID")
 
 def test_order_model(db: Session, create_order):
     order = create_order()
-    assert (
-        db.query(Order)
-        .join(User)
-        .filter(Order.id == order.id)
-        .first()
-    )
+    assert db.query(Order).join(User).filter(Order.id == order.id).first()
 
 
 def test_foreign_key_user_id(db: Session):
@@ -29,17 +24,7 @@ def test_foreign_key_user_id(db: Session):
 
 def test_delete_order(db: Session, create_order):
     order = create_order()
-    assert (
-        db.query(Order)
-        .join(User)
-        .filter(Order.id == order.id)
-        .first()
-    )
+    assert db.query(Order).join(User).filter(Order.id == order.id).first()
     db.delete(order)
     db.commit()
-    assert not (
-        db.query(Order)
-        .join(User)
-        .filter(Order.id == order.id)
-        .first()
-    )
+    assert not (db.query(Order).join(User).filter(Order.id == order.id).first())
