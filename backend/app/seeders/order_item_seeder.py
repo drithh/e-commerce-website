@@ -6,7 +6,7 @@ def order_item_seed(fake, session, order_id, product_size_quantity_id):
 
     for order in order_id:
         # get random 5 to 10 product size quantity
-        iteration = fake.pyint(min_value=5, max_value=10)
+        iteration = fake.pyint(min_value=3, max_value=6)
         for _ in range(iteration):
             order_item = OrderItem.seed(
                 fake,

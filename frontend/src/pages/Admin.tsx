@@ -8,8 +8,11 @@ import { AiOutlineUser } from "react-icons/ai";
 import Orders from "../components/dashboard/Orders";
 import { useLocation, useNavigate } from "react-router-dom";
 import Customers from "../components/dashboard/Customers";
+import Categories from "../components/dashboard/Categories";
+import Products from "../components/dashboard/Products";
+import Dashboard from "../components/dashboard/Dashboard";
 
-const Dashboard = () => {
+const Admin = () => {
   const location = useLocation();
   const navigate = useNavigate();
   return (
@@ -83,12 +86,15 @@ const Dashboard = () => {
           </button>
         </section>
         <section className="wrapper overflow-hidden w-full">
-          {location.pathname === "/dashboard/orders" && <Orders />}
-          {location.pathname === "/dashboard/customers" && <Customers />}
+          {location.pathname === "/admin" && <Dashboard />}
+          {location.pathname === "/admin/orders" && <Orders />}
+          {location.pathname === "/admin/customers" && <Customers />}
+          {location.pathname === "/admin/categories" && <Categories />}
+          {location.pathname === "/admin/products" && <Products />}
         </section>
       </div>
     </main>
   );
 };
 
-export default Dashboard;
+export default Admin;

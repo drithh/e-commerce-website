@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/Admin";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -56,7 +56,7 @@ function App() {
                     <Route path="/profile/*" element={<Profile />} />
                   </Route>
                   <Route element={<AdminRoutes />}>
-                    <Route path="/dashboard/*" element={<Dashboard />} />
+                    <Route path="/admin/*" element={<Dashboard />} />
                   </Route>
                   <Route path="/coming-soon" element={<ComingSoon />} />
                   <Route path="*" element={<Custom404 />} />
