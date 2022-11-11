@@ -7,11 +7,24 @@ import { IoMdCheckmark } from "react-icons/io";
 import GhostButton from "../button/GhostButton";
 import { toast } from "react-toastify";
 import OrderProducts from "./OrderProducts";
+import Pagination from "../Pagination";
+import { useState } from "react";
+
+interface DefaultParams {
+  page: number;
+  pageSize: number;
+}
 
 const Order = () => {
-  const fetchOrder = useQuery("order", () => OrderService.getOrdersUser(), {
-    staleTime: Infinity,
+  const [params, setParams] = useState<DefaultParams>({
+    page: 1,
+    pageSize: 5,
   });
+
+  const fetchOrder = useQuery(["orders", params], () =>
+    OrderService.getOrdersUser(params.page, params.pageSize)
+  );
+
   const updateOrder = useMutation(
     (id: string) => OrderService.updateOrderStatus(id),
     {
@@ -26,9 +39,6 @@ const Order = () => {
     updateOrder.mutate(id);
   };
 
-  if (fetchOrder.isError) {
-    return <div>Something went wrong</div>;
-  }
   if (fetchOrder.isLoading) {
     return <div>Loading...</div>;
   }
@@ -125,6 +135,11 @@ const Order = () => {
           </div>
         </div>
       ))}
+      <Pagination
+        currentPage={params.page}
+        lastPage={fetchOrder.data?.pagination.total_page || 10}
+        setParams={setParams}
+      />
     </div>
   );
 };

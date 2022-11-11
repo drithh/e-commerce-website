@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { GetCustomers } from "../models/GetCustomers";
+import type { GetDashboard } from "../models/GetDashboard";
 import type { GetOrders } from "../models/GetOrders";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -54,6 +55,18 @@ export class DashboardService {
       errors: {
         422: `Validation Error`,
       },
+    });
+  }
+
+  /**
+   * Get Dashboard
+   * @returns GetDashboard Successful Response
+   * @throws ApiError
+   */
+  public static getDashboard(): CancelablePromise<GetDashboard> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/dashboard/dashboard",
     });
   }
 }

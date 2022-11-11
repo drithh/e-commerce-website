@@ -1,3 +1,4 @@
+import math
 from typing import Generator
 from uuid import UUID
 
@@ -14,7 +15,7 @@ from app.models.order_item import OrderItem
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
 from app.schemas.order import CreateOrder, GetAdminOrders, GetUserOrders
-from app.schemas.request_params import DefaultResponse
+from app.schemas.request_params import DefaultResponse, Pagination
 
 router = APIRouter()
 
@@ -22,11 +23,14 @@ router = APIRouter()
 @router.get("/order", response_model=GetUserOrders, status_code=status.HTTP_200_OK)
 def get_orders_user(
     session: Generator = Depends(get_db),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_user),
 ):
     orders = session.execute(
         f"""
-        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products
+        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products,
+        COUNT(*) OVER() totalrow_count
         FROM (
             SELECT  orders.id, orders.city, orders.created_at,
             orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
@@ -58,9 +62,13 @@ def get_orders_user(
         group by order_product.id, order_product.created_at, order_product.shipping_method,
         order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
         ORDER BY order_product.created_at DESC
-
+        OFFSET :offset LIMIT :limit
     """,
-        {"user_id": current_user.id},
+        {
+            "user_id": current_user.id,
+            "offset": (page - 1) * page_size,
+            "limit": page_size,
+        },
     ).fetchall()
 
     if not orders:
@@ -69,7 +77,15 @@ def get_orders_user(
             detail="You have no orders",
         )
 
-    return GetUserOrders(data=orders)
+    return GetUserOrders(
+        data=orders,
+        pagination=Pagination(
+            page=page,
+            page_size=page_size,
+            total_item=orders[0].totalrow_count if orders else 0,
+            total_page=math.ceil(orders[0].totalrow_count / page_size) if orders else 1,
+        ),
+    )
 
 
 @router.post("/order", status_code=status.HTTP_201_CREATED)

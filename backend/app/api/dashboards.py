@@ -11,7 +11,7 @@ from app.deps.db import get_db
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.user import User
-from app.schemas.dashboard import GetCustomers, GetOrders, Pagination
+from app.schemas.dashboard import GetCustomers, GetDashboard, GetOrders, Pagination
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -100,4 +100,27 @@ def get_order(
             total_item=orders[0].totalrow_count if orders else 0,
             total_page=math.ceil(orders[0].totalrow_count / page_size) if orders else 1,
         ),
+    )
+
+
+@router.get("/dashboard", response_model=GetDashboard, status_code=status.HTTP_200_OK)
+def get_dashboard(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+):
+    total_order = session.execute(
+        """
+        SELECT COUNT(*) FROM orders
+        """
+    ).fetchone()[0]
+
+    total_user = session.execute(
+        """
+        SELECT COUNT(*) FROM users WHERE is_admin = false
+        """
+    ).fetchone()[0]
+
+    return GetDashboard(
+        total_user=total_user,
+        total_order=total_order,
     )

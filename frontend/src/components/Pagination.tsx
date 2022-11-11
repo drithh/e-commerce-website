@@ -27,6 +27,13 @@ type Props = {
 };
 
 const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
+  const scrolledToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   let pageNumbers: number[] = [];
 
   for (let i = 1; i <= lastPage; i++) {
@@ -74,6 +81,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                   ...prevParams,
                   page: prevParams.page - 1,
                 }));
+                scrolledToTop();
               }
             }}
             disabled={currentPage === 1}
@@ -101,6 +109,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                     ...prevParams,
                     page: num,
                   }));
+                  scrolledToTop();
                 }}
                 className={`${
                   num === currentPage && "bg-gray-500 text-gray-100"
@@ -126,6 +135,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                   ...prevParams,
                   page: prevParams.page + 1,
                 }));
+                scrolledToTop();
               }
             }}
             className={`${

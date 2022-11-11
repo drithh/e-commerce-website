@@ -46,3 +46,8 @@ class GetOrders(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class GetDashboard(BaseModel):
+    total_user: int
+    total_order: int
