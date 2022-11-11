@@ -2,10 +2,10 @@ from faker import Faker
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.session import Session
 
-from app.models.product_size_quantity import ProductSizeQuantity
-from app.models.user import User
-from app.models.size import Size
 from app.models.cart import Cart
+from app.models.product_size_quantity import ProductSizeQuantity
+from app.models.size import Size
+from app.models.user import User
 
 fake = Faker("id_ID")
 
