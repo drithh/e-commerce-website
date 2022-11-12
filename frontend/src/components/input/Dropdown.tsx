@@ -8,15 +8,20 @@ interface props {
   setSelected: React.Dispatch<React.SetStateAction<string>>;
   options: Array<string>;
   width?: string;
+  border?: string;
 }
 
-const Dropdown = ({ selected, setSelected, options, width }: props) => {
+const Dropdown = ({ selected, setSelected, options, width, border }: props) => {
   const selectedSort = options.find((option) => option === selected);
 
   return (
     <Menu as="div" className={`relative inline-block text-left ${width}`}>
       <div>
-        <Menu.Button className="inline-flex h-12 w-full justify-between p-4 border-2 border-gray-500 bg-white px-4 py-2 text font-medium text-gray-700  hover:bg-gray-50">
+        <Menu.Button
+          className={`${
+            border ? border : "border-2 border-gray-500"
+          } inline-flex h-12 w-full justify-between p-4 bg-white px-4 py-2 text font-medium text-gray-700  hover:bg-gray-50`}
+        >
           {capitalCase(selectedSort || "")}
           <HiOutlineChevronDown
             className="-mr-1 ml-2 h-8 w-5"

@@ -88,7 +88,7 @@ const Customer = () => {
       <h2 className="w-full text-2xl font-medium">Update Category</h2>
       <div className="py-3 flex ">
         <Link
-          to="/admin/categories"
+          to="/admin/customers"
           className="flex place-items-center  gap-x-2"
         >
           <HiOutlineChevronLeft className="text-xl" />

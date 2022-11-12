@@ -27,6 +27,7 @@ specifiers:
   react: ^18.2.0
   react-animate-height: ^3.0.4
   react-dom: ^18.2.0
+  react-dropzone-component: ^3.2.0
   react-icons: ^4.6.0
   react-query: ^3.39.2
   react-router-dom: ^6.4.2
@@ -68,6 +69,7 @@ dependencies:
   react: 18.2.0
   react-animate-height: 3.0.4_biqbaboplfbrettd7655fr4n2y
   react-dom: 18.2.0_react@18.2.0
+  react-dropzone-component: 3.2.0_biqbaboplfbrettd7655fr4n2y
   react-icons: 4.6.0_react@18.2.0
   react-query: 3.39.2_biqbaboplfbrettd7655fr4n2y
   react-router-dom: 6.4.2_biqbaboplfbrettd7655fr4n2y
@@ -4407,6 +4409,10 @@ packages:
     engines: {node: '>=10'}
     dev: false
 
+  /dropzone/5.9.3:
+    resolution: {integrity: sha512-Azk8kD/2/nJIuVPK+zQ9sjKMRIpRvNyqn9XwbBHNq+iNuSccbJS6hwm1Woy0pMST0erSo0u4j+KJaodndDk4vA==}
+    dev: false
+
   /duplexer/0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
     dev: false
@@ -5000,6 +5006,10 @@ packages:
       vary: 1.1.2
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /extend/3.0.2:
+    resolution: {integrity: sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==}
     dev: false
 
   /fast-deep-equal/3.1.3:
@@ -8321,6 +8331,18 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-dropzone-component/3.2.0_biqbaboplfbrettd7655fr4n2y:
+    resolution: {integrity: sha512-QwopN2GgzHCKcMyJvBZuYCeqnU9F/Uiq1hD94/JmFdLmkzU1rw7SbNjLNUad864YoAEvcx93uHUItv0NUwlTxw==}
+    peerDependencies:
+      react: '>15.0.1'
+      react-dom: '>15.0.1'
+    dependencies:
+      dropzone: 5.9.3
+      extend: 3.0.2
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
     dev: false
 
   /react-error-overlay/6.0.11:

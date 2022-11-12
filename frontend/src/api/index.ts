@@ -33,6 +33,7 @@ export type { GetCategories } from "./models/GetCategories";
 export type { GetCategory } from "./models/GetCategory";
 export type { GetCustomers } from "./models/GetCustomers";
 export type { GetDashboard } from "./models/GetDashboard";
+export type { GetDetailOrder } from "./models/GetDetailOrder";
 export type { GetImage } from "./models/GetImage";
 export type { GetOrders } from "./models/GetOrders";
 export type { GetProductDetail } from "./models/GetProductDetail";

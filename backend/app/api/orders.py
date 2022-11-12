@@ -14,7 +14,7 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
-from app.schemas.order import CreateOrder, GetAdminOrders, GetUserOrders
+from app.schemas.order import CreateOrder, GetAdminOrders, GetDetailOrder, GetUserOrders
 from app.schemas.request_params import DefaultResponse, Pagination
 
 router = APIRouter()
@@ -306,6 +306,64 @@ def update_orders(
     logger.info(f"Order {id} updated by {current_user.email}")
 
     return DefaultResponse(message="Order updated")
+
+
+@router.get(
+    "/orders/{id}", response_model=GetDetailOrder, status_code=status.HTTP_200_OK
+)
+def get_order_details(
+    id: UUID,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+):
+    order = session.execute(
+        """
+        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city,
+        array_agg(product) products, name, email
+        FROM (
+            SELECT  orders.id, orders.city, orders.created_at, users.name, users.email,
+            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
+            json_build_object(
+                'id', products.id,
+                'details', array_agg(
+                        json_build_object(
+                            'quantity', order_items.quantity,
+                            'size', sizes.size
+                    )
+                ),
+                'price', products.price,
+                'name', products.title,
+                'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
+            ) product
+            FROM only orders
+            JOIN order_items ON orders.id = order_items.order_id
+            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
+            JOIN sizes ON product_size_quantities.size_id = sizes.id
+            JOIN products ON product_size_quantities.product_id = products.id
+            LEFT JOIN product_images ON products.id = product_images.product_id
+            AND product_images.id = (
+                SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
+            )
+            JOIN images ON images.id = product_images.image_id
+            JOIN users ON orders.user_id = users.id
+            WHERE orders.id = :id
+            GROUP BY orders.id, products.id, images.id, users.name, users.email
+        ) order_product
+        group by order_product.id, order_product.created_at, order_product.shipping_method,
+        order_product.shipping_price, order_product.status, order_product.shipping_address,
+        order_product.city, order_product.name, order_product.email
+        """,
+        {
+            "id": id,
+        },
+    ).fetchone()
+
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
+        )
+
+    return order
 
 
 @router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)

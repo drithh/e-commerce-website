@@ -21,15 +21,16 @@ import Products from "./pages/Products";
 import Product from "./pages/Product";
 import Profile from "./pages/Profile";
 import Admin from "./pages/Admin";
-import Orders from "./components/dashboard/Orders";
-import Customers from "./components/dashboard/Customers";
-import Categories from "./components/dashboard/Categories";
-import { default as AdminProducts } from "./components/dashboard/Products";
-import Dashboard from "./components/dashboard/Dashboard";
+import Orders from "./components/admin/Orders";
+import Customers from "./components/admin/Customers";
+import Categories from "./components/admin/Categories";
+import { default as AdminProducts } from "./components/admin/Products";
+import { default as AdminOrder } from "./components/admin/Order";
+import Dashboard from "./components/admin/Dashboard";
 import PersonalData from "./components/profile/PersonalData";
 import Order from "./components/profile/Order";
-import Category from "./components/dashboard/Category";
-import Customer from "./components/dashboard/Customer";
+import Category from "./components/admin/Category";
+import Customer from "./components/admin/Customer";
 const queryClient = new QueryClient();
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
                     <Route path="/admin" element={<Admin />}>
                       <Route path="" element={<Dashboard />} />
                       <Route path="orders" element={<Orders />} />
+                      <Route path="orders/:id" element={<AdminOrder />} />
                       <Route path="products" element={<AdminProducts />} />
                       <Route path="categories" element={<Categories />} />
                       <Route path="categories/:id" element={<Category />} />

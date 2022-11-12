@@ -13,14 +13,14 @@ def order_seed(fake, session, user_id):
             if status == "cancelled":
                 iteration = fake.pyint(min_value=1, max_value=4)
             if status == "completed":
-                iteration = 72
+                iteration = 36
             for i in range(iteration):
                 if status == "completed":
                     order = Order.seed(
                         fake,
                         user,
                         status,
-                        (i % (iteration // 6)) + 1,
+                        (i % (iteration // 3)) + 1,
                         2021 + round(i / iteration),
                     )
                 else:

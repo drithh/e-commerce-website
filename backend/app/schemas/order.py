@@ -32,6 +32,11 @@ class GetUserOrder(BaseModel):
     shipping_address: str
 
 
+class GetDetailOrder(GetUserOrder, BaseModel):
+    name: str
+    email: str
+
+
 class GetUserOrders(BaseModel):
     data: List[GetUserOrder]
     pagination: Pagination

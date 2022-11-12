@@ -4,6 +4,7 @@
 import type { CreateOrder } from "../models/CreateOrder";
 import type { DefaultResponse } from "../models/DefaultResponse";
 import type { GetAdminOrders } from "../models/GetAdminOrders";
+import type { GetDetailOrder } from "../models/GetDetailOrder";
 import type { GetUserOrders } from "../models/GetUserOrders";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -67,6 +68,25 @@ export class OrderService {
       url: "/api/v1/order/{order_id}",
       path: {
         order_id: orderId,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Get Order Details
+   * @param id
+   * @returns GetDetailOrder Successful Response
+   * @throws ApiError
+   */
+  public static getOrderDetails(id: string): CancelablePromise<GetDetailOrder> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/orders/{id}",
+      path: {
+        id: id,
       },
       errors: {
         422: `Validation Error`,
