@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { CategoryService } from "../../api";
 import { capitalCase } from "change-case";
+import { Link } from "react-router-dom";
 const pluralize = require("pluralize");
 
 const Categories = () => {
@@ -31,19 +32,21 @@ const Categories = () => {
       <div className="">
         {fetchCategories.data?.data.map((category) => {
           return (
-            <tr
-              className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
-              key={category.id}
-            >
-              <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
-                {capitalCase(pluralize.singular(category.title))}
-              </td>
-              <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
-                {capitalCase(pluralize.singular(category.type), {
-                  delimiter: " & ",
-                })}
-              </td>
-            </tr>
+            <Link to={`/admin/categories/${category.id}`}>
+              <tr
+                className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
+                key={category.id}
+              >
+                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
+                  {capitalCase(pluralize.singular(category.title))}
+                </td>
+                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
+                  {capitalCase(pluralize.singular(category.type), {
+                    delimiter: " & ",
+                  })}
+                </td>
+              </tr>
+            </Link>
           );
         })}
       </div>

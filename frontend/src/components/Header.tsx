@@ -8,13 +8,13 @@ import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import PopoverMenu from "./PopoverMenu";
 import { useQuery } from "react-query";
-import { CategoryService, app__schemas__category__Category } from "../api";
+import { CategoryService, DetailCategory } from "../api";
 import { capitalCase } from "change-case";
 
 const Header = () => {
   let categories = new Array<{
     type: string;
-    items: app__schemas__category__Category[];
+    items: DetailCategory[];
   }>();
   const fetchCategories = useQuery(
     "categories",
@@ -82,7 +82,7 @@ const Header = () => {
       },
       [] as {
         type: string;
-        items: app__schemas__category__Category[];
+        items: DetailCategory[];
       }[]
     );
   }

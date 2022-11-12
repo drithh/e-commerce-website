@@ -4,7 +4,7 @@ from uuid import UUID
 from pydantic import BaseModel
 
 
-class Category(BaseModel):
+class DetailCategory(BaseModel):
     id: UUID
     title: str
     type: str
@@ -14,7 +14,7 @@ class Category(BaseModel):
 
 
 class GetCategory(BaseModel):
-    data: List[Category]
+    data: List[DetailCategory]
 
     class Config:
         orm_mode = True
@@ -29,7 +29,8 @@ class SetImage(BaseModel):
 
 
 class UpdateCategory(BaseModel):
-    id: UUID
+    title: str
+    type: str
 
     class Config:
         orm_mode = True

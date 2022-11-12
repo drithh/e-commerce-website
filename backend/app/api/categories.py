@@ -1,4 +1,5 @@
 from typing import Generator
+from uuid import UUID
 
 from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
@@ -11,7 +12,12 @@ from app.deps.sql_error import format_error
 from app.models.category import Category
 from app.models.image import Image
 from app.models.user import User
-from app.schemas.category import DeleteCategory, GetCategory, SetImage, UpdateCategory
+from app.schemas.category import (
+    DeleteCategory,
+    DetailCategory,
+    GetCategory,
+    UpdateCategory,
+)
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
@@ -30,6 +36,21 @@ def get_category(
         )
 
     return GetCategory(data=categories)
+
+
+@router.get("/detail", response_model=DetailCategory, status_code=status.HTTP_200_OK)
+def get_detail_category(
+    category_id: UUID,
+    session: Generator = Depends(get_db),
+):
+    category = session.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found",
+        )
+
+    return category
 
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
@@ -54,24 +75,23 @@ def create_category(
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def update_category(
+    category_id: UUID,
+    request: UpdateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-    category_id: UpdateCategory = Depends(UpdateCategory),
-    category_name: str = Query(..., min_length=2, max_length=100),
 ):
-    try:
-        session.query(Category).filter(Category.id == category_id.id).update(
-            {"title": category_name}
-        )
-        session.commit()
-    except Exception as e:
-        logger.error(e)
+    category = session.query(Category).filter(Category.id == category_id).first()
+    if not category:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=format_error(e),
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found",
         )
+    category.title = request.title
+    category.type = request.type
 
-    logger.info(f"Category {category_name} updated by {current_user.name}")
+    session.commit()
+
+    logger.info(f"Category {request.title} updated by {current_user.name}")
 
     return DefaultResponse(message="Category updated")
 

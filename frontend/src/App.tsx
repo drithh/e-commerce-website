@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Wishlist from "./pages/Wishlist";
 import Checkout from "./pages/Checkout";
-import Dashboard from "./pages/Admin";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -21,6 +20,16 @@ import ComingSoon from "./pages/ComingSoon";
 import Products from "./pages/Products";
 import Product from "./pages/Product";
 import Profile from "./pages/Profile";
+import Admin from "./pages/Admin";
+import Orders from "./components/dashboard/Orders";
+import Customers from "./components/dashboard/Customers";
+import Categories from "./components/dashboard/Categories";
+import { default as AdminProducts } from "./components/dashboard/Products";
+import Dashboard from "./components/dashboard/Dashboard";
+import PersonalData from "./components/profile/PersonalData";
+import Order from "./components/profile/Order";
+import Category from "./components/dashboard/Category";
+import Customer from "./components/dashboard/Customer";
 const queryClient = new QueryClient();
 
 function App() {
@@ -53,10 +62,21 @@ function App() {
                   <Route element={<UserRoutes />}>
                     <Route path="/wishlist" element={<Wishlist />} />
                     <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/profile/*" element={<Profile />} />
+                    <Route path="/profile" element={<Profile />}>
+                      <Route path="" element={<PersonalData />} />
+                      <Route path="order" element={<Order />} />
+                    </Route>
                   </Route>
                   <Route element={<AdminRoutes />}>
-                    <Route path="/admin/*" element={<Dashboard />} />
+                    <Route path="/admin" element={<Admin />}>
+                      <Route path="" element={<Dashboard />} />
+                      <Route path="orders" element={<Orders />} />
+                      <Route path="products" element={<AdminProducts />} />
+                      <Route path="categories" element={<Categories />} />
+                      <Route path="categories/:id" element={<Category />} />
+                      <Route path="customers" element={<Customers />} />
+                      <Route path="customers/:id" element={<Customer />} />
+                    </Route>
                   </Route>
                   <Route path="/coming-soon" element={<ComingSoon />} />
                   <Route path="*" element={<Custom404 />} />

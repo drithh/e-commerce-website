@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type app__schemas__category__Category = {
-  id: string;
+export type UpdateCategory = {
   title: string;
   type: string;
 };

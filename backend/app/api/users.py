@@ -1,4 +1,5 @@
 from typing import Any, Generator
+from uuid import UUID
 
 from fastapi import Depends, HTTPException, status
 from fastapi.routing import APIRouter
@@ -27,6 +28,50 @@ def get_user(
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     return current_user
+
+
+@router.get("/detail", response_model=GetUser, status_code=status.HTTP_200_OK)
+def get_detail_user(
+    id: UUID,
+    current_user: User = Depends(get_current_active_admin),
+    session: Generator = Depends(get_db),
+) -> Any:
+    user = session.query(User).filter(User.id == id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    return user
+
+
+@router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
+def update_user(
+    request: GetUser,
+    current_user: User = Depends(get_current_active_admin),
+    session: Generator = Depends(get_db),
+) -> Any:
+    try:
+        session.query(User).filter(User.id == request.id).update(
+            {
+                "name": request.name,
+                "email": request.email,
+                "phone_number": request.phone_number,
+                "address_name": request.address_name,
+                "address": request.address,
+                "city": request.city,
+                "balance": request.balance,
+            }
+        )
+        session.commit()
+    except Exception as e:
+        logger.error(format_error(e))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Internal Server Error",
+        )
+
+    return DefaultResponse(message="User updated successfully")
 
 
 @router.get(

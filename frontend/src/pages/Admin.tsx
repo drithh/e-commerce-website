@@ -5,12 +5,7 @@ import { MdOutlineAttachMoney } from "react-icons/md";
 import { BsBookmark } from "react-icons/bs";
 import { IoShirtOutline } from "react-icons/io5";
 import { AiOutlineUser } from "react-icons/ai";
-import Orders from "../components/dashboard/Orders";
-import { useLocation, useNavigate } from "react-router-dom";
-import Customers from "../components/dashboard/Customers";
-import Categories from "../components/dashboard/Categories";
-import Products from "../components/dashboard/Products";
-import Dashboard from "../components/dashboard/Dashboard";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const location = useLocation();
@@ -86,11 +81,7 @@ const Admin = () => {
           </button>
         </section>
         <section className="wrapper overflow-hidden w-full">
-          {location.pathname === "/admin" && <Dashboard />}
-          {location.pathname === "/admin/orders" && <Orders />}
-          {location.pathname === "/admin/customers" && <Customers />}
-          {location.pathname === "/admin/categories" && <Categories />}
-          {location.pathname === "/admin/products" && <Products />}
+          <Outlet />
         </section>
       </div>
     </main>
