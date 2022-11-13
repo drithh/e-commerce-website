@@ -120,7 +120,37 @@ def get_dashboard(
         """
     ).fetchone()[0]
 
+    income_per_month = session.execute(
+        """
+        SELECT TO_CHAR(orders.created_at, 'Mon') AS month,
+        DATE_TRUNC('month', orders.created_at) AS month_date,
+        SUM(order_items.price * order_items.quantity / 1000) income
+        FROM orders
+        JOIN order_items ON orders.id = order_items.order_id
+        WHERE orders.status = 'completed'
+        GROUP BY month, month_date
+        ORDER BY month_date DESC
+        LIMIT 12
+        """
+    ).fetchall()
+
+    # total completed order in this year per category
+    total_order_per_category = session.execute(
+        """
+        SELECT categories.title, COUNT(orders.id) total_order
+        FROM orders
+        JOIN order_items ON orders.id = order_items.order_id
+        JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
+        JOIN products ON product_size_quantities.product_id = products.id
+        JOIN categories ON products.category_id = categories.id
+        WHERE orders.status = 'completed' AND DATE_PART('year', orders.created_at) = DATE_PART('year', CURRENT_DATE)
+        GROUP BY categories.id
+        """
+    ).fetchall()
+
     return GetDashboard(
         total_user=total_user,
         total_order=total_order,
+        income_per_month=income_per_month[::-1],
+        total_order_per_category=total_order_per_category,
     )

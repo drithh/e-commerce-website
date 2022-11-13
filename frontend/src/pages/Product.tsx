@@ -8,10 +8,11 @@ import { SlSocialFacebook } from "react-icons/sl";
 import { SiInstagram } from "react-icons/si";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
-import { ProductService } from "../api";
+import { ApiError, ProductService } from "../api";
 import Button from "../components/button/Button";
 import { useCart } from "../context/CartContext";
 import { convertToCurrency } from "../components/util/utilFunc";
+import { toast } from "react-toastify";
 
 const Product = () => {
   const { id } = useParams();
@@ -201,11 +202,18 @@ const Product = () => {
                 extraClass={`flex-grow text-center whitespace-nowrap`}
                 onClick={() => {
                   if (quantity > 0) {
-                    addCartItem?.mutate({
-                      product_id: fetchProduct.data!.id,
-                      quantity,
-                      size,
-                    });
+                    addCartItem?.mutate(
+                      {
+                        product_id: fetchProduct.data!.id,
+                        quantity,
+                        size,
+                      },
+                      {
+                        onError: (error) => {
+                          toast.error((error as ApiError).body.message);
+                        },
+                      }
+                    );
                   }
                 }}
               />

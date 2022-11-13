@@ -42,7 +42,7 @@ def get_orders_user(
                             'size', sizes.size
                     )
                 ),
-                'price', products.price,
+                'price', order_items.price,
                 'name', products.title,
                 'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
             ) product
@@ -57,7 +57,7 @@ def get_orders_user(
             )
             JOIN images ON images.id = product_images.image_id
             WHERE orders.user_id = :user_id
-            GROUP BY orders.id, products.id, images.id
+            GROUP BY orders.id, products.id, images.id, order_items.price
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
         order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
@@ -121,7 +121,7 @@ def create_order(
     cart = session.execute(
         """
         SELECT product_size_quantities.id, product_size_quantities.quantity as stock,
-        carts.quantity, products.price, products.title
+        carts.quantity, order, products.title
         FROM only carts
         JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
         JOIN products ON product_size_quantities.product_id = products.id
@@ -331,7 +331,7 @@ def get_order_details(
                             'size', sizes.size
                     )
                 ),
-                'price', products.price,
+                'price', order_items.price,
                 'name', products.title,
                 'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
             ) product
@@ -347,7 +347,7 @@ def get_order_details(
             JOIN images ON images.id = product_images.image_id
             JOIN users ON orders.user_id = users.id
             WHERE orders.id = :id
-            GROUP BY orders.id, products.id, images.id, users.name, users.email
+            GROUP BY orders.id, products.id, images.id, users.name, users.email, order_items.price
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
         order_product.shipping_price, order_product.status, order_product.shipping_address,
@@ -383,7 +383,7 @@ def get_orders_admin(
             SELECT DISTINCT ON (products.id) orders.id, products.title,
             array_agg( DISTINCT sizes.size) sizes, orders.created_at,
             products.product_detail, users.email, array_agg( DISTINCT images.image_url) images_url,
-            orders.user_id, SUM(products.price) total
+            orders.user_id, SUM(order) total
             FROM only orders
             JOIN order_items ON orders.id = order_items.order_id
             JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id

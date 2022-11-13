@@ -17,7 +17,7 @@ const Admin = () => {
     >
       {/* ===== Heading ===== */}
       <div className="w-full  ">
-        <h1 className="  animatee__animated mt-6  animate__bounce mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Dashboard
         </h1>
       </div>

@@ -1,6 +1,7 @@
 from typing import List, Optional
 from uuid import UUID
 
+from fastapi import UploadFile
 from pydantic import BaseModel
 
 from app.models.category import Category
@@ -20,10 +21,9 @@ class CreateProduct(BaseModel):
         orm_mode = True
 
 
-class UpdateImage(BaseModel):
-    id: UUID
-    name: str
-    image_url: str
+class UpdateStock(BaseModel):
+    size: str
+    quantity: int
 
     class Config:
         orm_mode = True
@@ -34,10 +34,11 @@ class UpdateProduct(BaseModel):
     title: str
     brand: str
     product_detail: str
-    images: List[UpdateImage]
+    images: List[str]
     price: int
     category_id: UUID
     condition: str
+    stock: List[UpdateStock]
 
     class Config:
         orm_mode = True

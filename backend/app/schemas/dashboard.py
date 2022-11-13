@@ -48,6 +48,21 @@ class GetOrders(BaseModel):
         orm_mode = True
 
 
+class IncomeMonth(BaseModel):
+    month: str
+    income: int
+
+
+class CategoryOrder(BaseModel):
+    title: str
+    total_order: int
+
+    class Config:
+        orm_mode = True
+
+
 class GetDashboard(BaseModel):
     total_user: int
     total_order: int
+    income_per_month: List[IncomeMonth]
+    total_order_per_category: List[CategoryOrder]

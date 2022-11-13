@@ -10,7 +10,7 @@ const Wishlist = () => {
     <main id="main-content" className="mx-auto mt-20 min-h-[60vh] max-w-7xl">
       {/* ===== Heading & Continue Shopping */}
       <div className="app-max-width w-full border-t-2 border-gray-100 px-4 sm:px-8 md:px-20">
-        <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Wishlist
         </h1>
         <div className="mt-6 mb-3 flex ">

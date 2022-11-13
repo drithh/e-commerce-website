@@ -26,6 +26,7 @@ import Customers from "./components/admin/Customers";
 import Categories from "./components/admin/Categories";
 import { default as AdminProducts } from "./components/admin/Products";
 import { default as AdminOrder } from "./components/admin/Order";
+import { default as AdminProduct } from "./components/admin/Product";
 import Dashboard from "./components/admin/Dashboard";
 import PersonalData from "./components/profile/PersonalData";
 import Order from "./components/profile/Order";
@@ -74,6 +75,7 @@ function App() {
                       <Route path="orders" element={<Orders />} />
                       <Route path="orders/:id" element={<AdminOrder />} />
                       <Route path="products" element={<AdminProducts />} />
+                      <Route path="products/:id" element={<AdminProduct />} />
                       <Route path="categories" element={<Categories />} />
                       <Route path="categories/:id" element={<Category />} />
                       <Route path="customers" element={<Customers />} />

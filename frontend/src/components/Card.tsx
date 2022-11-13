@@ -44,12 +44,14 @@ const Card: FC<Props> = ({ item }) => {
             src={images[0] as string}
             alt={title}
             loading="lazy"
-            className={`${isHovered ? "hidden" : "animate__fadeIn"}`}
+            className={`${
+              isHovered ? "hidden" : "animate__fadeIn"
+            } h-80 animate__animated  object-cover`}
           />
           <img
             className={`${
               !isHovered ? "hidden" : ""
-            } transform transition-transform duration-1000 hover:scale-110`}
+            } h-80 transform object-cover transition-transform duration-1000 hover:scale-110`}
             src={(images[1] as string) || (images[0] as string)}
             alt={title}
           />

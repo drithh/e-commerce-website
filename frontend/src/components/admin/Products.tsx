@@ -4,6 +4,7 @@ import { ProductService } from "../../api";
 import Pagination from "../Pagination";
 import { convertToCurrency } from "../util/utilFunc";
 import { capitalCase } from "change-case";
+import { Link } from "react-router-dom";
 
 interface DefaultParams {
   page: number;
@@ -44,23 +45,25 @@ const Products = () => {
       <div className="mb-8">
         {fetchProducts.data?.data.map((product) => {
           return (
-            <tr
-              className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
-              key={product.id}
-            >
-              <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[5]">
-                {product.title}
-              </td>
-              <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[4]">
-                {product.brand}
-              </td>
-              <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
-                {convertToCurrency(product.price)}
-              </td>
-              <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[2]">
-                {capitalCase(product.condition)}
-              </td>
-            </tr>
+            <Link to={`${product.id}`}>
+              <tr
+                className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
+                key={product.id}
+              >
+                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[5]">
+                  {product.title}
+                </td>
+                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[4]">
+                  {product.brand}
+                </td>
+                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
+                  {convertToCurrency(product.price)}
+                </td>
+                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[2]">
+                  {capitalCase(product.condition)}
+                </td>
+              </tr>
+            </Link>
           );
         })}
       </div>

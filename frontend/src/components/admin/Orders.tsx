@@ -39,10 +39,10 @@ const Orders = () => {
             Address
           </th>
           <th className="py-2 text-left font-semibold table-cell flex-[2]">
-            Nb Products
+            Nb Product
           </th>
           <th className="py-2 text-left font-semibold table-cell flex-[2]">
-            Total
+            Product Total
           </th>
           <th className="py-2 text-left font-semibold table-cell flex-[2]">
             Status

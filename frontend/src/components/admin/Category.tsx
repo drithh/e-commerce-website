@@ -74,7 +74,7 @@ const Category = () => {
         </Link>
       </div>
       <form
-        className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 "
+        className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 min-h-[32rem]"
         onSubmit={handleSubmit}
       >
         <div className="">

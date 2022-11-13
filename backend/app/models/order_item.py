@@ -19,7 +19,7 @@ class OrderItem(DefaultModel, Base):
         order_item = OrderItem(
             id=fake.uuid4(),
             quantity=fake.pyint(min_value=1, max_value=5),
-            price=fake.pyint(min_value=1000),
+            price=fake.pyint(min_value=100, max_value=700) * 1000,
             order_id=order_id,
             product_size_quantity_id=product_size_quantity_id,
         )
