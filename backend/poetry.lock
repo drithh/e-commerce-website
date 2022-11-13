@@ -309,14 +309,14 @@ reference = "nogil"
 
 [[package]]
 name = "databases"
-version = "0.6.1"
+version = "0.6.2"
 description = "Async database support for Python."
 category = "main"
 optional = false
 python-versions = ">=3.7"
 
 [package.dependencies]
-sqlalchemy = ">=1.4,<1.5"
+sqlalchemy = ">=1.4,<=1.4.41"
 
 [package.extras]
 aiomysql = ["aiomysql"]
@@ -438,7 +438,7 @@ reference = "nogil"
 
 [[package]]
 name = "faker"
-version = "15.2.0"
+version = "15.3.1"
 description = "Faker is a Python package that generates fake data for you."
 category = "main"
 optional = false
@@ -454,7 +454,7 @@ reference = "nogil"
 
 [[package]]
 name = "fastapi"
-version = "0.85.2"
+version = "0.86.0"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
 category = "main"
 optional = false
@@ -468,12 +468,7 @@ starlette = "0.20.4"
 all = ["email-validator (>=1.1.1,<2.0.0)", "itsdangerous (>=1.1.0,<3.0.0)", "jinja2 (>=2.11.2,<4.0.0)", "orjson (>=3.2.1,<4.0.0)", "python-multipart (>=0.0.5,<0.0.6)", "pyyaml (>=5.3.1,<7.0.0)", "requests (>=2.24.0,<3.0.0)", "ujson (>=4.0.1,!=4.0.2,!=4.1.0,!=4.2.0,!=4.3.0,!=5.0.0,!=5.1.0,<6.0.0)", "uvicorn[standard] (>=0.12.0,<0.19.0)"]
 dev = ["autoflake (>=1.4.0,<2.0.0)", "flake8 (>=3.8.3,<6.0.0)", "pre-commit (>=2.17.0,<3.0.0)", "uvicorn[standard] (>=0.12.0,<0.19.0)"]
 doc = ["mdx-include (>=1.4.1,<2.0.0)", "mkdocs (>=1.1.2,<2.0.0)", "mkdocs-markdownextradata-plugin (>=0.1.7,<0.3.0)", "mkdocs-material (>=8.1.4,<9.0.0)", "pyyaml (>=5.3.1,<7.0.0)", "typer[all] (>=0.6.1,<0.7.0)"]
-test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==22.8.0)", "databases[sqlite] (>=0.3.2,<0.7.0)", "email-validator (>=1.1.1,<2.0.0)", "flake8 (>=3.8.3,<6.0.0)", "flask (>=1.1.2,<3.0.0)", "httpx (>=0.23.0,<0.24.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.982)", "orjson (>=3.2.1,<4.0.0)", "passlib[bcrypt] (>=1.7.2,<2.0.0)", "peewee (>=3.13.3,<4.0.0)", "pytest (>=7.1.3,<8.0.0)", "pytest-cov (>=2.12.0,<5.0.0)", "python-jose[cryptography] (>=3.3.0,<4.0.0)", "python-multipart (>=0.0.5,<0.0.6)", "pyyaml (>=5.3.1,<7.0.0)", "requests (>=2.24.0,<3.0.0)", "sqlalchemy (>=1.3.18,<=1.4.41)", "types-orjson (==3.6.2)", "types-ujson (==5.5.0)", "ujson (>=4.0.1,!=4.0.2,!=4.1.0,!=4.2.0,!=4.3.0,!=5.0.0,!=5.1.0,<6.0.0)"]
-
-[package.source]
-type = "legacy"
-url = "https://pypi.org/simple"
-reference = "nogil"
+test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==22.8.0)", "coverage[toml] (>=6.5.0,<7.0)", "databases[sqlite] (>=0.3.2,<0.7.0)", "email-validator (>=1.1.1,<2.0.0)", "flake8 (>=3.8.3,<6.0.0)", "flask (>=1.1.2,<3.0.0)", "httpx (>=0.23.0,<0.24.0)", "isort (>=5.0.6,<6.0.0)", "mypy (==0.982)", "orjson (>=3.2.1,<4.0.0)", "passlib[bcrypt] (>=1.7.2,<2.0.0)", "peewee (>=3.13.3,<4.0.0)", "pytest (>=7.1.3,<8.0.0)", "python-jose[cryptography] (>=3.3.0,<4.0.0)", "python-multipart (>=0.0.5,<0.0.6)", "pyyaml (>=5.3.1,<7.0.0)", "requests (>=2.24.0,<3.0.0)", "sqlalchemy (>=1.3.18,<=1.4.41)", "types-orjson (==3.6.2)", "types-ujson (==5.5.0)", "ujson (>=4.0.1,!=4.0.2,!=4.1.0,!=4.2.0,!=4.3.0,!=5.0.0,!=5.1.0,<6.0.0)"]
 
 [[package]]
 name = "fastapi-mail"
@@ -803,11 +798,6 @@ parallel = ["ipyparallel"]
 qtconsole = ["qtconsole"]
 test = ["pytest (<7.1)", "pytest-asyncio", "testpath"]
 test-extra = ["curio", "matplotlib (!=3.2.0)", "nbformat", "numpy (>=1.20)", "pandas", "pytest (<7.1)", "pytest-asyncio", "testpath", "trio"]
-
-[package.source]
-type = "legacy"
-url = "https://pypi.org/simple"
-reference = "nogil"
 
 [[package]]
 name = "jedi"
@@ -1594,7 +1584,7 @@ reference = "nogil"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "465e70699cdb4cf86bdb7f54723f0c6bdd1417a841b149e6bf0690ce18201f5e"
+content-hash = "d4153805dee2d2af42d5da549286e0e172c5b581ba906f1990a8bc2781892fe9"
 
 [metadata.files]
 aiosmtplib = [
@@ -1828,8 +1818,8 @@ cryptography = [
     {file = "cryptography-38.0.3.tar.gz", hash = "sha256:bfbe6ee19615b07a98b1d2287d6a6073f734735b49ee45b11324d85efc4d5cbd"},
 ]
 databases = [
-    {file = "databases-0.6.1-py3-none-any.whl", hash = "sha256:47fae85d82d8227049f08b154019913c3ad2f6057ceb0b5ebb36703be6f5666b"},
-    {file = "databases-0.6.1.tar.gz", hash = "sha256:0a69c6983a27e10a5b75ffa094486f1febadd9d5a8db016e69b8c2f6a354dc30"},
+    {file = "databases-0.6.2-py3-none-any.whl", hash = "sha256:ff4010136ac2bb9da2322a2ffda4ef9185ae1c365e5891e52924dd9499d33dc4"},
+    {file = "databases-0.6.2.tar.gz", hash = "sha256:b09c370ad7c2f64c7f4316c096e265dc2e28304732639889272390decda2f893"},
 ]
 decorator = [
     {file = "decorator-5.1.1-py3-none-any.whl", hash = "sha256:b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186"},
@@ -1856,12 +1846,12 @@ executing = [
     {file = "executing-1.2.0.tar.gz", hash = "sha256:19da64c18d2d851112f09c287f8d3dbbdf725ab0e569077efb6cdcbd3497c107"},
 ]
 faker = [
-    {file = "Faker-15.2.0-py3-none-any.whl", hash = "sha256:8066d5ef0ca116469292d947593ae4cdf1d97dd83f557dd8a749826cf960020a"},
-    {file = "Faker-15.2.0.tar.gz", hash = "sha256:f35b9b47fb84d7334645feba0dd87bbf5aba2b617cd83ec8e1b8c6dcd859a710"},
+    {file = "Faker-15.3.1-py3-none-any.whl", hash = "sha256:4a3465624515a6807e8aa7e8eeb85bdd86a2fa53de4e258892dd6be95362462e"},
+    {file = "Faker-15.3.1.tar.gz", hash = "sha256:b9dd2fd9a9ac68a4e0c5040cd9e9bfaa099fa8dd15bae5f01f224a45431818d5"},
 ]
 fastapi = [
-    {file = "fastapi-0.85.2-py3-none-any.whl", hash = "sha256:6292db0edd4a11f0d938d6033ccec5f706e9d476958bf33b119e8ddb4e524bde"},
-    {file = "fastapi-0.85.2.tar.gz", hash = "sha256:3e10ea0992c700e0b17b6de8c2092d7b9cd763ce92c49ee8d4be10fee3b2f367"},
+    {file = "fastapi-0.86.0-py3-none-any.whl", hash = "sha256:1020d7ca205d8b95813881fb3282e9c3656e47993531af3aa4ae11065b61dd2c"},
+    {file = "fastapi-0.86.0.tar.gz", hash = "sha256:cdcaff84ecf7ae939b9579f0c98b0a0989ee3dd855710a32bc985260d92612f6"},
 ]
 fastapi-mail = [
     {file = "fastapi_mail-1.2.0-py3-none-any.whl", hash = "sha256:d5a1e64861f0c22a180ad6239fc18cdea10b45f0668a6234802046181f979b41"},
@@ -2193,6 +2183,8 @@ psycopg2-binary = [
     {file = "psycopg2_binary-2.9.5-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:e67b3c26e9b6d37b370c83aa790bbc121775c57bfb096c2e77eacca25fd0233b"},
     {file = "psycopg2_binary-2.9.5-cp311-cp311-musllinux_1_1_ppc64le.whl", hash = "sha256:5fc447058d083b8c6ac076fc26b446d44f0145308465d745fba93a28c14c9e32"},
     {file = "psycopg2_binary-2.9.5-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:d892bfa1d023c3781a3cab8dd5af76b626c483484d782e8bd047c180db590e4c"},
+    {file = "psycopg2_binary-2.9.5-cp311-cp311-win32.whl", hash = "sha256:2abccab84d057723d2ca8f99ff7b619285d40da6814d50366f61f0fc385c3903"},
+    {file = "psycopg2_binary-2.9.5-cp311-cp311-win_amd64.whl", hash = "sha256:bef7e3f9dc6f0c13afdd671008534be5744e0e682fb851584c8c3a025ec09720"},
     {file = "psycopg2_binary-2.9.5-cp36-cp36m-macosx_10_14_x86_64.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64.whl", hash = "sha256:6e63814ec71db9bdb42905c925639f319c80e7909fb76c3b84edc79dadef8d60"},
     {file = "psycopg2_binary-2.9.5-cp36-cp36m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:212757ffcecb3e1a5338d4e6761bf9c04f750e7d027117e74aa3cd8a75bb6fbd"},
     {file = "psycopg2_binary-2.9.5-cp36-cp36m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6f8a9bcab7b6db2e3dbf65b214dfc795b4c6b3bb3af922901b6a67f7cb47d5f8"},
