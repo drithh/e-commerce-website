@@ -24,32 +24,21 @@ def faker_uuid(str: str) -> str:
     return f"{str}_{fake.uuid4()}"
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_user(db: Session):
     def inner() -> User:
-        user = User.seed(fake)
+        user = User.seed(fake, "password")
         db.add(user)
         db.commit()
         db.refresh(user)
+        user.password = "password"
         return user
 
     return inner
 
 
-@pytest.fixture(scope="session")
-def create_default_user(db: Session):
-    def inner() -> User:
-        user = User.default_user_seed(fake)
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-        return user
-
-    return inner
-
-
-@pytest.fixture(scope="session")
-def create_default_admin(db: Session):
+@pytest.fixture(scope="function")
+def create_admin(db: Session):
     def inner() -> User:
         admin = User.default_admin_seed(fake)
         db.add(admin)
@@ -60,7 +49,7 @@ def create_default_admin(db: Session):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_banner(db: Session):
     def inner() -> Banner:
         image = Image.seed(fake, faker_uuid("image"), faker_uuid("image_url"))
@@ -75,7 +64,7 @@ def create_banner(db: Session):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_category(db: Session):
     def inner() -> Category:
         category = Category.seed(
@@ -89,7 +78,7 @@ def create_category(db: Session):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_image(db: Session):
     def inner() -> Image:
         image = Image.seed(fake, faker_uuid("image"), faker_uuid("image_url"))
@@ -101,7 +90,7 @@ def create_image(db: Session):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_product(db: Session, create_category: Callable):
     def inner() -> Product:
         category = create_category()
@@ -119,7 +108,7 @@ def create_product(db: Session, create_category: Callable):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_product_image(db: Session, create_product: Callable, create_image: Callable):
     def inner(product=None, image=None) -> ProductImage:
         if not product:
@@ -135,7 +124,7 @@ def create_product_image(db: Session, create_product: Callable, create_image: Ca
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_product_size_quantity(
     db: Session, create_product: Callable, create_size: Callable
 ):
@@ -153,7 +142,7 @@ def create_product_size_quantity(
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_size(db: Session):
     def inner() -> Size:
         size = Size.seed(fake, faker_uuid("size"))
@@ -165,7 +154,7 @@ def create_size(db: Session):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_cart(
     db: Session, create_user: Callable, create_product_size_quantity: Callable
 ):
@@ -183,7 +172,7 @@ def create_cart(
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_wishlist(db: Session, create_user: Callable, create_product: Callable):
     def inner(user=None, product=None) -> Wishlist:
         if not user:
@@ -199,7 +188,7 @@ def create_wishlist(db: Session, create_user: Callable, create_product: Callable
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_order(db: Session, create_user: Callable):
     def inner(user=None) -> Order:
         if not user:
@@ -213,7 +202,7 @@ def create_order(db: Session, create_user: Callable):
     return inner
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def create_order_item(
     db: Session, create_order: Callable, create_product_size_quantity: Callable
 ):

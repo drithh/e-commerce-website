@@ -9,5 +9,5 @@ class ForgotPassword(DefaultModel, Base):
     __tablename__ = "forgot_passwords"
 
     token = Column(String(length=128), nullable=False)
-    expired_at = Column(DateTime(timezone=True), nullable=False)
+    expires_in = Column(DateTime(timezone=True), nullable=False)
     user_id = Column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)

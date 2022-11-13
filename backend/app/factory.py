@@ -9,10 +9,10 @@ from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 
 from app.api import (
+    admins,
     authentications,
     carts,
     categories,
-    dashboards,
     homes,
     images,
     orders,
@@ -111,8 +111,8 @@ def setup_routers(app: FastAPI) -> None:
         tags=["Order"],
     )
     app.include_router(
-        dashboards.router,
-        prefix=f"{settings.API_PATH}/dashboard",
+        admins.router,
+        prefix=f"{settings.API_PATH}/admin",
         tags=["Dashboard"],
     )
 

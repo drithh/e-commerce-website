@@ -11,8 +11,6 @@ from app.core.config import settings
 from app.db import Base
 from app.deps.db import get_db
 from app.factory import create_app
-from app.models.user import User
-from tests.utils import generate_random_string
 
 pytest_plugins = [
     "tests.fixtures.insert_data",
@@ -44,7 +42,6 @@ def client(app) -> Generator:
 @pytest.fixture(scope="session")
 def db() -> Generator:
     session = TestingSessionLocal()
-
     yield session
 
     session.rollback()
@@ -68,19 +65,7 @@ def override_get_db(app):
 @pytest.fixture(scope="function", autouse=True)
 def auto_rollback(db: Session):
     db.rollback()
-
-
-# @pytest.fixture(scope="session")
-# def create_item(db: Session, create_user: Callable):
-#     def inner(user=None):
-#         if not user:
-#             user = create_user()
-#         item = Item(
-#             user=user,
-#             value="value",
-#         )
-#         db.add(item)
-#         db.commit()
-#         return item
-
-#     return inner
+    # clear all tables
+    for table in reversed(Base.metadata.sorted_tables):
+        db.execute(table.delete())
+    db.commit()

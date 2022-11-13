@@ -23,7 +23,7 @@ class Customer(BaseModel):
     email: str
     total_order: int
     total_spent: float
-    last_order: datetime.date
+    last_order: str
 
     class Config:
         orm_mode = True

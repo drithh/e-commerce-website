@@ -20,7 +20,6 @@ from app.deps.send_email import send_forgot_password_email
 from app.models.forgot_password import ForgotPassword
 from app.models.user import User
 from app.schemas.authentication import (
-    AccessToken,
     ChangePassword,
     GetUser,
     ResetPassword,
@@ -160,7 +159,7 @@ async def forgot_password(
     forgot_password = ForgotPassword(
         user_id=user.id,
         token=reset_token,
-        expired_at=datetime.now() + timedelta(hours=1),
+        expires_in=datetime.now() + timedelta(hours=1),
     )
     session.add(forgot_password)
     session.commit()
@@ -170,7 +169,7 @@ async def forgot_password(
     )
 
 
-@router.put(
+@router.post(
     "/reset-password",
     status_code=status.HTTP_201_CREATED,
     response_model=DefaultResponse,
@@ -192,7 +191,7 @@ def reset_password(
             detail="Invalid token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    if forgot_password.expired_at < datetime.now(tz=pytz.UTC):
+    if forgot_password.expires_in < datetime.now(tz=pytz.UTC):
 
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -209,7 +208,7 @@ def reset_password(
     user.password = hashed_password
     user.salt = salt
     session.commit()
-    return DefaultResponse(message="Password reset success")
+    return DefaultResponse(message="Password updated successfully")
 
 
 @router.put(
@@ -235,4 +234,4 @@ def change_password(
     current_user.password = hashed_password
     current_user.salt = salt
     session.commit()
-    return DefaultResponse(message="Password changed success")
+    return DefaultResponse(message="Password updated successfully")

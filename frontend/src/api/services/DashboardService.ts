@@ -12,6 +12,30 @@ import { request as __request } from "../core/request";
 
 export class DashboardService {
   /**
+   * Get Sales
+   * @returns GetSales Successful Response
+   * @throws ApiError
+   */
+  public static getSales(): CancelablePromise<GetSales> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/admin",
+    });
+  }
+
+  /**
+   * Get Dashboard
+   * @returns GetDashboard Successful Response
+   * @throws ApiError
+   */
+  public static getDashboard(): CancelablePromise<GetDashboard> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/admin/dashboard",
+    });
+  }
+
+  /**
    * Get Customer
    * @param page
    * @param pageSize
@@ -24,7 +48,7 @@ export class DashboardService {
   ): CancelablePromise<GetCustomers> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/dashboard/customer",
+      url: "/api/v1/admin/customer",
       query: {
         page: page,
         page_size: pageSize,
@@ -48,7 +72,7 @@ export class DashboardService {
   ): CancelablePromise<GetOrders> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/dashboard/order",
+      url: "/api/v1/admin/order",
       query: {
         page: page,
         page_size: pageSize,
@@ -56,30 +80,6 @@ export class DashboardService {
       errors: {
         422: `Validation Error`,
       },
-    });
-  }
-
-  /**
-   * Get Sales
-   * @returns GetSales Successful Response
-   * @throws ApiError
-   */
-  public static getSales(): CancelablePromise<GetSales> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/dashboard",
-    });
-  }
-
-  /**
-   * Get Dashboard
-   * @returns GetDashboard Successful Response
-   * @throws ApiError
-   */
-  public static getDashboard(): CancelablePromise<GetDashboard> {
-    return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/dashboard/dashboard",
     });
   }
 }

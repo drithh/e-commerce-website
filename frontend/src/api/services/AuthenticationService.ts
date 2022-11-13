@@ -94,7 +94,7 @@ export class AuthenticationService {
     requestBody: ResetPassword
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "PUT",
+      method: "POST",
       url: "/api/v1/reset-password",
       body: requestBody,
       mediaType: "application/json",

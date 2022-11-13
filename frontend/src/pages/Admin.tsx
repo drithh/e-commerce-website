@@ -27,7 +27,7 @@ const Admin = () => {
           <button
             onClick={() => navigate("")}
             className={`${
-              location.pathname === "/dashboard" && "text-black"
+              location.pathname === "/admin" && "text-black"
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -38,7 +38,7 @@ const Admin = () => {
           <button
             onClick={() => navigate("orders")}
             className={`${
-              location.pathname === "/dashboard/orders" && "text-black"
+              location.pathname === "/admin/orders" && "text-black"
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -49,7 +49,7 @@ const Admin = () => {
           <button
             onClick={() => navigate("products")}
             className={`${
-              location.pathname === "/dashboard/products" && "text-black"
+              location.pathname === "/admin/products" && "text-black"
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -60,7 +60,7 @@ const Admin = () => {
           <button
             onClick={() => navigate("categories")}
             className={`${
-              location.pathname === "/dashboard/categories" && "text-black"
+              location.pathname === "/admin/categories" && "text-black"
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -71,7 +71,7 @@ const Admin = () => {
           <button
             onClick={() => navigate("customers")}
             className={`${
-              location.pathname === "/dashboard/customers" && "text-black"
+              location.pathname === "/admin/customers" && "text-black"
             } flex w-full cursor-pointer place-items-center  gap-x-3 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
