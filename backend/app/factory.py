@@ -12,6 +12,7 @@ from app.api import (
     authentications,
     carts,
     categories,
+    dashboards,
     homes,
     images,
     orders,
@@ -114,6 +115,11 @@ def setup_routers(app: FastAPI) -> None:
         orders.router,
         prefix=f"{settings.API_PATH}",
         tags=["Order"],
+    )
+    app.include_router(
+        dashboards.router,
+        prefix=f"{settings.API_PATH}/dashboard",
+        tags=["Dashboard"],
     )
 
     # The following operation needs to be at the end of this function

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type app__schemas__home__Category = {
+export type Category = {
   id: string;
   image: string;
   title: string;

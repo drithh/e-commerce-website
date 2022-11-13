@@ -5,7 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import { useRef, useState } from "react";
 import Sort from "../components/Sort";
 import Pagination from "../components/Pagination";
-interface TypeParams {
+interface ProductParams {
   category: Array<string>;
   page: number;
   pageSize: number;
@@ -18,7 +18,7 @@ interface TypeParams {
 const Product: React.FC = () => {
   const [searchParams] = useSearchParams();
   const scrolledToTop = useRef(false);
-  const [params, setParams] = useState<TypeParams>({
+  const [params, setParams] = useState<ProductParams>({
     category: searchParams.getAll("category"),
     page: Number(searchParams.get("page")) || 1,
     pageSize: Number(searchParams.get("page_size")) || 12,
@@ -65,7 +65,7 @@ const Product: React.FC = () => {
     <main id="main-content" className="mx-auto mt-20 min-h-[60vh] max-w-7xl">
       {/* ===== Heading & Continue Shopping */}
       <div className="w-full border-t-2 border-gray-100 ">
-        <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Product
         </h1>
       </div>

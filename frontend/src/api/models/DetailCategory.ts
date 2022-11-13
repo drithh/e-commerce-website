@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type UpdateImage = {
+export type DetailCategory = {
   id: string;
-  name: string;
-  image_url: string;
+  title: string;
+  type: string;
 };

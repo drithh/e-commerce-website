@@ -2,8 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type app__schemas__category__Category = {
-  id: string;
+export type CategoryOrder = {
   title: string;
-  type: string;
+  total_order: number;
 };

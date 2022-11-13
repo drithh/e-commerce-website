@@ -5,8 +5,8 @@ import React, { useEffect, useState } from "react";
 import { ApiError, UserService } from "../../api";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
+import LegendInput from "../input/LegendInput";
 const PersonalData = () => {
-  // address
   const [addressName, setAddressName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
@@ -68,14 +68,18 @@ const PersonalData = () => {
       {/*  ===== General Information ===== */}
       <h2 className="w-full text-2xl font-medium">General Information</h2>
       <div className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700">
-        <fieldset className="w-full border border-gray-300">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">Full Name</legend>
-          <div className="pl-6 pb-2">{fetchUser.data?.name}</div>
-        </fieldset>
-        <fieldset className="w-full border border-gray-300">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">Email</legend>
-          <div className="pl-6 pb-2">{fetchUser.data?.email}</div>
-        </fieldset>
+        <LegendInput
+          name="name"
+          label="Full Name"
+          value={fetchUser.data?.name}
+          readOnly={true}
+        />
+        <LegendInput
+          name="email"
+          label="Email"
+          value={fetchUser.data?.email}
+          readOnly={true}
+        />
         <div className="flex place-content-end">
           <Modal buttonText="Change Password"></Modal>
         </div>
@@ -84,10 +88,13 @@ const PersonalData = () => {
       {/*  ===== Your Balance ===== */}
       <h2 className="w-full text-2xl font-medium">Your Balance</h2>
       <div className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700">
-        <fieldset className="w-full border border-gray-300">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">Balance</legend>
-          <div className="pl-6 pb-2">{fetchUser.data?.balance}</div>
-        </fieldset>
+        <LegendInput
+          name="balance"
+          label="Balance"
+          type="number"
+          value={fetchUser.data?.balance}
+          readOnly={true}
+        />
 
         <div className="flex place-content-end">
           <Modal buttonText="Top Up" refetch={refetch}></Modal>
@@ -100,42 +107,30 @@ const PersonalData = () => {
         className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 "
         onSubmit={handleSubmit}
       >
-        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">Address Name</legend>
-          <input
-            className="w-full  pl-6"
-            onChange={(e) =>
-              setAddressName((e.target as HTMLInputElement).value)
-            }
-            value={addressName}
-          />
-        </fieldset>
-        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">Phone Number</legend>
-          <input
-            className="w-full  pl-6"
-            onChange={(e) =>
-              setPhoneNumber((e.target as HTMLInputElement).value)
-            }
-            value={phoneNumber}
-          />
-        </fieldset>
-        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">Address</legend>
-          <input
-            className="w-full  pl-6"
-            onChange={(e) => setAddress((e.target as HTMLInputElement).value)}
-            value={address}
-          />
-        </fieldset>
-        <fieldset className="w-full border border-gray-300 pb-2 focus-within:border-gray-700">
-          <legend className="ml-2 pr-2 pl-1 font-semibold">City</legend>
-          <input
-            className="w-full  pl-6"
-            onChange={(e) => setCity((e.target as HTMLInputElement).value)}
-            value={city}
-          />
-        </fieldset>
+        <LegendInput
+          name="address-name"
+          label="Address Name"
+          value={addressName}
+          onChange={(e) => setAddressName((e.target as HTMLInputElement).value)}
+        />
+        <LegendInput
+          name="phone-number"
+          label="Phone Number"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber((e.target as HTMLInputElement).value)}
+        />
+        <LegendInput
+          name="address"
+          label="Address"
+          value={address}
+          onChange={(e) => setAddress((e.target as HTMLInputElement).value)}
+        />
+        <LegendInput
+          name="city"
+          label="City"
+          value={city}
+          onChange={(e) => setCity((e.target as HTMLInputElement).value)}
+        />
         <div className="mt-8 flex place-content-end">
           <Button
             type="submit"

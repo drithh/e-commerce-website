@@ -3,10 +3,7 @@ import { AiOutlineUser } from "react-icons/ai";
 import { FiPower } from "react-icons/fi";
 import { useQuery } from "react-query";
 import { UserService } from "../api";
-import PersonalData from "../components/profile/PersonalData";
-import Order from "../components/profile/Order";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 const Profile = () => {
   const location = useLocation();
@@ -15,12 +12,6 @@ const Profile = () => {
   const fetchUser = useQuery("user", () => UserService.getUser(), {
     staleTime: Infinity,
   });
-
-  useEffect(() => {
-    if (location.pathname === "/profile") {
-      navigate("/profile/personal-data", { replace: true });
-    }
-  }, [location.pathname, navigate]);
 
   if (fetchUser.isError) {
     return <div>Error...</div>;
@@ -41,7 +32,7 @@ const Profile = () => {
     >
       {/* ===== Heading ===== */}
       <div className="w-full  ">
-        <h1 className="  animatee__animated mt-6  animate__bounce mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           My Account
         </h1>
       </div>
@@ -49,10 +40,8 @@ const Profile = () => {
       <div className="profile mt-4 flex w-full">
         <section className="side-panel inset-0 flex h-fit w-72 flex-col gap-y-[2px]  border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
           <button
-            onClick={() => navigate("personal-data")}
-            className={`${
-              location.pathname === "/profile/personal-data" && "text-black"
-            }
+            onClick={() => navigate("")}
+            className={`${location.pathname === "/profile" && "text-black"}
             flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 p-4 font-medium hover:text-black`}
           >
             <span className="text-xl">
@@ -83,8 +72,7 @@ const Profile = () => {
           </button>
         </section>
         <section className="wrapper mb-8 w-full">
-          {location.pathname === "/profile/personal-data" && <PersonalData />}
-          {location.pathname === "/profile/order" && <Order />}
+          <Outlet />
         </section>
       </div>
     </main>

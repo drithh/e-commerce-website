@@ -15,6 +15,19 @@ module.exports = {
         "gray-400": "#686868",
         "gray-500": "#282828",
       },
+      animation: {
+        "spin-fast-once": "zoom-spin 0.5s cubic-bezier(0.4, 0, 0.6, 1) 0.5",
+      },
+      keyframes: {
+        "zoom-spin": {
+          "0%": {
+            transform: "scale(0.5) rotate(0deg)",
+          },
+          "100%": {
+            transform: "scale(1) rotate(180deg)",
+          },
+        },
+      },
     },
   },
   plugins: [],

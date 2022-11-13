@@ -8,6 +8,7 @@ import { UserService, OrderService, ApiError } from "../api";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { convertToCurrency } from "../components/util/utilFunc";
 
 type PaymentType = "BALANCE";
 type DeliveryType = "REGULAR" | "NEXT_DAY";
@@ -95,7 +96,7 @@ const ShoppingCart = () => {
     <main id="main-content" className="mx-auto mt-24 min-h-[60vh] max-w-7xl">
       {/* ===== Heading & Continue Shopping */}
       <div className="app-max-width w-full border-t-2 border-gray-100 px-4 sm:px-8 md:px-20">
-        <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Checkout
         </h1>
       </div>
@@ -229,7 +230,9 @@ const ShoppingCart = () => {
                     </span>
                   </div>
                   <div className="text-base">
-                    Rp {roundDecimal(item.price * item!.details.quantity)}
+                    {convertToCurrency(
+                      roundDecimal(item.price * item!.details.quantity)
+                    )}
                   </div>
                 </div>
               ))}
@@ -237,7 +240,7 @@ const ShoppingCart = () => {
 
             <div className="flex justify-between py-3">
               <span className="uppercase">SUBTOTAL</span>
-              <span>Rp {subtotal}</span>
+              <span>{convertToCurrency(subtotal)}</span>
             </div>
 
             <div className="py-3">
@@ -257,7 +260,7 @@ const ShoppingCart = () => {
                       Regular
                     </label>
                   </div>
-                  <span>Rp {regularDelivery}</span>
+                  <span>{convertToCurrency(regularDelivery)}</span>
                 </div>
                 <div className="flex justify-between">
                   <div>
@@ -273,7 +276,7 @@ const ShoppingCart = () => {
                       Next Day
                     </label>
                   </div>
-                  <span>Rp {nextDayDelivery}</span>
+                  <span>{convertToCurrency(nextDayDelivery)}</span>
                 </div>
               </div>
             </div>
@@ -282,13 +285,14 @@ const ShoppingCart = () => {
               <div className="flex justify-between py-3">
                 <span>Grand Total</span>
                 <span>
-                  Rp{" "}
+                  convertToCurrency(
                   {roundDecimal(
                     +subtotal +
                       (delivery === "REGULAR"
                         ? regularDelivery
                         : nextDayDelivery)
                   )}
+                  )
                 </span>
               </div>
 

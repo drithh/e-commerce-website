@@ -2,7 +2,7 @@ import GhostButton from "../components/button/GhostButton";
 import { Link } from "react-router-dom";
 import { useWishlist } from "../context/WishlistContext";
 import { HiOutlineChevronLeft } from "react-icons/hi";
-
+import { convertToCurrency } from "../components/util/utilFunc";
 const Wishlist = () => {
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
 
@@ -10,7 +10,7 @@ const Wishlist = () => {
     <main id="main-content" className="mx-auto mt-20 min-h-[60vh] max-w-7xl">
       {/* ===== Heading & Continue Shopping */}
       <div className="app-max-width w-full border-t-2 border-gray-100 px-4 sm:px-8 md:px-20">
-        <h1 className="animatee__animated animate__bounce mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
+        <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
           Wishlist
         </h1>
         <div className="mt-6 mb-3 flex ">
@@ -35,15 +35,9 @@ const Wishlist = () => {
                 <th className="py-2 font-normal text-center max-w-xs">
                   Unit Price
                 </th>
-                {/* <th className="hidden max-w-xs py-2 font-normal sm:table-cell">
-                  Add
-                </th> */}
                 <th className="hidden  whitespace-nowrap py-2 text-center font-normal sm:table-cell">
                   Remove
                 </th>
-                {/* <th className="w-10 py-2 text-right font-normal sm:hidden">
-                  Actions
-                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -83,7 +77,7 @@ const Wishlist = () => {
                         </Link>
                       </td>
                       <td className="text-center max-w-xs text-gray-400">
-                        Rp{item.price}
+                        {convertToCurrency(item.price)}
                       </td>
                       {/* <td className="hidden max-w-xs text-center text-gray-400 sm:table-cell">
                         <Button

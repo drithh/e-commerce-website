@@ -2,7 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DefaultResponse } from "../models/DefaultResponse";
+import type { DetailCategory } from "../models/DetailCategory";
 import type { GetCategory } from "../models/GetCategory";
+import type { UpdateCategory } from "../models/UpdateCategory";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import { OpenAPI } from "../core/OpenAPI";
@@ -23,22 +25,23 @@ export class CategoryService {
 
   /**
    * Update Category
-   * @param categoryName
-   * @param id
+   * @param categoryId
+   * @param requestBody
    * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
   public static updateCategory(
-    categoryName: string,
-    id: string
+    categoryId: string,
+    requestBody: UpdateCategory
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: "PUT",
       url: "/api/v1/categories",
       query: {
-        category_name: categoryName,
-        id: id,
+        category_id: categoryId,
       },
+      body: requestBody,
+      mediaType: "application/json",
       errors: {
         422: `Validation Error`,
       },
@@ -78,6 +81,27 @@ export class CategoryService {
       url: "/api/v1/categories",
       query: {
         id: id,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Get Detail Category
+   * @param categoryId
+   * @returns DetailCategory Successful Response
+   * @throws ApiError
+   */
+  public static getDetailCategory(
+    categoryId: string
+  ): CancelablePromise<DetailCategory> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/categories/detail",
+      query: {
+        category_id: categoryId,
       },
       errors: {
         422: `Validation Error`,

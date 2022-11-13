@@ -27,6 +27,26 @@ export class UserService {
   }
 
   /**
+   * Update User
+   * @param requestBody
+   * @returns DefaultResponse Successful Response
+   * @throws ApiError
+   */
+  public static updateUser(
+    requestBody: app__schemas__user__GetUser
+  ): CancelablePromise<DefaultResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/user",
+      body: requestBody,
+      mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
    * Delete User
    * @param requestBody
    * @returns void
@@ -38,6 +58,27 @@ export class UserService {
       url: "/api/v1/user",
       body: requestBody,
       mediaType: "application/json",
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Get Detail User
+   * @param id
+   * @returns app__schemas__user__GetUser Successful Response
+   * @throws ApiError
+   */
+  public static getDetailUser(
+    id: string
+  ): CancelablePromise<app__schemas__user__GetUser> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/user/detail",
+      query: {
+        id: id,
+      },
       errors: {
         422: `Validation Error`,
       },

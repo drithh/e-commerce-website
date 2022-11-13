@@ -5,6 +5,8 @@ from uuid import UUID
 from fastapi import File, Form, Query, Response, UploadFile, status
 from pydantic import BaseModel
 
+from app.schemas.request_params import Pagination
+
 
 class GetUserProductDetails(BaseModel):
     quantity: int
@@ -30,8 +32,14 @@ class GetUserOrder(BaseModel):
     shipping_address: str
 
 
+class GetDetailOrder(GetUserOrder, BaseModel):
+    name: str
+    email: str
+
+
 class GetUserOrders(BaseModel):
     data: List[GetUserOrder]
+    pagination: Pagination
 
 
 class GetAdminOrder(BaseModel):

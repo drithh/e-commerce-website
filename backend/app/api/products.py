@@ -16,7 +16,7 @@ from app.deps.sql_error import format_error
 from app.models.image import Image
 from app.models.product import Product
 from app.models.product_image import ProductImage
-from app.models.size import Size
+from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
 from app.schemas.product import (
     CreateProduct,
@@ -136,20 +136,115 @@ def update_product(
             status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
         )
 
-    if request.images:
-        try:
-            for image in request.images:
-                updated_image = (
-                    session.query(Image).filter(Image.id == image.id).first()
-                )
-                updated_image.name = image.name
-                updated_image.image_url = image.image_url
+    # update quantity of each size
+    try:
+        for stock in request.stock:
+            session.execute(
+                """
+                UPDATE product_size_quantities SET quantity = :quantity WHERE product_id = :product_id
+                AND (SELECT id FROM sizes WHERE size = :size) = size_id
+                """,
+                {
+                    "quantity": stock.quantity,
+                    "product_id": request.id,
+                    "size": stock.size,
+                },
+            )
+        session.commit()
+
+    except Exception as e:
+        logger.error(e)
+        session.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+        )
+
+    # updating images
+    # get all images of the product
+    request_updated_images = []
+    database_images = session.execute(
+        f"""
+        SELECT CONCAT('{settings.CLOUD_STORAGE}/', images.image_url) AS image_url, images.id
+        FROM only product_images
+        JOIN only images ON product_images.image_id = images.id
+        WHERE product_images.product_id = :product_id
+        """,
+        {"product_id": request.id},
+    ).fetchall()
+
+    # if images is url do not delete
+
+    for image in request.images:
+        if not image.startswith("data:image"):
+            request_updated_images.append(image)
+        else:
+            image_data, image_type = base64_to_image(image)
+            file = {
+                "file": image_data,
+                "media_type": image_type,
+                "file_name": request.title.lower().replace(" ", "-"),
+            }
+            category = session.execute(
+                "SELECT title FROM categories WHERE id = :id",
+                {"id": request.category_id},
+            ).fetchone()[0]
+
+            image_url = upload_image(file, category)
+            name = image_url.split("/")[-1].split(".")[0]
+            image = Image(name=name, image_url=image_url)
+            try:
+                session.add(image)
                 session.commit()
-        except Exception as e:
-            logger.error(e)
-            session.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+                session.refresh(image)
+                logger.info(
+                    f"Image {image.name} added to product {request.title} by {current_user.name}"
+                )
+            except Exception as e:
+                logger.error(e)
+                session.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+                )
+
+            try:
+                product_image = ProductImage(
+                    product_id=request.id,
+                    image_id=image.id,
+                )
+                session.add(product_image)
+                session.commit()
+                session.refresh(product_image)
+                logger.info(
+                    f"Product Image Relation {product_image.id} added to product {request.title} by {current_user.name}"
+                )
+
+            except Exception as e:
+                logger.error(e)
+                session.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+                )
+
+    # delete images that are not in the request
+    for database_image in database_images:
+        if database_image.image_url not in request_updated_images:
+            try:
+                session.execute(
+                    """
+                    DELETE FROM product_images WHERE product_id = :product_id AND image_id = :image_id
+                    """,
+                    {"product_id": request.id, "image_id": database_image.id},
+                )
+                session.commit()
+            except Exception as e:
+                logger.error(e)
+                session.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+                )
+
+            logger.info(
+                f"Image {database_image.image_url} deleted by {current_user.name}"
             )
 
     logger.info(f"Product {product.title} updated by {current_user.name}")
@@ -211,7 +306,7 @@ def get_products(
         array_agg(CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) as images,
         COUNT(*) OVER() totalrow_count
         FROM only products
-        LEFT JOIN product_images ON products.id = product_images.product_id
+        LEFT JOIN only product_images ON products.id = product_images.product_id
         LEFT JOIN images ON product_images.image_id = images.id
         """
     if category:
@@ -271,8 +366,8 @@ def get_product(
         array_agg(DISTINCT jsonb_build_object('size', sizes.size, 'quantity', product_size_quantities.quantity))
         FILTER (WHERE sizes.size IS NOT NULL) as stock
         FROM only products
-        LEFT JOIN product_images ON products.id = product_images.product_id
-        LEFT JOIN images ON product_images.image_id = images.id
+        LEFT JOIN only product_images ON products.id = product_images.product_id
+        LEFT JOIN only images ON product_images.image_id = images.id
         LEFT JOIN product_size_quantities ON products.id = product_size_quantities.product_id
         LEFT JOIN sizes ON product_size_quantities.size_id = sizes.id
         JOIN categories ON products.category_id = categories.id

@@ -2,7 +2,7 @@ import Banner from "../components/Banner";
 import Card from "../components/Card";
 import LinkButton from "../components/button/LinkButton";
 import OverlayContainer from "../components/OverlayContainer";
-import { app__schemas__home__Category, HomeService, OpenAPI } from "../api";
+import { Category, HomeService, OpenAPI } from "../api";
 import { useQuery } from "react-query";
 import Cookies from "js-cookie";
 import { capitalCase } from "change-case";
@@ -10,7 +10,7 @@ const pluralize = require("pluralize");
 OpenAPI.TOKEN = Cookies.get("token");
 
 const Home = () => {
-  let categories: app__schemas__home__Category[] = [];
+  let categories: Category[] = [];
   const fetchCategories = useQuery(
     "category_images",
     HomeService.getCategoryWithImage,
@@ -25,16 +25,14 @@ const Home = () => {
   if (fetchCategories.isLoading) return <div>Loading...</div>;
   if (fetchCategories.error) return <div>Error</div>;
   if (fetchCategories.data) {
-    categories = fetchCategories.data.data.map(
-      (category: app__schemas__home__Category) => {
-        const title = capitalCase(pluralize.singular(category.title));
-        return {
-          id: category.id,
-          image: category.image,
-          title: `${title.charAt(0).toUpperCase()}${title.slice(1)} Collection`,
-        };
-      }
-    );
+    categories = fetchCategories.data.data.map((category: Category) => {
+      const title = capitalCase(pluralize.singular(category.title));
+      return {
+        id: category.id,
+        image: category.image,
+        title: `${title.charAt(0).toUpperCase()}${title.slice(1)} Collection`,
+      };
+    });
   }
 
   if (fetchBestSellers.isLoading) return <div>Loading...</div>;

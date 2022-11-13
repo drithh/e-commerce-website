@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { app__schemas__category__Category } from "./app__schemas__category__Category";
+import type { DetailCategory } from "./DetailCategory";
 
 export type GetCategory = {
-  data: Array<app__schemas__category__Category>;
+  data: Array<DetailCategory>;
 };
