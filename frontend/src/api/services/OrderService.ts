@@ -55,27 +55,6 @@ export class OrderService {
   }
 
   /**
-   * Update Order Status
-   * @param orderId
-   * @returns DefaultResponse Successful Response
-   * @throws ApiError
-   */
-  public static updateOrderStatus(
-    orderId: string
-  ): CancelablePromise<DefaultResponse> {
-    return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/order/{order_id}",
-      path: {
-        order_id: orderId,
-      },
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
-  /**
    * Get Order Details
    * @param id
    * @returns GetDetailOrder Successful Response
@@ -140,6 +119,27 @@ export class OrderService {
         sort_by: sortBy,
         page: page,
         page_size: pageSize,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Update Order Status
+   * @param orderId
+   * @returns DefaultResponse Successful Response
+   * @throws ApiError
+   */
+  public static updateOrderStatus(
+    orderId: string
+  ): CancelablePromise<DefaultResponse> {
+    return __request(OpenAPI, {
+      method: "PUT",
+      url: "/api/v1/order/{order_id}",
+      path: {
+        order_id: orderId,
       },
       errors: {
         422: `Validation Error`,

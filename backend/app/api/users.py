@@ -10,7 +10,7 @@ from app.deps.authentication import get_current_active_admin, get_current_active
 from app.deps.db import get_db
 from app.deps.sql_error import format_error
 from app.models.user import User
-from app.schemas.request_params import DefaultResponse
+from app.schemas.default_model import DefaultResponse
 from app.schemas.user import (
     DeleteUser,
     GetUser,
@@ -30,7 +30,7 @@ def get_user(
     return current_user
 
 
-@router.get("/detail", response_model=GetUser, status_code=status.HTTP_200_OK)
+@router.get("/{id}", response_model=GetUser, status_code=status.HTTP_200_OK)
 def get_detail_user(
     id: UUID,
     current_user: User = Depends(get_current_active_admin),
@@ -43,6 +43,22 @@ def get_detail_user(
             detail="User not found",
         )
     return user
+
+
+@router.get(
+    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
+)
+def get_user_shipping_address(
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    return current_user
+
+
+@router.get("/balance", response_model=GetUserBalance, status_code=status.HTTP_200_OK)
+async def get_user_balance(
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
+    return current_user
 
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
@@ -74,15 +90,6 @@ def update_user(
     return DefaultResponse(message="User updated successfully")
 
 
-@router.get(
-    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
-)
-def get_user_shipping_address(
-    current_user: User = Depends(get_current_active_user),
-) -> Any:
-    return current_user
-
-
 @router.put(
     "/shipping_address", response_model=DefaultResponse, status_code=status.HTTP_200_OK
 )
@@ -100,13 +107,6 @@ def put_user_shipping_address(
 
     logger.info(f"User {current_user.email} updated shipping address")
     return DefaultResponse(message="Shipping address updated")
-
-
-@router.get("/balance", response_model=GetUserBalance, status_code=status.HTTP_200_OK)
-async def get_user_balance(
-    current_user: User = Depends(get_current_active_user),
-) -> Any:
-    return current_user
 
 
 @router.put(

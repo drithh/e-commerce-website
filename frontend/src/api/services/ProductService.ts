@@ -2,11 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { app__schemas__product__GetProduct } from "../models/app__schemas__product__GetProduct";
-import type { Body_search_image_upload_api_v1_products_search_image_upload_post } from "../models/Body_search_image_upload_api_v1_products_search_image_upload_post";
 import type { CreateProduct } from "../models/CreateProduct";
 import type { DefaultResponse } from "../models/DefaultResponse";
 import type { GetProducts } from "../models/GetProducts";
-import type { SearchImageRequest } from "../models/SearchImageRequest";
 import type { UpdateProduct } from "../models/UpdateProduct";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
@@ -94,27 +92,6 @@ export class ProductService {
   }
 
   /**
-   * Delete Product
-   * @param productId
-   * @returns DefaultResponse Successful Response
-   * @throws ApiError
-   */
-  public static deleteProduct(
-    productId: string
-  ): CancelablePromise<DefaultResponse> {
-    return __request(OpenAPI, {
-      method: "DELETE",
-      url: "/api/v1/products/{product_id}",
-      path: {
-        product_id: productId,
-      },
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
-  /**
    * Get Product
    * @param id
    * @returns app__schemas__product__GetProduct Successful Response
@@ -136,39 +113,20 @@ export class ProductService {
   }
 
   /**
-   * Search Image Upload
-   * @param formData
-   * @returns any Successful Response
+   * Delete Product
+   * @param productId
+   * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
-  public static searchImageUpload(
-    formData: Body_search_image_upload_api_v1_products_search_image_upload_post
-  ): CancelablePromise<any> {
+  public static deleteProduct(
+    productId: string
+  ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/products/search_image/upload",
-      formData: formData,
-      mediaType: "multipart/form-data",
-      errors: {
-        422: `Validation Error`,
+      method: "DELETE",
+      url: "/api/v1/products/{product_id}",
+      path: {
+        product_id: productId,
       },
-    });
-  }
-
-  /**
-   * Search Image
-   * @param requestBody
-   * @returns any Successful Response
-   * @throws ApiError
-   */
-  public static searchImage(
-    requestBody: SearchImageRequest
-  ): CancelablePromise<any> {
-    return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/products/search_image",
-      body: requestBody,
-      mediaType: "application/json",
       errors: {
         422: `Validation Error`,
       },

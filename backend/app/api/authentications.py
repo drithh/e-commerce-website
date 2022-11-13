@@ -27,7 +27,7 @@ from app.schemas.authentication import (
     UserCreate,
     UserRead,
 )
-from app.schemas.request_params import DefaultResponse
+from app.schemas.default_model import DefaultResponse
 
 router = APIRouter()
 

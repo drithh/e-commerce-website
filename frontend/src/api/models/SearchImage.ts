@@ -2,6 +2,6 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type SearchImageRequest = {
+export type SearchImage = {
   image: string;
 };

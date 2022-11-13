@@ -5,7 +5,7 @@ from fastapi import UploadFile
 from pydantic import BaseModel
 
 from app.models.category import Category
-from app.schemas.request_params import Pagination
+from app.schemas.default_model import Pagination
 
 
 class CreateProduct(BaseModel):
@@ -87,13 +87,6 @@ class GetProducts(BaseModel):
     data: List[Product]
     total_rows: int
     pagination: Pagination
-
-    class Config:
-        orm_mode = True
-
-
-class SearchImageRequest(BaseModel):
-    image: str
 
     class Config:
         orm_mode = True

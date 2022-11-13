@@ -18,7 +18,7 @@ from app.schemas.category import (
     GetCategory,
     UpdateCategory,
 )
-from app.schemas.request_params import DefaultResponse
+from app.schemas.default_model import DefaultResponse
 
 router = APIRouter()
 

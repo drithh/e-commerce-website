@@ -13,7 +13,7 @@ from app.deps.sql_error import format_error
 from app.models.cart import Cart
 from app.models.user import User
 from app.schemas.cart import CreateCart, GetCart, UpdateCart
-from app.schemas.request_params import DefaultResponse
+from app.schemas.default_model import DefaultResponse
 
 router = APIRouter()
 

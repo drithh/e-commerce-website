@@ -75,8 +75,8 @@ export class UserService {
   ): CancelablePromise<app__schemas__user__GetUser> {
     return __request(OpenAPI, {
       method: "GET",
-      url: "/api/v1/user/detail",
-      query: {
+      url: "/api/v1/user/{id}",
+      path: {
         id: id,
       },
       errors: {

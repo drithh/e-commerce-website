@@ -10,8 +10,8 @@ from app.deps.db import get_db
 from app.models.banner import Banner
 from app.models.category import Category
 from app.models.image import Image
+from app.schemas.default_model import DefaultResponse
 from app.schemas.home import BestSeller, GetBanners, GetBestSeller, GetCategories
-from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
 

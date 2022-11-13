@@ -11,8 +11,14 @@ from app.deps.db import get_db
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.user import User
-from app.schemas.dashboard import GetCustomers, GetDashboard, GetOrders, Pagination
-from app.schemas.request_params import DefaultResponse
+from app.schemas.dashboard import (
+    GetCustomers,
+    GetDashboard,
+    GetOrders,
+    GetSales,
+    Pagination,
+)
+from app.schemas.default_model import DefaultResponse
 
 router = APIRouter()
 
@@ -103,11 +109,20 @@ def get_order(
     )
 
 
-@router.get("/dashboard", response_model=GetDashboard, status_code=status.HTTP_200_OK)
-def get_dashboard(
+@router.get("", response_model=GetSales, status_code=status.HTTP_200_OK)
+def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):
+    total_sales = session.execute(
+        """
+        SELECT SUM(price * quantity) total_sales
+        FROM order_items
+        JOIN orders ON order_items.order_id = orders.id
+        WHERE orders.status = 'completed'
+        """
+    ).fetchone()[0]
+
     total_order = session.execute(
         """
         SELECT COUNT(*) FROM orders
@@ -119,6 +134,24 @@ def get_dashboard(
         SELECT COUNT(*) FROM users WHERE is_admin = false
         """
     ).fetchone()[0]
+
+    if not total_sales:
+        total_sales = 0
+
+    return GetSales(
+        data={
+            "total_sales": total_sales,
+            "total_order": total_order,
+            "total_user": total_user,
+        }
+    )
+
+
+@router.get("/dashboard", response_model=GetDashboard, status_code=status.HTTP_200_OK)
+def get_dashboard(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+):
 
     income_per_month = session.execute(
         """
@@ -149,8 +182,6 @@ def get_dashboard(
     ).fetchall()
 
     return GetDashboard(
-        total_user=total_user,
-        total_order=total_order,
         income_per_month=income_per_month[::-1],
         total_order_per_category=total_order_per_category,
     )

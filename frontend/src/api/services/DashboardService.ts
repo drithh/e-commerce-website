@@ -4,6 +4,7 @@
 import type { GetCustomers } from "../models/GetCustomers";
 import type { GetDashboard } from "../models/GetDashboard";
 import type { GetOrders } from "../models/GetOrders";
+import type { GetSales } from "../models/GetSales";
 
 import type { CancelablePromise } from "../core/CancelablePromise";
 import { OpenAPI } from "../core/OpenAPI";
@@ -55,6 +56,18 @@ export class DashboardService {
       errors: {
         422: `Validation Error`,
       },
+    });
+  }
+
+  /**
+   * Get Sales
+   * @returns GetSales Successful Response
+   * @throws ApiError
+   */
+  public static getSales(): CancelablePromise<GetSales> {
+    return __request(OpenAPI, {
+      method: "GET",
+      url: "/api/v1/dashboard",
     });
   }
 

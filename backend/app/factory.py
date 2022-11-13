@@ -17,7 +17,6 @@ from app.api import (
     images,
     orders,
     products,
-    sales,
     users,
     wishlists,
 )
@@ -105,11 +104,6 @@ def setup_routers(app: FastAPI) -> None:
         carts.router,
         prefix=f"{settings.API_PATH}/cart",
         tags=["Cart"],
-    )
-    app.include_router(
-        sales.router,
-        prefix=f"{settings.API_PATH}",
-        tags=["Sales"],
     )
     app.include_router(
         orders.router,

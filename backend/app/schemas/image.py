@@ -7,3 +7,10 @@ class GetImage(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class SearchImage(BaseModel):
+    image: str
+
+    class Config:
+        orm_mode = True

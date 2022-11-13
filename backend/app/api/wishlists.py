@@ -14,8 +14,7 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.user import User
 from app.models.wishlist import Wishlist
-from app.schemas.request_params import DefaultResponse
-from app.schemas.sale import GetSales
+from app.schemas.default_model import DefaultResponse
 from app.schemas.wishlist import GetWishlist
 
 router = APIRouter()

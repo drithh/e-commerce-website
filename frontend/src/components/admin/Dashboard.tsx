@@ -2,7 +2,6 @@ import { AiOutlineUserAdd } from "react-icons/ai";
 import { BsBoxSeam } from "react-icons/bs";
 import { TfiMoney } from "react-icons/tfi";
 import { DashboardService } from "../../api";
-import { SalesService } from "../../api";
 import { useQuery } from "react-query";
 import { convertToCurrency } from "../util/utilFunc";
 
@@ -27,7 +26,7 @@ const Dashboard = () => {
   const fetchDashboard = useQuery("dashboard", () =>
     DashboardService.getDashboard()
   );
-  const fetchSales = useQuery("sales", () => SalesService.getSales());
+  const fetchSales = useQuery("sales", () => DashboardService.getSales());
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -43,7 +42,9 @@ const Dashboard = () => {
           <div className="w-full flex place-items-center flex-col">
             <div>
               <p className="text-xl">Total User</p>
-              <p className="text-gray-400">{fetchDashboard.data?.total_user}</p>
+              <p className="text-gray-400">
+                {fetchSales.data?.data.total_user}
+              </p>
             </div>
           </div>
         </div>
@@ -53,7 +54,7 @@ const Dashboard = () => {
             <div>
               <p className="text-xl">Total Order</p>
               <p className="text-gray-400">
-                {fetchDashboard.data?.total_order}
+                {fetchSales.data?.data.total_order}
               </p>
             </div>
           </div>
@@ -64,7 +65,7 @@ const Dashboard = () => {
             <div>
               <p className="text-xl">Total Sale</p>
               <p className="text-gray-400">
-                {convertToCurrency(fetchSales.data?.data.total || 0)}
+                {convertToCurrency(fetchSales.data?.data.total_sales || 0)}
               </p>
             </div>
           </div>
