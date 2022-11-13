@@ -1,4 +1,4 @@
-const MenuIcon = ({ size = 'md', extraClass = '' }) => (
+const MenuIcon = ({ size = "md", extraClass = "" }) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     className="h-8 w-8 sm:h-6 sm:w-6"

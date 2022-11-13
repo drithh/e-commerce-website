@@ -9,11 +9,13 @@ class Category(DefaultModel, Base):
     __tablename__ = "categories"
 
     title = Column(String(length=64), nullable=False, unique=True)
+    type = Column(String(length=64), nullable=False, default="Other")
 
     @classmethod
-    def seed(cls, fake, category):
+    def seed(cls, fake, category_title, category_type):
         category = Category(
             id=fake.uuid4(),
-            title=category,
+            title=category_title,
+            type=category_type,
         )
         return category

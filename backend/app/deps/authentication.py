@@ -6,6 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 
 from app.core.config import settings
+from app.db import SessionLocal
 from app.deps.db import get_db
 from app.models.user import User
 from app.schemas.authentication import TokenData
@@ -35,6 +36,27 @@ async def get_current_active_user(
     if user is None:
         raise credentials_exception
     return user
+
+
+def is_authenticated(token: str):
+    try:
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        email: str = payload.get("sub")
+        if email is None:
+            return None
+        token_data = TokenData(email=email)
+    except JWTError:
+        return None
+    user = (
+        SessionLocal()
+        .execute(
+            "SELECT * FROM users WHERE email = :email", {"email": token_data.email}
+        )
+        .fetchone()
+    )
+    if user is None:
+        return None
+    return user.is_admin
 
 
 def create_access_token(data: dict):
@@ -80,19 +102,4 @@ def password_validation(password: str):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password must contain at least one letter",
-        )
-    if password.isalnum():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must contain at least one special character",
-        )
-    if password.islower():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must contain at least one uppercase letter",
-        )
-    if password.isupper():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Password must contain at least one lowercase letter",
         )

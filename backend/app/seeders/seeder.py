@@ -72,7 +72,7 @@ product_items = [
         "category": "t-shirts",
         "item": [
             {
-                "name": "Skeleteon Tee",
+                "name": "Skeleton Tee",
                 "price": 90000,
             },
             {
@@ -80,7 +80,7 @@ product_items = [
                 "price": 120000,
             },
             {
-                "name": "Slogan Graphic Oversizde Tee",
+                "name": "Slogan Graphic Oversized Tee",
                 "price": 140000,
             },
             {
@@ -88,7 +88,7 @@ product_items = [
                 "price": 110000,
             },
             {
-                "name": "Reflective ExpressionTee",
+                "name": "Reflective Expression Tee",
                 "price": 150000,
             },
             {
@@ -423,7 +423,7 @@ product_items = [
                 "price": 480000,
             },
             {
-                "name": "Men Plaid & Letter Graphic Flap Pocket Zipper Coat",
+                "name": "Men Plaid Letter Graphic Flap Pocket Zipper Coat",
                 "price": 550000,
             },
         ],
@@ -475,15 +475,61 @@ product_items = [
     },
 ]
 
-category_items = []
+category_items = [
+    {
+        "title": "shirts",
+        "type": "tops",
+    },
+    {
+        "title": "t-shirts",
+        "type": "tops",
+    },
+    {
+        "title": "sandals",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "sneakers",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "ankle-boots",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "trousers",
+        "type": "bottoms",
+    },
+    {
+        "title": "pullovers",
+        "type": "tops",
+    },
+    {
+        "title": "dresses",
+        "type": "tops",
+    },
+    {
+        "title": "coats",
+        "type": "tops",
+    },
+    {
+        "title": "bags",
+        "type": "shoes & accessories",
+    },
+    {
+        "title": "hats",
+        "type": "shoes & accessories",
+    },
+]
 product_urls = []
 for product_item in product_items:
-    category_items.append(product_item["category"])
     for item in product_item["item"]:
         for i in range(1, 3):
             product_urls.append(
                 f"products/{product_item['category']}/{item['name'].replace(' ', '-').lower()}-{i}.webp"
             )
+
+banner_text = ["Night Summer Dresses", "The Weekend Promotions", "New Cocktail Dresses"]
 
 
 def seed():
@@ -506,14 +552,12 @@ def seed():
         category_id = category_seed(fake, session, category_items)
 
         logger.info("Seeding Table Banners")
-        banner_seed(fake, session, banner_image_id)
+        banner_seed(fake, session, banner_image_id, banner_text)
         session.commit()
 
         # change product_items category to category_id
-        for product_item in product_items:
-            product_item["category"] = category_id[
-                category_items.index(product_item["category"])
-            ]
+        for product_item, category in zip(product_items, category_id):
+            product_item["category"] = category
 
         logger.info("Seeding Table Products")
         product_id = product_seed(fake, session, product_items)

@@ -17,7 +17,7 @@ class Cart(DefaultModel, Base):
     def seed(cls, fake, user_id, product_size_quantity_id):
         cart = Cart(
             id=fake.uuid4(),
-            quantity=fake.pyint(max_value=10),
+            quantity=fake.pyint(min_value=1, max_value=5),
             user_id=user_id,
             product_size_quantity_id=product_size_quantity_id,
         )

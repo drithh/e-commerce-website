@@ -1,9 +1,9 @@
 import uuid
 from datetime import datetime, timedelta
-from typing import Generator
+from typing import Any, Generator
 
 import pytz
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -12,13 +12,15 @@ from app.deps.authentication import (
     create_access_token,
     email_validation,
     get_current_active_user,
+    is_authenticated,
     password_validation,
 )
 from app.deps.db import get_db
-from app.deps.email import send_forgot_password_email
+from app.deps.send_email import send_forgot_password_email
 from app.models.forgot_password import ForgotPassword
 from app.models.user import User
 from app.schemas.authentication import (
+    AccessToken,
     ChangePassword,
     GetUser,
     ResetPassword,
@@ -28,6 +30,31 @@ from app.schemas.authentication import (
 from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
+
+
+@router.get(
+    "/role",
+    response_model=DefaultResponse,
+    status_code=status.HTTP_200_OK,
+    responses={
+        200: {
+            "description": "Return current user role",
+            "content": {"application/json": {"example": {"message": "guest"}}},
+        },
+    },
+)
+def get_role(request: Request) -> Any:
+    access_token = request.headers.get("Authorization") or ""
+    access_token = access_token.replace("Bearer ", "")
+    logger.info(f"access_token: {access_token}")
+    role = is_authenticated(access_token)
+    message = "guest"
+    if role is not None:
+        if role is False:
+            message = "user"
+        else:
+            message = "admin"
+    return DefaultResponse(message=message)
 
 
 @router.post("/sign-in", response_model=UserRead, status_code=status.HTTP_200_OK)
@@ -144,7 +171,7 @@ async def forgot_password(
 
 
 @router.put(
-    "/reset-password/{token}",
+    "/reset-password",
     status_code=status.HTTP_201_CREATED,
     response_model=DefaultResponse,
 )
@@ -195,14 +222,15 @@ def change_password(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ):
-    password_validation(request.new_password)
 
     if not User.verify_password(request.old_password, current_user):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect password",
+            detail="Your old password is incorrect",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    password_validation(request.new_password)
+
     hashed_password, salt = User.encrypt_password(request.new_password)
     current_user.password = hashed_password
     current_user.salt = salt

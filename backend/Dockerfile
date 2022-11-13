@@ -2,6 +2,7 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
+ENV PIP_DEFAULT_TIMEOUT=100
 # Install Poetry
 RUN pip install poetry
 

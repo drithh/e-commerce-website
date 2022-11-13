@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC } from "react";
 
 type Props = {
   imgSrc: string;
@@ -8,9 +8,9 @@ type Props = {
 };
 
 const OverlayContainer: FC<Props> = ({ imgSrc, imgAlt, children }) => (
-  <div className="group relative flex items-center justify-center overflow-hidden">
+  <div className="group relative flex h-72 items-center justify-center overflow-hidden">
     <img
-      className="transition-all duration-500 group-hover:scale-110"
+      className="object-cover transition-all duration-500  group-hover:scale-110"
       src={imgSrc}
       alt={imgAlt}
       width={710}

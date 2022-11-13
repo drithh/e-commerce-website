@@ -1,4 +1,4 @@
-from email.generator import Generator
+from typing import Generator
 
 from fastapi import status
 from fastapi.params import Depends
@@ -21,10 +21,16 @@ def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):
-    finished_order = session.query(Order).filter(Order.status == "finished").all()
+    total_sales = session.execute(
+        """
+        SELECT SUM(price * quantity) total_sales
+        FROM order_items
+        JOIN orders ON order_items.order_id = orders.id
+        WHERE orders.status = 'completed'
+        """
+    ).fetchone()
 
-    total_sold = sum([order.order_price for order in finished_order]) + sum(
-        [order.shipping_price for order in finished_order]
-    )
+    if not total_sales:
+        total_sales = 0
 
-    return GetSales(data={"total": total_sold})
+    return GetSales(data={"total": total_sales.total_sales})

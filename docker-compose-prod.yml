@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./backend/sql/extension:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres', '-d', 'app']
+      interval: 3s
+      timeout: 2s
+      retries: 3
+
+  backend:
+    build:
+      context: backend
+    ports:
+      - '8000:8000'
+    env_file: .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: frontend
+    ports:
+      - '3000:80'
+    volumes:
+      - ./frontend:/app:delegated
+    environment:
+      - NODE_ENV=production
+
+volumes:
+  postgres-data:
+  root-home:

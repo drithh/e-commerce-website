@@ -48,7 +48,26 @@
 │   ├── pyproject.toml -> Package manager
 │   ├── sql -> SQL scripts
 │   └── tests -> Unit tests
-└── frontend -> Frontend
+├── frontend -> Frontend
+│   ├── package.json -> package manager
+│   └── src
+│       ├── api -> Generated API client
+│       ├── App.tsx  -> Main app
+│       ├── assets  -> Assets
+│       │   ├── fonts
+│       │   └── icons
+│       ├── components
+│       │   ├── Banner.tsx
+│       │   ├── ...
+│       │   └── PopoverMenu.tsx
+│       ├── context
+│       └── pages
+│           ├── Checkout.tsx
+│           ├── ...
+│           └── Wishlist.tsx
+├── Makefile  -> Macros for running commands
+└── README.md
+
 ```
 
 ### Step 1: Getting started
@@ -84,6 +103,16 @@ pre-commit install
 
 The backend setup of docker-compose is set to automatically reload the app whenever code is updated.
 
+```bash
+cd frontend
+npm install
+npm start
+```
+
+If you want to develop against something other than the default host, localhost:8000, you can set the `REACT_APP_BACKEND_URL` environment variable
+
+Don't forget to edit the .env file and update the BACKEND_CORS_ORIGINS value (add http://mydomain:3000 to the allowed origins).
+
 ### Database migrations
 
 Useful commands for database migrations:
@@ -104,6 +133,9 @@ make seed
 # Dearchive Soft Deleted Field
 make dearchive
 
+# Drop all tables
+make drop-tables
+
 ```
 
 ### Backend tests
@@ -111,7 +143,7 @@ make dearchive
 Backend uses a hardcoded database named apptest, first ensure that it's created
 
 ```bash
-docker-compose exec postgres createdb apptest -U postgres
+make test-db
 ```
 
 Then you can run tests with this command:

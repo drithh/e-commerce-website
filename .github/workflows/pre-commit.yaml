@@ -12,10 +12,8 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
-      # - uses: actions/setup-node@v3
-      #   with:
-      #     node-version: '14'
-      #     cache-dependency-path: "frontend/yarn.lock"
-      #     cache: 'yarn'
-      # - run: cd frontend && yarn install
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - run: cd frontend && yarn install
       - uses: pre-commit/action@v3.0.0

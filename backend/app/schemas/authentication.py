@@ -1,10 +1,15 @@
 from typing import Union
+from uuid import uuid4
 
 from pydantic import BaseModel
 
 
+class AccessToken(BaseModel):
+    access_token: str = uuid4()
+
+
 class Token(BaseModel):
-    access_token: str
+    access_token: AccessToken
     token_type: str
 
 

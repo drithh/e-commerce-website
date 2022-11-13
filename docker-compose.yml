@@ -28,16 +28,6 @@ services:
       postgres:
         condition: service_healthy
 
-  # frontend:
-  #   build:
-  #     context: frontend
-  #   ports:
-  #     - '3000:80'
-  #   volumes:
-  #     - ./frontend:/app:delegated
-  #   environment:
-  #     - NODE_ENV=production
-
 volumes:
   postgres-data:
   root-home:

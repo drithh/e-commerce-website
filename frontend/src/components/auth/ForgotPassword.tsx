@@ -1,34 +1,30 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import { useAuth } from '../../context/AuthContext';
-import Button from '../button/Button';
-import Input from '../input/Input';
+import React, { useState } from "react";
+import { Dialog } from "@headlessui/react";
+import Button from "../button/Button";
+import Input from "../input/Input";
 
 type Props = {
   onLogin: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
-  setSuccessMsg: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const ForgotPassword: React.FC<Props> = ({
   onLogin,
   errorMsg,
   setErrorMsg,
-  setSuccessMsg,
 }) => {
-  const auth = useAuth();
-
-  const [email, setEmail] = useState('');
+  // const auth = useAuth();
+  let auth: any;
+  const [email, setEmail] = useState("");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const forgotPasswordResponse = await auth.forgotPassword!(email);
     console.log(forgotPasswordResponse);
     if (forgotPasswordResponse.success) {
-      setSuccessMsg('login_successful');
     } else {
-      setErrorMsg('incorrect_email_password');
+      setErrorMsg("incorrect_email_password");
     }
   };
 
@@ -43,7 +39,7 @@ const ForgotPassword: React.FC<Props> = ({
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
           type="email"
-          placeholder={'Email Address *'}
+          placeholder={"Email Address *"}
           name="email"
           required
           extraClass="w-full focus:border-gray-500"
@@ -51,19 +47,19 @@ const ForgotPassword: React.FC<Props> = ({
           onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
           value={email}
         />
-        {errorMsg !== '' && (
+        {errorMsg !== "" && (
           <div className="text-red mb-4 whitespace-nowrap text-sm">
             {errorMsg}
           </div>
         )}
         <Button
           type="submit"
-          value={'Submit'}
+          value={"Submit"}
           extraClass="w-full text-center text-xl mb-4"
           size="lg"
         />
         <div className="text-center text-gray-400">
-          Go back to{' '}
+          Go back to{" "}
           <span
             onClick={onLogin}
             className="cursor-pointer text-gray-500 focus:underline focus:outline-none"

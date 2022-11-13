@@ -1,4 +1,5 @@
 from app import db
+from app.core.logger import logger
 
 
 def drop_tables():
@@ -9,6 +10,7 @@ def drop_tables():
             "SELECT table_name FROM information_schema.tables WHERE table_name NOT LIKE 'z_archive_%' AND table_schema='public'"
         ).fetchall()
         for table_name in table_names:
+            logger.info(f"Dropping table {table_name[0]}")
             session.execute(f"DROP TABLE {table_name[0]} CASCADE")
         session.commit()
 

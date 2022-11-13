@@ -1,30 +1,30 @@
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
-import Button from '../button/Button';
-import BagIcon from '../../assets/icons/BagIcon';
-import Item from './Item';
-import LinkButton from '../button/LinkButton';
-import { roundDecimal } from '../util/utilFunc';
-import { useCart } from '../../context/cart/CartProvider';
-import { useNavigate } from 'react-router-dom';
+import Button from "../button/Button";
+import { HiOutlineShoppingBag } from "react-icons/hi";
+import Item from "./Item";
+import { roundDecimal, convertToCurrency } from "../util/utilFunc";
+import { useCart } from "../../context/CartContext";
+import { useNavigate } from "react-router-dom";
 
 export default function CartItem() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [animate, setAnimate] = useState('');
-  const { cart, addOne, removeItem, deleteItem } = useCart();
+  const [animate, setAnimate] = useState("");
+  const { cart, updateCartItem, deleteCartItem } = useCart();
 
   let subtotal = 0;
 
-  let noOfItems = 0;
-  cart.forEach((item) => {
-    noOfItems += item.qty!;
-  });
+  const noOfItems = cart.data.reduce((acc, item) => {
+    return acc + item.details.quantity;
+  }, 0);
+
+  // count total number of items in cart
 
   const handleAnimate = useCallback(() => {
     if (noOfItems === 0) return;
-    setAnimate('animate__animated animate__headShake');
+    setAnimate("animate__animated animate__headShake");
     // setTimeout(() => {
     //   setAnimate("");
     // }, 0.1);
@@ -34,7 +34,7 @@ export default function CartItem() {
   useEffect(() => {
     handleAnimate();
     setTimeout(() => {
-      setAnimate('');
+      setAnimate("");
     }, 1000);
   }, [handleAnimate]);
 
@@ -50,7 +50,7 @@ export default function CartItem() {
     <>
       <div className="relative">
         <button type="button" onClick={openModal} aria-label="Cart">
-          <BagIcon extraClass="h-8 w-8 sm:h-6 sm:w-6" />
+          <HiOutlineShoppingBag className="h-8 w-8 sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
               className={`${animate} absolute -top-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
@@ -99,7 +99,7 @@ export default function CartItem() {
               leaveTo="translate-x-full"
             >
               <div
-                style={{ height: '100vh' }}
+                style={{ height: "100vh" }}
                 className="dur relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
               >
                 <div className="bg-lightgreen flex items-center justify-between p-6">
@@ -113,43 +113,50 @@ export default function CartItem() {
                   </button>
                 </div>
 
-                <div className="h-full">
-                  <div className="itemContainer h-2/3 w-full flex-shrink flex-grow overflow-y-auto px-4">
-                    {cart.map((item) => {
-                      subtotal += item.price * item.qty!;
+                <div className="h-full flex flex-col place-content-between">
+                  <div className="itemContainer w-full flex-shrink flex-grow px-4 overflow-y-scroll">
+                    {cart.data.map((item) => {
+                      subtotal += item.price * item.details.quantity!;
                       return (
                         <Item
                           key={item.id}
                           name={item.name}
-                          price={item.price * item.qty!}
-                          qty={item.qty!}
-                          img={item.img1 as string}
-                          onAdd={() => addOne!(item)}
-                          onRemove={() => removeItem!(item)}
-                          onDelete={() => deleteItem!(item)}
+                          price={item.price * item.details.quantity!}
+                          quantity={item.details.quantity!}
+                          size={item.details.size}
+                          img={item.image as string}
+                          onAdd={() => {
+                            updateCartItem?.mutate({
+                              cart_id: item.id,
+                              quantity: 1,
+                            });
+                          }}
+                          onRemove={() => {
+                            updateCartItem?.mutate({
+                              cart_id: item.id,
+                              quantity: -1,
+                            });
+                          }}
+                          onDelete={() => {
+                            deleteCartItem?.mutate({
+                              cartId: item.id,
+                            });
+                          }}
                         />
                       );
                     })}
                   </div>
-                  <div className="btnContainer mt-4 mb-20 flex h-1/3 w-full flex-col px-4 ">
+                  <div className="btnContainer mt-4 mb-20 flex min-h-[6rem] w-full flex-col px-4 ">
                     <div className="flex justify-between">
                       <span>Subtotal</span>
-                      <span>$ {roundDecimal(subtotal)}</span>
+                      <span>{convertToCurrency(roundDecimal(subtotal))}</span>
                     </div>
-                    <LinkButton
-                      href="/shopping-cart"
-                      extraClass="my-4"
-                      noBorder={false}
-                      inverted={false}
-                    >
-                      View Cart
-                    </LinkButton>
                     <Button
-                      value={'Checkout'}
+                      value={"Checkout"}
                       onClick={() => {
-                        navigate('/checkout');
+                        navigate("/checkout");
                       }}
-                      disabled={cart.length < 1 ? true : false}
+                      disabled={cart.data.length < 1 ? true : false}
                       extraClass="text-center"
                       size="lg"
                     />

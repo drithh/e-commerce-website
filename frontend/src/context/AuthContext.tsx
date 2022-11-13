@@ -1,188 +1,118 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import React, { useState, useEffect, useContext, createContext } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
-type authType = {
-  user: null | User;
-  register?: (
-    email: string,
-    fullname: string,
-    password: string,
-    shippingAddress: string,
-    phone: string
-  ) => Promise<{
-    success: boolean;
-    message: string;
-  }>;
-  login?: (
-    email: string,
-    password: string
-  ) => Promise<{
-    success: boolean;
-    message: string;
-  }>;
-  forgotPassword?: (email: string) => Promise<{
-    success: boolean;
-    message: string;
-  }>;
+import { OpenAPI, AuthenticationService, UserRead } from "../api";
+import { toast } from "react-toastify";
+import { UseMutationResult, useQuery } from "react-query";
+import Cookies from "js-cookie";
+import { useMutation } from "react-query";
+
+export type authType = {
+  role: string;
+  setRole?: React.Dispatch<React.SetStateAction<string>>;
+  login?: UseMutationResult<
+    UserRead,
+    unknown,
+    {
+      email: string;
+      password: string;
+    },
+    unknown
+  >;
+  register?: UseMutationResult<
+    UserRead,
+    unknown,
+    {
+      name: string;
+      email: string;
+      password: string;
+      phone: string;
+    },
+    unknown
+  >;
   logout?: () => void;
 };
 
-const initialAuth: authType = {
-  user: null,
-};
+const AuthContext = createContext<authType>({ role: "none" });
 
-const authContext = createContext<authType>(initialAuth);
+export const useAuth = () => useContext(AuthContext);
 
-type User = {
-  id: number;
-  email: string;
-  fullname: string;
-  shippingAddress?: string;
-  phone?: string;
-  token: string;
-};
-
-// Provider component that wraps your app and makes auth object ...
-// ... available to any child component that calls useAuth().
-export function ProvideAuth({ children }: { children: React.ReactNode }) {
-  const auth = useProvideAuth();
-  return <authContext.Provider value={auth}>{children}</authContext.Provider>;
+interface AuthProviderProps {
+  children: React.ReactNode;
 }
-// Hook for child components to get the auth object ...
-// ... and re-render when it changes.
-export const useAuth = () => {
-  return useContext(authContext);
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const auth = useProvideAuth();
+  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>;
 };
 
-// Provider hook that creates auth object and handles state
-function useProvideAuth() {
-  const [user, setUser] = useState<User | null>(null);
+const useProvideAuth = () => {
+  const [role, setRole] = useState("none");
 
-  useEffect(() => {
-    const initialAuth = Cookies.get('user');
-    if (initialAuth) {
-      const initUser = JSON.parse(initialAuth as string);
-      setUser(initUser);
+  const { refetch } = useQuery(
+    "authentication",
+    () => AuthenticationService.getRole(),
+    {
+      retry: false,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
+      onSuccess: (data) => {
+        toast.success(data.message);
+        setRole(data.message);
+        OpenAPI.TOKEN = Cookies.get("token");
+      },
     }
-  }, []);
+  );
 
-  useEffect(() => {
-    Cookies.set('user', JSON.stringify(user));
-  }, [user]);
-
-  const register = async (
-    email: string,
-    fullname: string,
-    password: string,
-    shippingAddress: string,
-    phone: string
-  ) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/register`,
-        {
-          email,
-          fullname,
-          password,
-          shippingAddress,
-          phone,
-        }
-      );
-      const registerResponse = response.data;
-      const user: User = {
-        id: +registerResponse.id,
-        email,
-        fullname,
-        shippingAddress,
-        phone,
-        token: registerResponse.token,
-      };
-      setUser(user);
-      return {
-        success: true,
-        message: 'register_successful',
-      };
-    } catch (err) {
-      const errResponse = (err as any).response.data;
-      let errorMessage: string;
-      if (errResponse.error.type === 'alreadyExists') {
-        errorMessage = errResponse.error.type;
-      } else {
-        errorMessage = errResponse.error.detail.message;
-      }
-      return {
-        success: false,
-        message: errorMessage,
-      };
+  const login = useMutation(
+    (variables: { email: string; password: string }) =>
+      AuthenticationService.signIn({
+        username: variables.email,
+        password: variables.password,
+      }),
+    {
+      onSuccess: (data) => {
+        Cookies.set("token", data.access_token);
+        OpenAPI.TOKEN = data.access_token;
+        refetch();
+      },
     }
-  };
+  );
 
-  const login = async (email: string, password: string) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
-      const loginResponse = response.data;
-      const user: User = {
-        id: +loginResponse.data.id,
-        email,
-        fullname: loginResponse.data.fullname,
-        phone: loginResponse.data.phone,
-        shippingAddress: loginResponse.data.shippingAddress,
-        token: loginResponse.token,
-      };
-      setUser(user);
-      return {
-        success: true,
-        message: 'login_successful',
-      };
-    } catch (err) {
-      return {
-        success: false,
-        message: 'incorrect',
-      };
+  const register = useMutation(
+    (variables: {
+      name: string;
+      email: string;
+      password: string;
+      phone: string;
+    }) =>
+      AuthenticationService.signUp({
+        name: variables.name,
+        email: variables.email,
+        password: variables.password,
+        phone_number: variables.phone,
+      }),
+    {
+      onSuccess: (data) => {
+        Cookies.set("token", data.access_token);
+        OpenAPI.TOKEN = data.access_token;
+        refetch();
+      },
     }
-  };
-
-  const forgotPassword = async (email: string) => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/auth/forgot-password`,
-        {
-          email,
-        }
-      );
-      const forgotPasswordResponse = response.data;
-      setUser(user);
-      return {
-        success: forgotPasswordResponse.success,
-        message: 'reset_email_sent',
-      };
-    } catch (err) {
-      console.log(err);
-      return {
-        success: false,
-        message: 'something_went_wrong',
-      };
-    }
-  };
+  );
 
   const logout = () => {
-    setUser(null);
-    Cookies.remove('user');
+    Cookies.remove("token");
+    OpenAPI.TOKEN = "";
+    refetch();
   };
 
-  // Return the user object and auth methods
   return {
-    user,
-    register,
+    role,
+    setRole,
     login,
-    forgotPassword,
+    refetch,
+    register,
     logout,
   };
-}
+};

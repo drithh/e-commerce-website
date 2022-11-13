@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
@@ -11,12 +12,14 @@ from app.api import (
     authentications,
     carts,
     categories,
+    dashboards,
     homes,
     images,
     orders,
     products,
     sales,
     users,
+    wishlists,
 )
 from app.core.config import settings
 from app.core.logger import logger
@@ -56,6 +59,7 @@ def create_app():
     setup_routers(app)
     init_db_hooks(app)
     setup_cors_middleware(app)
+    setup_gzip_middleware(app)
     serve_static_app(app)
 
     return app
@@ -71,6 +75,11 @@ def setup_routers(app: FastAPI) -> None:
         users.router,
         prefix=f"{settings.API_PATH}/user",
         tags=["User"],
+    )
+    app.include_router(
+        wishlists.router,
+        prefix=f"{settings.API_PATH}/wishlist",
+        tags=["Wishlist"],
     )
     app.include_router(
         images.router,
@@ -107,6 +116,11 @@ def setup_routers(app: FastAPI) -> None:
         prefix=f"{settings.API_PATH}",
         tags=["Order"],
     )
+    app.include_router(
+        dashboards.router,
+        prefix=f"{settings.API_PATH}/dashboard",
+        tags=["Dashboard"],
+    )
 
     # The following operation needs to be at the end of this function
     use_route_names_as_operation_ids(app)
@@ -139,6 +153,10 @@ def setup_cors_middleware(app):
         )
 
 
+def setup_gzip_middleware(app):
+    app.add_middleware(GZipMiddleware, minimum_size=500)
+
+
 def use_route_names_as_operation_ids(app: FastAPI) -> None:
     """
     Simplify operation IDs so that generated API clients have simpler function
@@ -165,7 +183,6 @@ def init_db_hooks(app: FastAPI) -> None:
         Query, "before_compile", retval=True, bake_ok=True, propagate=True
     )
     def no_deleted(query):
-        # disable limit
         query._enable_assertions = False
         for desc in query.column_descriptions:
             entity = desc["entity"]
