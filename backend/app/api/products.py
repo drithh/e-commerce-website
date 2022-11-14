@@ -92,6 +92,11 @@ def get_products(
         },
     ).fetchall()
 
+    if products.__len__() == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="There are no products"
+        )
+
     return GetProducts(
         data=products,
         total_rows=len(products),
