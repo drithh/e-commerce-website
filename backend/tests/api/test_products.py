@@ -41,6 +41,7 @@ def test_get_product(client: TestClient, create_product):
 
 #     category = create_category()
 #     admin = create_admin()
+#     image = create_image()
 
 #     resp = client.post(f"{prefix}",
 #         headers=get_jwt_header(admin),
