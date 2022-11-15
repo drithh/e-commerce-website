@@ -101,7 +101,7 @@ def put_user_balance(
     request: PutUserBalance,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     new_balance = int(current_user.balance) + request.balance
     current_user.balance = new_balance
     try:
