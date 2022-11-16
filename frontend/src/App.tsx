@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Wishlist from "./pages/Wishlist";
@@ -32,9 +32,15 @@ import PersonalData from "./components/profile/PersonalData";
 import Order from "./components/profile/Order";
 import Category from "./components/admin/Category";
 import Customer from "./components/admin/Customer";
+import Search from "./components/Search";
 const queryClient = new QueryClient();
 
 function App() {
+  const [search, setSearch] = useState(false);
+
+  // disable body scroll when search is open
+  document.body.style.overflow = search ? "hidden" : "unset";
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
@@ -55,7 +61,8 @@ function App() {
               />
               <BrowserRouter>
                 {/* ===== Head Section ===== */}
-                <Header />
+                {search && <Search setSearch={setSearch} />}
+                <Header search={search} setSearch={setSearch} />
 
                 <Routes>
                   <Route path="/" element={<Home />} />

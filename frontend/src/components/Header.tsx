@@ -11,7 +11,12 @@ import { useQuery } from "react-query";
 import { CategoryService, DetailCategory } from "../api";
 import { capitalCase } from "change-case";
 
-const Header = () => {
+interface props {
+  search: boolean;
+  setSearch: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Header = ({ search, setSearch }: props) => {
   let categories = new Array<{
     type: string;
     items: DetailCategory[];
@@ -92,7 +97,7 @@ const Header = () => {
       <nav
         className={`${
           scrolled ? "bg-white shadow-md" : "bg-transparent"
-        } fixed top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
+        } sticky top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
       >
         <div className="h-full w-full 2xl:max-w-[96rem]">
           <div className="justify-content-center flex h-full justify-between align-baseline">
@@ -124,7 +129,10 @@ const Header = () => {
             <ul className="mr-4 flex flex-1 place-items-center justify-start gap-x-8 lg:justify-end 2xl:mr-0">
               <li>
                 {/* <SearchForm /> */}
-                <HiOutlineSearch className="text-2xl"></HiOutlineSearch>
+                <HiOutlineSearch
+                  onClick={() => setSearch(true)}
+                  className="text-2xl cursor-pointer"
+                />
               </li>
               <li className="opacity-100 text-2xl">
                 {role !== "guest" ? (
