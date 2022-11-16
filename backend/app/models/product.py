@@ -3,6 +3,18 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from app.db import Base
 from app.models.default import DefaultModel
 
+cloth_brands = [
+    "Adudu",
+    "Nuke",
+    "Elvi's",
+    "The South Butt",
+    "ReadBook",
+    "Dior",
+    "Prada",
+    "Homies",
+    "Versace",
+]
+
 
 class Product(DefaultModel, Base):
     __tablename__ = "products"
@@ -21,7 +33,7 @@ class Product(DefaultModel, Base):
         product = Product(
             id=fake.uuid4(),
             title=item_name,
-            brand=fake.text(max_nb_chars=16),
+            brand=fake.random_element(cloth_brands),
             product_detail=fake.text(max_nb_chars=120),
             price=item_price,
             condition=fake.random_element(elements=("new", "used")),

@@ -75,3 +75,60 @@ BEGIN
     END loop;
 END;
 $$ language 'plpgsql';
+
+-- Implement Full Text Search Function
+-- ALTER TABLE products
+-- ADD search tsvector
+-- GENERATED ALWAYS AS (
+--   setweight(to_tsvector('simple',title), 'A')  || ' ' ||
+--   setweight(to_tsvector('english',brand), 'B') :: tsvector
+
+-- ) stored;
+
+
+-- CREATE index idx_search ON products USING GIN(search);
+
+-- CREATE OR REPLACE FUNCTION search_questions(term TEXT)
+-- returns table(
+--   id UUID,
+--   title TEXT,
+--   rank REAL
+-- )
+-- as
+-- $$
+
+-- SELECT id, title,
+--   ts_rank(search, websearch_to_tsquery('english',term)) +
+--   ts_rank(search, websearch_to_tsquery('simple',term)) as rank
+-- FROM products
+-- WHERE search @@ websearch_to_tsquery('english',term)
+-- OR search @@ websearch_to_tsquery('simple',term)
+-- ORDER BY rank DESC;
+
+-- $$ language SQL;
+
+ ALTER TABLE products
+ ADD search TEXT
+ GENERATED ALWAYS AS (
+    coalesce(title, '') || ' ' || coalesce(brand, '')
+ ) stored;
+
+CREATE INDEX products_searchable_text_trgm_gist_idx on PRODUCTS
+  USING GIST(search  gist_trgm_ops(siglen=256));
+
+CREATE OR REPLACE FUNCTION search_products(term TEXT)
+returns table(
+  id UUID,
+  title TEXT,
+  score REAL
+)
+as
+$$
+
+WITH term AS (SELECT term AS q)
+SELECT id, title,
+      1 - (term.q <<-> search) AS score
+FROM products p , term
+WHERE term.q <% (search)
+ORDER BY term.q <<-> (search) LIMIT 10;
+$$ language SQL;
