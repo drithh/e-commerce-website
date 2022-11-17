@@ -55,6 +55,8 @@ class Settings(BaseSettings):
     USE_CREDENTIALS: bool
     VALIDATE_CERTS: bool
 
+    TWITTER_API: str
+
     #  END: required environment variables
 
     class Config:

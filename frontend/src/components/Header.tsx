@@ -10,13 +10,9 @@ import PopoverMenu from "./PopoverMenu";
 import { useQuery } from "react-query";
 import { CategoryService, DetailCategory } from "../api";
 import { capitalCase } from "change-case";
-
-interface props {
-  search: boolean;
-  setSearch: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const Header = ({ search, setSearch }: props) => {
+import { useSearch } from "../context/SearchContext";
+const Header = () => {
+  const { search, setSearch } = useSearch();
   let categories = new Array<{
     type: string;
     items: DetailCategory[];
@@ -33,6 +29,8 @@ const Header = ({ search, setSearch }: props) => {
   const [didMount, setDidMount] = useState<boolean>(false);
   const { wishlist } = useWishlist();
   const [animate, setAnimate] = useState("");
+
+  document.body.style.overflow = search ? "hidden" : "unset";
 
   let noOfWishlist = wishlist.data?.length || 0;
   // Animate Wishlist Number
@@ -130,7 +128,7 @@ const Header = ({ search, setSearch }: props) => {
               <li>
                 {/* <SearchForm /> */}
                 <HiOutlineSearch
-                  onClick={() => setSearch(true)}
+                  onClick={() => setSearch!(true)}
                   className="text-2xl cursor-pointer"
                 />
               </li>
