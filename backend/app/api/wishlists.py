@@ -41,12 +41,6 @@ def get_wishlist(
         {"user_id": current_user.id},
     ).fetchall()
 
-    if not wishlists:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="You have no wishlists",
-        )
-
     return GetWishlist(data=wishlists)
 
 

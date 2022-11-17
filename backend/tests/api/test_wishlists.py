@@ -10,8 +10,8 @@ def test_get_empty_wishlist(client: TestClient, create_admin):
     user = create_admin()
 
     resp = client.get(f"{prefix}", headers=get_jwt_header(user))
-    assert resp.status_code == 404
-    assert resp.json() == {"message": "You have no wishlists"}
+    assert resp.status_code == 200
+    assert resp.json()["data"] == []
 
 
 def test_get_wishlist(client: TestClient, create_admin, create_wishlist):
