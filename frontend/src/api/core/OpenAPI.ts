@@ -19,7 +19,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-  BASE: 'http://localhost:8000',
+  BASE: process.env.BACKEND_URL || 'http://localhost:8000',
   VERSION: '0.1.0',
   WITH_CREDENTIALS: false,
   CREDENTIALS: 'include',
