@@ -41,7 +41,6 @@ const Home = () => {
   return (
     <main id="main-content" className="min-h-[60vh]">
       <Banner />
-
       {/* ===== Category Section ===== */}
       <section className="h-auto w-full border-b-2  border-y-gray-100 py-10  ">
         <div className="my-6 text-center">

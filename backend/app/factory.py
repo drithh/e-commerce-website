@@ -14,9 +14,9 @@ from app.api import (
     carts,
     categories,
     homes,
-    images,
     orders,
     products,
+    searches,
     users,
     wishlists,
 )
@@ -81,9 +81,9 @@ def setup_routers(app: FastAPI) -> None:
         tags=["Wishlist"],
     )
     app.include_router(
-        images.router,
-        prefix=f"{settings.API_PATH}/image",
-        tags=["Image"],
+        searches.router,
+        prefix=f"{settings.API_PATH}",
+        tags=["Search"],
     )
     app.include_router(
         homes.router,
