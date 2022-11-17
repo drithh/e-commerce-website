@@ -4,5 +4,5 @@ services:
   backend:
     image: 'e-commerce-website-backend:latest'
 
-  # frontend:
-  #   image: "e-commerce-website-frontend:latest"
+  frontend:
+    image: 'e-commerce-website-frontend:latest'
