@@ -95,7 +95,7 @@ const Header = () => {
       <nav
         className={`${
           scrolled ? "bg-white shadow-md" : "bg-transparent"
-        } sticky top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
+        } fixed top-0 z-50  flex  h-20 w-full place-content-center place-items-center transition-all duration-1000`}
       >
         <div className="h-full w-full 2xl:max-w-[96rem]">
           <div className="justify-content-center flex h-full justify-between align-baseline">

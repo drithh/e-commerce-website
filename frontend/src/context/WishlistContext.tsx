@@ -90,7 +90,7 @@ const useProvideWishlist = () => {
   const clearWishlist = useMutation(() => WishlistService.clearWishlist(), {
     onSuccess: () => {
       refetch();
-      // setWishlist([]);
+      setWishlist({ data: [] });
     },
   });
 

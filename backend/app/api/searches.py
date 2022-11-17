@@ -64,8 +64,7 @@ async def search_image(
     session: Generator = Depends(get_db),
 ) -> Any:
     img_data, image_type = base64_to_image(request.base64_image)
-    # sleep(5)
-    await sleep(15)
+    await sleep(15)  # Simulate a long running task AI Image Classification
     return session.execute(
         """
             SELECT id, title FROM

@@ -1,8 +1,4 @@
-import {
-  HiOutlineArrowLongLeft,
-  HiOutlineArrowLongRight,
-} from "react-icons/hi2";
-
+import { CgArrowLongLeft, CgArrowLongRight } from "react-icons/cg";
 interface ProductParams {
   category: Array<string>;
   page: number;
@@ -91,7 +87,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                 : "cursor-pointer"
             } mx-1 flex h-10 w-16 items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
-            <HiOutlineArrowLongLeft />
+            <CgArrowLongLeft />
           </button>
         </li>
         {(midPageNumbers || endPageNumbers) && (
@@ -142,9 +138,9 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
               currentPage >= lastPage
                 ? "pointer-events-none cursor-not-allowed text-gray-400"
                 : "cursor-pointer"
-            } mx-1 flex h-10 w-16 items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
+            } mx-1 flex h-10 w-16  items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
-            <HiOutlineArrowLongRight />
+            <CgArrowLongRight />
           </button>
         </li>
       </ul>

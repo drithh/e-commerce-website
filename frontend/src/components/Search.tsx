@@ -22,9 +22,6 @@ const Search = () => {
     {
       enabled: searchText.length > 0,
       staleTime: Infinity,
-      onSuccess: (data) => {
-        console.log(data);
-      },
     }
   );
 
@@ -37,7 +34,7 @@ const Search = () => {
 
   return (
     <div
-      className="pt-10 fixed z-[200]  w-screen h-screen  px-2 bg-[rgba(0,0,0,0.5)]"
+      className="pt-10 fixed z-[200]  w-screen h-screen  px-2 bg-[rgba(0,0,0,0.5)] top-0"
       onKeyDown={(e) => {
         if (e.key === "Escape") {
           setSearch!(false);
@@ -104,9 +101,7 @@ const Dropzone = () => {
   const { setSearch, setSearchImage } = useSearch();
   const image = useRef<any>(null);
   const [processing, setProcessing] = useState(false);
-  const [showerThought, setShowerThought] = useState(
-    "Did you know? The first computer mouse was made out of wood."
-  );
+  const [showerThought, setShowerThought] = useState("");
   const indexShowerThought = useRef(0);
   const searchByImage = useMutation(
     (base64_image: string) => SearchService.searchImage({ base64_image }),
@@ -120,7 +115,7 @@ const Dropzone = () => {
           file: image.current,
           category: data.title,
         });
-        navigate(`/products?category=${data.id}`);
+        navigate(`/products?category=${data.id}&searchImage=true`);
       },
     }
   );
@@ -129,7 +124,7 @@ const Dropzone = () => {
     "showerThought",
     () => SearchService.showerThoughts(),
     {
-      staleTime: Infinity,
+      staleTime: 10000,
       onSuccess: (data) => {
         setShowerThought(data.data[indexShowerThought.current]);
         indexShowerThought.current++;
@@ -147,7 +142,7 @@ const Dropzone = () => {
         );
         indexShowerThought.current++;
       }
-    }, 9000);
+    }, 8000);
 
     return () => clearInterval(interval);
   }, [fetchShowerThought.data]);
@@ -198,7 +193,7 @@ const Dropzone = () => {
         {processing ? (
           <div className="flex flex-col justify-center items-center">
             <p className="">Processing Your Image</p>
-            <AiOutlineLoading3Quarters className="my-3 animate-spin text-5xl text-gray-300" />
+            <AiOutlineLoading3Quarters className="my-3 animate-spin-slow text-5xl text-gray-300" />
           </div>
         ) : isDragReject ? (
           <p>Unsupported file type...</p>

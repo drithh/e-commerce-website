@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState } from "react";
 
 import { OpenAPI, AuthenticationService, UserRead } from "../api";
-import { toast } from "react-toastify";
 import { UseMutationResult, useQuery } from "react-query";
 import Cookies from "js-cookie";
 import { useMutation } from "react-query";
@@ -57,7 +56,6 @@ const useProvideAuth = () => {
       refetchOnMount: false,
       staleTime: Infinity,
       onSuccess: (data) => {
-        toast.success(data.message);
         setRole(data.message);
         OpenAPI.TOKEN = Cookies.get("token");
       },

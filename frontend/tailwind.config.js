@@ -17,6 +17,7 @@ module.exports = {
       },
       animation: {
         "spin-fast-once": "zoom-spin 0.5s cubic-bezier(0.4, 0, 0.6, 1) 0.5",
+        "spin-slow": "spin 3s linear infinite",
       },
       keyframes: {
         "zoom-spin": {

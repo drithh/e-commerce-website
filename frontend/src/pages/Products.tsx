@@ -111,7 +111,7 @@ const Products = () => {
                       category: "",
                     });
                   }}
-                  className="absolute top-0 right-0 animate-spin-fast-once text-3xl text-gray-400 "
+                  className="absolute top-0 right-0 animate-spin-fast-once text-3xl text-gray-400 cursor-pointer"
                 />
               </div>
             </section>

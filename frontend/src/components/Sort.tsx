@@ -59,6 +59,10 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
     requestParams.append("page", params.page.toString());
     requestParams.append("page_size", params.pageSize.toString());
     requestParams.append("sort_by", params.sortBy);
+
+    if (searchParams.get("searchImage") !== null) {
+      params.category = searchParams.getAll("category");
+    }
     params.category.forEach((single_category) => {
       requestParams.append("category", single_category);
     });
