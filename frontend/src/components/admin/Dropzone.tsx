@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import { IoClose } from "react-icons/io5";
+import React, { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { IoClose } from 'react-icons/io5';
 
 interface props {
   initialImages: string[];
@@ -31,8 +31,8 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
   } = useDropzone({
     onDrop,
     accept: {
-      "image/jpeg": [],
-      "image/png": [],
+      'image/jpeg': [],
+      'image/png': [],
     },
   });
 
@@ -82,10 +82,10 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
       </div>
       <div
         {...getRootProps()}
-        className={`${isDragActive && "bg-gray-100"} ${
-          isDragReject && "bg-red-100"
+        className={`${isDragActive && 'bg-gray-100'} ${
+          isDragReject && 'bg-red-100'
         } ${
-          isDragAccept && "bg-green-100"
+          isDragAccept && 'bg-green-100'
         } gap-y flex h-[10rem] w-full cursor-pointer flex-col place-content-center place-items-center border-2 border-dashed border-gray-300 text-xl font-bold`}
       >
         <input {...getInputProps()} />

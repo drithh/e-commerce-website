@@ -1,20 +1,20 @@
-import { Link, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { Link, useParams } from 'react-router-dom';
+import { useMutation, useQuery } from 'react-query';
 import {
   ProductService,
   CategoryService,
   UpdateStock,
   Stock,
   ApiError,
-} from "../../api";
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import Input from "../input/Input";
-import Button from "../button/Button";
-import Dropdown from "../input/Dropdown";
-import Dropzone from "./Dropzone";
-import { convertToBase64 } from "../util/utilFunc";
-import { toast } from "react-toastify";
+} from '../../api';
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import Input from '../input/Input';
+import Button from '../button/Button';
+import Dropdown from '../input/Dropdown';
+import Dropzone from './Dropzone';
+import { convertToBase64 } from '../util/utilFunc';
+import { toast } from 'react-toastify';
 
 interface categoryType {
   id: string;
@@ -23,12 +23,12 @@ interface categoryType {
 
 const Product = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState("");
-  const [brand, setBrand] = useState("");
-  const [detail, setDetail] = useState("");
+  const [title, setTitle] = useState('');
+  const [brand, setBrand] = useState('');
+  const [detail, setDetail] = useState('');
   const [price, setPrice] = useState(0);
-  const [category, setCategory] = useState("");
-  const [condition, setCondition] = useState("");
+  const [category, setCategory] = useState('');
+  const [condition, setCondition] = useState('');
   const [stock, setStock] = useState<Stock[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<categoryType[]>([]);
   const [images, setImages] = useState<string[]>([]);
@@ -69,7 +69,7 @@ const Product = () => {
   );
 
   const fetchProduct = useQuery(
-    ["product", id],
+    ['product', id],
     () => ProductService.getProduct(id as string),
     {
       refetchOnWindowFocus: false,
@@ -87,7 +87,7 @@ const Product = () => {
   );
 
   const fetchCategories = useQuery(
-    "categories",
+    'categories',
     () => CategoryService.getCategory(),
     {
       refetchOnWindowFocus: false,
@@ -132,7 +132,7 @@ const Product = () => {
       },
       {
         onSuccess: () => {
-          toast.success("Product updated");
+          toast.success('Product updated');
         },
         onError: (error) => {
           toast.error((error as ApiError).body.message);
@@ -226,7 +226,7 @@ const Product = () => {
                 setSelected={setCondition}
                 width="w-64"
                 border="border-2 border-gray-400"
-                options={["new", "used"]}
+                options={['new', 'used']}
               />
             </div>
           </div>

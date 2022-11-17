@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { ApiError, UserService } from "../../api";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-query';
+import { ApiError, UserService } from '../../api';
+import Button from '../button/Button';
+import Input from '../input/Input';
+import { toast } from 'react-toastify';
 
 const Customer = () => {
   const { id } = useParams();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [balance, setBalance] = useState(0);
-  const [addressName, setAddressName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
+  const [addressName, setAddressName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
 
   const updateUser = useMutation(
     (variables: {
@@ -49,7 +49,7 @@ const Customer = () => {
   );
 
   const fetchUser = useQuery(
-    ["user-detail", id],
+    ['user-detail', id],
     () => UserService.getDetailUser(id as string),
     {
       refetchOnWindowFocus: false,
@@ -57,10 +57,10 @@ const Customer = () => {
         setName(data.name);
         setEmail(data.email);
         setBalance(data.balance);
-        setAddressName(data.address_name ?? "");
-        setPhoneNumber(data.phone_number ?? "");
-        setAddress(data.address ?? "");
-        setCity(data.city ?? "");
+        setAddressName(data.address_name ?? '');
+        setPhoneNumber(data.phone_number ?? '');
+        setAddress(data.address ?? '');
+        setCity(data.city ?? '');
       },
     }
   );

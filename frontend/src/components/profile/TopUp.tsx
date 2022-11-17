@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { ApiError, UserService } from "../../api";
-import { useMutation } from "react-query";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import { Dialog } from '@headlessui/react';
+import Button from '../button/Button';
+import Input from '../input/Input';
+import { ApiError, UserService } from '../../api';
+import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
 
 type Props = {
   closeModal: () => void;
@@ -12,7 +12,7 @@ type Props = {
 
 const TopUp: React.FC<Props> = ({ closeModal }) => {
   const [balance, setBalance] = useState(0);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   const topUp = useMutation(
     (variables: { balance: number }) =>
@@ -46,11 +46,11 @@ const TopUp: React.FC<Props> = ({ closeModal }) => {
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
           type="number"
-          placeholder={"Amount *"}
+          placeholder={'Amount *'}
           name="amount"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300 mb-4"
           onChange={(e) =>
@@ -58,7 +58,7 @@ const TopUp: React.FC<Props> = ({ closeModal }) => {
           }
           value={balance.toString()}
         />
-        {errorMsg !== "" && (
+        {errorMsg !== '' && (
           <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>

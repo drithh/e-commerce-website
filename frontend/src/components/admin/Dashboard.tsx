@@ -1,9 +1,9 @@
-import { AiOutlineUserAdd } from "react-icons/ai";
-import { BsBoxSeam } from "react-icons/bs";
-import { TfiMoney } from "react-icons/tfi";
-import { DashboardService } from "../../api";
-import { useQuery } from "react-query";
-import { convertToCurrency } from "../util/utilFunc";
+import { AiOutlineUserAdd } from 'react-icons/ai';
+import { BsBoxSeam } from 'react-icons/bs';
+import { TfiMoney } from 'react-icons/tfi';
+import { DashboardService } from '../../api';
+import { useQuery } from 'react-query';
+import { convertToCurrency } from '../util/utilFunc';
 
 import {
   LineChart,
@@ -17,16 +17,16 @@ import {
   PieChart,
   Pie,
   Sector,
-} from "recharts";
-import { useState } from "react";
-import { capitalCase } from "change-case";
-const pluralize = require("pluralize");
+} from 'recharts';
+import { useState } from 'react';
+import { capitalCase } from 'change-case';
+const pluralize = require('pluralize');
 
 const Dashboard = () => {
-  const fetchDashboard = useQuery("dashboard", () =>
+  const fetchDashboard = useQuery('dashboard', () =>
     DashboardService.getDashboard()
   );
-  const fetchSales = useQuery("sales", () => DashboardService.getSales());
+  const fetchSales = useQuery('sales', () => DashboardService.getSales());
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -98,7 +98,7 @@ const Dashboard = () => {
         </div>
         <div className="h-96 p-4 w-[35%] border-gray-400 border-2 mt-5">
           <h1 className="text-xl font-bold text-center">
-            Total Order Per Category{" "}
+            Total Order Per Category{' '}
           </h1>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart width={400} height={400}>

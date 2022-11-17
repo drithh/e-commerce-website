@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { ApiError, CategoryService } from "../../api";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { toast } from "react-toastify";
-import Dropdown from "../input/Dropdown";
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-query';
+import { ApiError, CategoryService } from '../../api';
+import Button from '../button/Button';
+import Input from '../input/Input';
+import { toast } from 'react-toastify';
+import Dropdown from '../input/Dropdown';
 const Category = () => {
   const { id } = useParams();
-  const [category, setCategory] = useState("");
-  const [categoryType, setCategoryType] = useState("");
+  const [category, setCategory] = useState('');
+  const [categoryType, setCategoryType] = useState('');
 
   const updateCategory = useMutation(
     (variables: { id: string; title: string; type: string }) =>
@@ -29,7 +29,7 @@ const Category = () => {
   );
 
   const fetchCategory = useQuery(
-    ["category", id],
+    ['category', id],
     () => CategoryService.getDetailCategory(id as string),
     {
       refetchOnWindowFocus: false,
@@ -41,7 +41,7 @@ const Category = () => {
   );
 
   const fetchCategories = useQuery(
-    "categories",
+    'categories',
     () => CategoryService.getCategory(),
     {
       staleTime: Infinity,

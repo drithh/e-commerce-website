@@ -1,12 +1,12 @@
-import Card from "../components/Card";
-import { useQuery } from "react-query";
-import { ProductService } from "../api";
-import { useSearchParams } from "react-router-dom";
-import { useRef, useState } from "react";
-import Sort from "../components/Sort";
-import Pagination from "../components/Pagination";
-import { IoClose } from "react-icons/io5";
-import { useSearch } from "../context/SearchContext";
+import Card from '../components/Card';
+import { useQuery } from 'react-query';
+import { ProductService } from '../api';
+import { useSearchParams } from 'react-router-dom';
+import { useRef, useState } from 'react';
+import Sort from '../components/Sort';
+import Pagination from '../components/Pagination';
+import { IoClose } from 'react-icons/io5';
+import { useSearch } from '../context/SearchContext';
 
 interface ProductParams {
   category: Array<string>;
@@ -23,17 +23,17 @@ const Products = () => {
   const { searchImage, setSearchImage } = useSearch();
   const scrolledToTop = useRef(false);
   const [params, setParams] = useState<ProductParams>({
-    category: searchParams.getAll("category"),
-    page: Number(searchParams.get("page")) || 1,
-    pageSize: Number(searchParams.get("page_size")) || 12,
-    sortBy: searchParams.get("sort_by") || "Title a_z",
-    price: searchParams.getAll("price").map((price) => Number(price)),
-    condition: searchParams.get("condition") || "",
-    productName: searchParams.get("product_name") || "",
+    category: searchParams.getAll('category'),
+    page: Number(searchParams.get('page')) || 1,
+    pageSize: Number(searchParams.get('page_size')) || 12,
+    sortBy: searchParams.get('sort_by') || 'Title a_z',
+    price: searchParams.getAll('price').map((price) => Number(price)),
+    condition: searchParams.get('condition') || '',
+    productName: searchParams.get('product_name') || '',
   });
 
   const fetchProducts = useQuery(
-    ["products", params],
+    ['products', params],
     () =>
       ProductService.getProducts(
         params.category,
@@ -57,7 +57,7 @@ const Products = () => {
     if (!scrolledToTop.current) {
       window.scrollTo({
         top: 0,
-        behavior: "smooth",
+        behavior: 'smooth',
       });
       scrolledToTop.current = true;
     }
@@ -98,7 +98,7 @@ const Products = () => {
                 <div className="text-gray-700 text-left text-xl">
                   <b>We found these following products:</b>
                   <p>
-                    We're pretty sure you were looking for{" "}
+                    We're pretty sure you were looking for{' '}
                     <b>{searchImage.category}</b>
                     <br />
                     If this not what you were looking for, then we are fricked
@@ -107,8 +107,8 @@ const Products = () => {
                 <IoClose
                   onClick={() => {
                     setSearchImage!({
-                      file: new File([], ""),
-                      category: "",
+                      file: new File([], ''),
+                      category: '',
                     });
                   }}
                   className="absolute top-0 right-0 animate-spin-fast-once text-3xl text-gray-400 cursor-pointer"

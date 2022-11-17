@@ -1,8 +1,8 @@
-import { GetUserOrder } from "../../api";
-import { HiOutlineChevronDown } from "react-icons/hi";
-import { useState } from "react";
-import AnimateHeight from "react-animate-height";
-import { convertToCurrency } from "../util/utilFunc";
+import { GetUserOrder } from '../../api';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+import { useState } from 'react';
+import AnimateHeight from 'react-animate-height';
+import { convertToCurrency } from '../util/utilFunc';
 interface props {
   order: GetUserOrder;
 }
@@ -14,7 +14,7 @@ const OrderProducts = ({ order }: props) => {
     <>
       <AnimateHeight
         duration={500}
-        height={showMore ? "auto" : 100}
+        height={showMore ? 'auto' : 100}
         className=" relative my-4 border-t border-y-gray-100 py-2 transition-all  duration-500"
       >
         <div>
@@ -53,7 +53,7 @@ const OrderProducts = ({ order }: props) => {
         </div>
         <div
           className={`${
-            showMore ? "hidden" : "absolute"
+            showMore ? 'hidden' : 'absolute'
           } bottom-0 h-10 w-full bg-gradient-to-t from-white to-transparent`}
         ></div>
       </AnimateHeight>
@@ -62,10 +62,10 @@ const OrderProducts = ({ order }: props) => {
           className="boder-b-gray-100 mb-4 flex w-full min-w-[8rem] flex-row place-items-center justify-end gap-x-2 border-0 border-b px-1 pb-2 pr-[5.5rem] text-sm text-gray-300 outline-0 transition duration-500 ease-in-out hover:text-black hover:outline-0 hover:ring-0 focus:outline-0"
           onClick={() => setShowMore(!showMore)}
         >
-          <div>{showMore ? "Show Less" : "Show More"}</div>
+          <div>{showMore ? 'Show Less' : 'Show More'}</div>
           <HiOutlineChevronDown
             className={`transform ${
-              showMore ? "rotate-180" : "rotate-0"
+              showMore ? 'rotate-180' : 'rotate-0'
             } inline-block transform text-[1.5rem] opacity-60 transition duration-500 ease-in-out `}
             aria-hidden="true"
           />

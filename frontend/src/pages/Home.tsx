@@ -1,24 +1,24 @@
-import Banner from "../components/Banner";
-import Card from "../components/Card";
-import LinkButton from "../components/button/LinkButton";
-import OverlayContainer from "../components/OverlayContainer";
-import { Category, HomeService, OpenAPI } from "../api";
-import { useQuery } from "react-query";
-import Cookies from "js-cookie";
-import { capitalCase } from "change-case";
-const pluralize = require("pluralize");
-OpenAPI.TOKEN = Cookies.get("token");
+import Banner from '../components/Banner';
+import Card from '../components/Card';
+import LinkButton from '../components/button/LinkButton';
+import OverlayContainer from '../components/OverlayContainer';
+import { Category, HomeService, OpenAPI } from '../api';
+import { useQuery } from 'react-query';
+import Cookies from 'js-cookie';
+import { capitalCase } from 'change-case';
+const pluralize = require('pluralize');
+OpenAPI.TOKEN = Cookies.get('token');
 
 const Home = () => {
   let categories: Category[] = [];
   const fetchCategories = useQuery(
-    "category_images",
+    'category_images',
     HomeService.getCategoryWithImage,
     {
       staleTime: 1000 * 60,
     }
   );
-  const fetchBestSellers = useQuery("bestSellers", HomeService.getBestSeller, {
+  const fetchBestSellers = useQuery('bestSellers', HomeService.getBestSeller, {
     staleTime: 1000 * 60,
   });
 

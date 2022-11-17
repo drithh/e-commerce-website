@@ -1,6 +1,6 @@
-import { Fragment } from "react";
-import { HiOutlineChevronDown } from "react-icons/hi";
-import { Menu, Transition } from "@headlessui/react";
+import { Fragment } from 'react';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+import { Menu, Transition } from '@headlessui/react';
 
 interface TypeParams {
   category: Array<string>;
@@ -19,12 +19,12 @@ interface props {
 
 const Dropdown = ({ params, setParams }: props) => {
   const sorts = [
-    { name: "Name: A to Z", value: "Title a_z" },
-    { name: "Name: Z to A", value: "Title z_a" },
-    { name: "Price: Low to High", value: "Price a_z" },
-    { name: "Price: High to Low", value: "Price z_a" },
-    { name: "Newest", value: "Newest" },
-    { name: "Oldest", value: "Oldest" },
+    { name: 'Name: A to Z', value: 'Title a_z' },
+    { name: 'Name: Z to A', value: 'Title z_a' },
+    { name: 'Price: Low to High', value: 'Price a_z' },
+    { name: 'Price: High to Low', value: 'Price z_a' },
+    { name: 'Newest', value: 'Newest' },
+    { name: 'Oldest', value: 'Oldest' },
   ];
 
   const selectedSort = sorts.find((sort) => sort.value === params.sortBy);
@@ -56,7 +56,7 @@ const Dropdown = ({ params, setParams }: props) => {
               {({ active }) => (
                 <button
                   className={`${
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700"
+                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   onClick={() => {
                     setParams((prev) => ({

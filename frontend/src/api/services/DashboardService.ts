@@ -1,14 +1,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { GetCustomers } from "../models/GetCustomers";
-import type { GetDashboard } from "../models/GetDashboard";
-import type { GetOrders } from "../models/GetOrders";
-import type { GetSales } from "../models/GetSales";
+import type { GetCustomers } from '../models/GetCustomers';
+import type { GetDashboard } from '../models/GetDashboard';
+import type { GetOrders } from '../models/GetOrders';
+import type { GetSales } from '../models/GetSales';
 
-import type { CancelablePromise } from "../core/CancelablePromise";
-import { OpenAPI } from "../core/OpenAPI";
-import { request as __request } from "../core/request";
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
 
 export class DashboardService {
   /**
@@ -18,8 +18,8 @@ export class DashboardService {
    */
   public static getSales(): CancelablePromise<GetSales> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/admin",
+      method: 'GET',
+      url: '/api/v1/admin',
     });
   }
 
@@ -30,8 +30,8 @@ export class DashboardService {
    */
   public static getDashboard(): CancelablePromise<GetDashboard> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/admin/dashboard",
+      method: 'GET',
+      url: '/api/v1/admin/dashboard',
     });
   }
 
@@ -47,8 +47,8 @@ export class DashboardService {
     pageSize: number = 25
   ): CancelablePromise<GetCustomers> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/admin/customer",
+      method: 'GET',
+      url: '/api/v1/admin/customer',
       query: {
         page: page,
         page_size: pageSize,
@@ -71,8 +71,8 @@ export class DashboardService {
     pageSize: number = 25
   ): CancelablePromise<GetOrders> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/admin/order",
+      method: 'GET',
+      url: '/api/v1/admin/order',
       query: {
         page: page,
         page_size: pageSize,

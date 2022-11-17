@@ -1,9 +1,9 @@
 export const roundDecimal = (num: number) => Math.round(num * 100) / 100;
 
 export const convertToCurrency = (num: number) => {
-  return num.toLocaleString("id-ID", {
-    style: "currency",
-    currency: "IDR",
+  return num.toLocaleString('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
   });
 };
 
@@ -29,6 +29,6 @@ export const getBase64 = (file: File, callback: (result: string) => void) => {
     callback(reader.result as string);
   };
   reader.onerror = function (error) {
-    console.log("Error: ", error);
+    console.log('Error: ', error);
   };
 };

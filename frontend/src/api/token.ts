@@ -1,5 +1,5 @@
 // import axios
-const tokenKey = "auth-token";
+const tokenKey = 'auth-token';
 
 export const getToken = () => {
   return localStorage.getItem(tokenKey);
@@ -10,7 +10,7 @@ const setToken = (token: string) => {
 };
 function parseJwt(token: string) {
   try {
-    return JSON.parse(Buffer.from(token.split(".")[1], "base64").toString());
+    return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
   } catch (e) {
     return null;
   }
@@ -18,7 +18,7 @@ function parseJwt(token: string) {
 export const isTokenExpired = () => {
   const token = getToken();
   if (!token) {
-    console.log("no token");
+    console.log('no token');
     return false;
   }
   const decoded = parseJwt(token);
@@ -26,7 +26,7 @@ export const isTokenExpired = () => {
 };
 
 const getRefreshedToken = () => {
-  return "new token";
+  return 'new token';
 };
 
 export const refreshToken = async () => {

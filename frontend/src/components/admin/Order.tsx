@@ -1,19 +1,19 @@
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { ApiError, OrderService } from "../../api";
-import Button from "../button/Button";
-import { toast } from "react-toastify";
-import Dropdown from "../input/Dropdown";
-import dayjs from "dayjs";
-import { capitalCase } from "change-case";
-import { convertToCurrency } from "../util/utilFunc";
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery, useMutation } from 'react-query';
+import { ApiError, OrderService } from '../../api';
+import Button from '../button/Button';
+import { toast } from 'react-toastify';
+import Dropdown from '../input/Dropdown';
+import dayjs from 'dayjs';
+import { capitalCase } from 'change-case';
+import { convertToCurrency } from '../util/utilFunc';
 
 const Order = () => {
   const { id } = useParams();
-  const [status, setStatus] = useState("");
-  const statusOptions = ["processed", "shipped", "cancelled", "completed"];
+  const [status, setStatus] = useState('');
+  const statusOptions = ['processed', 'shipped', 'cancelled', 'completed'];
 
   const updateOrder = useMutation(
     (variables: { id: string; status: string }) =>
@@ -29,7 +29,7 @@ const Order = () => {
   );
 
   const fetchOrder = useQuery(
-    ["order", id],
+    ['order', id],
     () => OrderService.getOrderDetails(id as string),
     {
       refetchOnWindowFocus: false,
@@ -65,11 +65,11 @@ const Order = () => {
           <div className="flex w-full place-content-between mb-6  text-gray-400 uppercase text-[1.05rem]">
             <div>
               {dayjs(fetchOrder.data?.created_at).format(
-                "dddd, MMMM D YYYY, h:mm A"
+                'dddd, MMMM D YYYY, h:mm A'
               )}
             </div>
             <div className="tracking-wider">
-              {capitalCase(fetchOrder.data?.status || "")}
+              {capitalCase(fetchOrder.data?.status || '')}
             </div>
           </div>
           <div className=" grid grid-cols-2 mb-6  text-gray-700 border-gray-100 pb-6 border-b-2 ">

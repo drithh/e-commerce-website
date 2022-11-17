@@ -1,8 +1,8 @@
-import { Fragment, useState, FC } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { IoCloseOutline } from "react-icons/io5";
-import ChangePassword from "./ChangePassword";
-import TopUp from "./TopUp";
+import { Fragment, useState, FC } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { IoCloseOutline } from 'react-icons/io5';
+import ChangePassword from './ChangePassword';
+import TopUp from './TopUp';
 type Props = {
   buttonText: string;
   refetch?: () => void;
@@ -17,9 +17,9 @@ const Modal: FC<Props> = ({ buttonText, refetch }) => {
     setOpen(false);
   };
 
-  if (buttonText === "Change Password") {
+  if (buttonText === 'Change Password') {
     modalBox = <ChangePassword closeModal={closeModal} />;
-  } else if (buttonText === "Top Up") {
+  } else if (buttonText === 'Top Up') {
     modalBox = <TopUp closeModal={closeModal} />;
   }
   return (

@@ -1,4 +1,4 @@
-import { CgArrowLongLeft, CgArrowLongRight } from "react-icons/cg";
+import { CgArrowLongLeft, CgArrowLongRight } from 'react-icons/cg';
 interface ProductParams {
   category: Array<string>;
   page: number;
@@ -26,7 +26,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
   const scrolledToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   };
 
@@ -83,8 +83,8 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
             disabled={currentPage === 1}
             className={`${
               currentPage === 1
-                ? "pointer-events-none cursor-not-allowed text-gray-400"
-                : "cursor-pointer"
+                ? 'pointer-events-none cursor-not-allowed text-gray-400'
+                : 'cursor-pointer'
             } mx-1 flex h-10 w-16 items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <CgArrowLongLeft />
@@ -108,7 +108,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
                   scrolledToTop();
                 }}
                 className={`${
-                  num === currentPage && "bg-gray-500 text-gray-100"
+                  num === currentPage && 'bg-gray-500 text-gray-100'
                 } mx-1 flex h-10 w-10 cursor-pointer items-center justify-center border hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
               >
                 {num}
@@ -136,8 +136,8 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
             }}
             className={`${
               currentPage >= lastPage
-                ? "pointer-events-none cursor-not-allowed text-gray-400"
-                : "cursor-pointer"
+                ? 'pointer-events-none cursor-not-allowed text-gray-400'
+                : 'cursor-pointer'
             } mx-1 flex h-10 w-16  items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <CgArrowLongRight />

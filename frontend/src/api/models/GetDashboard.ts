@@ -2,8 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CategoryOrder } from "./CategoryOrder";
-import type { IncomeMonth } from "./IncomeMonth";
+import type { CategoryOrder } from './CategoryOrder';
+import type { IncomeMonth } from './IncomeMonth';
 
 export type GetDashboard = {
   income_per_month: Array<IncomeMonth>;

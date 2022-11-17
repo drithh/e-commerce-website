@@ -1,15 +1,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CreateOrder } from "../models/CreateOrder";
-import type { DefaultResponse } from "../models/DefaultResponse";
-import type { GetAdminOrders } from "../models/GetAdminOrders";
-import type { GetDetailOrder } from "../models/GetDetailOrder";
-import type { GetUserOrders } from "../models/GetUserOrders";
+import type { CreateOrder } from '../models/CreateOrder';
+import type { DefaultResponse } from '../models/DefaultResponse';
+import type { GetAdminOrders } from '../models/GetAdminOrders';
+import type { GetDetailOrder } from '../models/GetDetailOrder';
+import type { GetUserOrders } from '../models/GetUserOrders';
 
-import type { CancelablePromise } from "../core/CancelablePromise";
-import { OpenAPI } from "../core/OpenAPI";
-import { request as __request } from "../core/request";
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
 
 export class OrderService {
   /**
@@ -24,8 +24,8 @@ export class OrderService {
     pageSize: number = 25
   ): CancelablePromise<GetUserOrders> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/order",
+      method: 'GET',
+      url: '/api/v1/order',
       query: {
         page: page,
         page_size: pageSize,
@@ -44,10 +44,10 @@ export class OrderService {
    */
   public static createOrder(requestBody: CreateOrder): CancelablePromise<any> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/order",
+      method: 'POST',
+      url: '/api/v1/order',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -62,8 +62,8 @@ export class OrderService {
    */
   public static getOrderDetails(id: string): CancelablePromise<GetDetailOrder> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/orders/{id}",
+      method: 'GET',
+      url: '/api/v1/orders/{id}',
       path: {
         id: id,
       },
@@ -85,8 +85,8 @@ export class OrderService {
     status: string
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/orders/{id}",
+      method: 'PUT',
+      url: '/api/v1/orders/{id}',
       path: {
         id: id,
       },
@@ -108,13 +108,13 @@ export class OrderService {
    * @throws ApiError
    */
   public static getOrdersAdmin(
-    sortBy: string = "Price a_z",
+    sortBy: string = 'Price a_z',
     page: number = 1,
     pageSize: number = 25
   ): CancelablePromise<GetAdminOrders> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/orders",
+      method: 'GET',
+      url: '/api/v1/orders',
       query: {
         sort_by: sortBy,
         page: page,
@@ -136,8 +136,8 @@ export class OrderService {
     orderId: string
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/order/{order_id}",
+      method: 'PUT',
+      url: '/api/v1/order/{order_id}',
       path: {
         order_id: orderId,
       },

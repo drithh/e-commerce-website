@@ -1,13 +1,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { GetBanners } from "../models/GetBanners";
-import type { GetBestSeller } from "../models/GetBestSeller";
-import type { GetCategories } from "../models/GetCategories";
+import type { GetBanners } from '../models/GetBanners';
+import type { GetBestSeller } from '../models/GetBestSeller';
+import type { GetCategories } from '../models/GetCategories';
 
-import type { CancelablePromise } from "../core/CancelablePromise";
-import { OpenAPI } from "../core/OpenAPI";
-import { request as __request } from "../core/request";
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
 
 export class HomeService {
   /**
@@ -17,8 +17,8 @@ export class HomeService {
    */
   public static getBanner(): CancelablePromise<GetBanners> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/home/banner",
+      method: 'GET',
+      url: '/api/v1/home/banner',
     });
   }
 
@@ -29,8 +29,8 @@ export class HomeService {
    */
   public static getCategoryWithImage(): CancelablePromise<GetCategories> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/home/category",
+      method: 'GET',
+      url: '/api/v1/home/category',
     });
   }
 
@@ -41,8 +41,8 @@ export class HomeService {
    */
   public static getBestSeller(): CancelablePromise<GetBestSeller> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/home/best-seller",
+      method: 'GET',
+      url: '/api/v1/home/best-seller',
     });
   }
 }

@@ -1,8 +1,8 @@
-import { FC } from "react";
+import { FC } from 'react';
 
 type Props = {
   extraClass?: string;
-  size?: "sm" | "normal" | "lg";
+  size?: 'sm' | 'normal' | 'lg';
   inverted?: boolean;
   noBorder?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -18,13 +18,13 @@ const GhostButton: FC<Props> = ({
   inverted = true,
   children,
 }) => {
-  let btnSize = "";
-  if (size === "sm") {
-    btnSize = "py-2 sm:py-1 px-5";
-  } else if (size === "lg") {
-    btnSize = "py-4 sm:py-3 px-7  text-xl";
+  let btnSize = '';
+  if (size === 'sm') {
+    btnSize = 'py-2 sm:py-1 px-5';
+  } else if (size === 'lg') {
+    btnSize = 'py-4 sm:py-3 px-7  text-xl';
   } else {
-    btnSize = "py-3 sm:py-2 px-6";
+    btnSize = 'py-3 sm:py-2 px-6';
   }
 
   return (
@@ -32,11 +32,11 @@ const GhostButton: FC<Props> = ({
       type="button"
       onClick={onClick}
       className={`cursor-pointer bg-white text-center text-xl tracking-widest text-gray-500 sm:text-base ${
-        !noBorder && "border border-gray-500"
+        !noBorder && 'border border-gray-500'
       } ${
         inverted
-          ? "hover:bg-gray-500 hover:text-gray-100"
-          : "hover:text-gray-400"
+          ? 'hover:bg-gray-500 hover:text-gray-100'
+          : 'hover:text-gray-400'
       } ${btnSize} ${extraClass}`}
     >
       {children}

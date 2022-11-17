@@ -1,12 +1,12 @@
-import { useQuery } from "react-query";
-import { CategoryService } from "../../api";
-import { capitalCase } from "change-case";
-import { Link } from "react-router-dom";
-const pluralize = require("pluralize");
+import { useQuery } from 'react-query';
+import { CategoryService } from '../../api';
+import { capitalCase } from 'change-case';
+import { Link } from 'react-router-dom';
+const pluralize = require('pluralize');
 
 const Categories = () => {
   const fetchCategories = useQuery(
-    "categories",
+    'categories',
     () => CategoryService.getCategory(),
     {
       staleTime: Infinity,
@@ -42,7 +42,7 @@ const Categories = () => {
                 </td>
                 <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
                   {capitalCase(pluralize.singular(category.type), {
-                    delimiter: " & ",
+                    delimiter: ' & ',
                   })}
                 </td>
               </tr>

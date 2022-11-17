@@ -1,21 +1,21 @@
-import React, { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { ApiError, UserService } from "../../api";
-import { useMutation } from "react-query";
-import { toast } from "react-toastify";
+import React, { useState } from 'react';
+import { Dialog } from '@headlessui/react';
+import Button from '../button/Button';
+import Input from '../input/Input';
+import { ApiError, UserService } from '../../api';
+import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
 
 type Props = {
   closeModal: () => void;
 };
 
 const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
-  const [addressName, setAddressName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [addressName, setAddressName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const ChangeAddress = useMutation(
     (variables: {
@@ -57,11 +57,11 @@ const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
           type="text"
-          placeholder={"Address Name *"}
+          placeholder={'Address Name *'}
           name="addressName"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300 mb-4"
           onChange={(e) => setAddressName((e.target as HTMLInputElement).value)}
@@ -69,11 +69,11 @@ const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
         />
         <Input
           type="text"
-          placeholder={"Phone Number *"}
+          placeholder={'Phone Number *'}
           name="phoneNumber"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300"
           onChange={(e) => setPhoneNumber((e.target as HTMLInputElement).value)}
@@ -81,11 +81,11 @@ const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
         />
         <Input
           type="text"
-          placeholder={"Address *"}
+          placeholder={'Address *'}
           name="address"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300"
           onChange={(e) => setAddress((e.target as HTMLInputElement).value)}
@@ -94,17 +94,17 @@ const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
 
         <Input
           type="text"
-          placeholder={"City *"}
+          placeholder={'City *'}
           name="city"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300"
           onChange={(e) => setCity((e.target as HTMLInputElement).value)}
           value={city}
         />
-        {errorMsg !== "" && (
+        {errorMsg !== '' && (
           <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>

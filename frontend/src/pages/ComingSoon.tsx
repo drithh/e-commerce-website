@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 const ComingSoon = () => {
   return (
@@ -14,7 +14,7 @@ const ComingSoon = () => {
         height={300}
       />
       <span className="text-gray-400">
-        Go back to{" "}
+        Go back to{' '}
         <Link to="/" className="hover:text-gray500 font-bold underline">
           Home Page
         </Link>

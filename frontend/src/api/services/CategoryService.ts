@@ -1,14 +1,14 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { DefaultResponse } from "../models/DefaultResponse";
-import type { DetailCategory } from "../models/DetailCategory";
-import type { GetCategory } from "../models/GetCategory";
-import type { UpdateCategory } from "../models/UpdateCategory";
+import type { DefaultResponse } from '../models/DefaultResponse';
+import type { DetailCategory } from '../models/DetailCategory';
+import type { GetCategory } from '../models/GetCategory';
+import type { UpdateCategory } from '../models/UpdateCategory';
 
-import type { CancelablePromise } from "../core/CancelablePromise";
-import { OpenAPI } from "../core/OpenAPI";
-import { request as __request } from "../core/request";
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
 
 export class CategoryService {
   /**
@@ -18,8 +18,8 @@ export class CategoryService {
    */
   public static getCategory(): CancelablePromise<GetCategory> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/categories",
+      method: 'GET',
+      url: '/api/v1/categories',
     });
   }
 
@@ -35,13 +35,13 @@ export class CategoryService {
     requestBody: UpdateCategory
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/categories",
+      method: 'PUT',
+      url: '/api/v1/categories',
       query: {
         category_id: categoryId,
       },
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -58,8 +58,8 @@ export class CategoryService {
     categoryName: string
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/categories",
+      method: 'POST',
+      url: '/api/v1/categories',
       query: {
         category_name: categoryName,
       },
@@ -77,8 +77,8 @@ export class CategoryService {
    */
   public static deleteCategory(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "DELETE",
-      url: "/api/v1/categories",
+      method: 'DELETE',
+      url: '/api/v1/categories',
       query: {
         id: id,
       },
@@ -98,8 +98,8 @@ export class CategoryService {
     categoryId: string
   ): CancelablePromise<DetailCategory> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/categories/detail",
+      method: 'GET',
+      url: '/api/v1/categories/detail',
       query: {
         category_id: categoryId,
       },

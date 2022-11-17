@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
-import { DashboardService } from "../../api";
-import Pagination from "../Pagination";
-import { convertToCurrency } from "../util/utilFunc";
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+import { DashboardService } from '../../api';
+import Pagination from '../Pagination';
+import { convertToCurrency } from '../util/utilFunc';
 
 interface DefaultParams {
   page: number;
@@ -15,7 +15,7 @@ const Customers = () => {
     page: 1,
     pageSize: 15,
   });
-  const fetchCustomers = useQuery(["customers", params], () =>
+  const fetchCustomers = useQuery(['customers', params], () =>
     DashboardService.getCustomer(params.page, params.pageSize)
   );
 

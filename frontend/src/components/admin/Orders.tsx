@@ -1,10 +1,10 @@
-import { useQuery } from "react-query";
-import { DashboardService } from "../../api";
-import { convertToCurrency } from "../util/utilFunc";
-import { capitalCase } from "change-case";
-import Pagination from "../Pagination";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useQuery } from 'react-query';
+import { DashboardService } from '../../api';
+import { convertToCurrency } from '../util/utilFunc';
+import { capitalCase } from 'change-case';
+import Pagination from '../Pagination';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 interface DefaultParams {
   page: number;
@@ -17,7 +17,7 @@ const Orders = () => {
     pageSize: 20,
   });
 
-  const fetchOrders = useQuery(["orders", params], () =>
+  const fetchOrders = useQuery(['orders', params], () =>
     DashboardService.getOrder(params.page, params.pageSize)
   );
 

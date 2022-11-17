@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { ProductService } from "../../api";
-import Pagination from "../Pagination";
-import { convertToCurrency } from "../util/utilFunc";
-import { capitalCase } from "change-case";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { ProductService } from '../../api';
+import Pagination from '../Pagination';
+import { convertToCurrency } from '../util/utilFunc';
+import { capitalCase } from 'change-case';
+import { Link } from 'react-router-dom';
 
 interface DefaultParams {
   page: number;
@@ -16,7 +16,7 @@ const Products = () => {
     page: 1,
     pageSize: 15,
   });
-  const fetchProducts = useQuery(["products", params], () =>
+  const fetchProducts = useQuery(['products', params], () =>
     ProductService.getProducts([], params.page, params.pageSize)
   );
 

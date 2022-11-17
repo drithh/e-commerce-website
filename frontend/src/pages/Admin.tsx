@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
-import { SlGraph } from "react-icons/sl";
-import { MdOutlineAttachMoney } from "react-icons/md";
-import { BsBookmark } from "react-icons/bs";
-import { IoShirtOutline } from "react-icons/io5";
-import { AiOutlineUser } from "react-icons/ai";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { SlGraph } from 'react-icons/sl';
+import { MdOutlineAttachMoney } from 'react-icons/md';
+import { BsBookmark } from 'react-icons/bs';
+import { IoShirtOutline } from 'react-icons/io5';
+import { AiOutlineUser } from 'react-icons/ai';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
   const location = useLocation();
@@ -25,9 +25,9 @@ const Admin = () => {
         {/* ===== Side Panel Section ===== */}
         <section className="side-panel inset-0 flex h-fit flex-col gap-y-[2px]   border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
           <button
-            onClick={() => navigate("")}
+            onClick={() => navigate('')}
             className={`${
-              location.pathname === "/admin" && "text-black"
+              location.pathname === '/admin' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -36,9 +36,9 @@ const Admin = () => {
             Dashboard
           </button>
           <button
-            onClick={() => navigate("orders")}
+            onClick={() => navigate('orders')}
             className={`${
-              location.pathname === "/admin/orders" && "text-black"
+              location.pathname === '/admin/orders' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -47,9 +47,9 @@ const Admin = () => {
             Orders
           </button>
           <button
-            onClick={() => navigate("products")}
+            onClick={() => navigate('products')}
             className={`${
-              location.pathname === "/admin/products" && "text-black"
+              location.pathname === '/admin/products' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -58,9 +58,9 @@ const Admin = () => {
             Products
           </button>
           <button
-            onClick={() => navigate("categories")}
+            onClick={() => navigate('categories')}
             className={`${
-              location.pathname === "/admin/categories" && "text-black"
+              location.pathname === '/admin/categories' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">
@@ -69,9 +69,9 @@ const Admin = () => {
             Categories
           </button>
           <button
-            onClick={() => navigate("customers")}
+            onClick={() => navigate('customers')}
             className={`${
-              location.pathname === "/admin/customers" && "text-black"
+              location.pathname === '/admin/customers' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 py-4 font-medium hover:text-black uppercase px-6`}
           >
             <span className="text-xl">

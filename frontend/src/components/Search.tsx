@@ -1,23 +1,23 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { AiOutlineSearch, AiOutlineCamera } from "react-icons/ai";
-import { useQuery, useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { SearchService } from "../api";
-import { convertToBase64 } from "./util/utilFunc";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { useSearch } from "../context/SearchContext";
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { AiOutlineSearch, AiOutlineCamera } from 'react-icons/ai';
+import { useQuery, useMutation } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { SearchService } from '../api';
+import { convertToBase64 } from './util/utilFunc';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useSearch } from '../context/SearchContext';
 
 const Search = () => {
   const { search, setSearch } = useSearch();
   const navigate = useNavigate();
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, setSearch);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [searchImage, setSearchImage] = useState(false);
 
   const { data } = useQuery(
-    ["search", searchText],
+    ['search', searchText],
     () => SearchService.searchText(searchText),
     {
       enabled: searchText.length > 0,
@@ -36,7 +36,7 @@ const Search = () => {
     <div
       className="pt-10 fixed z-[200]  w-screen h-screen  px-2 bg-[rgba(0,0,0,0.5)] top-0"
       onKeyDown={(e) => {
-        if (e.key === "Escape") {
+        if (e.key === 'Escape') {
           setSearch!(false);
         }
       }}
@@ -54,8 +54,8 @@ const Search = () => {
                 type="text"
                 className={`bg-white h-14 w-full px-14 text-lg  focus:outline-none hover:cursor-pointer ${
                   data?.length || searchImage
-                    ? "border-b-2 border-gray-300 rounded-t-lg"
-                    : "rounded-lg"
+                    ? 'border-b-2 border-gray-300 rounded-t-lg'
+                    : 'rounded-lg'
                 }`}
                 name="search"
                 placeholder="Product Name Or Brand"
@@ -101,7 +101,7 @@ const Dropzone = () => {
   const { setSearch, setSearchImage } = useSearch();
   const image = useRef<any>(null);
   const [processing, setProcessing] = useState(false);
-  const [showerThought, setShowerThought] = useState("");
+  const [showerThought, setShowerThought] = useState('');
   const indexShowerThought = useRef(0);
   const searchByImage = useMutation(
     (base64_image: string) => SearchService.searchImage({ base64_image }),
@@ -121,7 +121,7 @@ const Dropzone = () => {
   );
 
   const fetchShowerThought = useQuery(
-    "showerThought",
+    'showerThought',
     () => SearchService.showerThoughts(),
     {
       staleTime: 10000,
@@ -172,9 +172,9 @@ const Dropzone = () => {
     disabled: processing,
     multiple: false,
     accept: {
-      "image/jpeg": [],
-      "image/png": [],
-      "image/webp": [],
+      'image/jpeg': [],
+      'image/png': [],
+      'image/webp': [],
     },
   });
 
@@ -182,10 +182,10 @@ const Dropzone = () => {
     <>
       <div
         {...getRootProps()}
-        className={`${isDragActive && "bg-gray-100"} ${
-          isDragReject && "bg-red-100"
-        } ${isDragAccept && "bg-green-100"} ${
-          processing && "bg-gray-100 cursor-not-allowed"
+        className={`${isDragActive && 'bg-gray-100'} ${
+          isDragReject && 'bg-red-100'
+        } ${isDragAccept && 'bg-green-100'} ${
+          processing && 'bg-gray-100 cursor-not-allowed'
         }
           gap-y flex h-[12rem] w-full cursor-pointer flex-col place-content-center place-items-center border-2 rounded-b-lg border-dashed border-gray-300 text-xl font-bold`}
       >
@@ -205,7 +205,7 @@ const Dropzone = () => {
 
         {processing ? (
           <p className=" text-base text-center text-gray-400 px-[10%]">
-            {showerThought}{" "}
+            {showerThought}{' '}
           </p>
         ) : (
           <p className="text-lg text-gray-300">
@@ -231,10 +231,10 @@ const useOutsideAlerter = (
       }
     }
     // Bind the event listener
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
       // Unbind the event listener on clean up
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [ref, setSearch]);
 };

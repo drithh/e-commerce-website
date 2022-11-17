@@ -1,8 +1,8 @@
-import GhostButton from "../components/button/GhostButton";
-import { Link } from "react-router-dom";
-import { useWishlist } from "../context/WishlistContext";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { convertToCurrency } from "../components/util/utilFunc";
+import GhostButton from '../components/button/GhostButton';
+import { Link } from 'react-router-dom';
+import { useWishlist } from '../context/WishlistContext';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { convertToCurrency } from '../components/util/utilFunc';
 const Wishlist = () => {
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
 

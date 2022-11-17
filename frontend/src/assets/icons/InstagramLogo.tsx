@@ -1,4 +1,4 @@
-const IgLogo = ({ extraClass = "" }) => (
+const IgLogo = ({ extraClass = '' }) => (
   <svg
     aria-hidden="true"
     focusable="false"

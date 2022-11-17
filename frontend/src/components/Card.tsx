@@ -1,10 +1,10 @@
-import { FC, useState } from "react";
-import { Link } from "react-router-dom";
-import { HiOutlineHeart, HiHeart } from "react-icons/hi";
-import { Product, BestSeller } from "../api";
-import { useWishlist } from "../context/WishlistContext";
-import { useAuth } from "../context/AuthContext";
-import { convertToCurrency } from "../components/util/utilFunc";
+import { FC, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { HiOutlineHeart, HiHeart } from 'react-icons/hi';
+import { Product, BestSeller } from '../api';
+import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
+import { convertToCurrency } from '../components/util/utilFunc';
 
 interface Props {
   item: BestSeller | Product;
@@ -25,7 +25,7 @@ const Card: FC<Props> = ({ item }) => {
     (item) => item.product_id === id
   );
   const handleWishlist = () => {
-    if (role !== "guest") {
+    if (role !== 'guest') {
       alreadyWishlisted
         ? deleteWishlistItem!.mutate({ product_id: id })
         : addWishlistItem!.mutate({ id });
@@ -45,12 +45,12 @@ const Card: FC<Props> = ({ item }) => {
             alt={title}
             loading="lazy"
             className={`${
-              isHovered ? "hidden" : "animate__fadeIn"
+              isHovered ? 'hidden' : 'animate__fadeIn'
             } h-80 animate__animated  object-cover`}
           />
           <img
             className={`${
-              !isHovered ? "hidden" : ""
+              !isHovered ? 'hidden' : ''
             } h-80 transform object-cover transition-transform duration-1000 hover:scale-110`}
             src={(images[1] as string) || (images[0] as string)}
             alt={title}

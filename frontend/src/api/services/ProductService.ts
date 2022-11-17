@@ -1,15 +1,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { app__schemas__product__GetProduct } from "../models/app__schemas__product__GetProduct";
-import type { CreateProduct } from "../models/CreateProduct";
-import type { DefaultResponse } from "../models/DefaultResponse";
-import type { GetProducts } from "../models/GetProducts";
-import type { UpdateProduct } from "../models/UpdateProduct";
+import type { app__schemas__product__GetProduct } from '../models/app__schemas__product__GetProduct';
+import type { CreateProduct } from '../models/CreateProduct';
+import type { DefaultResponse } from '../models/DefaultResponse';
+import type { GetProducts } from '../models/GetProducts';
+import type { UpdateProduct } from '../models/UpdateProduct';
 
-import type { CancelablePromise } from "../core/CancelablePromise";
-import { OpenAPI } from "../core/OpenAPI";
-import { request as __request } from "../core/request";
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
 
 export class ProductService {
   /**
@@ -28,14 +28,14 @@ export class ProductService {
     category?: Array<string>,
     page: number = 1,
     pageSize: number = 20,
-    sortBy: string = "Title a_z",
+    sortBy: string = 'Title a_z',
     price?: Array<number>,
-    condition: string = "",
-    productName: string = ""
+    condition: string = '',
+    productName: string = ''
   ): CancelablePromise<GetProducts> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/products",
+      method: 'GET',
+      url: '/api/v1/products',
       query: {
         category: category,
         page: page,
@@ -61,10 +61,10 @@ export class ProductService {
     requestBody: UpdateProduct
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/products",
+      method: 'PUT',
+      url: '/api/v1/products',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -81,10 +81,10 @@ export class ProductService {
     requestBody: CreateProduct
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/products",
+      method: 'POST',
+      url: '/api/v1/products',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -101,8 +101,8 @@ export class ProductService {
     id: string
   ): CancelablePromise<app__schemas__product__GetProduct> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/products/{id}",
+      method: 'GET',
+      url: '/api/v1/products/{id}',
       path: {
         id: id,
       },
@@ -122,8 +122,8 @@ export class ProductService {
     productId: string
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "DELETE",
-      url: "/api/v1/products/{product_id}",
+      method: 'DELETE',
+      url: '/api/v1/products/{product_id}',
       path: {
         product_id: productId,
       },

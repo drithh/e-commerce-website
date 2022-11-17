@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
 interface SearchImage {
   file: File;
@@ -15,11 +15,11 @@ export type SearchType = {
 };
 
 const SearchContext = createContext<SearchType>({
-  searchText: "",
+  searchText: '',
   search: false,
   searchImage: {
-    file: new File([], ""),
-    category: "",
+    file: new File([], ''),
+    category: '',
   },
 });
 
@@ -37,11 +37,11 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 };
 
 const useProvideSearch = () => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState('');
   const [search, setSearch] = useState(false);
   const [searchImage, setSearchImage] = useState<SearchImage>({
-    file: new File([], ""),
-    category: "",
+    file: new File([], ''),
+    category: '',
   });
 
   return {

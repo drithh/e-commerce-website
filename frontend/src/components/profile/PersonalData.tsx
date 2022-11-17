@@ -1,27 +1,27 @@
-import { useQuery } from "react-query";
-import Button from "../button/Button";
-import Modal from "./Modal";
-import React, { useEffect, useState } from "react";
-import { ApiError, UserService } from "../../api";
-import { useMutation } from "react-query";
-import { toast } from "react-toastify";
-import LegendInput from "../input/LegendInput";
+import { useQuery } from 'react-query';
+import Button from '../button/Button';
+import Modal from './Modal';
+import React, { useEffect, useState } from 'react';
+import { ApiError, UserService } from '../../api';
+import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
+import LegendInput from '../input/LegendInput';
 const PersonalData = () => {
-  const [addressName, setAddressName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
+  const [addressName, setAddressName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
 
-  const fetchUser = useQuery("user", () => UserService.getUser(), {
+  const fetchUser = useQuery('user', () => UserService.getUser(), {
     staleTime: Infinity,
   });
 
   useEffect(() => {
     if (fetchUser.data) {
-      setAddressName(fetchUser.data.address_name || "");
-      setPhoneNumber(fetchUser.data.phone_number || "");
-      setAddress(fetchUser.data.address || "");
-      setCity(fetchUser.data.city || "");
+      setAddressName(fetchUser.data.address_name || '');
+      setPhoneNumber(fetchUser.data.phone_number || '');
+      setAddress(fetchUser.data.address || '');
+      setCity(fetchUser.data.city || '');
     }
   }, [fetchUser.data]);
 
