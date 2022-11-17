@@ -1,8 +1,8 @@
 include .env
 
-APP=docker-compose run backend
-EXEC=docker-compose exec backend
-MIGRATE=docker-compose run --rm backend poetry run alembic
+APP=docker compose run backend
+EXEC=docker compose exec backend
+MIGRATE=docker compose run --rm backend poetry run alembic
 
 seed:
 	$(EXEC) poetry run python -m app.seeders.seeder
@@ -31,4 +31,4 @@ pre-commit:
 		pre-commit run --all-files
 
 production:
-		docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+		docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
