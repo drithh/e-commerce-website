@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Any, Generator
 from uuid import UUID
 
 from fastapi import HTTPException, status
@@ -24,7 +24,7 @@ router = APIRouter()
 def get_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     wishlists = session.execute(
         f"""
         SELECT wishlists.id, wishlists.product_id, products.title, products.price,
@@ -55,7 +55,7 @@ def create_wishlist(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     try:
         wishlist = Wishlist(
             user_id=current_user.id,
@@ -78,7 +78,7 @@ def delete_wishlist(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     try:
         session.query(Wishlist).filter(
             Wishlist.user_id == current_user.id, Wishlist.product_id == id
@@ -101,7 +101,7 @@ def delete_wishlist(
 def clear_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     try:
         session.query(Wishlist).filter(Wishlist.user_id == current_user.id).delete()
         session.commit()

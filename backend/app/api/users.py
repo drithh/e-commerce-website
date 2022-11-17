@@ -30,21 +30,6 @@ def get_user(
     return current_user
 
 
-@router.get("/{id}", response_model=GetUser, status_code=status.HTTP_200_OK)
-def get_detail_user(
-    id: UUID,
-    current_user: User = Depends(get_current_active_admin),
-    session: Generator = Depends(get_db),
-) -> Any:
-    user = session.query(User).filter(User.id == id).first()
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found",
-        )
-    return user
-
-
 @router.get(
     "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
 )
@@ -116,7 +101,7 @@ def put_user_balance(
     request: PutUserBalance,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     new_balance = int(current_user.balance) + request.balance
     current_user.balance = new_balance
     try:
@@ -150,3 +135,18 @@ def delete_user(
             detail=format_error(e),
         )
     logger.info(f"User {request.id} deleted by {current_user.email}")
+
+
+@router.get("/{id}", response_model=GetUser, status_code=status.HTTP_200_OK)
+def get_detail_user(
+    id: UUID,
+    current_user: User = Depends(get_current_active_admin),
+    session: Generator = Depends(get_db),
+) -> Any:
+    user = session.query(User).filter(User.id == id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    return user
