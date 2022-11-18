@@ -1,5 +1,5 @@
-import uuid
-from datetime import datetime, timedelta
+import random
+from datetime import datetime
 from typing import Any, Generator
 
 import pytz
@@ -150,7 +150,8 @@ async def forgot_password(
             detail="Email not registered",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    reset_token = str(uuid.uuid4())
+
+    token = str(random.randint(100000, 999999))
 
     # remove old token
     session.query(ForgotPassword).filter(ForgotPassword.user_id == user.id).delete()
@@ -158,14 +159,13 @@ async def forgot_password(
     # send_forgot_password_email
     forgot_password = ForgotPassword(
         user_id=user.id,
-        token=reset_token,
-        expires_in=datetime.now() + timedelta(hours=1),
+        token=token,
     )
     session.add(forgot_password)
     session.commit()
-    await send_forgot_password_email(email, reset_token)
+    await send_forgot_password_email(email, token)
     return DefaultResponse(
-        message="Reset password link sent to your email",
+        message="Reset password code has been sent to your email",
     )
 
 
@@ -181,7 +181,9 @@ def reset_password(
     password_validation(request.password)
     forgot_password = (
         session.query(ForgotPassword)
+        .join(User)
         .filter(ForgotPassword.token == request.token)
+        .filter(User.email == request.email)
         .first()
     )
 

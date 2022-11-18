@@ -28,7 +28,7 @@ async def send_forgot_password_email(
     subject = "Reset your password"
     template_body = {
         "name": email,
-        "action_url": token,
+        "token": token,
     }
     await send_email(subject, email, template_body, "forgot_password.html")
 

@@ -383,6 +383,9 @@
       }
       .my-4 {
         margin-top: 1rem;
+      }
+      .mb-4,
+      .my-4 {
         margin-bottom: 1rem;
       }
       .mb-2 {
@@ -391,11 +394,11 @@
       .mb-6 {
         margin-bottom: 1.5rem;
       }
+      .mb-10 {
+        margin-bottom: 2.5rem;
+      }
       .mb-1 {
         margin-bottom: 0.25rem;
-      }
-      .mb-4 {
-        margin-bottom: 1rem;
       }
       .mt-2 {
         margin-top: 0.5rem;
@@ -474,6 +477,16 @@
       }
       .w-\[600px\] {
         width: 600px;
+      }
+      .w-\[560px\] {
+        width: 560px;
+      }
+      .w-fit {
+        width: -moz-fit-content;
+        width: fit-content;
+      }
+      .max-w-2xl {
+        max-width: 42rem;
       }
       .flex-shrink,
       .shrink {
@@ -1075,6 +1088,9 @@
       .break-keep {
         word-break: keep-all;
       }
+      .rounded-md {
+        border-radius: 0.375rem;
+      }
       .rounded {
         border-radius: 0.25rem;
       }
@@ -1085,19 +1101,15 @@
       .rounded-t {
         border-top-right-radius: 0.25rem;
       }
+      .rounded-b,
       .rounded-r {
         border-bottom-right-radius: 0.25rem;
-      }
-      .rounded-l {
-        border-top-left-radius: 0.25rem;
       }
       .rounded-b,
       .rounded-l {
         border-bottom-left-radius: 0.25rem;
       }
-      .rounded-b {
-        border-bottom-right-radius: 0.25rem;
-      }
+      .rounded-l,
       .rounded-tl {
         border-top-left-radius: 0.25rem;
       }
@@ -1122,6 +1134,9 @@
       }
       .border-y {
         border-top-width: 1px;
+      }
+      .border-b-\[1px\],
+      .border-y {
         border-bottom-width: 1px;
       }
       .border-b-2 {
@@ -1156,6 +1171,14 @@
       }
       .border-none {
         border-style: none;
+      }
+      .border-gray-400 {
+        --tw-border-opacity: 1;
+        border-color: rgb(104 104 104 / var(--tw-border-opacity));
+      }
+      .border-gray-300 {
+        --tw-border-opacity: 1;
+        border-color: rgb(193 193 193 / var(--tw-border-opacity));
       }
       .border-gray-700 {
         --tw-border-opacity: 1;
@@ -1261,13 +1284,13 @@
       .p-5 {
         padding: 1.25rem;
       }
-      .py-3 {
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-      }
       .px-5 {
         padding-left: 1.25rem;
         padding-right: 1.25rem;
+      }
+      .py-3 {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
       }
       .text-left {
         text-align: left;
@@ -1401,20 +1424,24 @@
         --tw-text-opacity: 1;
         color: rgb(40 40 40 / var(--tw-text-opacity));
       }
-      .text-gray-700 {
-        --tw-text-opacity: 1;
-        color: rgb(55 65 81 / var(--tw-text-opacity));
-      }
       .text-gray-100 {
         --tw-text-opacity: 1;
         color: rgb(238 238 238 / var(--tw-text-opacity));
       }
-      .text-blue-500 {
+      .text-gray-400 {
         --tw-text-opacity: 1;
-        color: rgb(59 130 246 / var(--tw-text-opacity));
+        color: rgb(104 104 104 / var(--tw-text-opacity));
+      }
+      .text-gray-700 {
+        --tw-text-opacity: 1;
+        color: rgb(55 65 81 / var(--tw-text-opacity));
       }
       .text-\[\#336699\]\/\[\.35\] {
         color: #33669959;
+      }
+      .text-blue-500 {
+        --tw-text-opacity: 1;
+        color: rgb(59 130 246 / var(--tw-text-opacity));
       }
       .underline {
         text-decoration-line: underline;
@@ -1774,7 +1801,7 @@
   <body>
     <div class="w-full text-xs font-lato text-gray-500">
       <div
-        class="w-[600px] border-2 border-gray-700 flex p-5 justify-center items-center flex-col"
+        class="max-w-2xl w-fit mx-auto border-2 border-gray-700 flex p-5 justify-center items-center flex-col"
       >
         <!-- LOGO -->
         <div class="w-full border-b-2 border-gray-100">
@@ -1782,13 +1809,13 @@
             <svg
               version="1.0"
               xmlns="http://www.w3.org/2000/svg"
-              width="70.000000pt"
-              height="50.000000pt"
+              width="70pt"
+              height="50pt"
               viewBox="0 0 299 108"
               preserveAspectRatio="xMidYMid meet"
             >
               <g
-                transform="translate(0.000000,108.000000) scale(0.100000,-0.100000)"
+                transform="translate(0,108) scale(0.100000,-0.100000)"
                 fill="#000000"
                 stroke="none"
               >
