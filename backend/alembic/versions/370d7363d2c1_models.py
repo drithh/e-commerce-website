@@ -1,8 +1,8 @@
 """models
 
-Revision ID: 616aab7cdeb6
+Revision ID: 370d7363d2c1
 Revises: 
-Create Date: 2022-11-18 12:19:10.828976
+Create Date: 2022-11-18 13:55:02.961216
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '616aab7cdeb6'
+revision = '370d7363d2c1'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -85,7 +85,7 @@ def upgrade():
     sa.Column('updated_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=True),
     sa.Column('deleted_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('token', sa.String(length=16), nullable=False),
-    sa.Column('expires_in', sa.DateTime(timezone=True), nullable=False),
+    sa.Column('expires_in', sa.DateTime(timezone=True), server_default=sa.text("now() + interval '15 minutes'"), nullable=False),
     sa.Column('user_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')

@@ -4,5 +4,6 @@
 
 export type ResetPassword = {
   token: string;
+  email: string;
   password: string;
 };

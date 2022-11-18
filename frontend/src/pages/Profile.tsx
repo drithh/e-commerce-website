@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import { UserService } from '../api';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,7 +23,8 @@ const Profile = () => {
 
   const logoutAccount = () => {
     logout && logout();
-    navigate('0', { replace: true });
+    navigate('/', { replace: true });
+    toast.success('Logged out successfully');
   };
 
   return (

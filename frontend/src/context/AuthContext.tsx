@@ -1,9 +1,15 @@
 import React, { createContext, useContext, useState } from 'react';
 
-import { OpenAPI, AuthenticationService, UserRead } from '../api';
+import {
+  OpenAPI,
+  AuthenticationService,
+  UserRead,
+  DefaultResponse,
+} from '../api';
 import { UseMutationResult, useQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
 
 export type authType = {
   role: string;
@@ -25,6 +31,17 @@ export type authType = {
       email: string;
       password: string;
       phone: string;
+    },
+    unknown
+  >;
+  forgotPassword?: UseMutationResult<DefaultResponse, unknown, string, unknown>;
+  resetPassword?: UseMutationResult<
+    DefaultResponse,
+    unknown,
+    {
+      email: string;
+      token: string;
+      password: string;
     },
     unknown
   >;
@@ -70,6 +87,7 @@ const useProvideAuth = () => {
       }),
     {
       onSuccess: (data) => {
+        toast.success(`Welcome back ${data.user_information.name}!`);
         Cookies.set('token', data.access_token);
         OpenAPI.TOKEN = data.access_token;
         refetch();
@@ -93,10 +111,24 @@ const useProvideAuth = () => {
     {
       onSuccess: (data) => {
         Cookies.set('token', data.access_token);
+        toast.success(`Welcome ${data.user_information.name}!`);
         OpenAPI.TOKEN = data.access_token;
         refetch();
       },
     }
+  );
+
+  const forgotPassword = useMutation((email: string) =>
+    AuthenticationService.forgotPassword(email)
+  );
+
+  const resetPassword = useMutation(
+    (variables: { email: string; token: string; password: string }) =>
+      AuthenticationService.resetPassword({
+        email: variables.email,
+        token: variables.token,
+        password: variables.password,
+      })
   );
 
   const logout = () => {
@@ -111,6 +143,8 @@ const useProvideAuth = () => {
     login,
     refetch,
     register,
+    forgotPassword,
+    resetPassword,
     logout,
   };
 };

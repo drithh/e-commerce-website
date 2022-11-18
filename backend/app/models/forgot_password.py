@@ -1,8 +1,4 @@
-from datetime import datetime, timedelta
-
-import bcrypt
-import pytz
-from sqlalchemy import Column, DateTime, ForeignKey, String
+from sqlalchemy import Column, DateTime, ForeignKey, String, text
 
 from app.db import Base
 from app.models.default import DefaultModel
@@ -15,6 +11,6 @@ class ForgotPassword(DefaultModel, Base):
     expires_in = Column(
         DateTime(timezone=True),
         nullable=False,
-        default=pytz.utc.localize(datetime.now() + timedelta(minutes=15)),
+        server_default=text("now() + interval '15 minutes'"),
     )
     user_id = Column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
