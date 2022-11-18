@@ -65,27 +65,6 @@ export class UserService {
   }
 
   /**
-   * Get Detail User
-   * @param id
-   * @returns app__schemas__user__GetUser Successful Response
-   * @throws ApiError
-   */
-  public static getDetailUser(
-    id: string
-  ): CancelablePromise<app__schemas__user__GetUser> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/v1/user/{id}',
-      path: {
-        id: id,
-      },
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
-  /**
    * Get User Shipping Address
    * @returns GetUserAddress Successful Response
    * @throws ApiError
@@ -143,6 +122,27 @@ export class UserService {
       url: '/api/v1/user/balance',
       body: requestBody,
       mediaType: 'application/json',
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Get Detail User
+   * @param id
+   * @returns app__schemas__user__GetUser Successful Response
+   * @throws ApiError
+   */
+  public static getDetailUser(
+    id: string
+  ): CancelablePromise<app__schemas__user__GetUser> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/v1/user/{id}',
+      path: {
+        id: id,
+      },
       errors: {
         422: `Validation Error`,
       },

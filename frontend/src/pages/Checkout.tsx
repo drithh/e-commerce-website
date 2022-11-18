@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import Button from '../components/button/Button';
 import { roundDecimal } from '../components/util/utilFunc';
 import Input from '../components/input/Input';
 import { useCart } from '../context/CartContext';
-import { UserService, OrderService, ApiError } from '../api';
+import { UserService, OrderService, ApiError, SearchService } from '../api';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { convertToCurrency } from '../components/util/utilFunc';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 
 type PaymentType = 'BALANCE';
 type DeliveryType = 'REGULAR' | 'NEXT_DAY';
@@ -28,6 +29,10 @@ const ShoppingCart = () => {
   const [useUserAddress, setUseUserAddress] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
 
+  const [processing, setProcessing] = useState(false);
+  const [showerThought, setShowerThought] = useState('');
+  const indexShowerThought = useRef(0);
+
   const fetchUserAddress = useQuery('userAddress', () =>
     UserService.getUserShippingAddress()
   );
@@ -35,6 +40,33 @@ const ShoppingCart = () => {
   const fetchOrder = useQuery('order', () => OrderService.getOrdersUser(), {
     enabled: false,
   });
+
+  const fetchShowerThought = useQuery(
+    'showerThought',
+    () => SearchService.showerThoughts(),
+    {
+      staleTime: 10000,
+      onSuccess: (data) => {
+        setShowerThought(data.data[indexShowerThought.current]);
+        indexShowerThought.current++;
+      },
+    }
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (fetchShowerThought.data) {
+        if (indexShowerThought.current === fetchShowerThought.data?.data.length)
+          indexShowerThought.current = 0;
+        setShowerThought(
+          fetchShowerThought.data?.data[indexShowerThought.current]
+        );
+        indexShowerThought.current++;
+      }
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, [fetchShowerThought.data]);
 
   const createOrder = useMutation(OrderService.createOrder, {
     onSuccess: (data) => {
@@ -52,6 +84,7 @@ const ShoppingCart = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setProcessing(true);
     createOrder.mutate({
       shipping_method: delivery === 'REGULAR' ? 'Regular' : 'Next Day',
       shipping_address: {
@@ -60,6 +93,7 @@ const ShoppingCart = () => {
         address: address,
         city: city,
       },
+      send_email: sendEmail,
     });
   };
 
@@ -94,6 +128,15 @@ const ShoppingCart = () => {
 
   return (
     <main id="main-content" className="mx-auto mt-24 min-h-[60vh] max-w-7xl">
+      {processing && (
+        <div className="loading-overlay w-full h-full flex-col gap-y-4 fixed top-0 left-0 z-50 bg-white bg-opacity-80 flex items-center justify-center">
+          <p className="text-2xl font-semibold text-gray-500">
+            Processing Your Order...
+          </p>
+          <AiOutlineLoading3Quarters className="my-3 animate-spin-slow text-7xl text-gray-300" />
+          <p className="text-xl font-semibold text-gray-400">{showerThought}</p>
+        </div>
+      )}
       {/* ===== Heading & Continue Shopping */}
       <div className="app-max-width w-full border-t-2 border-gray-100 px-4 sm:px-8 md:px-20">
         <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
@@ -246,7 +289,7 @@ const ShoppingCart = () => {
             <div className="py-3">
               <span className="uppercase">DELIVERY</span>
               <div className="mt-3 space-y-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between accent-gray-600">
                   <div>
                     <input
                       type="radio"
@@ -262,7 +305,7 @@ const ShoppingCart = () => {
                   </div>
                   <span>{convertToCurrency(regularDelivery)}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between accent-gray-600">
                   <div>
                     <input
                       type="radio"
@@ -285,14 +328,14 @@ const ShoppingCart = () => {
               <div className="flex justify-between py-3">
                 <span>Grand Total</span>
                 <span>
-                  convertToCurrency(
-                  {roundDecimal(
-                    +subtotal +
-                      (delivery === 'REGULAR'
-                        ? regularDelivery
-                        : nextDayDelivery)
+                  {convertToCurrency(
+                    roundDecimal(
+                      +subtotal +
+                        (delivery === 'REGULAR'
+                          ? regularDelivery
+                          : nextDayDelivery)
+                    )
                   )}
-                  )
                 </span>
               </div>
 

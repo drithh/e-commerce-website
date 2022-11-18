@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from typing import Any, Generator
 
 import pytz
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import BackgroundTasks, Depends, HTTPException, Request, status
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
