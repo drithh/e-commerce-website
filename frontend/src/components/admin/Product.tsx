@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   ProductService,
   CategoryService,
@@ -15,6 +15,7 @@ import Dropdown from '../input/Dropdown';
 import Dropzone from './Dropzone';
 import { convertToBase64 } from '../util/utilFunc';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 interface categoryType {
   id: string;
@@ -23,6 +24,9 @@ interface categoryType {
 
 const Product = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [title, setTitle] = useState('');
   const [brand, setBrand] = useState('');
   const [detail, setDetail] = useState('');
@@ -33,16 +37,6 @@ const Product = () => {
   const [categoryOptions, setCategoryOptions] = useState<categoryType[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
-
-  // id: string;
-  // title: string;
-  // brand: string;
-  // product_detail: string;
-  // images: Array<string>;
-  // price: number;
-  // category_id: string;
-  // condition: string;
-  // stock: Array<UpdateStock>;
 
   const updateProduct = useMutation(
     (variables: {
@@ -102,7 +96,21 @@ const Product = () => {
     }
   );
 
-  if (fetchProduct.isLoading || fetchCategories.isLoading) {
+  const deleteProduct = useMutation(
+    (id: string) => ProductService.deleteProduct(id),
+    {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        queryClient.invalidateQueries('products');
+        navigate('/admin/products');
+      },
+      onError: (error) => {
+        toast.error((error as ApiError).body.message);
+      },
+    }
+  );
+
+  if (fetchProduct.isLoading || fetchCategories.isLoading || !id) {
     return <div>Loading...</div>;
   }
 
@@ -270,7 +278,15 @@ const Product = () => {
             setFiles={setFiles}
           />
         </div>
-        <div className="mt-8 flex place-content-end">
+        <div className="mt-8 flex place-content-between">
+          <button
+            type="button"
+            onClick={() => deleteProduct.mutate(id)}
+            className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
+            aria-label="Delete Product"
+          >
+            Delete Product
+          </button>
           <Button
             type="submit"
             value="Update Product"

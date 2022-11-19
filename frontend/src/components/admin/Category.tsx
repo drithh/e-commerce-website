@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 import { Link, useParams } from 'react-router-dom';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { ApiError, CategoryService } from '../../api';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import { toast } from 'react-toastify';
 import Dropdown from '../input/Dropdown';
+import { useNavigate } from 'react-router-dom';
+
+const categoryTypes = ['tops', 'bottoms', 'shoes & accessories'];
+
 const Category = () => {
   const { id } = useParams();
   const [category, setCategory] = useState('');
   const [categoryType, setCategoryType] = useState('');
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const updateCategory = useMutation(
     (variables: { id: string; title: string; type: string }) =>
@@ -36,6 +42,20 @@ const Category = () => {
       onSuccess: (data) => {
         setCategory(data.title);
         setCategoryType(data.type);
+      },
+    }
+  );
+
+  const deleteCategory = useMutation(
+    (id: string) => CategoryService.deleteCategory(id),
+    {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        queryClient.invalidateQueries('categories');
+        navigate('/admin/categories');
+      },
+      onError: (error) => {
+        toast.error((error as ApiError).body.message);
       },
     }
   );
@@ -97,14 +117,18 @@ const Category = () => {
             selected={categoryType}
             setSelected={setCategoryType}
             width="w-64"
-            options={Array.from(
-              new Set(
-                fetchCategories.data?.data.map((category) => category.type)
-              )
-            )}
+            options={categoryTypes}
           />
         </div>
-        <div className="mt-8 flex place-content-end">
+        <div className="mt-8 flex place-content-between">
+          <button
+            type="button"
+            onClick={() => deleteCategory.mutate(id)}
+            className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
+            aria-label="Delete Category"
+          >
+            Delete Category
+          </button>
           <Button
             type="submit"
             value="Update Category"

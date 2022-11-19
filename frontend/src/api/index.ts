@@ -22,7 +22,6 @@ export type { CreateOrder } from './models/CreateOrder';
 export type { CreateProduct } from './models/CreateProduct';
 export type { Customer } from './models/Customer';
 export type { DefaultResponse } from './models/DefaultResponse';
-export type { DeleteUser } from './models/DeleteUser';
 export type { DetailCategory } from './models/DetailCategory';
 export type { GetAdminOrder } from './models/GetAdminOrder';
 export type { GetAdminOrders } from './models/GetAdminOrders';

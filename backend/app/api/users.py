@@ -120,21 +120,23 @@ def put_user_balance(
     )
 
 
-@router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def delete_user(
-    request: DeleteUser,
+    id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> Response:
     try:
-        session.query(User).filter(User.id == request.id).delete()
+        session.query(User).filter(User.id == id).delete()
         session.commit()
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=format_error(e),
         )
-    logger.info(f"User {request.id} deleted by {current_user.email}")
+    logger.info(f"User {id} deleted by {current_user.email}")
+
+    return DefaultResponse(message="User Deleted")
 
 
 @router.get("/{id}", response_model=GetUser, status_code=status.HTTP_200_OK)
