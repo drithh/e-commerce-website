@@ -74,12 +74,12 @@ export class ProductService {
   /**
    * Create Product
    * @param requestBody
-   * @returns any Successful Response
+   * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
   public static createProduct(
     requestBody: CreateProduct
-  ): CancelablePromise<any> {
+  ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/v1/products',

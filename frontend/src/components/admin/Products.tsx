@@ -4,7 +4,7 @@ import { ProductService } from '../../api';
 import Pagination from '../Pagination';
 import { convertToCurrency } from '../util/utilFunc';
 import { capitalCase } from 'change-case';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface DefaultParams {
   page: number;
@@ -12,6 +12,7 @@ interface DefaultParams {
 }
 
 const Products = () => {
+  const navigate = useNavigate();
   const [params, setParams] = useState<DefaultParams>({
     page: 1,
     pageSize: 15,
@@ -29,7 +30,7 @@ const Products = () => {
       <div className="flex place-content-end">
         <button
           type="button"
-          // onClick={() => deleteProduct.mutate(id)}
+          onClick={() => navigate('create')}
           className="text-xl mt-3 mb-6 sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  hover:bg-gray-500 hover:text-gray-100"
           aria-label="Create Product"
         >

@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { UpdateStock } from './UpdateStock';
+
 export type CreateProduct = {
   title: string;
   brand: string;
@@ -10,4 +12,5 @@ export type CreateProduct = {
   price: number;
   category_id: string;
   condition: string;
+  stock: Array<UpdateStock>;
 };

@@ -13,6 +13,11 @@ class DetailCategory(BaseModel):
         orm_mode = True
 
 
+class CreateCategory(BaseModel):
+    title: str
+    type: str
+
+
 class GetCategory(BaseModel):
     data: List[DetailCategory]
 

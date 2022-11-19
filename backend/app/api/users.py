@@ -134,9 +134,16 @@ def delete_user(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=format_error(e),
         )
+
+    if current_user.id == id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="You can't delete yourself",
+        )
+
     logger.info(f"User {id} deleted by {current_user.email}")
 
-    return DefaultResponse(message="User Deleted")
+    return DefaultResponse(message="User deleted successfully")
 
 
 @router.get("/{id}", response_model=GetUser, status_code=status.HTTP_200_OK)

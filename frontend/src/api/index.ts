@@ -18,6 +18,7 @@ export type { Category } from './models/Category';
 export type { CategoryOrder } from './models/CategoryOrder';
 export type { ChangePassword } from './models/ChangePassword';
 export type { CreateCart } from './models/CreateCart';
+export type { CreateCategory } from './models/CreateCategory';
 export type { CreateOrder } from './models/CreateOrder';
 export type { CreateProduct } from './models/CreateProduct';
 export type { Customer } from './models/Customer';

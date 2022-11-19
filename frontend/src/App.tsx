@@ -33,6 +33,8 @@ import Order from './components/profile/Order';
 import Category from './components/admin/Category';
 import Customer from './components/admin/Customer';
 import Search from './components/Search';
+import CreateCategory from './components/admin/CreateCategory';
+import CreateProduct from './components/admin/CreateProduct';
 const queryClient = new QueryClient();
 
 function App() {
@@ -78,8 +80,16 @@ function App() {
                         <Route path="orders" element={<Orders />} />
                         <Route path="orders/:id" element={<AdminOrder />} />
                         <Route path="products" element={<AdminProducts />} />
+                        <Route
+                          path="products/create"
+                          element={<CreateProduct />}
+                        />
                         <Route path="products/:id" element={<AdminProduct />} />
                         <Route path="categories" element={<Categories />} />
+                        <Route
+                          path="categories/create"
+                          element={<CreateCategory />}
+                        />
                         <Route path="categories/:id" element={<Category />} />
                         <Route path="customers" element={<Customers />} />
                         <Route path="customers/:id" element={<Customer />} />
