@@ -2,6 +2,9 @@ import numpy as np
 from PIL import Image
 import torch
 import torchvision.transforms as transforms
+import torch.nn as nn
+from torchvision.models import resnet34
+import torch.nn.functional as F
 
 class ImageClassifier:
     def __init__(self):        
