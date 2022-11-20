@@ -96,5 +96,5 @@ async def shower_thoughts() -> Any:
     try:
         tweets = [tweet["text"] for tweet in data["data"] if len(tweet["text"]) < 100]
         return ShowerThoughts(data=tweets)
-    except AttributeError:
+    except Exception:
         return ShowerThoughts(data=["No shower thoughts found"])

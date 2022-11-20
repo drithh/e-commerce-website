@@ -159,6 +159,12 @@ def create_product(
             "file_name": title_slug,
         }
         image_url = upload_image(file, category)
+        if image_url is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Product created but image upload failed, because of cloud storage error",
+            )
+
         name = image_url.split("/")[-1].split(".")[0]
         image = Image(name=name, image_url=image_url)
         try:
@@ -270,6 +276,11 @@ def update_product(
             ).fetchone()[0]
 
             image_url = upload_image(file, category)
+            if image_url is None:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Product updated but image upload failed, because of cloud storage error",
+                )
             name = image_url.split("/")[-1].split(".")[0]
             image = Image(name=name, image_url=image_url)
             try:
