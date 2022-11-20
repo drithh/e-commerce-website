@@ -1,8 +1,8 @@
 """models
 
-Revision ID: a77e8da39eb4
+Revision ID: 370d7363d2c1
 Revises: 
-Create Date: 2022-11-08 10:59:08.399129
+Create Date: 2022-11-18 13:55:02.961216
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = "a77e8da39eb4"
+revision = "370d7363d2c1"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -69,8 +69,10 @@ def upgrade():
         sa.Column("name", sa.String(length=128), nullable=False),
         sa.Column("image_url", sa.String(length=128), nullable=False),
         sa.PrimaryKeyConstraint("id"),
+        sa.UniqueConstraint("image_url"),
         sa.UniqueConstraint("name"),
     )
+    op.create_index("image_url", "images", ["image_url"], unique=False)
     op.create_table(
         "sizes",
         sa.Column(
@@ -180,8 +182,13 @@ def upgrade():
             nullable=True,
         ),
         sa.Column("deleted_at", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("token", sa.String(length=128), nullable=False),
-        sa.Column("expired_at", sa.DateTime(timezone=True), nullable=False),
+        sa.Column("token", sa.String(length=16), nullable=False),
+        sa.Column(
+            "expires_in",
+            sa.DateTime(timezone=True),
+            server_default=sa.text("now() + interval '15 minutes'"),
+            nullable=False,
+        ),
         sa.Column(
             "user_id", fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False
         ),
@@ -443,6 +450,7 @@ def downgrade():
     op.drop_index(op.f("ix_users_email"), table_name="users")
     op.drop_table("users")
     op.drop_table("sizes")
+    op.drop_index("image_url", table_name="images")
     op.drop_table("images")
     op.drop_table("categories")
     # ### end Alembic commands ###

@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 
 from fastapi import BackgroundTasks, FastAPI
@@ -20,33 +21,55 @@ conf = ConnectionConfig(
 )
 
 
-async def send_forgot_password_email(email: str, token: str):
+async def send_forgot_password_email(
+    email: str,
+    token: str,
+):
     subject = "Reset your password"
-    # body = f"""
-    # <!DOCTYPE html>
-    # <html>
-    #   <Title>Reset your password</Title>
-    #   <body>
-    #     <p>Hi,{email}</p>
-    #     <p>Sombody has requested to reset your password. If it was you, click the link below to reset it.</p>
-    #     <a href="http://localhost:8000/{settings.API_PATH}/reset-password?token={token}">Reset your password</a>
-    #     <p>If it wasn't you, ignore this email.</p>
-    #   </body>
-    # </html>
-    # """
     template_body = {
         "name": email,
-        "action_url": token,
+        "token": token,
     }
-    await send_email(subject, email, template_body)
+    await send_email(subject, email, template_body, "forgot_password.html")
 
 
-async def send_email(subject: str, recipientt: str, template_body: dict):
+async def send_checkout_email(
+    name: str,
+    email: str,
+    shipping_address: str,
+    shipping_method: str,
+    shipping_price: int,
+    subtotal: int,
+    total: int,
+    order_items: list,
+):
+    order_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    subject = "Your order has been placed"
+    template_body = {
+        "name": name,
+        "order_time": order_time,
+        "shipping_address": shipping_address,
+        "subtotal": subtotal,
+        "shipping_method": shipping_method,
+        "shipping_price": shipping_price,
+        "total": total,
+        "order_items": order_items,
+    }
+    await send_email(subject, email, template_body, "checkout_order.html")
+
+
+async def send_email(
+    subject: str,
+    recipient: str,
+    template_body: dict,
+    template_name: str,
+):
     message = MessageSchema(
         subject=subject,
-        recipients=[recipientt],
+        recipients=[recipient],
         template_body=template_body,
         subtype=MessageType.html,
     )
     fm = FastMail(conf)
-    await fm.send_message(message, template_name="forgot_password_template.html")
+
+    await fm.send_message(message, template_name=template_name)

@@ -20,8 +20,6 @@ export default function CartItem() {
     return acc + item.details.quantity;
   }, 0);
 
-  // count total number of items in cart
-
   const handleAnimate = useCallback(() => {
     if (noOfItems === 0) return;
     setAnimate('animate__animated animate__headShake');
@@ -100,7 +98,7 @@ export default function CartItem() {
             >
               <div
                 style={{ height: '100vh' }}
-                className="dur relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
+                className="relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
               >
                 <div className="bg-lightgreen flex items-center justify-between p-6">
                   <h3 className="text-xl">Cart ({noOfItems})</h3>
@@ -108,9 +106,7 @@ export default function CartItem() {
                     type="button"
                     className="text-3xl outline-none focus:outline-none sm:text-2xl"
                     onClick={closeModal}
-                  >
-                    &#10005;
-                  </button>
+                  ></button>
                 </div>
 
                 <div className="h-full flex flex-col place-content-between">

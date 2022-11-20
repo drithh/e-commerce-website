@@ -7,34 +7,40 @@ import { toast } from 'react-toastify';
 import { ApiError } from '../../api';
 
 type Props = {
+  emailForReset: string;
   onLogin: () => void;
-  onResetPassword: () => void;
-  setEmailForReset: React.Dispatch<React.SetStateAction<string>>;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
+  closeModal: () => void;
 };
 
-const ForgotPassword: React.FC<Props> = ({
-  onResetPassword,
+const ResetPassword: React.FC<Props> = ({
+  emailForReset,
   onLogin,
-  setEmailForReset,
   errorMsg,
   setErrorMsg,
+  closeModal,
 }) => {
   // const auth = useAuth();
-  const { forgotPassword } = useAuth();
-  const [email, setEmail] = useState('');
+  const { login, resetPassword } = useAuth();
+  const [token, setToken] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       // set cursor to loading
-      document.body.style.cursor = 'wait';
-      setEmailForReset(email);
-      const forgotPasswordResponse = await forgotPassword!.mutateAsync(email);
-      toast.success(forgotPasswordResponse.message);
-      document.body.style.cursor = 'default';
-      onResetPassword();
+      const resetPasswordResponse = await resetPassword!.mutateAsync({
+        email: emailForReset,
+        token,
+        password,
+      });
+      toast.success(resetPasswordResponse.message);
+      await login!.mutateAsync({
+        email: emailForReset,
+        password,
+      });
+      closeModal();
     } catch (err) {
       setErrorMsg((err as ApiError).body.message);
     }
@@ -46,18 +52,28 @@ const ForgotPassword: React.FC<Props> = ({
         as="h3"
         className="my-8 text-center text-3xl font-medium leading-10 text-gray-800"
       >
-        Forgot your password?
+        Reset your password
       </Dialog.Title>
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
-          type="email"
-          placeholder={'Email Address *'}
-          name="email"
+          type="text"
+          placeholder={'Code *'}
+          name="code"
           required
           extraClass="w-full focus:border-gray-500"
           border="border-2 border-gray-300 mb-4"
-          onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
-          value={email}
+          onChange={(e) => setToken((e.target as HTMLInputElement).value)}
+          value={token}
+        />
+        <Input
+          type="password"
+          placeholder={'Your new password *'}
+          name="password"
+          required
+          extraClass="w-full focus:border-gray-500"
+          border="border-2 border-gray-300 mb-4"
+          onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
+          value={password}
         />
         {errorMsg !== '' && (
           <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
@@ -84,4 +100,4 @@ const ForgotPassword: React.FC<Props> = ({
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

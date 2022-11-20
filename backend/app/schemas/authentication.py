@@ -51,6 +51,7 @@ class UserRead(BaseModel):
 
 class ResetPassword(BaseModel):
     token: str
+    email: str
     password: str
 
 

@@ -46,7 +46,7 @@
   },
   "scripts": {
     "start": "cp ${ENV:-'../.env'} .env && react-scripts start",
-    "build": "cp ${ENV:-'../.env'} .env && react-scripts build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "genapi": "npx openapi -i http://localhost:8000/api/v1/openapi.json -o src/api -c axios"

@@ -10,6 +10,7 @@ from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
+from app.deps.send_email import send_checkout_email
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product_size_quantity import ProductSizeQuantity
@@ -192,7 +193,7 @@ def get_orders_admin(
 
 
 @router.post("/order", status_code=status.HTTP_201_CREATED)
-def create_order(
+async def create_order(
     request: CreateOrder,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
@@ -224,9 +225,10 @@ def create_order(
     cart = session.execute(
         """
         SELECT product_size_quantities.id, product_size_quantities.quantity as stock,
-        carts.quantity, order, products.title
+        carts.quantity, products.title, products.brand, products.condition, products.price, sizes.size
         FROM only carts
         JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
+        JOIN sizes ON product_size_quantities.size_id = sizes.id
         JOIN products ON product_size_quantities.product_id = products.id
         WHERE user_id = :user_id
     """,
@@ -340,8 +342,22 @@ def create_order(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong, when reducing balance",
         )
-
-    return DefaultResponse(message="Order created successfully")
+    if request.send_email:
+        await send_checkout_email(
+            email=current_user.email,
+            name=current_user.name,
+            shipping_address=request.shipping_address.address,
+            shipping_method=request.shipping_method,
+            shipping_price=shipping_price,
+            subtotal=total_price,
+            total=total_price + shipping_price,
+            order_items=cart,
+        )
+        return DefaultResponse(
+            message="Order created successfully And An Email Has Been Sent To You"
+        )
+    else:
+        return DefaultResponse(message="Order created successfully")
 
 
 @router.put(

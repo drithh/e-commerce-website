@@ -4,7 +4,8 @@ import { IoCloseOutline } from 'react-icons/io5';
 import Login from './Login';
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
-type CurrentPage = 'login' | 'register' | 'forgot-password';
+import ResetPassword from './ResetPassword';
+type CurrentPage = 'login' | 'register' | 'forgot-password' | 'reset-password';
 
 type Props = {
   extraClass?: string;
@@ -13,6 +14,7 @@ type Props = {
 
 const LoginForm: FC<Props> = ({ extraClass, children }) => {
   const [currentPage, setCurrentPage] = useState<CurrentPage>('login');
+  const [emailForReset, setEmailForReset] = useState('');
   const [open, setOpen] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -33,14 +35,28 @@ const LoginForm: FC<Props> = ({ extraClass, children }) => {
         closeModal={closeModal}
       />
     );
-  } else {
+  } else if (currentPage === 'forgot-password') {
     modalBox = (
       <ForgotPassword
+        setEmailForReset={setEmailForReset}
         onLogin={() => setCurrentPage('login')}
+        onResetPassword={() => setCurrentPage('reset-password')}
         errorMsg={errorMsg}
         setErrorMsg={setErrorMsg}
       />
     );
+  } else if (currentPage === 'reset-password') {
+    modalBox = (
+      <ResetPassword
+        emailForReset={emailForReset}
+        onLogin={() => setCurrentPage('login')}
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        closeModal={closeModal}
+      />
+    );
+  } else {
+    modalBox = <div>404</div>;
   }
 
   function closeModal() {

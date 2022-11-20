@@ -67,3 +67,4 @@ class OrderAddress(BaseModel):
 class CreateOrder(BaseModel):
     shipping_method: str = Query("", regex="^(Next Day|Regular)$")
     shipping_address: OrderAddress
+    send_email: bool = Query(False)

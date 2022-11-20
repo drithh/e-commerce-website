@@ -4,7 +4,7 @@ DECLARE
     t text;
 BEGIN
     FOR t IN
-        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%' AND table_name NOT LIKE 'wishlists'
+        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%' AND table_name NOT IN ('wishlists', 'forgot_passwords')
     LOOP
         EXECUTE format('CREATE TABLE %I
                     (CHECK (deleted_at IS NOT NULL))
@@ -39,7 +39,7 @@ DECLARE
     t text;
 BEGIN
     FOR t IN
-        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%' AND table_name NOT LIKE 'wishlists'
+        SELECT table_name FROM information_schema.columns WHERE column_name = 'deleted_at' AND table_name NOT LIKE 'z_archive_%' AND table_name NOT IN ('wishlists', 'forgot_passwords')
     LOOP
         EXECUTE format('CREATE TRIGGER trigger_archive_record
                     AFTER UPDATE OF deleted_at OR DELETE ON %I
