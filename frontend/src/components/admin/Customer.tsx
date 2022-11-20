@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 import { Link, useParams } from 'react-router-dom';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { ApiError, UserService } from '../../api';
 import Button from '../button/Button';
 import Input from '../input/Input';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 const Customer = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [balance, setBalance] = useState(0);
@@ -47,6 +51,17 @@ const Customer = () => {
       },
     }
   );
+
+  const deleteUser = useMutation((id: string) => UserService.deleteUser(id), {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries('users');
+      navigate('/admin/users');
+    },
+    onError: (error) => {
+      toast.error((error as ApiError).body.message);
+    },
+  });
 
   const fetchUser = useQuery(
     ['user-detail', id],
@@ -204,7 +219,15 @@ const Customer = () => {
           />
         </div>
 
-        <div className="mt-8 flex place-content-end">
+        <div className="mt-8 flex place-content-between">
+          <button
+            type="button"
+            onClick={() => deleteUser.mutate(id)}
+            className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
+            aria-label="Delete User"
+          >
+            Delete User
+          </button>
           <Button
             type="submit"
             value="Update User"

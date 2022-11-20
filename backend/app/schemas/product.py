@@ -1,11 +1,19 @@
 from typing import List, Optional
 from uuid import UUID
 
-from fastapi import UploadFile
+from fastapi import Query
 from pydantic import BaseModel
 
 from app.models.category import Category
 from app.schemas.default_model import Pagination
+
+
+class UpdateStock(BaseModel):
+    size: str = Query("", regex="^(S|M|L|XL|XXL)$")
+    quantity: int
+
+    class Config:
+        orm_mode = True
 
 
 class CreateProduct(BaseModel):
@@ -16,14 +24,7 @@ class CreateProduct(BaseModel):
     price: int
     category_id: UUID
     condition: str
-
-    class Config:
-        orm_mode = True
-
-
-class UpdateStock(BaseModel):
-    size: str
-    quantity: int
+    stock: List[UpdateStock]
 
     class Config:
         orm_mode = True

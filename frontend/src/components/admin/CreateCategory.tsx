@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { Link } from 'react-router-dom';
+import { useMutation, useQueryClient } from 'react-query';
 import { ApiError, CategoryService } from '../../api';
 import Button from '../button/Button';
 import Input from '../input/Input';
@@ -11,43 +11,18 @@ import { useNavigate } from 'react-router-dom';
 
 const categoryTypes = ['tops', 'bottoms', 'shoes & accessories'];
 
-const Category = () => {
-  const { id } = useParams();
+const CreateCategory = () => {
   const [category, setCategory] = useState('');
-  const [categoryType, setCategoryType] = useState('');
+  const [categoryType, setCategoryType] = useState('tops');
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const updateCategory = useMutation(
-    (variables: { id: string; title: string; type: string }) =>
-      CategoryService.updateCategory(variables.id, {
+  const createCategory = useMutation(
+    (variables: { title: string; type: string }) =>
+      CategoryService.createCategory({
         title: variables.title,
         type: variables.type,
       }),
-    {
-      onSuccess: (data) => {
-        toast.success(data.message);
-      },
-      onError: (error) => {
-        toast.error((error as ApiError).body.message);
-      },
-    }
-  );
-
-  const fetchCategory = useQuery(
-    ['category', id],
-    () => CategoryService.getDetailCategory(id as string),
-    {
-      refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        setCategory(data.title);
-        setCategoryType(data.type);
-      },
-    }
-  );
-
-  const deleteCategory = useMutation(
-    (id: string) => CategoryService.deleteCategory(id),
     {
       onSuccess: (data) => {
         toast.success(data.message);
@@ -60,30 +35,14 @@ const Category = () => {
     }
   );
 
-  const fetchCategories = useQuery(
-    'categories',
-    () => CategoryService.getCategory(),
-    {
-      staleTime: Infinity,
-    }
-  );
-
-  if (
-    fetchCategory.isLoading ||
-    id === undefined ||
-    fetchCategories.isLoading
-  ) {
-    return <div>Loading...</div>;
-  }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateCategory.mutate({ id, title: category, type: categoryType });
+    createCategory.mutate({ title: category, type: categoryType });
   };
 
   return (
     <>
-      <h2 className="w-full text-2xl font-medium">Update Category</h2>
+      <h2 className="w-full text-2xl font-medium">Create Category</h2>
       <div className="py-3 flex ">
         <Link
           to="/admin/categories"
@@ -123,15 +82,15 @@ const Category = () => {
         <div className="mt-8 flex place-content-between">
           <button
             type="button"
-            onClick={() => deleteCategory.mutate(id)}
+            onClick={() => navigate('/admin/categories')}
             className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
-            aria-label="Delete Category"
+            aria-label="Cancel"
           >
-            Delete Category
+            Cancel
           </button>
           <Button
             type="submit"
-            value="Update Category"
+            value="Create Category"
             extraClass="w-52 text-center text-xl mb-4"
             size="lg"
           />
@@ -141,4 +100,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default CreateCategory;

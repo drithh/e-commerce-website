@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type UpdateStock = {
-  size: string;
+  size?: string;
   quantity: number;
 };

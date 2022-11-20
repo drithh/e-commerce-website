@@ -1,6 +1,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CreateCategory } from '../models/CreateCategory';
 import type { DefaultResponse } from '../models/DefaultResponse';
 import type { DetailCategory } from '../models/DetailCategory';
 import type { GetCategory } from '../models/GetCategory';
@@ -50,19 +51,18 @@ export class CategoryService {
 
   /**
    * Create Category
-   * @param categoryName
+   * @param requestBody
    * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
   public static createCategory(
-    categoryName: string
+    requestBody: CreateCategory
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/v1/categories',
-      query: {
-        category_name: categoryName,
-      },
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },

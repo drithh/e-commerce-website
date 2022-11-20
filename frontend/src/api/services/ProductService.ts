@@ -74,38 +74,17 @@ export class ProductService {
   /**
    * Create Product
    * @param requestBody
-   * @returns any Successful Response
+   * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
   public static createProduct(
     requestBody: CreateProduct
-  ): CancelablePromise<any> {
+  ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/api/v1/products',
       body: requestBody,
       mediaType: 'application/json',
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
-  /**
-   * Get Product
-   * @param id
-   * @returns app__schemas__product__GetProduct Successful Response
-   * @throws ApiError
-   */
-  public static getProduct(
-    id: string
-  ): CancelablePromise<app__schemas__product__GetProduct> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/api/v1/products/{id}',
-      path: {
-        id: id,
-      },
       errors: {
         422: `Validation Error`,
       },
@@ -126,6 +105,27 @@ export class ProductService {
       url: '/api/v1/products/{product_id}',
       path: {
         product_id: productId,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Get Product
+   * @param id
+   * @returns app__schemas__product__GetProduct Successful Response
+   * @throws ApiError
+   */
+  public static getProduct(
+    id: string
+  ): CancelablePromise<app__schemas__product__GetProduct> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/api/v1/products/{id}',
+      path: {
+        id: id,
       },
       errors: {
         422: `Validation Error`,

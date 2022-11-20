@@ -112,28 +112,24 @@ def test_update_user(client: TestClient, create_admin):
     assert resp.status_code == 200
 
 
-def test_delete_user(client: TestClient, create_admin):
+def test_delete_user_self(client: TestClient, create_admin):
     admin = create_admin()
-
     resp = client.delete(
         f"{prefix}",
         headers=get_jwt_header(admin),
-        json={
-            "id": str(admin.id),
-        },
+        params={"id": str(admin.id)},
     )
-    assert resp.status_code == 204
+    assert resp.status_code == 400
+    assert resp.json() == {"message": "You can't delete yourself"}
 
 
-# def test_delete_empty_user(client: TestClient, create_admin):
-#     admin = create_admin()
-
-#     resp = client.delete(
-#         f"{prefix}",
-#         headers=get_jwt_header(admin),
-#         json={
-#             "id" : str(uuid.uuid4()),
-#         }
-#     )
-#     assert resp.status_code == 400
-#     assert resp.json() == {"message": "User not found"}
+def test_delete_user(client: TestClient, create_admin, create_user):
+    admin = create_admin()
+    user = create_user()
+    resp = client.delete(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        params={"id": str(user.id)},
+    )
+    assert resp.status_code == 200
+    assert resp.json() == {"message": "User deleted successfully"}

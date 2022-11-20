@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type DeleteUser = {
-  id: string;
+export type CreateCategory = {
+  title: string;
+  type: string;
 };
