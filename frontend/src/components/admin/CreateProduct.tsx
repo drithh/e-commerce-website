@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import {
   ProductService,
@@ -22,8 +22,7 @@ interface categoryType {
   title: string;
 }
 
-const Product = () => {
-  const { id } = useParams();
+const CreateProduct = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -32,13 +31,34 @@ const Product = () => {
   const [detail, setDetail] = useState('');
   const [price, setPrice] = useState(0);
   const [category, setCategory] = useState('');
-  const [condition, setCondition] = useState('');
-  const [stock, setStock] = useState<Stock[]>([]);
+  const [condition, setCondition] = useState('new');
+  const [stock, setStock] = useState<Stock[]>([
+    {
+      size: 'L',
+      quantity: 0,
+    },
+    {
+      size: 'M',
+      quantity: 0,
+    },
+    {
+      size: 'S',
+      quantity: 0,
+    },
+    {
+      size: 'XL',
+      quantity: 0,
+    },
+    {
+      size: 'XXL',
+      quantity: 0,
+    },
+  ]);
   const [categoryOptions, setCategoryOptions] = useState<categoryType[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
 
-  const updateProduct = useMutation(
+  const createProduct = useMutation(
     (variables: {
       title: string;
       brand: string;
@@ -49,8 +69,7 @@ const Product = () => {
       stock: UpdateStock[];
       images: string[];
     }) =>
-      ProductService.updateProduct({
-        id: id as string,
+      ProductService.createProduct({
         title: variables.title,
         brand: variables.brand,
         product_detail: variables.detail,
@@ -62,57 +81,18 @@ const Product = () => {
       })
   );
 
-  const fetchProduct = useQuery(
-    ['product', id],
-    () => ProductService.getProduct(id as string),
-    {
-      refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        setTitle(data.title);
-        setBrand(data.brand);
-        setDetail(data.product_detail);
-        setPrice(data.price);
-        setCategory(data.category_name);
-        setCondition(data.condition);
-        setStock(data.stock as Stock[]);
-        setImages(data.images);
-      },
-    }
-  );
-
-  const fetchCategories = useQuery(
-    'categories',
-    () => CategoryService.getCategory(),
-    {
-      refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        setCategoryOptions(
-          data.data.map((category) => ({
-            id: category.id,
-            title: category.title,
-          }))
-        );
-      },
-    }
-  );
-
-  const deleteProduct = useMutation(
-    (id: string) => ProductService.deleteProduct(id),
-    {
-      onSuccess: (data) => {
-        toast.success(data.message);
-        queryClient.invalidateQueries('products');
-        navigate('/admin/products');
-      },
-      onError: (error) => {
-        toast.error((error as ApiError).body.message);
-      },
-    }
-  );
-
-  if (fetchProduct.isLoading || fetchCategories.isLoading || !id) {
-    return <div>Loading...</div>;
-  }
+  useQuery('categories', () => CategoryService.getCategory(), {
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      setCategory(data.data[0].title);
+      setCategoryOptions(
+        data.data.map((category) => ({
+          id: category.id,
+          title: category.title,
+        }))
+      );
+    },
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -126,8 +106,7 @@ const Product = () => {
       (option) => option.title === category
     );
 
-    console.log(combinedImages);
-    updateProduct.mutate(
+    createProduct.mutate(
       {
         title,
         brand,
@@ -139,8 +118,10 @@ const Product = () => {
         images: combinedImages,
       },
       {
-        onSuccess: () => {
-          toast.success('Product updated');
+        onSuccess: (data) => {
+          toast.success(data.message);
+          queryClient.invalidateQueries('products');
+          navigate('/admin/products');
         },
         onError: (error) => {
           toast.error((error as ApiError).body.message);
@@ -151,7 +132,7 @@ const Product = () => {
 
   return (
     <>
-      <h2 className="w-full text-2xl font-medium">Update Product</h2>
+      <h2 className="w-full text-2xl font-medium">Create Product</h2>
       <div className="py-3 flex ">
         <Link to="/admin/products" className="flex place-items-center  gap-x-2">
           <HiOutlineChevronLeft className="text-xl" />
@@ -281,15 +262,15 @@ const Product = () => {
         <div className="mt-8 flex place-content-between">
           <button
             type="button"
-            onClick={() => deleteProduct.mutate(id)}
+            onClick={() => navigate('/admin/products')}
             className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
-            aria-label="Delete Product"
+            aria-label="Cancel"
           >
-            Delete Product
+            Cancel
           </button>
           <Button
             type="submit"
-            value="Update Product"
+            value="Create Product"
             extraClass="w-52 text-center text-xl mb-4"
             size="lg"
           />
@@ -299,4 +280,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default CreateProduct;

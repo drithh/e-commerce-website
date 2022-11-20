@@ -43,14 +43,18 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
           <button
             type="button"
             key={index}
-            className="group relative h-52 w-40 cursor-pointer rounded border-2 border-gray-100"
+            className="group relative h-52 w-40 cursor-pointer rounded border-2 border-gray-100  overflow-hidden"
             onClick={() => {
               setImages(
                 initialImages.filter((selectedImage) => selectedImage !== image)
               );
             }}
           >
-            <img src={image} alt="" className="rounded-md" />
+            <img
+              src={image}
+              alt=""
+              className="rounded-md object-contain object-bottom"
+            />
             <div className="group absolute inset-0 hidden h-full  w-full place-content-center place-items-center bg-gray-100 opacity-50 group-hover:flex">
               <IoClose className="animate-spin-fast-once text-7xl text-black " />
             </div>

@@ -55,8 +55,20 @@ class Settings(BaseSettings):
     USE_CREDENTIALS: bool
     VALIDATE_CERTS: bool
 
+    # Twitter
     TWITTER_API: str
 
+    # Google Cloud Platform
+    GCP_TYPE: str
+    GCP_PROJECT_ID: str
+    GCP_PRIVATE_KEY_ID: str
+    GCP_PRIVATE_KEY: str
+    GCP_CLIENT_EMAIL: str
+    GCP_CLIENT_ID: str
+    GCP_AUTH_URI: str
+    GCP_TOKEN_URI: str
+    GCP_AUTH_PROVIDER_X509_CERT_URL: str
+    GCP_CLIENT_X509_CERT_URL: str
     #  END: required environment variables
 
     class Config:

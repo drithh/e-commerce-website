@@ -4,7 +4,7 @@ import { ProductService } from '../../api';
 import Pagination from '../Pagination';
 import { convertToCurrency } from '../util/utilFunc';
 import { capitalCase } from 'change-case';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface DefaultParams {
   page: number;
@@ -12,6 +12,7 @@ interface DefaultParams {
 }
 
 const Products = () => {
+  const navigate = useNavigate();
   const [params, setParams] = useState<DefaultParams>({
     page: 1,
     pageSize: 15,
@@ -26,6 +27,16 @@ const Products = () => {
 
   return (
     <div className="w-full whitespace-nowrap px-8 pt-4 pb-8 border border-gray-500">
+      <div className="flex place-content-end">
+        <button
+          type="button"
+          onClick={() => navigate('create')}
+          className="text-xl mt-3 mb-6 sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  hover:bg-gray-500 hover:text-gray-100"
+          aria-label="Create Product"
+        >
+          Create Product
+        </button>
+      </div>
       <div>
         <tr className="border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4">
           <th className="py-2 text-left font-semibold table-cell flex-[5]">

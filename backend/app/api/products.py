@@ -111,7 +111,7 @@ def get_products(
     )
 
 
-@router.post("", status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
 def create_product(
     request: CreateProduct,
     session: Generator = Depends(get_db),
@@ -159,6 +159,12 @@ def create_product(
             "file_name": title_slug,
         }
         image_url = upload_image(file, category)
+        if image_url is None:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="Product created but image upload failed, because of cloud storage error",
+            )
+
         name = image_url.split("/")[-1].split(".")[0]
         image = Image(name=name, image_url=image_url)
         try:
@@ -180,6 +186,34 @@ def create_product(
             session.add(product_image)
             session.commit()
             session.refresh(product_image)
+            logger.info(
+                f"Product image {product_image.id} created by {current_user.name}"
+            )
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+            )
+
+    # create product size quantity
+    for item in request.stock:
+        try:
+            size_id = session.execute(
+                "SELECT id FROM sizes WHERE size = :size",
+                {"size": item.size},
+            ).fetchone()[0]
+            product_size_quantity = ProductSizeQuantity(
+                product_id=product.id,
+                size_id=size_id,
+                quantity=item.quantity,
+            )
+            session.add(product_size_quantity)
+            session.commit()
+            session.refresh(product_size_quantity)
+            logger.info(
+                f"Product size quantity {product_size_quantity.id} created by {current_user.name}"
+            )
         except Exception as e:
             logger.error(e)
             session.rollback()
@@ -270,6 +304,11 @@ def update_product(
             ).fetchone()[0]
 
             image_url = upload_image(file, category)
+            if image_url is None:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Product updated but image upload failed, because of cloud storage error",
+                )
             name = image_url.split("/")[-1].split(".")[0]
             image = Image(name=name, image_url=image_url)
             try:

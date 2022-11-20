@@ -13,6 +13,7 @@ from app.models.category import Category
 from app.models.image import Image
 from app.models.user import User
 from app.schemas.category import (
+    CreateCategory,
     DeleteCategory,
     DetailCategory,
     GetCategory,
@@ -55,12 +56,12 @@ def get_detail_category(
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
 def create_category(
+    request: CreateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-    category_name: str = Query(..., min_length=2, max_length=100),
 ):
     try:
-        session.add(Category(title=category_name))
+        session.add(Category(**request.dict()))
         session.commit()
     except Exception as e:
         logger.error(format_error(e))
@@ -68,7 +69,7 @@ def create_category(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=format_error(e),
         )
-    logger.info(f"Category {category_name} created by {current_user.name}")
+    logger.info(f"Category {request.title} created by {current_user.name}")
 
     return DefaultResponse(message="Category added")
 

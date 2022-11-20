@@ -107,28 +107,26 @@ $$ language 'plpgsql';
 
 -- $$ language SQL;
 
- ALTER TABLE products
- ADD search TEXT
- GENERATED ALWAYS AS (
-    coalesce(title, '') || ' ' || coalesce(brand, '')
- ) stored;
+--  ALTER TABLE products
+--  ADD search TEXT
+--  GENERATED ALWAYS AS (
 
-CREATE INDEX products_searchable_text_trgm_gist_idx on PRODUCTS
-  USING GIST(search  gist_trgm_ops(siglen=256));
+--  ) stored;
+
+-- CREATE INDEX products_searchable_text_trgm_gist_idx on PRODUCTS
+--   USING GIST((title || ' ' || brand)  gist_trgm_ops(siglen=256));
 
 CREATE OR REPLACE FUNCTION search_products(term TEXT)
 returns table(
   id UUID,
-  title TEXT,
-  score REAL
+  title TEXT
 )
 as
 $$
 
-WITH term AS (SELECT term AS q)
-SELECT id, title,
-      1 - (term.q <<-> search) AS score
-FROM products p , term
-WHERE term.q <% (search)
-ORDER BY term.q <<-> (search) LIMIT 10;
+SELECT p.id, p.title
+FROM products p
+JOIN categories c ON p.category_id = c.id
+WHERE term <% (p.title || ' ' || p.brand || ' ' || SPLIT_PART(c.title, '-', 1) || ' ' || SPLIT_PART(c.title, '-', 2))
+ORDER BY term <<-> (p.title || ' ' || p.brand || ' ' || SPLIT_PART(c.title, '-', 1) || ' ' || SPLIT_PART(c.title, '-', 2)) LIMIT 10;
 $$ language SQL;

@@ -1,7 +1,7 @@
 from app.models.image import Image
 
 
-def image_seed(fake, session, image_urls, is_multiple=False):
+def image_seed(fake, session, image_urls):
     image_id = []
     for url in image_urls:
         name = url.split("/")[-1].split(".")[0]

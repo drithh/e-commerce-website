@@ -3,7 +3,6 @@
 /* eslint-disable */
 import type { app__schemas__user__GetUser } from '../models/app__schemas__user__GetUser';
 import type { DefaultResponse } from '../models/DefaultResponse';
-import type { DeleteUser } from '../models/DeleteUser';
 import type { GetUserAddress } from '../models/GetUserAddress';
 import type { GetUserBalance } from '../models/GetUserBalance';
 import type { PutUserAddress } from '../models/PutUserAddress';
@@ -48,16 +47,17 @@ export class UserService {
 
   /**
    * Delete User
-   * @param requestBody
-   * @returns void
+   * @param id
+   * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
-  public static deleteUser(requestBody: DeleteUser): CancelablePromise<void> {
+  public static deleteUser(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/api/v1/user',
-      body: requestBody,
-      mediaType: 'application/json',
+      query: {
+        id: id,
+      },
       errors: {
         422: `Validation Error`,
       },
