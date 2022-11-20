@@ -12,4 +12,4 @@ RUN poetry install --no-root
 
 COPY . /app
 
-CMD uvicorn --host 0.0.0.0 --port 8000 main:app
+CMD uvicorn --port 8000 --host 0.0.0.0 --reload main:app

@@ -125,13 +125,43 @@ def test_forgot_password(client: TestClient, create_user):
         params={"email": user.email},
     )
     assert resp.status_code == 200
-    assert resp.json().get("message") == "Reset password link sent to your email"
+    assert (
+        resp.json().get("message") == "Reset password code has been sent to your email"
+    )
 
 
 def test_reset_password_invalid_token(client: TestClient):
     resp = client.post(
         f"{prefix}/reset-password",
-        json={"token": "invalid_token", "password": "password123"},
+        json={
+            "email": "admin@admin.com",
+            "token": "invalid_token",
+            "password": "password123",
+        },
+    )
+    assert resp.status_code == 400
+    assert resp.json().get("message") == "Invalid token"
+
+
+def test_reset_password_invalid_email(client: TestClient, create_user, db: Session):
+    user = create_user()
+    db.execute(
+        "INSERT INTO forgot_passwords (user_id, token, expires_in) VALUES (:user_id, :token, :expires_in)",
+        {
+            "user_id": user.id,
+            "token": "expired_token",
+            "expires_in": datetime.now() - timedelta(hours=1),
+        },
+    )
+    db.commit()
+
+    resp = client.post(
+        f"{prefix}/reset-password",
+        json={
+            "email": "admin@admin.com",
+            "token": "expired_token",
+            "password": "password123",
+        },
     )
     assert resp.status_code == 400
     assert resp.json().get("message") == "Invalid token"
@@ -151,7 +181,11 @@ def test_reset_expired_token(client: TestClient, create_user, db: Session):
 
     resp = client.post(
         f"{prefix}/reset-password",
-        json={"token": "expired_token", "password": "password123"},
+        json={
+            "email": user.email,
+            "token": "expired_token",
+            "password": "password123",
+        },
     )
     assert resp.status_code == 400
     assert resp.json().get("message") == "Token expired"
@@ -171,7 +205,11 @@ def test_reset_password(client: TestClient, create_user, db: Session):
 
     resp = client.post(
         f"{prefix}/reset-password",
-        json={"token": "valid_token", "password": "password123"},
+        json={
+            "email": user.email,
+            "token": "valid_token",
+            "password": "password123",
+        },
     )
     assert resp.status_code == 201
     assert resp.json().get("message") == "Password updated successfully"
