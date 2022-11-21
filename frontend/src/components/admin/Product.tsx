@@ -1,21 +1,21 @@
-import { Link, useParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import {
-  ProductService,
-  CategoryService,
-  UpdateStock,
-  Stock,
-  ApiError,
-} from '../../api';
 import { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
-import Input from '../input/Input';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import {
+  ApiError,
+  CategoryService,
+  ProductService,
+  Stock,
+  UpdateStock,
+} from '../../api';
 import Button from '../button/Button';
 import Dropdown from '../input/Dropdown';
-import Dropzone from './Dropzone';
+import Input from '../input/Input';
 import { convertToBase64 } from '../util/utilFunc';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import Dropzone from './Dropzone';
 
 interface categoryType {
   id: string;
@@ -117,7 +117,7 @@ const Product = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const base64Images = await Promise.all(
-      files.map((file) => convertToBase64(file))
+      files.map(async (file) => await convertToBase64(file))
     );
 
     const combinedImages = [...images, ...base64Images] as string[];
@@ -152,7 +152,7 @@ const Product = () => {
   return (
     <>
       <h2 className="w-full text-2xl font-medium">Update Product</h2>
-      <div className="py-3 flex ">
+      <div className="flex py-3 ">
         <Link to="/admin/products" className="flex place-items-center  gap-x-2">
           <HiOutlineChevronLeft className="text-xl" />
           Go Back
@@ -196,15 +196,15 @@ const Product = () => {
           </label>
           <textarea
             aria-label="Address"
-            className="w-full mt-1 mb-2 border-2 border-gray-400 p-4 outline-none"
+            className="mt-1 mb-2 w-full border-2 border-gray-400 p-4 outline-none"
             rows={4}
             value={detail}
             onChange={(e) => setDetail((e.target as HTMLTextAreaElement).value)}
             required
           />
-          <div className="flex flex-wrap gap-x-4 place-content-between">
-            <div className="w-full flex-1 min-w-[10rem]">
-              <div className="text-lg mb-1">Price</div>
+          <div className="flex flex-wrap place-content-between gap-x-4">
+            <div className="w-full min-w-[10rem] flex-1">
+              <div className="mb-1 text-lg">Price</div>
               <Input
                 name="price"
                 type="number"
@@ -218,7 +218,7 @@ const Product = () => {
               />
             </div>
             <div className="">
-              <div className="text-lg mb-2">Category Type</div>
+              <div className="mb-2 text-lg">Category Type</div>
               <Dropdown
                 selected={category}
                 setSelected={setCategory}
@@ -228,7 +228,7 @@ const Product = () => {
               />
             </div>
             <div className="">
-              <div className="text-lg mb-2">Condition</div>
+              <div className="mb-2 text-lg">Condition</div>
               <Dropdown
                 selected={condition}
                 setSelected={setCondition}
@@ -238,9 +238,9 @@ const Product = () => {
               />
             </div>
           </div>
-          <div className="flex gap-x-4 my-4 flex-wrap">
+          <div className="my-4 flex flex-wrap gap-x-4">
             {stock.map((item) => (
-              <div className="flex-1 min-w-[10rem]" key={item.size}>
+              <div className="min-w-[10rem] flex-1" key={item.size}>
                 <label htmlFor="stock" className="text-lg">
                   Size {item.size}
                 </label>
@@ -282,7 +282,7 @@ const Product = () => {
           <button
             type="button"
             onClick={() => deleteProduct.mutate(id)}
-            className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
+            className="mb-4 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500  hover:text-gray-100 sm:py-2 sm:text-base"
             aria-label="Delete Product"
           >
             Delete Product

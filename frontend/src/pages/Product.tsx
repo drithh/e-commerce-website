@@ -1,18 +1,20 @@
-import { useParams, Link } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import { useState } from 'react';
-import GhostButton from '../components/button/GhostButton';
-import { HiOutlineHeart, HiHeart } from 'react-icons/hi';
-import { SlSocialFacebook } from 'react-icons/sl';
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
 import { SiInstagram } from 'react-icons/si';
-import { useWishlist } from '../context/WishlistContext';
-import { useAuth } from '../context/AuthContext';
+import { SlSocialFacebook } from 'react-icons/sl';
+import { useQuery } from 'react-query';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
 import { ApiError, ProductService } from '../api';
 import Button from '../components/button/Button';
-import { useCart } from '../context/CartContext';
+import GhostButton from '../components/button/GhostButton';
 import { convertToCurrency } from '../components/util/utilFunc';
-import { toast } from 'react-toastify';
+import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
 const Product = () => {
   const { id } = useParams();
@@ -30,7 +32,7 @@ const Product = () => {
     {
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
-        setMainImage(data.images[0] as string);
+        setMainImage(data.images[0]);
         setSize((data.size as string[])[0]);
       },
     }
@@ -46,12 +48,12 @@ const Product = () => {
     return <div>Error...</div>;
   }
 
-  const alreadyWishlisted = wishlist.data!.find(
+  const alreadyWishlisted = wishlist.data.find(
     (item) => item.product_id === id
   );
   const handleWishlist = () => {
     if (role !== 'guest') {
-      alreadyWishlisted
+      alreadyWishlisted != null
         ? deleteWishlistItem!.mutate({ product_id: id })
         : addWishlistItem!.mutate({ id });
     }
@@ -107,7 +109,7 @@ const Product = () => {
               <SwiperSlide>
                 <img
                   className="each-slide w-full"
-                  src={fetchProduct.data!.images[0] as string}
+                  src={fetchProduct.data!.images[0]}
                   width={1000}
                   height={1282}
                   alt={fetchProduct.data!.title}
@@ -116,10 +118,10 @@ const Product = () => {
               <SwiperSlide>
                 <img
                   className="each-slide w-full"
-                  src={fetchProduct.data!.images[1] as string}
+                  src={fetchProduct.data?.images[1]}
                   width={1000}
                   height={1282}
-                  alt={fetchProduct.data!.title}
+                  alt={fetchProduct.data?.title}
                 />
               </SwiperSlide>
             </Swiper>
@@ -199,7 +201,7 @@ const Product = () => {
               <Button
                 value="Add to Cart"
                 size="lg"
-                extraClass={`flex-grow text-center whitespace-nowrap`}
+                extraClass={'flex-grow text-center whitespace-nowrap'}
                 onClick={() => {
                   if (quantity > 0) {
                     addCartItem?.mutate(
@@ -218,10 +220,10 @@ const Product = () => {
                 }}
               />
               <GhostButton onClick={handleWishlist} extraClass="text-4xl">
-                {alreadyWishlisted ? (
-                  <HiHeart className="text-gray-500 text-4xl w-7 h-7" />
+                {alreadyWishlisted != null ? (
+                  <HiHeart className="h-7 w-7 text-4xl text-gray-500" />
                 ) : (
-                  <HiOutlineHeart className="text-gray-500 text-4xl w-7 h-7" />
+                  <HiOutlineHeart className="h-7 w-7 text-4xl text-gray-500" />
                 )}
               </GhostButton>
             </div>

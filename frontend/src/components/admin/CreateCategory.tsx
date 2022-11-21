@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
-import { Link } from 'react-router-dom';
 import { useMutation, useQueryClient } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import { ApiError, CategoryService } from '../../api';
 import Button from '../button/Button';
-import Input from '../input/Input';
-import { toast } from 'react-toastify';
 import Dropdown from '../input/Dropdown';
-import { useNavigate } from 'react-router-dom';
+import Input from '../input/Input';
 
 const categoryTypes = ['tops', 'bottoms', 'shoes & accessories'];
 
@@ -43,7 +43,7 @@ const CreateCategory = () => {
   return (
     <>
       <h2 className="w-full text-2xl font-medium">Create Category</h2>
-      <div className="py-3 flex ">
+      <div className="flex py-3 ">
         <Link
           to="/admin/categories"
           className="flex place-items-center  gap-x-2"
@@ -53,7 +53,7 @@ const CreateCategory = () => {
         </Link>
       </div>
       <form
-        className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 min-h-[32rem]"
+        className="information flex min-h-[32rem] w-full flex-col gap-y-4 py-4 text-lg text-gray-700"
         onSubmit={handleSubmit}
       >
         <div className="">
@@ -71,7 +71,7 @@ const CreateCategory = () => {
           />
         </div>
         <div className="">
-          <div className="text-lg mb-2">Category Type</div>
+          <div className="mb-2 text-lg">Category Type</div>
           <Dropdown
             selected={categoryType}
             setSelected={setCategoryType}
@@ -83,7 +83,7 @@ const CreateCategory = () => {
           <button
             type="button"
             onClick={() => navigate('/admin/categories')}
-            className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
+            className="mb-4 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500  hover:text-gray-100 sm:py-2 sm:text-base"
             aria-label="Cancel"
           >
             Cancel

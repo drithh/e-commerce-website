@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
-type Props = {
+interface Props {
   extraClass?: string;
   size?: 'sm' | 'normal' | 'lg';
   inverted?: boolean;
   noBorder?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
-};
+}
 
 // eslint-disable-next-line react/display-name
 const GhostButton: FC<Props> = ({

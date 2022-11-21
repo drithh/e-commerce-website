@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
-type Props = {
+interface Props {
   extraClass?: string;
   href: string;
   aria_label?: string;
@@ -10,7 +10,7 @@ type Props = {
   noBorder?: boolean;
   onClick?: React.MouseEventHandler<HTMLAnchorElement>;
   children: React.ReactNode;
-};
+}
 
 const LinkButton: FC<Props> = ({
   href,

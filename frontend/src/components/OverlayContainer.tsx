@@ -1,11 +1,11 @@
 import { FC } from 'react';
 
-type Props = {
+interface Props {
   imgSrc: string;
   imgSrc2?: string;
   imgAlt?: string;
   children?: React.ReactNode;
-};
+}
 
 const OverlayContainer: FC<Props> = ({ imgSrc, imgAlt, children }) => (
   <div className="group relative flex h-72 items-center justify-center overflow-hidden">

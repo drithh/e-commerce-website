@@ -1,12 +1,13 @@
-import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useCallback, useEffect, useState } from 'react';
-
-import Button from '../button/Button';
 import { HiOutlineShoppingBag } from 'react-icons/hi';
-import Item from './Item';
-import { roundDecimal, convertToCurrency } from '../util/utilFunc';
-import { useCart } from '../../context/CartContext';
 import { useNavigate } from 'react-router-dom';
+
+import { Dialog, Transition } from '@headlessui/react';
+
+import { useCart } from '../../context/CartContext';
+import Button from '../button/Button';
+import { convertToCurrency, roundDecimal } from '../util/utilFunc';
+import Item from './Item';
 
 export default function CartItem() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ export default function CartItem() {
     <>
       <div className="relative">
         <button type="button" onClick={openModal} aria-label="Cart">
-          <HiOutlineShoppingBag className="h-8 w-8 -mb-[5px] sm:h-6 sm:w-6" />
+          <HiOutlineShoppingBag className="-mb-[5px] h-8 w-8 sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
               className={`${animate} absolute -top-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
@@ -109,18 +110,18 @@ export default function CartItem() {
                   ></button>
                 </div>
 
-                <div className="h-full flex flex-col place-content-between">
-                  <div className="itemContainer w-full flex-shrink flex-grow px-4 overflow-y-scroll">
+                <div className="flex h-full flex-col place-content-between">
+                  <div className="itemContainer w-full flex-shrink flex-grow overflow-y-scroll px-4">
                     {cart.data.map((item) => {
-                      subtotal += item.price * item.details.quantity!;
+                      subtotal += item.price * item.details.quantity;
                       return (
                         <Item
                           key={item.id}
                           name={item.name}
-                          price={item.price * item.details.quantity!}
-                          quantity={item.details.quantity!}
+                          price={item.price * item.details.quantity}
+                          quantity={item.details.quantity}
                           size={item.details.size}
-                          img={item.image as string}
+                          img={item.image}
                           onAdd={() => {
                             updateCartItem?.mutate({
                               cart_id: item.id,
@@ -152,7 +153,7 @@ export default function CartItem() {
                       onClick={() => {
                         navigate('/checkout');
                       }}
-                      disabled={cart.data.length < 1 ? true : false}
+                      disabled={cart.data.length < 1}
                       extraClass="text-center"
                       size="lg"
                     />

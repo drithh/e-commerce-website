@@ -1,13 +1,14 @@
 import { Fragment } from 'react';
 import { HiOutlineChevronDown } from 'react-icons/hi';
+
 import { Menu, Transition } from '@headlessui/react';
 
 interface TypeParams {
-  category: Array<string>;
+  category: string[];
   page: number;
   pageSize: number;
   sortBy: string;
-  price: Array<number>;
+  price: number[];
   condition: string;
   productName: string;
 }

@@ -1,12 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { AiOutlineSearch, AiOutlineCamera } from 'react-icons/ai';
-import { useQuery, useMutation } from 'react-query';
+import {
+  AiOutlineCamera,
+  AiOutlineLoading3Quarters,
+  AiOutlineSearch,
+} from 'react-icons/ai';
+import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+
 import { SearchService } from '../api';
-import { convertToBase64 } from './util/utilFunc';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useSearch } from '../context/SearchContext';
+import { convertToBase64 } from './util/utilFunc';
 
 const Search = () => {
   const { search, setSearch } = useSearch();
@@ -34,7 +38,7 @@ const Search = () => {
 
   return (
     <div
-      className="pt-10 fixed z-[200]  w-screen h-screen  px-2 bg-[rgba(0,0,0,0.5)] top-0"
+      className="fixed top-0 z-[200]  h-screen w-screen  bg-[rgba(0,0,0,0.5)] px-2 pt-10"
       onKeyDown={(e) => {
         if (e.key === 'Escape') {
           setSearch!(false);
@@ -42,40 +46,40 @@ const Search = () => {
       }}
     >
       <div
-        className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl "
+        className="mx-auto max-w-md overflow-hidden rounded-lg md:max-w-xl "
         ref={wrapperRef}
       >
         <div className="md:flex">
           <div className="w-full px-3">
             <div className="relative">
-              <AiOutlineSearch className="absolute top-4 left-4 text-gray-400 text-2xl" />
+              <AiOutlineSearch className="absolute top-4 left-4 text-2xl text-gray-400" />
               <input
                 autoFocus
                 type="text"
-                className={`bg-white h-14 w-full px-14 text-lg  focus:outline-none hover:cursor-pointer ${
+                className={`h-14 w-full bg-white px-14 text-lg  hover:cursor-pointer focus:outline-none ${
                   data?.length || searchImage
-                    ? 'border-b-2 border-gray-300 rounded-t-lg'
+                    ? 'rounded-t-lg border-b-2 border-gray-300'
                     : 'rounded-lg'
                 }`}
                 name="search"
                 placeholder="Product Name Or Brand"
                 value={searchText}
                 onFocus={() => {
-                  setSearchImage!(false);
+                  setSearchImage(false);
                 }}
                 onChange={(e) => setSearchText(e.target.value)}
               />
               <span className="absolute top-4 right-5 border-l pl-4">
                 <AiOutlineCamera
                   onClick={() => setSearchImage(!searchImage)}
-                  className="text-gray-500 hover:text-green-500 hover:cursor-pointer text-2xl top-4 right-4"
+                  className="top-4 right-4 text-2xl text-gray-500 hover:cursor-pointer hover:text-green-500"
                 />
               </span>
             </div>
           </div>
         </div>
-        <div className="w-full px-3 relative flex flex-col ">
-          <div className="bg-white flex flex-col  text-gray-600  rounded-b-lg">
+        <div className="relative flex w-full flex-col px-3 ">
+          <div className="flex flex-col rounded-b-lg  bg-white  text-gray-600">
             {searchImage ? (
               <Dropzone />
             ) : (
@@ -134,9 +138,12 @@ const Dropzone = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (fetchShowerThought.data) {
-        if (indexShowerThought.current === fetchShowerThought.data?.data.length)
+      if (fetchShowerThought.data != null) {
+        if (
+          indexShowerThought.current === fetchShowerThought.data?.data.length
+        ) {
           indexShowerThought.current = 0;
+        }
         setShowerThought(
           fetchShowerThought.data?.data[indexShowerThought.current]
         );
@@ -185,13 +192,13 @@ const Dropzone = () => {
         className={`${isDragActive && 'bg-gray-100'} ${
           isDragReject && 'bg-red-100'
         } ${isDragAccept && 'bg-green-100'} ${
-          processing && 'bg-gray-100 cursor-not-allowed'
+          processing && 'cursor-not-allowed bg-gray-100'
         }
-          gap-y flex h-[12rem] w-full cursor-pointer flex-col place-content-center place-items-center border-2 rounded-b-lg border-dashed border-gray-300 text-xl font-bold`}
+          gap-y flex h-[12rem] w-full cursor-pointer flex-col place-content-center place-items-center rounded-b-lg border-2 border-dashed border-gray-300 text-xl font-bold`}
       >
         <input {...getInputProps()} />
         {processing ? (
-          <div className="flex flex-col justify-center items-center">
+          <div className="flex flex-col items-center justify-center">
             <p className="">Processing Your Image</p>
             <AiOutlineLoading3Quarters className="my-3 animate-spin-slow text-5xl text-gray-300" />
           </div>
@@ -204,7 +211,7 @@ const Dropzone = () => {
         )}
 
         {processing ? (
-          <p className=" text-base text-center text-gray-400 px-[10%]">
+          <p className=" px-[10%] text-center text-base text-gray-400">
             {showerThought}{' '}
           </p>
         ) : (

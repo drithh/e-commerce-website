@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import { ApiError, UserService } from '../../api';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 
 const Customer = () => {
   const { id } = useParams();
@@ -101,7 +101,7 @@ const Customer = () => {
   return (
     <>
       <h2 className="w-full text-2xl font-medium">Update Customer</h2>
-      <div className="py-3 flex ">
+      <div className="flex py-3 ">
         <Link
           to="/admin/customers"
           className="flex place-items-center  gap-x-2"
@@ -223,7 +223,7 @@ const Customer = () => {
           <button
             type="button"
             onClick={() => deleteUser.mutate(id)}
-            className="text-xl sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  mb-4 hover:bg-gray-500 hover:text-gray-100"
+            className="mb-4 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500  hover:text-gray-100 sm:py-2 sm:text-base"
             aria-label="Delete User"
           >
             Delete User

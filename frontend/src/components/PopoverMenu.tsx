@@ -1,10 +1,11 @@
-import { Fragment, useRef, useState, useEffect } from 'react';
-import { Popover, Transition } from '@headlessui/react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import { HiOutlineChevronDown } from 'react-icons/hi';
+
+import { Popover, Transition } from '@headlessui/react';
 
 interface props {
   menuTitle: string;
-  linksArray: Array<Array<string>>;
+  linksArray: string[][];
 }
 
 const PopoverMenu = ({ menuTitle, linksArray }: props) => {
@@ -37,7 +38,7 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
-      buttonRef.current &&
+      buttonRef.current != null &&
       !buttonRef.current.contains(event.target as Node)
     ) {
       event.stopPropagation();

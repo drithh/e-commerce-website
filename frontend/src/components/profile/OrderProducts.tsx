@@ -1,7 +1,8 @@
-import { GetUserOrder } from '../../api';
-import { HiOutlineChevronDown } from 'react-icons/hi';
 import { useState } from 'react';
 import AnimateHeight from 'react-animate-height';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+
+import { GetUserOrder } from '../../api';
 import { convertToCurrency } from '../util/utilFunc';
 interface props {
   order: GetUserOrder;

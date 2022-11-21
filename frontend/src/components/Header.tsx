@@ -1,16 +1,18 @@
-import { useEffect, useState, useCallback, Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { AiOutlineUser, AiOutlinePieChart } from 'react-icons/ai';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { AiOutlinePieChart, AiOutlineUser } from 'react-icons/ai';
 import { HiOutlineHeart, HiOutlineSearch } from 'react-icons/hi';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+
+import { capitalCase } from 'change-case';
+
+import { CategoryService, DetailCategory } from '../api';
+import { useAuth } from '../context/AuthContext';
+import { useSearch } from '../context/SearchContext';
+import { useWishlist } from '../context/WishlistContext';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
-import { useWishlist } from '../context/WishlistContext';
-import { useAuth } from '../context/AuthContext';
 import PopoverMenu from './PopoverMenu';
-import { useQuery } from 'react-query';
-import { CategoryService, DetailCategory } from '../api';
-import { capitalCase } from 'change-case';
-import { useSearch } from '../context/SearchContext';
 const Header = () => {
   const { search, setSearch } = useSearch();
   let categories = new Array<{
@@ -32,7 +34,7 @@ const Header = () => {
 
   document.body.style.overflow = search ? 'hidden' : 'unset';
 
-  let noOfWishlist = wishlist.data?.length || 0;
+  const noOfWishlist = wishlist.data?.length || 0;
   // Animate Wishlist Number
   const handleAnimate = useCallback(() => {
     if (noOfWishlist === 0) return;
@@ -71,23 +73,22 @@ const Header = () => {
   if (fetchCategories.isError) {
     return <div>Error...</div>;
   }
-  if (fetchCategories.data) {
-    categories = fetchCategories.data.data.reduce(
-      (acc, curr) => {
-        const type = capitalCase(curr.type, { delimiter: ' & ' });
-        const existing = acc.find((item) => item.type === type);
-        if (existing) {
-          existing.items.push(curr);
-        } else {
-          acc.push({ type, items: [curr] });
-        }
-        return acc;
-      },
-      [] as {
+  if (fetchCategories.data != null) {
+    categories = fetchCategories.data.data.reduce<
+      Array<{
         type: string;
         items: DetailCategory[];
-      }[]
-    );
+      }>
+    >((acc, curr) => {
+      const type = capitalCase(curr.type, { delimiter: ' & ' });
+      const existing = acc.find((item) => item.type === type);
+      if (existing != null) {
+        existing.items.push(curr);
+      } else {
+        acc.push({ type, items: [curr] });
+      }
+      return acc;
+    }, []);
   }
 
   return (
@@ -128,7 +129,7 @@ const Header = () => {
               <li>
                 <HiOutlineSearch
                   onClick={() => setSearch!(true)}
-                  className="cursor-pointer h-8 w-8 sm:h-6 sm:w-6"
+                  className="h-8 w-8 cursor-pointer sm:h-6 sm:w-6"
                 />
               </li>
               <li>
@@ -155,7 +156,7 @@ const Header = () => {
                     className="relative"
                     aria-label="Wishlist"
                   >
-                    <HiOutlineHeart className="cursor-pointer h-8 w-8 sm:h-6 sm:w-6 -mb-[4px]" />
+                    <HiOutlineHeart className="-mb-[4px] h-8 w-8 cursor-pointer sm:h-6 sm:w-6" />
                     {noOfWishlist > 0 && (
                       <span
                         className={`${animate} absolute -top-3 -right-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
@@ -173,7 +174,7 @@ const Header = () => {
               <li>
                 {role === 'admin' && (
                   <Link to="/admin" aria-label="Admin">
-                    <AiOutlinePieChart className="h-8 w-8 sm:h-6 sm:w-6 -ml-2 -mb-1" />
+                    <AiOutlinePieChart className="-ml-2 -mb-1 h-8 w-8 sm:h-6 sm:w-6" />
                   </Link>
                 )}
               </li>

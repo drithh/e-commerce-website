@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-type Props = {
+interface Props {
   type?: 'button' | 'submit' | 'reset';
   extraClass?: string;
   size?: 'sm' | 'lg' | 'xl';
@@ -8,7 +8,7 @@ type Props = {
   disabled?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children?: React.ReactNode;
-};
+}
 
 const Button: FC<Props> = ({
   size = 'sm',

@@ -1,10 +1,10 @@
 import { CgArrowLongLeft, CgArrowLongRight } from 'react-icons/cg';
 interface ProductParams {
-  category: Array<string>;
+  category: string[];
   page: number;
   pageSize: number;
   sortBy: string;
-  price: Array<number>;
+  price: number[];
   condition: string;
   productName: string;
 }
@@ -14,13 +14,13 @@ interface DefaultParams {
   pageSize: number;
 }
 
-type Props = {
+interface Props {
   lastPage: number;
   currentPage: number;
   setParams:
     | React.Dispatch<React.SetStateAction<ProductParams>>
     | React.Dispatch<React.SetStateAction<DefaultParams>>;
-};
+}
 
 const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
   const scrolledToTop = () => {
@@ -85,7 +85,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
               currentPage === 1
                 ? 'pointer-events-none cursor-not-allowed text-gray-400'
                 : 'cursor-pointer'
-            } mx-1 flex h-10 w-16 items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
+            } mx-1 flex h-10 w-16 items-center justify-center border px-3 text-2xl hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <CgArrowLongLeft />
           </button>
@@ -138,7 +138,7 @@ const Pagination: React.FC<Props> = ({ lastPage, currentPage, setParams }) => {
               currentPage >= lastPage
                 ? 'pointer-events-none cursor-not-allowed text-gray-400'
                 : 'cursor-pointer'
-            } mx-1 flex h-10 w-16  items-center text-2xl justify-center border px-3 hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
+            } mx-1 flex h-10 w-16  items-center justify-center border px-3 text-2xl hover:bg-gray-500 hover:text-gray-100 focus:outline-none`}
           >
             <CgArrowLongRight />
           </button>

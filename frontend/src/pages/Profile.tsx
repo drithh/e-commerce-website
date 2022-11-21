@@ -1,11 +1,12 @@
-import { BsBoxSeam } from 'react-icons/bs';
 import { AiOutlineUser } from 'react-icons/ai';
+import { BsBoxSeam } from 'react-icons/bs';
 import { FiPower } from 'react-icons/fi';
 import { useQuery } from 'react-query';
-import { UserService } from '../api';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+
+import { UserService } from '../api';
+import { useAuth } from '../context/AuthContext';
 const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Profile = () => {
   }
 
   const logoutAccount = () => {
-    logout && logout();
+    logout != null && logout();
     navigate('/', { replace: true });
     toast.success('Logged out successfully');
   };
@@ -40,7 +41,7 @@ const Profile = () => {
       </div>
       {/* ===== Side Panel Section ===== */}
       <div className="profile mt-4 flex w-full">
-        <section className="side-panel inset-0 flex h-fit w-72 flex-col gap-y-[2px]  border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
+        <section className="side-panel inset-0 flex h-fit w-72 flex-col gap-y-[2px]  border-[1.5px] border-gray-500 py-2 px-5 font-medium text-gray-400">
           <button
             onClick={() => navigate('')}
             className={`${location.pathname === '/profile' && 'text-black'}

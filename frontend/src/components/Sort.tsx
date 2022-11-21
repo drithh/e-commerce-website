@@ -1,19 +1,20 @@
-import { useQuery } from 'react-query';
-import { CategoryService, Pagination } from '../api';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { capitalCase } from 'change-case';
+import { useEffect, useRef } from 'react';
 import { CiDollar } from 'react-icons/ci';
+import { useQuery } from 'react-query';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { capitalCase } from 'change-case';
+
+import { CategoryService, Pagination } from '../api';
 import Dropdown from '../components/Dropdown';
-import { useRef } from 'react';
 const pluralize = require('pluralize');
 
 interface TypeParams {
-  category: Array<string>;
+  category: string[];
   page: number;
   pageSize: number;
   sortBy: string;
-  price: Array<number>;
+  price: number[];
   condition: string;
   productName: string;
 }
@@ -95,24 +96,27 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
     return <div>Loading...</div>;
   }
 
-  if (fetchCategories.isError || !fetchCategories.data) {
+  if (fetchCategories.isError || fetchCategories.data == null) {
     return <div>Error...</div>;
   }
 
   const categories = fetchCategories.data.data;
-  const categoriesByType = categories.reduce((acc, category) => {
-    const { type } = category;
-    if (!acc[type]) {
-      acc[type] = [];
-    }
-    acc[type].push(category);
-    return acc;
-  }, {} as Record<string, Array<any>>);
+  const categoriesByType = categories.reduce<Record<string, any[]>>(
+    (acc, category) => {
+      const { type } = category;
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(category);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="flex w-full  flex-col text-gray-600">
       <div className="border-b border-b-gray-100 px-4 py-5 ">
-        {pagination && pagination.total_item > 0 ? (
+        {pagination != null && pagination.total_item > 0 ? (
           <span>
             Showing {1 + (pagination.page - 1) * pagination.page_size} -{' '}
             {Math.min(
@@ -207,7 +211,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
               defaultValue={params.price[1]}
               className="h-5 w-full"
               onBlur={(e) => {
-                let value = e.target.value;
+                const value = e.target.value;
                 if (!value) {
                   setParams((prev) => ({
                     ...prev,

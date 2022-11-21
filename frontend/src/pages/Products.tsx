@@ -1,19 +1,20 @@
-import Card from '../components/Card';
-import { useQuery } from 'react-query';
-import { ProductService } from '../api';
-import { useSearchParams } from 'react-router-dom';
 import { useRef, useState } from 'react';
-import Sort from '../components/Sort';
-import Pagination from '../components/Pagination';
 import { IoClose } from 'react-icons/io5';
+import { useQuery } from 'react-query';
+import { useSearchParams } from 'react-router-dom';
+
+import { ProductService } from '../api';
+import Card from '../components/Card';
+import Pagination from '../components/Pagination';
+import Sort from '../components/Sort';
 import { useSearch } from '../context/SearchContext';
 
 interface ProductParams {
-  category: Array<string>;
+  category: string[];
   page: number;
   pageSize: number;
   sortBy: string;
-  price: Array<number>;
+  price: number[];
   condition: string;
   productName: string;
 }
@@ -82,19 +83,19 @@ const Products = () => {
             pagination={fetchProducts.data?.pagination}
           />
         </section>
-        <div className="flex flex-col gap-y-4 flex-1">
+        <div className="flex flex-1 flex-col gap-y-4">
           {searchImage.category.length > 0 && (
             <section className="w-full  border border-gray-400 p-4">
-              <div className="group relative w-full flex overflow-hidden place-content-start gap-x-4 ">
+              <div className="group relative flex w-full place-content-start gap-x-4 overflow-hidden ">
                 <img
                   alt="you searched for"
                   src={(searchImage as any).file.preview}
-                  className="rounded-md object-contain object-bottom  w-40  border-2 border-gray-100"
+                  className="w-40 rounded-md border-2  border-gray-100  object-contain object-bottom"
                   onLoad={() => {
                     URL.revokeObjectURL((searchImage as any).file.preview);
                   }}
                 />
-                <div className="text-gray-700 text-left text-xl">
+                <div className="text-left text-xl text-gray-700">
                   <b>We found these following products:</b>
                   <p>
                     We're pretty sure you were looking for{' '}
@@ -110,7 +111,7 @@ const Products = () => {
                       category: '',
                     });
                   }}
-                  className="absolute top-0 right-0 animate-spin-fast-once text-3xl text-gray-400 cursor-pointer"
+                  className="absolute top-0 right-0 animate-spin-fast-once cursor-pointer text-3xl text-gray-400"
                 />
               </div>
             </section>
@@ -121,9 +122,10 @@ const Products = () => {
               <strong>Loading...</strong>
               <div>Please wait a moment</div>
             </div>
-          ) : fetchProducts.data && fetchProducts.data?.data.length > 0 ? (
+          ) : fetchProducts.data != null &&
+            fetchProducts.data?.data.length > 0 ? (
             <div className="flex flex-col justify-between gap-y-12">
-              <section className="grid grid-cols-2 gap-y-4 gap-x-2 w-full lg:grid-cols-3 xl:grid-cols-4">
+              <section className="grid w-full grid-cols-2 gap-y-4 gap-x-2 lg:grid-cols-3 xl:grid-cols-4">
                 {fetchProducts.data?.data.map((product) => (
                   <Card key={product.id} item={product} />
                 ))}

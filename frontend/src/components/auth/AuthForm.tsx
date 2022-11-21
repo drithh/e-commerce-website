@@ -1,16 +1,18 @@
-import { Fragment, useState, FC } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { FC, Fragment, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
+
+import { Dialog, Transition } from '@headlessui/react';
+
+import ForgotPassword from './ForgotPassword';
 import Login from './Login';
 import Register from './Register';
-import ForgotPassword from './ForgotPassword';
 import ResetPassword from './ResetPassword';
 type CurrentPage = 'login' | 'register' | 'forgot-password' | 'reset-password';
 
-type Props = {
+interface Props {
   extraClass?: string;
   children: any;
-};
+}
 
 const LoginForm: FC<Props> = ({ extraClass, children }) => {
   const [currentPage, setCurrentPage] = useState<CurrentPage>('login');

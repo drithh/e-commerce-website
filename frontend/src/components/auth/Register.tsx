@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
+
 import { Dialog } from '@headlessui/react';
+
+import { ApiError } from '../../api';
+import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { useAuth } from '../../context/AuthContext';
-import { ApiError } from '../../api';
 
-type Props = {
+interface Props {
   onLogin: () => void;
   closeModal: () => void;
-};
+}
 
 const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
   const { register } = useAuth();

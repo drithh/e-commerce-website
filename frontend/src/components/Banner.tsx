@@ -1,11 +1,14 @@
+import { useQuery } from 'react-query';
+
+import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { HomeService } from '../api';
 import TextButton from './button/TextButton';
+
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
-import { useQuery } from 'react-query';
-import { HomeService } from '../api';
 SwiperCore.use([Pagination, Navigation, Autoplay]);
 
 const Slideshow = () => {

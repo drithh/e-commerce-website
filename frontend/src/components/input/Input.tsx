@@ -1,6 +1,6 @@
 import { FC, FormEvent } from 'react';
 
-type Props = {
+interface Props {
   type?: string;
   name: string;
   placeholder?: string;
@@ -12,7 +12,7 @@ type Props = {
   onChange?: (e: FormEvent<HTMLInputElement>) => void;
   value?: string;
   readOnly?: boolean;
-};
+}
 
 const Input: FC<Props> = ({
   type = 'text',

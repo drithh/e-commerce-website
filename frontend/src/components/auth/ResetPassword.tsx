@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+
 import { Dialog } from '@headlessui/react';
+
+import { ApiError } from '../../api';
+import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
-import { useAuth } from '../../context/AuthContext';
-import { toast } from 'react-toastify';
-import { ApiError } from '../../api';
 
-type Props = {
+interface Props {
   emailForReset: string;
   onLogin: () => void;
   errorMsg: string;
   setErrorMsg: React.Dispatch<React.SetStateAction<string>>;
   closeModal: () => void;
-};
+}
 
 const ResetPassword: React.FC<Props> = ({
   emailForReset,
@@ -76,7 +78,7 @@ const ResetPassword: React.FC<Props> = ({
           value={password}
         />
         {errorMsg !== '' && (
-          <div className="text-red-600 mb-4 whitespace-nowrap text-sm">
+          <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
         )}

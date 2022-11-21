@@ -43,7 +43,7 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
           <button
             type="button"
             key={index}
-            className="group relative h-52 w-40 cursor-pointer rounded border-2 border-gray-100  overflow-hidden"
+            className="group relative h-52 w-40 cursor-pointer overflow-hidden rounded border-2  border-gray-100"
             onClick={() => {
               setImages(
                 initialImages.filter((selectedImage) => selectedImage !== image)

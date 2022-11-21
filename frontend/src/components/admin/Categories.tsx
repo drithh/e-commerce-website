@@ -1,10 +1,13 @@
 import { useQuery } from 'react-query';
-import { CategoryService } from '../../api';
-import { capitalCase } from 'change-case';
 import { Link, useNavigate } from 'react-router-dom';
+
+import { capitalCase } from 'change-case';
+
+import { CategoryService } from '../../api';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pluralize = require('pluralize');
 
-const Categories = () => {
+const Categories: React.FC = () => {
   const navigate = useNavigate();
   const fetchCategories = useQuery(
     'categories',
@@ -19,23 +22,23 @@ const Categories = () => {
   }
 
   return (
-    <div className="w-full whitespace-nowrap px-8 pt-4 pb-8 border border-gray-500">
+    <div className="w-full whitespace-nowrap border border-gray-500 px-8 pt-4 pb-8">
       <div className="flex place-content-end">
         <button
           type="button"
           onClick={() => navigate('create')}
-          className="text-xl mt-3 mb-6 sm:text-base py-3 sm:py-2 px-6 border border-gray-500 w-52 text-center  hover:bg-gray-500 hover:text-gray-100"
+          className="mt-3 mb-6 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500 hover:text-gray-100  sm:py-2 sm:text-base"
           aria-label="Create Category"
         >
           Create Category
         </button>
       </div>
       <div>
-        <tr className="border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4">
-          <th className="py-2 text-left font-semibold table-cell flex-1">
+        <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
+          <th className="table-cell flex-1 py-2 text-left font-semibold">
             Title
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-1">
+          <th className="table-cell flex-1 py-2 text-left font-semibold">
             Type
           </th>
         </tr>
@@ -43,15 +46,15 @@ const Categories = () => {
       <div className="">
         {fetchCategories.data?.data.map((category) => {
           return (
-            <Link to={`/admin/categories/${category.id}`}>
+            <Link key={category.id} to={`/admin/categories/${category.id}`}>
               <tr
-                className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
+                className=" flex w-full cursor-pointer  place-content-evenly  gap-x-4 border-b-2 border-gray-200 pl-4 hover:bg-gray-50"
                 key={category.id}
               >
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
+                <td className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {capitalCase(pluralize.singular(category.title))}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
+                <td className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {capitalCase(pluralize.singular(category.type), {
                     delimiter: ' & ',
                   })}

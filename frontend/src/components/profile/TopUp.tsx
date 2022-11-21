@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
-import Button from '../button/Button';
-import Input from '../input/Input';
-import { ApiError, UserService } from '../../api';
 import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 
-type Props = {
+import { Dialog } from '@headlessui/react';
+
+import { ApiError, UserService } from '../../api';
+import Button from '../button/Button';
+import Input from '../input/Input';
+
+interface Props {
   closeModal: () => void;
-};
+}
 
 const TopUp: React.FC<Props> = ({ closeModal }) => {
   const [balance, setBalance] = useState(0);

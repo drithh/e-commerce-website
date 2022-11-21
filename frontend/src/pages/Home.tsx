@@ -1,11 +1,13 @@
-import Banner from '../components/Banner';
-import Card from '../components/Card';
-import LinkButton from '../components/button/LinkButton';
-import OverlayContainer from '../components/OverlayContainer';
-import { Category, HomeService, OpenAPI } from '../api';
 import { useQuery } from 'react-query';
-import Cookies from 'js-cookie';
+
 import { capitalCase } from 'change-case';
+import Cookies from 'js-cookie';
+
+import { Category, HomeService, OpenAPI } from '../api';
+import Banner from '../components/Banner';
+import LinkButton from '../components/button/LinkButton';
+import Card from '../components/Card';
+import OverlayContainer from '../components/OverlayContainer';
 const pluralize = require('pluralize');
 OpenAPI.TOKEN = Cookies.get('token');
 
@@ -24,7 +26,7 @@ const Home = () => {
 
   if (fetchCategories.isLoading) return <div>Loading...</div>;
   if (fetchCategories.error) return <div>Error</div>;
-  if (fetchCategories.data) {
+  if (fetchCategories.data != null) {
     categories = fetchCategories.data.data.map((category: Category) => {
       const title = capitalCase(pluralize.singular(category.title));
       return {

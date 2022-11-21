@@ -1,14 +1,16 @@
-import { useMutation, useQuery } from 'react-query';
-import { OrderService } from '../../api';
-import dayjs from 'dayjs';
-import { capitalCase } from 'change-case';
-import { BsTruck, BsBoxSeam } from 'react-icons/bs';
-import { IoMdCheckmark } from 'react-icons/io';
-import GhostButton from '../button/GhostButton';
-import { toast } from 'react-toastify';
-import OrderProducts from './OrderProducts';
-import Pagination from '../Pagination';
 import { useState } from 'react';
+import { BsBoxSeam, BsTruck } from 'react-icons/bs';
+import { IoMdCheckmark } from 'react-icons/io';
+import { useMutation, useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+
+import { capitalCase } from 'change-case';
+import dayjs from 'dayjs';
+
+import { OrderService } from '../../api';
+import GhostButton from '../button/GhostButton';
+import Pagination from '../Pagination';
+import OrderProducts from './OrderProducts';
 
 interface DefaultParams {
   page: number;
@@ -48,7 +50,7 @@ const Order = () => {
       {fetchOrder.data?.data.map((order) => (
         <div key={order.id}>
           <div className="w-full border-2 border-gray-400 p-8  text-gray-600">
-            <div className="flex w-full place-content-between mb-4 pb-4  text-gray-400 uppercase text-[1.05rem]">
+            <div className="mb-4 flex w-full place-content-between pb-4  text-[1.05rem] uppercase text-gray-400">
               <span>
                 {dayjs(order.created_at).format('dddd, MMMM D YYYY, h:mm A')}
               </span>

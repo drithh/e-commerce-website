@@ -1,11 +1,11 @@
-import { useQuery } from 'react-query';
-import Button from '../button/Button';
-import Modal from './Modal';
 import React, { useEffect, useState } from 'react';
-import { ApiError, UserService } from '../../api';
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 import { toast } from 'react-toastify';
+
+import { ApiError, UserService } from '../../api';
+import Button from '../button/Button';
 import LegendInput from '../input/LegendInput';
+import Modal from './Modal';
 const PersonalData = () => {
   const [addressName, setAddressName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -17,7 +17,7 @@ const PersonalData = () => {
   });
 
   useEffect(() => {
-    if (fetchUser.data) {
+    if (fetchUser.data != null) {
       setAddressName(fetchUser.data.address_name || '');
       setPhoneNumber(fetchUser.data.phone_number || '');
       setAddress(fetchUser.data.address || '');

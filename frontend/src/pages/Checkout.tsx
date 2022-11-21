@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
-
-import Button from '../components/button/Button';
-import { roundDecimal } from '../components/util/utilFunc';
-import Input from '../components/input/Input';
-import { useCart } from '../context/CartContext';
-import { UserService, OrderService, ApiError, SearchService } from '../api';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { convertToCurrency } from '../components/util/utilFunc';
-import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+
+import { ApiError, OrderService, SearchService, UserService } from '../api';
+import Button from '../components/button/Button';
+import Input from '../components/input/Input';
+import { convertToCurrency, roundDecimal } from '../components/util/utilFunc';
+import { useCart } from '../context/CartContext';
 
 type PaymentType = 'BALANCE';
 type DeliveryType = 'REGULAR' | 'NEXT_DAY';
@@ -55,9 +54,12 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (fetchShowerThought.data) {
-        if (indexShowerThought.current === fetchShowerThought.data?.data.length)
+      if (fetchShowerThought.data != null) {
+        if (
+          indexShowerThought.current === fetchShowerThought.data?.data.length
+        ) {
           indexShowerThought.current = 0;
+        }
         setShowerThought(
           fetchShowerThought.data?.data[indexShowerThought.current]
         );
@@ -91,15 +93,15 @@ const ShoppingCart = () => {
       shipping_address: {
         address_name: addressName,
         phone_number: phoneNumber,
-        address: address,
-        city: city,
+        address,
+        city,
       },
       send_email: sendEmail,
     });
   };
 
   useEffect(() => {
-    if (useUserAddress && fetchUserAddress.data) {
+    if (useUserAddress && fetchUserAddress.data != null) {
       setAddressName(fetchUserAddress.data.address_name);
       setPhoneNumber(fetchUserAddress.data.phone_number);
       setAddress(fetchUserAddress.data.address);
@@ -130,7 +132,7 @@ const ShoppingCart = () => {
   return (
     <main id="main-content" className="mx-auto mt-24 min-h-[60vh] max-w-7xl">
       {processing && (
-        <div className="loading-overlay w-full h-full flex-col gap-y-4 fixed top-0 left-0 z-50 bg-white bg-opacity-80 flex items-center justify-center">
+        <div className="loading-overlay fixed top-0 left-0 z-50 flex h-full w-full flex-col items-center justify-center gap-y-4 bg-white bg-opacity-80">
           <p className="text-2xl font-semibold text-gray-500">
             Processing Your Order...
           </p>
@@ -265,7 +267,7 @@ const ShoppingCart = () => {
               {cart.data.map((item) => (
                 <div className="mb-2 flex justify-between" key={item.id}>
                   <div className="  flex">
-                    <span className="text-base font-medium max-w-[10rem] text-ellipsis overflow-clip whitespace-pre">
+                    <span className="max-w-[10rem] overflow-clip text-ellipsis whitespace-pre text-base font-medium">
                       {item.name}{' '}
                     </span>
                     <span className="text-gray-400">
@@ -275,7 +277,7 @@ const ShoppingCart = () => {
                   </div>
                   <div className="text-base">
                     {convertToCurrency(
-                      roundDecimal(item.price * item!.details.quantity)
+                      roundDecimal(item.price * item.details.quantity)
                     )}
                   </div>
                 </div>
@@ -419,7 +421,7 @@ const ShoppingCart = () => {
             <Button
               value="Place Order"
               size="xl"
-              extraClass={`w-full`}
+              extraClass={'w-full'}
               type="submit"
             />
           </div>
