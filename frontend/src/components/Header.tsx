@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineUser, AiOutlinePieChart } from 'react-icons/ai';
 import { HiOutlineHeart, HiOutlineSearch } from 'react-icons/hi';
 import AuthForm from './auth/AuthForm';
 import CartItem from './cart/CartItem';
@@ -126,33 +126,36 @@ const Header = () => {
             {/* Right Nav */}
             <ul className="mr-4 flex flex-1 place-items-center justify-start gap-x-8 lg:justify-end 2xl:mr-0">
               <li>
-                {/* <SearchForm /> */}
                 <HiOutlineSearch
                   onClick={() => setSearch!(true)}
-                  className="text-2xl cursor-pointer"
+                  className="cursor-pointer h-8 w-8 sm:h-6 sm:w-6"
                 />
               </li>
-              <li className="opacity-100 text-2xl">
+              <li>
                 {role !== 'guest' ? (
                   <Link to="/profile" aria-label="Profile">
-                    <AiOutlineUser />
+                    <AiOutlineUser className="h-8 w-8 sm:h-6 sm:w-6" />
                   </Link>
                 ) : (
                   <AuthForm>
-                    <AiOutlineUser />
+                    <AiOutlineUser className="h-8 w-8 sm:h-6 sm:w-6" />
                   </AuthForm>
                 )}
               </li>
 
               <li>
-                <Link to="/wishlist" aria-label="Wishlist">
+                <Link
+                  to="/wishlist"
+                  aria-label="Wishlist"
+                  className="h-8 w-8 sm:h-6 sm:w-6"
+                >
                   {/* <a className="relative" aria-label="Wishlist"> */}
                   <button
                     type="button"
                     className="relative"
                     aria-label="Wishlist"
                   >
-                    <HiOutlineHeart className="text-2xl" />
+                    <HiOutlineHeart className="cursor-pointer h-8 w-8 sm:h-6 sm:w-6 -mb-[4px]" />
                     {noOfWishlist > 0 && (
                       <span
                         className={`${animate} absolute -top-3 -right-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
@@ -166,6 +169,13 @@ const Header = () => {
               </li>
               <li>
                 <CartItem />
+              </li>
+              <li>
+                {role === 'admin' && (
+                  <Link to="/admin" aria-label="Admin">
+                    <AiOutlinePieChart className="h-8 w-8 sm:h-6 sm:w-6 -ml-2 -mb-1" />
+                  </Link>
+                )}
               </li>
             </ul>
           </div>

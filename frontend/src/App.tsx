@@ -13,8 +13,6 @@ import { AuthProvider } from './context/AuthContext';
 import { SearchProvider } from './context/SearchContext';
 import { WishlistProvider } from './context/WishlistContext';
 import { CartProvider } from './context/CartContext';
-import 'react-toastify/dist/ReactToastify.min.css';
-import 'animate.css';
 import Custom404 from './pages/404';
 import ComingSoon from './pages/ComingSoon';
 import Products from './pages/Products';
@@ -35,6 +33,10 @@ import Customer from './components/admin/Customer';
 import Search from './components/Search';
 import CreateCategory from './components/admin/CreateCategory';
 import CreateProduct from './components/admin/CreateProduct';
+
+import 'animate.css';
+import 'react-toastify/dist/ReactToastify.min.css';
+
 const queryClient = new QueryClient();
 
 function App() {

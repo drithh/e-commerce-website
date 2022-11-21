@@ -48,7 +48,7 @@ export default function CartItem() {
     <>
       <div className="relative">
         <button type="button" onClick={openModal} aria-label="Cart">
-          <HiOutlineShoppingBag className="h-8 w-8 sm:h-6 sm:w-6" />
+          <HiOutlineShoppingBag className="h-8 w-8 -mb-[5px] sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
               className={`${animate} absolute -top-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}

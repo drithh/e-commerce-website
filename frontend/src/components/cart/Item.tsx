@@ -51,9 +51,7 @@ const Item: FC<Props> = ({
           onClick={onDelete}
           type="button"
           className="mb-3 text-xl text-gray-300 outline-none hover:text-gray-500 focus:outline-none"
-        >
-          &#10005;
-        </button>
+        ></button>
         <span>{convertToCurrency(roundDecimal(price))}</span>
       </div>
     </div>

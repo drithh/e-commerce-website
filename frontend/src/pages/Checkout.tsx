@@ -79,6 +79,7 @@ const ShoppingCart = () => {
     },
     onError: (error) => {
       toast.error((error as ApiError).body.message);
+      setProcessing(false);
     },
   });
 

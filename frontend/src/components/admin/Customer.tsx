@@ -56,7 +56,7 @@ const Customer = () => {
     onSuccess: (data) => {
       toast.success(data.message);
       queryClient.invalidateQueries('users');
-      navigate('/admin/users');
+      navigate('/admin/customers');
     },
     onError: (error) => {
       toast.error((error as ApiError).body.message);
@@ -100,7 +100,7 @@ const Customer = () => {
 
   return (
     <>
-      <h2 className="w-full text-2xl font-medium">Update Category</h2>
+      <h2 className="w-full text-2xl font-medium">Update Customer</h2>
       <div className="py-3 flex ">
         <Link
           to="/admin/customers"

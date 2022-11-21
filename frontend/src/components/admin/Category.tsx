@@ -27,6 +27,7 @@ const Category = () => {
     {
       onSuccess: (data) => {
         toast.success(data.message);
+        queryClient.invalidateQueries('categories');
       },
       onError: (error) => {
         toast.error((error as ApiError).body.message);

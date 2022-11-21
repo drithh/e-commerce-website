@@ -24,6 +24,26 @@ export class CartService {
   }
 
   /**
+   * Update Cart
+   * @param requestBody
+   * @returns DefaultResponse Successful Response
+   * @throws ApiError
+   */
+  public static updateCart(
+    requestBody: UpdateCart
+  ): CancelablePromise<DefaultResponse> {
+    return __request(OpenAPI, {
+      method: 'PUT',
+      url: '/api/v1/cart',
+      body: requestBody,
+      mediaType: 'application/json',
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
    * Create Cart
    * @param requestBody
    * @returns DefaultResponse Successful Response
@@ -44,26 +64,6 @@ export class CartService {
   }
 
   /**
-   * Update Cart
-   * @param requestBody
-   * @returns DefaultResponse Successful Response
-   * @throws ApiError
-   */
-  public static updateCart(
-    requestBody: UpdateCart
-  ): CancelablePromise<DefaultResponse> {
-    return __request(OpenAPI, {
-      method: 'PUT',
-      url: '/api/v1/cart/{cart_id}',
-      body: requestBody,
-      mediaType: 'application/json',
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
-  /**
    * Delete Cart
    * @param cartId
    * @returns DefaultResponse Successful Response
@@ -72,8 +72,8 @@ export class CartService {
   public static deleteCart(cartId: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/cart/{cart_id}',
-      path: {
+      url: '/api/v1/cart',
+      query: {
         cart_id: cartId,
       },
       errors: {

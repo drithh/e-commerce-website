@@ -46,12 +46,11 @@ const Products = () => {
       ),
     {
       staleTime: Infinity,
+      retryOnMount: false,
+      retry: 0,
     }
   );
 
-  if (fetchProducts.isError) {
-    return <div>Error...</div>;
-  }
   if (fetchProducts.isLoading) {
     // scroll to top only only once
     if (!scrolledToTop.current) {

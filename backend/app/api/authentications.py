@@ -45,7 +45,6 @@ router = APIRouter()
 def get_role(request: Request) -> Any:
     access_token = request.headers.get("Authorization") or ""
     access_token = access_token.replace("Bearer ", "")
-    logger.info(f"access_token: {access_token}")
     role = is_authenticated(access_token)
     message = "guest"
     if role is not None:

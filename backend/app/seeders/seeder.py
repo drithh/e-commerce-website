@@ -1,7 +1,8 @@
+from asyncio.log import logger
+
 from faker import Faker
 
 from app import db
-from app.core.logger import logger
 from app.seeders.banner_seeder import banner_seed
 from app.seeders.cart_seeder import cart_seed
 from app.seeders.category_seeder import category_seed
