@@ -8,10 +8,11 @@ from pydantic.networks import AnyHttpUrl
 class Settings(BaseSettings):
 
     PROJECT_NAME: str = "e-commerce-website"
+    VERSION: str = "0.1.0"
 
     SENTRY_DSN: Optional[HttpUrl] = None
 
-    API_PATH: str = "/api/v1"
+    API_PATH: str = "/v1"
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 

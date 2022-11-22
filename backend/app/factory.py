@@ -4,6 +4,7 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
@@ -30,9 +31,10 @@ def create_app():
     app = FastAPI(
         title=settings.PROJECT_NAME,
         openapi_url=f"{settings.API_PATH}/openapi.json",
-        docs_url="/docs/",
+        docs_url="/swagger",
         description=description,
-        redoc_url="/redoc/",
+        version=settings.VERSION,
+        redoc_url="/redoc",
     )
 
     @app.exception_handler(StarletteHTTPException)
@@ -122,6 +124,7 @@ def setup_routers(app: FastAPI) -> None:
 
 def serve_static_app(app):
     app.mount("/", StaticFiles(directory="static"), name="static")
+    templates = Jinja2Templates(directory="static")
 
     @app.middleware("http")
     async def _add_404_middleware(request: Request, call_next):
@@ -131,7 +134,12 @@ def serve_static_app(app):
         if path.startswith(settings.API_PATH) or path.startswith("/docs"):
             return response
         if response.status_code == 404:
-            return FileResponse("static/index.html")
+            # remove path and query string
+            host = request.url.scheme + "://" + request.url.netloc
+            return templates.TemplateResponse(
+                "index.html",
+                {"request": request, "host": host},
+            )
         return response
 
 
