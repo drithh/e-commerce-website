@@ -19,7 +19,7 @@ export class DashboardService {
   public static getSales(): CancelablePromise<GetSales> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/admin',
+      url: '/v1/admin',
     });
   }
 
@@ -31,7 +31,7 @@ export class DashboardService {
   public static getDashboard(): CancelablePromise<GetDashboard> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/admin/dashboard',
+      url: '/v1/admin/dashboard',
     });
   }
 
@@ -48,7 +48,7 @@ export class DashboardService {
   ): CancelablePromise<GetCustomers> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/admin/customer',
+      url: '/v1/admin/customer',
       query: {
         page: page,
         page_size: pageSize,
@@ -72,7 +72,7 @@ export class DashboardService {
   ): CancelablePromise<GetOrders> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/admin/order',
+      url: '/v1/admin/order',
       query: {
         page: page,
         page_size: pageSize,

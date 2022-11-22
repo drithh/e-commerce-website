@@ -13,7 +13,7 @@ export type { app__schemas__user__GetUser } from './models/app__schemas__user__G
 export type { app__schemas__wishlist__GetProduct } from './models/app__schemas__wishlist__GetProduct';
 export type { Banner } from './models/Banner';
 export type { BestSeller } from './models/BestSeller';
-export type { Body_sign_in_api_v1_sign_in_post } from './models/Body_sign_in_api_v1_sign_in_post';
+export type { Body_sign_in_v1_sign_in_post } from './models/Body_sign_in_v1_sign_in_post';
 export type { Category } from './models/Category';
 export type { CategoryOrder } from './models/CategoryOrder';
 export type { ChangePassword } from './models/ChangePassword';

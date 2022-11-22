@@ -35,7 +35,7 @@ export class ProductService {
   ): CancelablePromise<GetProducts> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/products',
+      url: '/v1/products',
       query: {
         category: category,
         page: page,
@@ -62,7 +62,7 @@ export class ProductService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/products',
+      url: '/v1/products',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -82,7 +82,7 @@ export class ProductService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/v1/products',
+      url: '/v1/products',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -102,7 +102,7 @@ export class ProductService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/products/{product_id}',
+      url: '/v1/products/{product_id}',
       path: {
         product_id: productId,
       },
@@ -123,7 +123,7 @@ export class ProductService {
   ): CancelablePromise<app__schemas__product__GetProduct> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/products/{id}',
+      url: '/v1/products/{id}',
       path: {
         id: id,
       },

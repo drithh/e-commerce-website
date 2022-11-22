@@ -21,7 +21,7 @@ export class SearchService {
   public static getImage(imageName: string): CancelablePromise<GetImage> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1',
+      url: '/v1',
       query: {
         image_name: imageName,
       },
@@ -40,7 +40,7 @@ export class SearchService {
   public static searchText(text: string): CancelablePromise<Array<SearchText>> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/search',
+      url: '/v1/search',
       query: {
         text: text,
       },
@@ -61,7 +61,7 @@ export class SearchService {
   ): CancelablePromise<SearchImageResponse> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/v1/search_image',
+      url: '/v1/search_image',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -78,7 +78,7 @@ export class SearchService {
   public static showerThoughts(): CancelablePromise<ShowerThoughts> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/shower-thoughts',
+      url: '/v1/shower-thoughts',
     });
   }
 }

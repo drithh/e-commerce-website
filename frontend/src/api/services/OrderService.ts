@@ -25,7 +25,7 @@ export class OrderService {
   ): CancelablePromise<GetUserOrders> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/order',
+      url: '/v1/order',
       query: {
         page: page,
         page_size: pageSize,
@@ -45,7 +45,7 @@ export class OrderService {
   public static createOrder(requestBody: CreateOrder): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/v1/order',
+      url: '/v1/order',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -63,7 +63,7 @@ export class OrderService {
   public static getOrderDetails(id: string): CancelablePromise<GetDetailOrder> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/orders/{id}',
+      url: '/v1/orders/{id}',
       path: {
         id: id,
       },
@@ -86,7 +86,7 @@ export class OrderService {
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/orders/{id}',
+      url: '/v1/orders/{id}',
       path: {
         id: id,
       },
@@ -114,7 +114,7 @@ export class OrderService {
   ): CancelablePromise<GetAdminOrders> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/orders',
+      url: '/v1/orders',
       query: {
         sort_by: sortBy,
         page: page,
@@ -137,7 +137,7 @@ export class OrderService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/order/{order_id}',
+      url: '/v1/order/{order_id}',
       path: {
         order_id: orderId,
       },

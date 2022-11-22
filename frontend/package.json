@@ -48,7 +48,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "genapi": "npx openapi -i http://localhost:8000/api/v1/openapi.json -o src/api -c axios"
+    "genapi": "npx openapi -i http://localhost:8000/v1/openapi.json -o src/api -c axios"
   },
   "eslintConfig": {
     "extends": [

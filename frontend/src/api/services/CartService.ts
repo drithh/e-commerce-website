@@ -19,7 +19,7 @@ export class CartService {
   public static getCart(): CancelablePromise<GetCart> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/cart',
+      url: '/v1/cart',
     });
   }
 
@@ -34,7 +34,7 @@ export class CartService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/cart',
+      url: '/v1/cart',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -54,7 +54,7 @@ export class CartService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/v1/cart',
+      url: '/v1/cart',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -72,7 +72,7 @@ export class CartService {
   public static deleteCart(cartId: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/cart',
+      url: '/v1/cart',
       query: {
         cart_id: cartId,
       },
@@ -90,7 +90,7 @@ export class CartService {
   public static clearCart(): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/cart/clear',
+      url: '/v1/cart/clear',
     });
   }
 }

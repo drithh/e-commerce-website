@@ -17,7 +17,7 @@ export class WishlistService {
   public static getWishlist(): CancelablePromise<GetWishlist> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/wishlist',
+      url: '/v1/wishlist',
     });
   }
 
@@ -30,7 +30,7 @@ export class WishlistService {
   public static createWishlist(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'POST',
-      url: '/api/v1/wishlist',
+      url: '/v1/wishlist',
       query: {
         id: id,
       },
@@ -49,7 +49,7 @@ export class WishlistService {
   public static deleteWishlist(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/wishlist',
+      url: '/v1/wishlist',
       query: {
         id: id,
       },
@@ -67,7 +67,7 @@ export class WishlistService {
   public static clearWishlist(): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/wishlist/all',
+      url: '/v1/wishlist/all',
     });
   }
 }

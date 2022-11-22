@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { capitalCase } from 'change-case';
 
 import { CategoryService } from '../../api';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pluralize = require('pluralize');
 
 const Categories: React.FC = () => {

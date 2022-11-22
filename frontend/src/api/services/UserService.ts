@@ -21,7 +21,7 @@ export class UserService {
   public static getUser(): CancelablePromise<app__schemas__user__GetUser> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/user',
+      url: '/v1/user',
     });
   }
 
@@ -36,7 +36,7 @@ export class UserService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/user',
+      url: '/v1/user',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -54,7 +54,7 @@ export class UserService {
   public static deleteUser(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/api/v1/user',
+      url: '/v1/user',
       query: {
         id: id,
       },
@@ -72,7 +72,7 @@ export class UserService {
   public static getUserShippingAddress(): CancelablePromise<GetUserAddress> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/user/shipping_address',
+      url: '/v1/user/shipping_address',
     });
   }
 
@@ -87,7 +87,7 @@ export class UserService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/user/shipping_address',
+      url: '/v1/user/shipping_address',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -104,7 +104,7 @@ export class UserService {
   public static getUserBalance(): CancelablePromise<GetUserBalance> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/user/balance',
+      url: '/v1/user/balance',
     });
   }
 
@@ -119,7 +119,7 @@ export class UserService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
-      url: '/api/v1/user/balance',
+      url: '/v1/user/balance',
       body: requestBody,
       mediaType: 'application/json',
       errors: {
@@ -139,7 +139,7 @@ export class UserService {
   ): CancelablePromise<app__schemas__user__GetUser> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/user/{id}',
+      url: '/v1/user/{id}',
       path: {
         id: id,
       },

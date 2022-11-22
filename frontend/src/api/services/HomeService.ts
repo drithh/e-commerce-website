@@ -18,7 +18,7 @@ export class HomeService {
   public static getBanner(): CancelablePromise<GetBanners> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/home/banner',
+      url: '/v1/home/banner',
     });
   }
 
@@ -30,7 +30,7 @@ export class HomeService {
   public static getCategoryWithImage(): CancelablePromise<GetCategories> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/home/category',
+      url: '/v1/home/category',
     });
   }
 
@@ -42,7 +42,7 @@ export class HomeService {
   public static getBestSeller(): CancelablePromise<GetBestSeller> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/api/v1/home/best-seller',
+      url: '/v1/home/best-seller',
     });
   }
 }
