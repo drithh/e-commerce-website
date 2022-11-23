@@ -47,7 +47,7 @@ def get_cart(
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="You have no carts",
-    )
+        )
 
     return GetCart(data=carts)
 
@@ -112,9 +112,7 @@ def create_cart(
 
     logger.info(f"User {current_user.name} added product {request.product_id} to cart")
 
-    return DefaultResponse(
-        message=f"Added to cart"
-    )
+    return DefaultResponse(message=f"Added to cart")
 
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)

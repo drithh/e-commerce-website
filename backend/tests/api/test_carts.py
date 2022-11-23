@@ -5,6 +5,7 @@ from app.core.config import settings
 prefix = f"{settings.API_PATH}/cart"
 from tests.utils import get_jwt_header
 
+
 def test_get_empty_cart(client: TestClient, create_user):
     user = create_user()
 
@@ -13,7 +14,14 @@ def test_get_empty_cart(client: TestClient, create_user):
     assert resp.json() == {"message": "You have no carts"}
 
 
-def test_get_cart(client: TestClient, create_user, create_cart, create_product, create_size, create_product_size_quantity):
+def test_get_cart(
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product,
+    create_size,
+    create_product_size_quantity,
+):
     user = create_user()
     product = create_product()
     size = create_size()
@@ -26,7 +34,13 @@ def test_get_cart(client: TestClient, create_user, create_cart, create_product, 
     assert data[0]["id"] == str(cart.id)
 
 
-def test_create_cart(client: TestClient, create_user, create_product, create_size, create_product_size_quantity):
+def test_create_cart(
+    client: TestClient,
+    create_user,
+    create_product,
+    create_size,
+    create_product_size_quantity,
+):
     user = create_user()
     product = create_product()
     size = create_size()
@@ -35,18 +49,21 @@ def test_create_cart(client: TestClient, create_user, create_product, create_siz
     resp = client.post(
         f"{prefix}",
         headers=get_jwt_header(user),
-        json={
-            "product_id": str(product.id),
-            "quantity": "1",
-            "size": str(size.size)
-        }
+        json={"product_id": str(product.id), "quantity": "1", "size": str(size.size)},
     )
     data = resp.json()
     assert data["message"] == "Added to cart"
     assert resp.status_code == 201
 
 
-def test_update_cart(client: TestClient, create_user, create_cart, create_product, create_size, create_product_size_quantity):
+def test_update_cart(
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product,
+    create_size,
+    create_product_size_quantity,
+):
     user = create_user()
     product = create_product()
     size = create_size()
@@ -56,10 +73,7 @@ def test_update_cart(client: TestClient, create_user, create_cart, create_produc
     resp = client.put(
         f"{prefix}/{cart.id}",
         headers=get_jwt_header(user),
-        json={
-            "id": str(cart.id),
-            "quantity": "2"
-        },
+        json={"id": str(cart.id), "quantity": "2"},
     )
     data = resp.json()
     assert data["message"] == "Cart updated"
@@ -67,7 +81,12 @@ def test_update_cart(client: TestClient, create_user, create_cart, create_produc
 
 
 def test_delete_cart(
-    client: TestClient, create_user, create_cart, create_product, create_size, create_product_size_quantity
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product,
+    create_size,
+    create_product_size_quantity,
 ):
     user = create_user()
     product = create_product()
@@ -87,9 +106,7 @@ def test_delete_cart(
     assert resp.status_code == 200
 
 
-def test_clear_cart(
-    client: TestClient, create_user
-):
+def test_clear_cart(client: TestClient, create_user):
     user = create_user()
 
     resp = client.delete(

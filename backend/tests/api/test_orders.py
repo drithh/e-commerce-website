@@ -14,7 +14,9 @@ def test_get_empty_orders_user(client: TestClient, create_user):
     assert resp.json() == {"message": "You have no orders"}
 
 
-def test_get_orders_user(client: TestClient, create_user, create_order, create_order_item):
+def test_get_orders_user(
+    client: TestClient, create_user, create_order, create_order_item
+):
     user = create_user()
     order = create_order(user)
     create_order_item(order)
@@ -29,14 +31,16 @@ def test_get_empty_order_detail(client: TestClient, create_user):
     user = create_user()
 
     resp = client.get(
-        f"{prefix}/3fa85f64-5717-4562-b3fc-2c963f66afa6", 
-            headers=get_jwt_header(user),
-        )
+        f"{prefix}/3fa85f64-5717-4562-b3fc-2c963f66afa6",
+        headers=get_jwt_header(user),
+    )
     assert resp.status_code == 404
     assert resp.json() == {"message": "Order not found"}
 
 
-def test_get_order_detail(client: TestClient, create_user, create_order, create_order_item):
+def test_get_order_detail(
+    client: TestClient, create_user, create_order, create_order_item
+):
     user = create_user()
     order = create_order(user)
     create_order_item(order)
@@ -46,7 +50,7 @@ def test_get_order_detail(client: TestClient, create_user, create_order, create_
     # create_order_item(order, product_size_quantity)
 
     resp = client.get(
-        f"{prefix}/{order.id}", 
+        f"{prefix}/{order.id}",
         headers=get_jwt_header(user),
     )
     assert resp.status_code == 200
@@ -62,7 +66,9 @@ def test_get_empty_orders_admin(client: TestClient, create_admin):
     assert resp.json() == {"message": "You have no orders"}
 
 
-def test_get_orders_admin(client: TestClient, create_admin, create_order, create_order_item):
+def test_get_orders_admin(
+    client: TestClient, create_admin, create_order, create_order_item
+):
     admin = create_admin()
     order = create_order(admin)
     create_order_item(order)
@@ -85,9 +91,9 @@ def test_create_order(client: TestClient, create_user):
                 "address_name": "Bali",
                 "address": "Renon",
                 "city": "Denpasar",
-                "phone_number": "081123344556"
+                "phone_number": "081123344556",
             },
-            "send_email": False
+            "send_email": False,
         },
     )
     data = resp.json()
@@ -95,7 +101,9 @@ def test_create_order(client: TestClient, create_user):
     assert resp.status_code == 201
 
 
-def test_update_order_status(client: TestClient, create_admin, create_order, create_order_item):
+def test_update_order_status(
+    client: TestClient, create_admin, create_order, create_order_item
+):
     admin = create_admin()
     order = create_order(admin)
     order_item = create_order_item(order)
@@ -108,13 +116,14 @@ def test_update_order_status(client: TestClient, create_admin, create_order, cre
     assert data["message"] == "Order updated"
     assert resp.status_code == 200
 
+
 {
     "shipping_method": "Regular",
     "shipping_address": {
         "address_name": "Bali",
         "address": "Renon",
         "city": "Denpasar",
-        "phone_number": "081123344556"
+        "phone_number": "081123344556",
     },
-    "send_email": False
+    "send_email": False,
 }
