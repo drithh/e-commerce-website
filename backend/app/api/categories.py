@@ -30,7 +30,7 @@ def get_category(
 ):
     categories = session.query(Category).all()
 
-    if not categories:
+    if len(categories) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="There are no categories",
@@ -41,10 +41,10 @@ def get_category(
 
 @router.get("/detail", response_model=DetailCategory, status_code=status.HTTP_200_OK)
 def get_detail_category(
-    category_id: UUID,
+    id: UUID,
     session: Generator = Depends(get_db),
 ):
-    category = session.query(Category).filter(Category.id == category_id).first()
+    category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -76,12 +76,12 @@ def create_category(
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def update_category(
-    category_id: UUID,
+    id: UUID,
     request: UpdateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ):
-    category = session.query(Category).filter(Category.id == category_id).first()
+    category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
