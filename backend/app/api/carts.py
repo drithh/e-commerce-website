@@ -22,7 +22,7 @@ router = APIRouter()
 def get_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     carts = session.execute(
         f"""
         SELECT DISTINCT ON (carts.id) products.id as product_id, carts.id,
@@ -112,7 +112,7 @@ def create_cart(
 
     logger.info(f"User {current_user.name} added product {request.product_id} to cart")
 
-    return DefaultResponse(message=f"Added to cart")
+    return DefaultResponse(message="Added to cart")
 
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
