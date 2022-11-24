@@ -8,10 +8,7 @@ RUN npm install
 
 COPY . /app/
 
-# RUN CI=1 pnpm test
-
 RUN npm run build
-
 
 FROM nginx:latest
 

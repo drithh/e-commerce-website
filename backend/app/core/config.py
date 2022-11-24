@@ -58,9 +58,6 @@ class Settings(BaseSettings):
     # Twitter
     TWITTER_API: str
 
-    # Readme
-    README_API_KEY: str
-
     # Backend URL
     REACT_APP_BACKEND_URL: str
 

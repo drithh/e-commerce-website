@@ -132,7 +132,7 @@ def serve_static_app(app):
         """Serves static assets on 404"""
         response = await call_next(request)
         path = request["path"]
-        if path.startswith(settings.API_PATH) or path.startswith("/docs"):
+        if path.startswith(settings.API_PATH):
             return response
         if response.status_code == 404:
             # remove path and query string
