@@ -1,9 +1,9 @@
 from starlette.testclient import TestClient
 
 from app.core.config import settings
+from tests.utils import get_jwt_header
 
 prefix = f"{settings.API_PATH}/cart"
-from tests.utils import get_jwt_header
 
 
 def test_get_empty_cart(client: TestClient, create_user):
@@ -71,7 +71,7 @@ def test_update_cart(
     cart = create_cart(user, product_size_quantity)
 
     resp = client.put(
-        f"{prefix}/{cart.id}",
+        f"{prefix}",
         headers=get_jwt_header(user),
         json={"id": str(cart.id), "quantity": "2"},
     )
@@ -95,7 +95,7 @@ def test_delete_cart(
     cart = create_cart(user, product_size_quantity)
 
     resp = client.delete(
-        f"{prefix}/{cart.id}",
+        f"{prefix}",
         headers=get_jwt_header(user),
         params={
             "id": str(cart.id),
