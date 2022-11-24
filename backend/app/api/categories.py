@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Any, Generator
 from uuid import UUID
 
 from fastapi import HTTPException, Query, status
@@ -27,10 +27,10 @@ router = APIRouter()
 @router.get("", response_model=GetCategory, status_code=status.HTTP_200_OK)
 def get_category(
     session: Generator = Depends(get_db),
-):
+) -> Any:
     categories = session.query(Category).all()
 
-    if not categories:
+    if len(categories) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="There are no categories",
@@ -41,10 +41,10 @@ def get_category(
 
 @router.get("/detail", response_model=DetailCategory, status_code=status.HTTP_200_OK)
 def get_detail_category(
-    category_id: UUID,
+    id: UUID,
     session: Generator = Depends(get_db),
-):
-    category = session.query(Category).filter(Category.id == category_id).first()
+) -> Any:
+    category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -59,7 +59,7 @@ def create_category(
     request: CreateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-):
+) -> Any:
     try:
         session.add(Category(**request.dict()))
         session.commit()
@@ -76,12 +76,12 @@ def create_category(
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def update_category(
-    category_id: UUID,
+    id: UUID,
     request: UpdateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-):
-    category = session.query(Category).filter(Category.id == category_id).first()
+) -> Any:
+    category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -102,7 +102,7 @@ def delete_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
     category_id: DeleteCategory = Depends(DeleteCategory),
-):
+) -> Any:
     try:
         session.query(Category).filter(Category.id == category_id.id).delete()
         session.commit()

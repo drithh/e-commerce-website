@@ -22,7 +22,7 @@ router = APIRouter()
 def get_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     carts = session.execute(
         f"""
         SELECT DISTINCT ON (carts.id) products.id as product_id, carts.id,
@@ -36,12 +36,18 @@ def get_cart(
         AND product_images.id = (
             SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
         )
-        JOIN images ON images.id = product_images.image_id
+        LEFT JOIN images ON images.id = product_images.image_id
         WHERE user_id = :user_id
         GROUP BY products.id, products.price, image, name, carts.id, sizes.size, carts.quantity
         """,
         {"user_id": current_user.id},
     ).fetchall()
+
+    if len(carts) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="You have no carts",
+        )
 
     return GetCart(data=carts)
 
@@ -106,9 +112,7 @@ def create_cart(
 
     logger.info(f"User {current_user.name} added product {request.product_id} to cart")
 
-    return DefaultResponse(
-        message=f"Added {request.quantity} {product_size_quantity.title} to cart"
-    )
+    return DefaultResponse(message="Added to cart")
 
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
@@ -124,7 +128,7 @@ def update_cart(
         JOIN product_size_quantities ON product_size_quantities.id = carts.product_size_quantity_id
         WHERE carts.user_id = :user_id AND carts.id = :cart_id
         """,
-        {"user_id": current_user.id, "cart_id": request.cart_id},
+        {"user_id": current_user.id, "cart_id": request.id},
     ).fetchone()
 
     if not cart:
@@ -155,7 +159,7 @@ def update_cart(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=format_error(e),
             )
-        logger.info(f"User {current_user.name} updated cart {request.cart_id}")
+        logger.info(f"User {current_user.name} updated cart {request.id}")
 
     else:
         try:
@@ -179,12 +183,12 @@ def update_cart(
 
 @router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def delete_cart(
-    cart_id: UUID,
+    id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> Any:
     try:
-        cart = session.query(Cart).filter(Cart.id == cart_id).first()
+        cart = session.query(Cart).filter(Cart.id == id).first()
         session.delete(cart)
         session.commit()
     except Exception as e:
@@ -195,7 +199,7 @@ def delete_cart(
             detail=format_error(e),
         )
 
-    logger.info(f"Cart {cart_id} deleted by {current_user.name}")
+    logger.info(f"Cart {id} deleted by {current_user.name}")
 
     return DefaultResponse(message="Cart deleted")
 

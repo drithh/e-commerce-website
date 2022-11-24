@@ -1,5 +1,5 @@
 import math
-from typing import Generator
+from typing import Any, Generator
 from uuid import UUID
 
 from fastapi import HTTPException, Query, status
@@ -27,7 +27,7 @@ def get_orders_user(
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     orders = session.execute(
         f"""
         SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products,
@@ -56,7 +56,7 @@ def get_orders_user(
             AND product_images.id = (
                 SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
             )
-            JOIN images ON images.id = product_images.image_id
+            LEFT JOIN images ON images.id = product_images.image_id
             WHERE orders.user_id = :user_id
             GROUP BY orders.id, products.id, images.id, order_items.price
         ) order_product
@@ -72,7 +72,7 @@ def get_orders_user(
         },
     ).fetchall()
 
-    if not orders:
+    if len(orders) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="You have no orders",
@@ -95,8 +95,8 @@ def get_orders_user(
 def get_order_details(
     id: UUID,
     session: Generator = Depends(get_db),
-    current_user: User = Depends(get_current_active_admin),
-):
+    current_user: User = Depends(get_current_active_user),
+) -> Any:
     order = session.execute(
         """
         SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city,
@@ -125,7 +125,7 @@ def get_order_details(
             AND product_images.id = (
                 SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
             )
-            JOIN images ON images.id = product_images.image_id
+            LEFT JOIN images ON images.id = product_images.image_id
             JOIN users ON orders.user_id = users.id
             WHERE orders.id = :id
             GROUP BY orders.id, products.id, images.id, users.name, users.email, order_items.price
@@ -139,7 +139,7 @@ def get_order_details(
         },
     ).fetchone()
 
-    if not order:
+    if len(order) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
         )
@@ -154,7 +154,7 @@ def get_orders_admin(
     page_size: int = Query(25, ge=1, le=100),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-):
+) -> Any:
     sort = "ASC" if sort_by == "Price a_z" else "DESC"
     orders = session.execute(
         f"""
@@ -163,15 +163,16 @@ def get_orders_admin(
         FROM (
             SELECT DISTINCT ON (products.id) orders.id, products.title,
             array_agg( DISTINCT sizes.size) sizes, orders.created_at,
-            products.product_detail, users.email, array_agg( DISTINCT images.image_url) images_url,
-            orders.user_id, SUM(order) total
+            products.product_detail, users.email, array_agg( DISTINCT
+            CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) images_url,
+            orders.user_id, SUM(order_items.price) total
             FROM only orders
             JOIN order_items ON orders.id = order_items.order_id
             JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
             JOIN sizes ON product_size_quantities.size_id = sizes.id
             JOIN products ON product_size_quantities.product_id = products.id
-            JOIN product_images ON products.id = product_images.product_id
-            JOIN images ON product_images.image_id = images.id
+            LEFT JOIN product_images ON products.id = product_images.product_id
+            LEFT JOIN images ON product_images.image_id = images.id
             JOIN users ON orders.user_id = users.id
             GROUP BY orders.id, products.id, users.id
         ) order_product
@@ -197,7 +198,7 @@ async def create_order(
     request: CreateOrder,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     if request.shipping_address.address_name == "":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -367,7 +368,7 @@ def update_order_status(
     order_id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
     order = (
         session.query(Order)
         .filter(Order.id == order_id)
@@ -398,7 +399,7 @@ def update_orders(
     status: str = Query(regex="^(processed|shipped|cancelled|completed)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-):
+) -> Any:
     order = session.execute(
         """
         SELECT status FROM only orders
