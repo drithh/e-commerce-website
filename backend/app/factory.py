@@ -30,6 +30,7 @@ def create_app():
     description = f"{settings.PROJECT_NAME} API"
     app = FastAPI(
         title=settings.PROJECT_NAME,
+        servers=[{"url": settings.REACT_APP_BACKEND_URL}],
         openapi_url=f"{settings.API_PATH}/openapi.json",
         docs_url="/swagger",
         description=description,
@@ -135,10 +136,9 @@ def serve_static_app(app):
             return response
         if response.status_code == 404:
             # remove path and query string
-            host = request.url.scheme + "://" + request.url.netloc
             return templates.TemplateResponse(
                 "index.html",
-                {"request": request, "host": host},
+                {"request": request, "host": settings.REACT_APP_BACKEND_URL},
             )
         return response
 

@@ -59,7 +59,7 @@ def get_role(request: Request) -> Any:
 def sign_in(
     request: OAuth2PasswordRequestForm = Depends(),
     session: Generator = Depends(get_db),
-):
+) -> Any:
     user = session.query(User).filter(User.email == request.username).first()
     if not user:
         raise HTTPException(
@@ -93,7 +93,7 @@ def sign_in(
 def sign_up(
     request: UserCreate,
     session: Generator = Depends(get_db),
-):
+) -> Any:
     email_validation(request.email)
     password_validation(request.password)
     user = session.query(User).filter(User.email == request.email).first()
@@ -141,7 +141,7 @@ def sign_up(
 async def forgot_password(
     email: str,
     session: Generator = Depends(get_db),
-):
+) -> Any:
     user = session.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(
@@ -176,7 +176,7 @@ async def forgot_password(
 def reset_password(
     request: ResetPassword,
     session: Generator = Depends(get_db),
-):
+) -> Any:
     password_validation(request.password)
     forgot_password = (
         session.query(ForgotPassword)
@@ -221,7 +221,7 @@ def change_password(
     request: ChangePassword,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> Any:
 
     if not User.verify_password(request.old_password, current_user):
         raise HTTPException(

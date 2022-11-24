@@ -2,7 +2,6 @@ import sys
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseSettings, HttpUrl, PostgresDsn, validator
-from pydantic.networks import AnyHttpUrl
 
 
 class Settings(BaseSettings):
@@ -16,7 +15,7 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: List[str] = []
 
     # The following variables need to be defined in environment
 
@@ -58,6 +57,12 @@ class Settings(BaseSettings):
 
     # Twitter
     TWITTER_API: str
+
+    # Readme
+    README_API_KEY: str
+
+    # Backend URL
+    REACT_APP_BACKEND_URL: str
 
     # Google Cloud Platform
     GCP_TYPE: str
