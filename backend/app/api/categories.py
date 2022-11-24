@@ -1,8 +1,9 @@
-from typing import Any, Generator
+from typing import Generator
 from uuid import UUID
 
 from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
@@ -27,7 +28,7 @@ router = APIRouter()
 @router.get("", response_model=GetCategory, status_code=status.HTTP_200_OK)
 def get_category(
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     categories = session.query(Category).all()
 
     if len(categories) == 0:
@@ -43,7 +44,7 @@ def get_category(
 def get_detail_category(
     id: UUID,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
@@ -59,7 +60,7 @@ def create_category(
     request: CreateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     try:
         session.add(Category(**request.dict()))
         session.commit()
@@ -80,7 +81,7 @@ def update_category(
     request: UpdateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
@@ -102,7 +103,7 @@ def delete_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
     category_id: DeleteCategory = Depends(DeleteCategory),
-) -> Any:
+) -> JSONResponse:
     try:
         session.query(Category).filter(Category.id == category_id.id).delete()
         session.commit()

@@ -124,13 +124,13 @@ export default function CartItem() {
                           img={item.image}
                           onAdd={() => {
                             updateCartItem?.mutate({
-                              cart_id: item.id,
+                              id: item.id,
                               quantity: 1,
                             });
                           }}
                           onRemove={() => {
                             updateCartItem?.mutate({
-                              cart_id: item.id,
+                              id: item.id,
                               quantity: -1,
                             });
                           }}

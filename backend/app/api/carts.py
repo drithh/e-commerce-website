@@ -1,8 +1,9 @@
-from typing import Any, Generator
+from typing import Generator
 from uuid import UUID
 
 from fastapi import HTTPException, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
@@ -22,7 +23,7 @@ router = APIRouter()
 def get_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     carts = session.execute(
         f"""
         SELECT DISTINCT ON (carts.id) products.id as product_id, carts.id,
@@ -57,7 +58,7 @@ def create_cart(
     request: CreateCart,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
 
     product_size_quantity = session.execute(
         """
@@ -120,7 +121,7 @@ def update_cart(
     request: UpdateCart,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
 
     cart = session.execute(
         """
@@ -186,7 +187,7 @@ def delete_cart(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     try:
         cart = session.query(Cart).filter(Cart.id == id).first()
         session.delete(cart)
@@ -208,7 +209,7 @@ def delete_cart(
 def clear_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     try:
         session.execute(
             """

@@ -3,6 +3,6 @@
 /* eslint-disable */
 
 export type UpdateCart = {
-  cart_id: string;
+  id: string;
   quantity: number;
 };

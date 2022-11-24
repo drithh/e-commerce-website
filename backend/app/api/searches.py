@@ -1,11 +1,12 @@
 import random
 from asyncio import sleep
 from datetime import datetime, timedelta
-from typing import Any, Generator, List
+from typing import Generator, List
 
 import requests
 from fastapi import HTTPException, Response, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
@@ -28,7 +29,7 @@ router = APIRouter()
 async def get_image(
     image_name: str,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     image_name = image_name.lower()
     image = session.query(Image).filter(Image.name.like(f"%{image_name}%")).first()
     if not image:
@@ -46,7 +47,7 @@ async def get_image(
 def search_text(
     text: str,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     products = session.execute(
         """
             SELECT id, title FROM search_products(:text);
@@ -62,7 +63,7 @@ def search_text(
 async def search_image(
     request: SearchImage,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     img_data, image_type = base64_to_image(request.base64_image)
     await sleep(15)  # Simulate a long running task AI Image Classification
     return session.execute(
@@ -79,7 +80,7 @@ async def search_image(
     response_model=ShowerThoughts,
     status_code=status.HTTP_200_OK,
 )
-async def shower_thoughts() -> Any:
+async def shower_thoughts() -> JSONResponse:
     start = datetime(2022, 1, 1)
     end = datetime.now() - timedelta(days=7)
 

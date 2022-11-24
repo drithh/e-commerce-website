@@ -1,9 +1,10 @@
 import random
 from datetime import datetime
-from typing import Any, Generator
+from typing import Generator
 
 import pytz
 from fastapi import BackgroundTasks, Depends, HTTPException, Request, status
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -42,7 +43,7 @@ router = APIRouter()
         },
     },
 )
-def get_role(request: Request) -> Any:
+def get_role(request: Request) -> JSONResponse:
     access_token = request.headers.get("Authorization") or ""
     access_token = access_token.replace("Bearer ", "")
     role = is_authenticated(access_token)
@@ -59,7 +60,7 @@ def get_role(request: Request) -> Any:
 def sign_in(
     request: OAuth2PasswordRequestForm = Depends(),
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     user = session.query(User).filter(User.email == request.username).first()
     if not user:
         raise HTTPException(
@@ -93,7 +94,7 @@ def sign_in(
 def sign_up(
     request: UserCreate,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     email_validation(request.email)
     password_validation(request.password)
     user = session.query(User).filter(User.email == request.email).first()
@@ -141,7 +142,7 @@ def sign_up(
 async def forgot_password(
     email: str,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     user = session.query(User).filter(User.email == email).first()
     if not user:
         raise HTTPException(
@@ -176,7 +177,7 @@ async def forgot_password(
 def reset_password(
     request: ResetPassword,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     password_validation(request.password)
     forgot_password = (
         session.query(ForgotPassword)
@@ -221,7 +222,7 @@ def change_password(
     request: ChangePassword,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
 
     if not User.verify_password(request.old_password, current_user):
         raise HTTPException(

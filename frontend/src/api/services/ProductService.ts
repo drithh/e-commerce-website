@@ -102,8 +102,8 @@ export class ProductService {
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
-      url: '/v1/products/{product_id}',
-      path: {
+      url: '/v1/products',
+      query: {
         product_id: productId,
       },
       errors: {

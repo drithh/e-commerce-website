@@ -65,16 +65,16 @@ export class CartService {
 
   /**
    * Delete Cart
-   * @param cartId
+   * @param id
    * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
-  public static deleteCart(cartId: string): CancelablePromise<DefaultResponse> {
+  public static deleteCart(id: string): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'DELETE',
       url: '/v1/cart',
       query: {
-        cart_id: cartId,
+        id: id,
       },
       errors: {
         422: `Validation Error`,

@@ -1,8 +1,9 @@
 import math
-from typing import Any, Generator
+from typing import Generator
 
 from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
@@ -27,7 +28,7 @@ router = APIRouter()
 def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     total_sales = session.execute(
         """
         SELECT SUM(price * quantity) total_sales
@@ -69,7 +70,7 @@ def get_sales(
 def get_dashboard(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
 
     income_per_month = session.execute(
         """
@@ -111,7 +112,7 @@ def get_customer(
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     customers = session.execute(
         """
         SELECT users.name, users.id, users.email, COUNT(orders.id) total_order,
@@ -155,7 +156,7 @@ def get_order(
     page_size: int = Query(25, ge=1, le=100),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     orders = session.execute(
         """
         SELECT orders.id, users.name, users.email, orders.status,

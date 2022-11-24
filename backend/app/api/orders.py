@@ -1,9 +1,10 @@
 import math
-from typing import Any, Generator
+from typing import Generator
 from uuid import UUID
 
 from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
@@ -27,7 +28,7 @@ def get_orders_user(
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     orders = session.execute(
         f"""
         SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products,
@@ -96,7 +97,7 @@ def get_order_details(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     order = session.execute(
         """
         SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city,
@@ -154,7 +155,7 @@ def get_orders_admin(
     page_size: int = Query(25, ge=1, le=100),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     sort = "ASC" if sort_by == "Price a_z" else "DESC"
     orders = session.execute(
         f"""
@@ -198,7 +199,7 @@ async def create_order(
     request: CreateOrder,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     if request.shipping_address.address_name == "":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -368,7 +369,7 @@ def update_order_status(
     order_id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     order = (
         session.query(Order)
         .filter(Order.id == order_id)
@@ -399,7 +400,7 @@ def update_orders(
     status: str = Query(regex="^(processed|shipped|cancelled|completed)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     order = session.execute(
         """
         SELECT status FROM only orders

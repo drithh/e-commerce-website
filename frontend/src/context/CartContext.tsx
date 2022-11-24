@@ -23,7 +23,7 @@ export type cartType = {
     DefaultResponse,
     unknown,
     {
-      cart_id: string;
+      id: string;
       quantity: number;
     },
     unknown
@@ -84,7 +84,7 @@ const useProvideCart = () => {
   );
 
   const updateCartItem = useMutation(
-    (variables: { cart_id: string; quantity: number }) =>
+    (variables: { id: string; quantity: number }) =>
       CartService.updateCart({ ...variables }),
     {
       onSuccess: () => {

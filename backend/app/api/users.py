@@ -1,7 +1,8 @@
-from typing import Any, Generator
+from typing import Generator
 from uuid import UUID
 
 from fastapi import Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 from starlette.responses import Response
 
@@ -26,7 +27,7 @@ router = APIRouter()
 @router.get("", response_model=GetUser, status_code=status.HTTP_200_OK)
 def get_user(
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     return current_user
 
 
@@ -35,14 +36,14 @@ def get_user(
 )
 def get_user_shipping_address(
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     return current_user
 
 
 @router.get("/balance", response_model=GetUserBalance, status_code=status.HTTP_200_OK)
 async def get_user_balance(
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     return current_user
 
 
@@ -51,7 +52,7 @@ def update_user(
     request: GetUser,
     current_user: User = Depends(get_current_active_admin),
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     try:
         session.query(User).filter(User.id == request.id).update(
             {
@@ -82,7 +83,7 @@ def put_user_shipping_address(
     request: PutUserAddress,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     current_user.address_name = request.address_name
     current_user.address = request.address
     current_user.city = request.city
@@ -101,7 +102,7 @@ def put_user_balance(
     request: PutUserBalance,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-) -> Any:
+) -> JSONResponse:
     new_balance = int(current_user.balance) + request.balance
     current_user.balance = new_balance
     try:
@@ -125,7 +126,7 @@ def delete_user(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     try:
         session.query(User).filter(User.id == id).delete()
         session.commit()
@@ -151,7 +152,7 @@ def get_detail_user(
     id: UUID,
     current_user: User = Depends(get_current_active_admin),
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     user = session.query(User).filter(User.id == id).first()
     if not user:
         raise HTTPException(

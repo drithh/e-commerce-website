@@ -1,9 +1,10 @@
 import math
-from typing import Any, Generator, List
+from typing import Generator, List
 from uuid import UUID
 
 from fastapi import File, HTTPException, Query, Response, UploadFile, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
@@ -42,7 +43,7 @@ def get_products(
     price: List[int] = Query([], ge=0),
     condition: str = Query("", regex="^(new|used|)$"),
     product_name: str = "",
-) -> Any:
+) -> JSONResponse:
     sorts = sort_by.split(" ")
     if sorts[0] == "Newest":
         order = "products.created_at"
@@ -116,7 +117,7 @@ def create_product(
     request: CreateProduct,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
 
     product = Product(
         title=request.title,
@@ -231,7 +232,7 @@ def update_product(
     request: UpdateProduct,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     try:
         product = session.query(Product).filter(Product.id == request.id).first()
 
@@ -371,14 +372,12 @@ def update_product(
     return DefaultResponse(message="Product updated")
 
 
-@router.delete(
-    "/{product_id}", response_model=DefaultResponse, status_code=status.HTTP_200_OK
-)
+@router.delete("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def delete_product(
     product_id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-) -> Any:
+) -> JSONResponse:
     try:
         product = session.query(Product).filter(Product.id == product_id).first()
         session.delete(product)
@@ -399,7 +398,7 @@ def delete_product(
 def get_product(
     id: UUID,
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     result = session.execute(
         f"""
         SELECT products.id, products.title, products.brand, products.product_detail,

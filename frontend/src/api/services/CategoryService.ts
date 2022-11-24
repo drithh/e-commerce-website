@@ -26,20 +26,20 @@ export class CategoryService {
 
   /**
    * Update Category
-   * @param categoryId
+   * @param id
    * @param requestBody
    * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
   public static updateCategory(
-    categoryId: string,
+    id: string,
     requestBody: UpdateCategory
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
       url: '/v1/categories',
       query: {
-        category_id: categoryId,
+        id: id,
       },
       body: requestBody,
       mediaType: 'application/json',
@@ -90,18 +90,18 @@ export class CategoryService {
 
   /**
    * Get Detail Category
-   * @param categoryId
+   * @param id
    * @returns DetailCategory Successful Response
    * @throws ApiError
    */
   public static getDetailCategory(
-    categoryId: string
+    id: string
   ): CancelablePromise<DetailCategory> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/categories/detail',
       query: {
-        category_id: categoryId,
+        id: id,
       },
       errors: {
         422: `Validation Error`,
