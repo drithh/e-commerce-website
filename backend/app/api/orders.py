@@ -163,14 +163,15 @@ def get_orders_admin(
         FROM (
             SELECT DISTINCT ON (products.id) orders.id, products.title,
             array_agg( DISTINCT sizes.size) sizes, orders.created_at,
-            products.product_detail, users.email, array_agg( DISTINCT images.image_url) images_url,
-            orders.user_id, SUM(order) total
+            products.product_detail, users.email, array_agg( DISTINCT
+            CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) images_url,
+            orders.user_id, SUM(order_items.price) total
             FROM only orders
             JOIN order_items ON orders.id = order_items.order_id
             JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
             JOIN sizes ON product_size_quantities.size_id = sizes.id
             JOIN products ON product_size_quantities.product_id = products.id
-            JOIN product_images ON products.id = product_images.product_id
+            LEFT JOIN product_images ON products.id = product_images.product_id
             LEFT JOIN images ON product_images.image_id = images.id
             JOIN users ON orders.user_id = users.id
             GROUP BY orders.id, products.id, users.id
