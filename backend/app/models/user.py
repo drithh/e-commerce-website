@@ -62,8 +62,8 @@ class User(DefaultModel, Base):
         return admin
 
     @classmethod
-    def seed(cls, fake):
-        password, salt = cls.encrypt_password("password")
+    def seed(cls, fake, password="password"):
+        password, salt = cls.encrypt_password(password)
         user = User(
             id=fake.uuid4(),
             name=fake.name(),

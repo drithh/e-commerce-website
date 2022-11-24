@@ -1,10 +1,11 @@
-import { Fragment, useRef, useState, useEffect } from "react";
-import { Popover, Transition } from "@headlessui/react";
-import { HiOutlineChevronDown } from "react-icons/hi";
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+
+import { Popover, Transition } from '@headlessui/react';
 
 interface props {
   menuTitle: string;
-  linksArray: Array<Array<string>>;
+  linksArray: string[][];
 }
 
 const PopoverMenu = ({ menuTitle, linksArray }: props) => {
@@ -22,8 +23,8 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
 
   const onHover = (open: boolean, action: string) => {
     if (
-      (!open && !openState && action === "onMouseEnter") ||
-      (open && openState && action === "onMouseLeave")
+      (!open && !openState && action === 'onMouseEnter') ||
+      (open && openState && action === 'onMouseLeave')
     ) {
       clearTimeout(timeout);
       timeout = setTimeout(() => toggleMenu(), timeoutDuration);
@@ -37,17 +38,17 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
 
   const handleClickOutside = (event: MouseEvent) => {
     if (
-      buttonRef.current &&
+      buttonRef.current != null &&
       !buttonRef.current.contains(event.target as Node)
     ) {
       event.stopPropagation();
     }
   };
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   });
 
@@ -57,14 +58,14 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
     <Popover className="">
       {({ open }) => (
         <div
-          onMouseEnter={() => onHover(open, "onMouseEnter")}
-          onMouseLeave={() => onHover(open, "onMouseLeave")}
+          onMouseEnter={() => onHover(open, 'onMouseEnter')}
+          onMouseLeave={() => onHover(open, 'onMouseLeave')}
           className="flex flex-col"
         >
           <Popover.Button ref={buttonRef}>
             <div
               className={`${
-                open ? "text-black" : "text-gray-700"
+                open ? 'text-black' : 'text-gray-700'
               } flex w-max min-w-[8rem] flex-row place-items-center justify-center gap-x-2 border-0 px-1 pb-2 text-gray-700 outline-0 transition duration-500 ease-in-out hover:text-black hover:outline-0 hover:ring-0 focus:outline-0
               `}
               ref={menuRef}
@@ -73,7 +74,7 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
               <div>{menuTitle}</div>
               <HiOutlineChevronDown
                 className={`${
-                  open ? "translate-y-[0.15rem] text-black" : "text-gray-500"
+                  open ? 'translate-y-[0.15rem] text-black' : 'text-gray-500'
                 } inline-block transform text-[1.5rem] opacity-70 transition-all duration-500
                 `}
                 aria-hidden="true"
@@ -97,7 +98,7 @@ const PopoverMenu = ({ menuTitle, linksArray }: props) => {
                 style={{ width: buttonWidth }}
               >
                 {linksArray.map(([title, href]) => (
-                  <Fragment key={"PopoverPanel<>" + title + href}>
+                  <Fragment key={'PopoverPanel<>' + title + href}>
                     <a
                       href={href}
                       className="bg-white py-2  px-1 text-gray-400 transition duration-500 ease-in-out hover:text-black"

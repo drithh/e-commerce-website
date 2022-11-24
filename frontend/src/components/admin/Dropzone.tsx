@@ -1,6 +1,6 @@
-import React, { useCallback } from "react";
-import { useDropzone } from "react-dropzone";
-import { IoClose } from "react-icons/io5";
+import React, { useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { IoClose } from 'react-icons/io5';
 
 interface props {
   initialImages: string[];
@@ -31,8 +31,8 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
   } = useDropzone({
     onDrop,
     accept: {
-      "image/jpeg": [],
-      "image/png": [],
+      'image/jpeg': [],
+      'image/png': [],
     },
   });
 
@@ -43,14 +43,18 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
           <button
             type="button"
             key={index}
-            className="group relative h-52 w-40 cursor-pointer rounded border-2 border-gray-100"
+            className="group relative h-52 w-40 cursor-pointer overflow-hidden rounded border-2  border-gray-100"
             onClick={() => {
               setImages(
                 initialImages.filter((selectedImage) => selectedImage !== image)
               );
             }}
           >
-            <img src={image} alt="" className="rounded-md" />
+            <img
+              src={image}
+              alt=""
+              className="rounded-md object-contain object-bottom"
+            />
             <div className="group absolute inset-0 hidden h-full  w-full place-content-center place-items-center bg-gray-100 opacity-50 group-hover:flex">
               <IoClose className="animate-spin-fast-once text-7xl text-black " />
             </div>
@@ -82,10 +86,10 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
       </div>
       <div
         {...getRootProps()}
-        className={`${isDragActive && "bg-gray-100"} ${
-          isDragReject && "bg-red-100"
+        className={`${isDragActive && 'bg-gray-100'} ${
+          isDragReject && 'bg-red-100'
         } ${
-          isDragAccept && "bg-green-100"
+          isDragAccept && 'bg-green-100'
         } gap-y flex h-[10rem] w-full cursor-pointer flex-col place-content-center place-items-center border-2 border-dashed border-gray-300 text-xl font-bold`}
       >
         <input {...getInputProps()} />

@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { Stock } from "./Stock";
+import type { Stock } from './Stock';
 
 export type app__schemas__product__GetProduct = {
   id: string;

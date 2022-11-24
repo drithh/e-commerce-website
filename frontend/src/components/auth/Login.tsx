@@ -1,14 +1,16 @@
-import React, { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { useAuth } from "../../context/AuthContext";
-import { ApiError } from "../../api";
-type Props = {
+import React, { useState } from 'react';
+
+import { Dialog } from '@headlessui/react';
+
+import { ApiError } from '../../api';
+import { useAuth } from '../../context/AuthContext';
+import Button from '../button/Button';
+import Input from '../input/Input';
+interface Props {
   onRegister: () => void;
   onForgotPassword: () => void;
   closeModal: () => void;
-};
+}
 
 const Login: React.FC<Props> = ({
   onRegister,
@@ -16,9 +18,9 @@ const Login: React.FC<Props> = ({
   closeModal,
 }) => {
   const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,11 +43,11 @@ const Login: React.FC<Props> = ({
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
           type="email"
-          placeholder={"Email Address *"}
+          placeholder={'Email Address *'}
           name="email"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300 mb-4"
           onChange={(e) => setEmail((e.target as HTMLInputElement).value)}
@@ -53,17 +55,17 @@ const Login: React.FC<Props> = ({
         />
         <Input
           type="password"
-          placeholder={"Password *"}
+          placeholder={'Password *'}
           name="password"
           required
           extraClass={`w-full focus:border-gray-500 mb-4 ${
-            errorMsg ? "border-red-300" : ""
+            errorMsg ? 'border-red-300' : ''
           }`}
           border="border-2 border-gray-300"
           onChange={(e) => setPassword((e.target as HTMLInputElement).value)}
           value={password}
         />
-        {errorMsg !== "" && (
+        {errorMsg !== '' && (
           <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
@@ -79,12 +81,12 @@ const Login: React.FC<Props> = ({
         </div>
         <Button
           type="submit"
-          value={"Login"}
+          value={'Login'}
           extraClass="w-full text-center text-xl mb-4"
           size="lg"
         />
         <div className="text-center text-gray-400">
-          Not a member?{" "}
+          Not a member?{' '}
           <span
             onClick={onRegister}
             className="cursor-pointer text-gray-500 focus:underline focus:outline-none"

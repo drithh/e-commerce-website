@@ -1,16 +1,16 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Body_sign_in_api_v1_sign_in_post } from "../models/Body_sign_in_api_v1_sign_in_post";
-import type { ChangePassword } from "../models/ChangePassword";
-import type { DefaultResponse } from "../models/DefaultResponse";
-import type { ResetPassword } from "../models/ResetPassword";
-import type { UserCreate } from "../models/UserCreate";
-import type { UserRead } from "../models/UserRead";
+import type { Body_sign_in_v1_sign_in_post } from '../models/Body_sign_in_v1_sign_in_post';
+import type { ChangePassword } from '../models/ChangePassword';
+import type { DefaultResponse } from '../models/DefaultResponse';
+import type { ResetPassword } from '../models/ResetPassword';
+import type { UserCreate } from '../models/UserCreate';
+import type { UserRead } from '../models/UserRead';
 
-import type { CancelablePromise } from "../core/CancelablePromise";
-import { OpenAPI } from "../core/OpenAPI";
-import { request as __request } from "../core/request";
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
 
 export class AuthenticationService {
   /**
@@ -20,8 +20,8 @@ export class AuthenticationService {
    */
   public static getRole(): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "GET",
-      url: "/api/v1/role",
+      method: 'GET',
+      url: '/v1/role',
     });
   }
 
@@ -32,13 +32,13 @@ export class AuthenticationService {
    * @throws ApiError
    */
   public static signIn(
-    formData: Body_sign_in_api_v1_sign_in_post
+    formData: Body_sign_in_v1_sign_in_post
   ): CancelablePromise<UserRead> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/sign-in",
+      method: 'POST',
+      url: '/v1/sign-in',
       formData: formData,
-      mediaType: "application/x-www-form-urlencoded",
+      mediaType: 'application/x-www-form-urlencoded',
       errors: {
         422: `Validation Error`,
       },
@@ -53,10 +53,10 @@ export class AuthenticationService {
    */
   public static signUp(requestBody: UserCreate): CancelablePromise<UserRead> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/sign-up",
+      method: 'POST',
+      url: '/v1/sign-up',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -73,8 +73,8 @@ export class AuthenticationService {
     email: string
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "POST",
-      url: "/api/v1/forgot-password",
+      method: 'POST',
+      url: '/v1/forgot-password',
       query: {
         email: email,
       },
@@ -94,10 +94,10 @@ export class AuthenticationService {
     requestBody: ResetPassword
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/reset-password",
+      method: 'POST',
+      url: '/v1/reset-password',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
@@ -114,10 +114,10 @@ export class AuthenticationService {
     requestBody: ChangePassword
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: "PUT",
-      url: "/api/v1/change-password",
+      method: 'PUT',
+      url: '/v1/change-password',
       body: requestBody,
-      mediaType: "application/json",
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },

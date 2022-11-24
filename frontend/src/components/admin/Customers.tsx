@@ -1,9 +1,10 @@
-import { useState } from "react";
-import { useQuery } from "react-query";
-import { Link } from "react-router-dom";
-import { DashboardService } from "../../api";
-import Pagination from "../Pagination";
-import { convertToCurrency } from "../util/utilFunc";
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+
+import { DashboardService } from '../../api';
+import Pagination from '../Pagination';
+import { convertToCurrency } from '../util/utilFunc';
 
 interface DefaultParams {
   page: number;
@@ -15,7 +16,7 @@ const Customers = () => {
     page: 1,
     pageSize: 15,
   });
-  const fetchCustomers = useQuery(["customers", params], () =>
+  const fetchCustomers = useQuery(['customers', params], () =>
     DashboardService.getCustomer(params.page, params.pageSize)
   );
 
@@ -24,22 +25,22 @@ const Customers = () => {
   }
 
   return (
-    <div className="w-full whitespace-nowrap px-8 pt-4 pb-8 border border-gray-500">
+    <div className="w-full whitespace-nowrap border border-gray-500 px-8 pt-4 pb-8">
       <div>
-        <tr className="border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4">
-          <th className="py-2 text-left font-semibold table-cell flex-[5]">
+        <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
+          <th className="table-cell flex-[5] py-2 text-left font-semibold">
             Name
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[4]">
+          <th className="table-cell flex-[4] py-2 text-left font-semibold">
             Email
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[3]">
+          <th className="table-cell flex-[3] py-2 text-left font-semibold">
             Total Order
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[3]">
+          <th className="table-cell flex-[3] py-2 text-left font-semibold">
             Total Spent
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[3]">
+          <th className="table-cell flex-[3] py-2 text-left font-semibold">
             Last Order
           </th>
         </tr>
@@ -49,22 +50,22 @@ const Customers = () => {
           return (
             <Link to={`${customer.id}`}>
               <tr
-                className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
+                className=" flex w-full cursor-pointer  place-content-evenly  gap-x-4 border-b-2 border-gray-200 pl-4 hover:bg-gray-50"
                 key={customer.id}
               >
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[5]">
+                <td className="table-cell flex-[5] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {customer.name}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[4]">
+                <td className="table-cell flex-[4] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {customer.email}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
+                <td className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {customer.total_order}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
+                <td className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {convertToCurrency(customer.total_spent)}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
+                <td className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {customer.last_order}
                 </td>
               </tr>

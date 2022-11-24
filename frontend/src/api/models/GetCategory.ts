@@ -2,7 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { DetailCategory } from "./DetailCategory";
+import type { DetailCategory } from './DetailCategory';
 
 export type GetCategory = {
   data: Array<DetailCategory>;

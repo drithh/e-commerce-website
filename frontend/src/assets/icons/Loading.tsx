@@ -1,4 +1,4 @@
-import styles from "./Loading.module.css";
+import styles from './Loading.module.css';
 
 const Loading = () => (
   <div className={styles.ldsEllipsis}>

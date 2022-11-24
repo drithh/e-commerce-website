@@ -1,70 +1,107 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
+import { AiOutlineLoading3Quarters } from 'react-icons/ai';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import Button from "../components/button/Button";
-import { roundDecimal } from "../components/util/utilFunc";
-import Input from "../components/input/Input";
-import { useCart } from "../context/CartContext";
-import { UserService, OrderService, ApiError } from "../api";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { convertToCurrency } from "../components/util/utilFunc";
+import { ApiError, OrderService, SearchService, UserService } from '../api';
+import Button from '../components/button/Button';
+import Input from '../components/input/Input';
+import { convertToCurrency, roundDecimal } from '../components/util/utilFunc';
+import { useCart } from '../context/CartContext';
 
-type PaymentType = "BALANCE";
-type DeliveryType = "REGULAR" | "NEXT_DAY";
+type PaymentType = 'BALANCE';
+type DeliveryType = 'REGULAR' | 'NEXT_DAY';
 
 const ShoppingCart = () => {
   const { cart } = useCart();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const [addressName, setAddressName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<PaymentType>("BALANCE");
-  const [delivery, setDelivery] = useState<DeliveryType>("REGULAR");
+  const [addressName, setAddressName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentType>('BALANCE');
+  const [delivery, setDelivery] = useState<DeliveryType>('REGULAR');
 
   const [useUserAddress, setUseUserAddress] = useState(false);
   const [sendEmail, setSendEmail] = useState(false);
 
-  const fetchUserAddress = useQuery("userAddress", () =>
+  const [processing, setProcessing] = useState(false);
+  const [showerThought, setShowerThought] = useState('');
+  const indexShowerThought = useRef(0);
+
+  const fetchUserAddress = useQuery('userAddress', () =>
     UserService.getUserShippingAddress()
   );
 
-  const fetchOrder = useQuery("order", () => OrderService.getOrdersUser(), {
+  const fetchOrder = useQuery('order', () => OrderService.getOrdersUser(), {
     enabled: false,
   });
+
+  const fetchShowerThought = useQuery(
+    'showerThought',
+    () => SearchService.showerThoughts(),
+    {
+      staleTime: 10000,
+      onSuccess: (data) => {
+        setShowerThought(data.data[indexShowerThought.current]);
+        indexShowerThought.current++;
+      },
+    }
+  );
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (fetchShowerThought.data != null) {
+        if (
+          indexShowerThought.current === fetchShowerThought.data?.data.length
+        ) {
+          indexShowerThought.current = 0;
+        }
+        setShowerThought(
+          fetchShowerThought.data?.data[indexShowerThought.current]
+        );
+        indexShowerThought.current++;
+      }
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, [fetchShowerThought.data]);
 
   const createOrder = useMutation(OrderService.createOrder, {
     onSuccess: (data) => {
       toast.success(data.message);
       fetchOrder.refetch();
-      queryClient.invalidateQueries("cart");
-      queryClient.invalidateQueries("user");
+      queryClient.invalidateQueries('cart');
+      queryClient.invalidateQueries('user');
 
-      navigate("/profile/order");
+      navigate('/profile/order');
     },
     onError: (error) => {
       toast.error((error as ApiError).body.message);
+      setProcessing(false);
     },
   });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setProcessing(true);
     createOrder.mutate({
-      shipping_method: delivery === "REGULAR" ? "Regular" : "Next Day",
+      shipping_method: delivery === 'REGULAR' ? 'Regular' : 'Next Day',
       shipping_address: {
         address_name: addressName,
         phone_number: phoneNumber,
-        address: address,
-        city: city,
+        address,
+        city,
       },
+      send_email: sendEmail,
     });
   };
 
   useEffect(() => {
-    if (useUserAddress && fetchUserAddress.data) {
+    if (useUserAddress && fetchUserAddress.data != null) {
       setAddressName(fetchUserAddress.data.address_name);
       setPhoneNumber(fetchUserAddress.data.phone_number);
       setAddress(fetchUserAddress.data.address);
@@ -94,6 +131,15 @@ const ShoppingCart = () => {
 
   return (
     <main id="main-content" className="mx-auto mt-24 min-h-[60vh] max-w-7xl">
+      {processing && (
+        <div className="loading-overlay fixed top-0 left-0 z-50 flex h-full w-full flex-col items-center justify-center gap-y-4 bg-white bg-opacity-80">
+          <p className="text-2xl font-semibold text-gray-500">
+            Processing Your Order...
+          </p>
+          <AiOutlineLoading3Quarters className="my-3 animate-spin-slow text-7xl text-gray-300" />
+          <p className="text-xl font-semibold text-gray-400">{showerThought}</p>
+        </div>
+      )}
       {/* ===== Heading & Continue Shopping */}
       <div className="app-max-width w-full border-t-2 border-gray-100 px-4 sm:px-8 md:px-20">
         <h1 className="mt-6 mb-2 text-center text-2xl sm:text-left sm:text-4xl">
@@ -114,7 +160,7 @@ const ShoppingCart = () => {
               name="addressName"
               type="text"
               extraClass={`${
-                useUserAddress ? "bg-gray-100" : ""
+                useUserAddress ? 'bg-gray-100' : ''
               } w-full mt-1 mb-2`}
               border="border-2 border-gray-400"
               value={addressName}
@@ -134,7 +180,7 @@ const ShoppingCart = () => {
               name="phoneNumber"
               type="email"
               extraClass={`${
-                useUserAddress ? "bg-gray-100" : ""
+                useUserAddress ? 'bg-gray-100' : ''
               } w-full mt-1 mb-2`}
               border="border-2 border-gray-400"
               value={phoneNumber}
@@ -154,7 +200,7 @@ const ShoppingCart = () => {
               name="address"
               type="text"
               extraClass={`${
-                useUserAddress ? "bg-gray-100" : ""
+                useUserAddress ? 'bg-gray-100' : ''
               } w-full mt-1 mb-2`}
               border="border-2 border-gray-400"
               value={address}
@@ -172,7 +218,7 @@ const ShoppingCart = () => {
               name="city"
               type="text"
               extraClass={`${
-                useUserAddress ? "bg-gray-100" : ""
+                useUserAddress ? 'bg-gray-100' : ''
               } w-full mt-1 mb-2`}
               border="border-2 border-gray-400"
               value={city}
@@ -194,13 +240,13 @@ const ShoppingCart = () => {
                 checked={useUserAddress}
                 onChange={() => setUseUserAddress(!useUserAddress)}
                 className={`${
-                  useUserAddress ? "right-0 border-gray-500" : "border-gray-300"
+                  useUserAddress ? 'right-0 border-gray-500' : 'border-gray-300'
                 } absolute block h-6 w-6 cursor-pointer appearance-none rounded-full border-4  bg-white`}
               />
               <label
                 htmlFor="toggle"
                 className={`${
-                  useUserAddress ? " bg-gray-500" : "bg-gray-300"
+                  useUserAddress ? ' bg-gray-500' : 'bg-gray-300'
                 }  block h-6 cursor-pointer overflow-hidden rounded-full `}
               ></label>
             </div>
@@ -221,17 +267,17 @@ const ShoppingCart = () => {
               {cart.data.map((item) => (
                 <div className="mb-2 flex justify-between" key={item.id}>
                   <div className="  flex">
-                    <span className="text-base font-medium max-w-[10rem] text-ellipsis overflow-clip whitespace-pre">
-                      {item.name}{" "}
+                    <span className="max-w-[10rem] overflow-clip text-ellipsis whitespace-pre text-base font-medium">
+                      {item.name}{' '}
                     </span>
                     <span className="text-gray-400">
-                      {" "}
+                      {' '}
                       ({item.details.size}) x {item.details.quantity}
                     </span>
                   </div>
                   <div className="text-base">
                     {convertToCurrency(
-                      roundDecimal(item.price * item!.details.quantity)
+                      roundDecimal(item.price * item.details.quantity)
                     )}
                   </div>
                 </div>
@@ -246,32 +292,32 @@ const ShoppingCart = () => {
             <div className="py-3">
               <span className="uppercase">DELIVERY</span>
               <div className="mt-3 space-y-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between accent-gray-600">
                   <div>
                     <input
                       type="radio"
                       name="delivery"
                       value="REGULAR"
                       id="regular"
-                      checked={delivery === "REGULAR"}
-                      onChange={() => setDelivery("REGULAR")}
-                    />{" "}
+                      checked={delivery === 'REGULAR'}
+                      onChange={() => setDelivery('REGULAR')}
+                    />{' '}
                     <label htmlFor="regular" className="cursor-pointer">
                       Regular
                     </label>
                   </div>
                   <span>{convertToCurrency(regularDelivery)}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between accent-gray-600">
                   <div>
                     <input
                       type="radio"
                       name="delivery"
                       value="NEXT_DAY"
                       id="next_day"
-                      checked={delivery === "NEXT_DAY"}
-                      onChange={() => setDelivery("NEXT_DAY")}
-                    />{" "}
+                      checked={delivery === 'NEXT_DAY'}
+                      onChange={() => setDelivery('NEXT_DAY')}
+                    />{' '}
                     <label htmlFor="next_day" className="cursor-pointer">
                       Next Day
                     </label>
@@ -285,14 +331,14 @@ const ShoppingCart = () => {
               <div className="flex justify-between py-3">
                 <span>Grand Total</span>
                 <span>
-                  convertToCurrency(
-                  {roundDecimal(
-                    +subtotal +
-                      (delivery === "REGULAR"
-                        ? regularDelivery
-                        : nextDayDelivery)
+                  {convertToCurrency(
+                    roundDecimal(
+                      +subtotal +
+                        (delivery === 'REGULAR'
+                          ? regularDelivery
+                          : nextDayDelivery)
+                    )
                   )}
-                  )
                 </span>
               </div>
 
@@ -313,12 +359,12 @@ const ShoppingCart = () => {
                     id="plan-bank"
                     value="BALANCE"
                     className="absolute h-0 w-0 appearance-none"
-                    onChange={() => setPaymentMethod("BALANCE")}
+                    onChange={() => setPaymentMethod('BALANCE')}
                   />
                   <span
                     aria-hidden="true"
                     className={`${
-                      paymentMethod === "BALANCE" ? "block" : "hidden"
+                      paymentMethod === 'BALANCE' ? 'block' : 'hidden'
                     } absolute inset-0 rounded-lg border-2 border-gray-500 bg-opacity-10`}
                   >
                     <span className="absolute top-4 right-4 inline-flex h-6 w-6 items-center justify-center rounded-full bg-gray-100">
@@ -354,14 +400,14 @@ const ShoppingCart = () => {
                       onChange={() => setSendEmail(!sendEmail)}
                       className={`${
                         sendEmail
-                          ? "right-0 border-gray-500"
-                          : "border-gray-300"
+                          ? 'right-0 border-gray-500'
+                          : 'border-gray-300'
                       } absolute block h-6 w-6 cursor-pointer appearance-none rounded-full border-4  bg-white`}
                     />
                     <label
                       htmlFor="toggle"
                       className={`${
-                        sendEmail ? " bg-gray-500" : "bg-gray-300"
+                        sendEmail ? ' bg-gray-500' : 'bg-gray-300'
                       }  block h-6 cursor-pointer overflow-hidden rounded-full `}
                     ></label>
                   </div>
@@ -375,7 +421,7 @@ const ShoppingCart = () => {
             <Button
               value="Place Order"
               size="xl"
-              extraClass={`w-full`}
+              extraClass={'w-full'}
               type="submit"
             />
           </div>

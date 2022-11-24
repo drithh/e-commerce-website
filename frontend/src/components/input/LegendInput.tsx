@@ -1,6 +1,6 @@
-import { FC, FormEvent } from "react";
+import { FC, FormEvent } from 'react';
 
-type Props = {
+interface Props {
   type?: string;
   name: string;
   placeholder?: string;
@@ -12,23 +12,23 @@ type Props = {
   onChange?: (e: FormEvent<HTMLInputElement>) => void;
   value?: string | number;
   readOnly?: boolean;
-};
+}
 
 const LegendInput: FC<Props> = ({
-  type = "text",
+  type = 'text',
   name,
   placeholder,
   extraClass,
   required = false,
-  border = "",
-  label = "",
+  border = '',
+  label = '',
   onChange,
   value,
   readOnly = false,
 }) => (
   <fieldset
     className={`${
-      !readOnly ? "focus-within:border-gray-700" : ""
+      !readOnly ? 'focus-within:border-gray-700' : ''
     } w-full border border-gray-300 pb-2 `}
   >
     <legend className="ml-2 pr-2 pl-1 font-semibold">{label}</legend>

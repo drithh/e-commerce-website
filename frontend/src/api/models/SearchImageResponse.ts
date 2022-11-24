@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type SearchImageRequest = {
-  image: string;
+export type SearchImageResponse = {
+  id: string;
+  title: string;
 };

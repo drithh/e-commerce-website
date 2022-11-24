@@ -5,7 +5,7 @@ from uuid import UUID
 from fastapi import File, Form, Query, Response, UploadFile, status
 from pydantic import BaseModel
 
-from app.schemas.request_params import Pagination
+from app.schemas.default_model import Pagination
 
 
 class GetUserProductDetails(BaseModel):
@@ -67,3 +67,4 @@ class OrderAddress(BaseModel):
 class CreateOrder(BaseModel):
     shipping_method: str = Query("", regex="^(Next Day|Regular)$")
     shipping_address: OrderAddress
+    send_email: bool = Query(False)

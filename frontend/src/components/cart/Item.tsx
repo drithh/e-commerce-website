@@ -1,7 +1,8 @@
-import React, { FC } from "react";
-import { roundDecimal, convertToCurrency } from "../util/utilFunc";
+import React, { FC } from 'react';
 
-type Props = {
+import { convertToCurrency, roundDecimal } from '../util/utilFunc';
+
+interface Props {
   img: string;
   name: string;
   price: number;
@@ -10,7 +11,7 @@ type Props = {
   onAdd?: () => void;
   onRemove?: () => void;
   onDelete?: () => void;
-};
+}
 
 const Item: FC<Props> = ({
   img,
@@ -46,14 +47,12 @@ const Item: FC<Props> = ({
           </div>
         </div>
       </div>
-      <div className="lastPart flex flex-col items-end place-content-between">
+      <div className="lastPart flex flex-col place-content-between items-end">
         <button
           onClick={onDelete}
           type="button"
           className="mb-3 text-xl text-gray-300 outline-none hover:text-gray-500 focus:outline-none"
-        >
-          &#10005;
-        </button>
+        ></button>
         <span>{convertToCurrency(roundDecimal(price))}</span>
       </div>
     </div>

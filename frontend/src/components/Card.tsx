@@ -1,10 +1,11 @@
-import { FC, useState } from "react";
-import { Link } from "react-router-dom";
-import { HiOutlineHeart, HiHeart } from "react-icons/hi";
-import { Product, BestSeller } from "../api";
-import { useWishlist } from "../context/WishlistContext";
-import { useAuth } from "../context/AuthContext";
-import { convertToCurrency } from "../components/util/utilFunc";
+import { FC, useState } from 'react';
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
+
+import { BestSeller, Product } from '../api';
+import { convertToCurrency } from '../components/util/utilFunc';
+import { useAuth } from '../context/AuthContext';
+import { useWishlist } from '../context/WishlistContext';
 
 interface Props {
   item: BestSeller | Product;
@@ -21,12 +22,12 @@ const Card: FC<Props> = ({ item }) => {
 
   const itemLink = `/products/${encodeURIComponent(id)}`;
 
-  const alreadyWishlisted = wishlist.data!.find(
+  const alreadyWishlisted = wishlist.data.find(
     (item) => item.product_id === id
   );
   const handleWishlist = () => {
-    if (role !== "guest") {
-      alreadyWishlisted
+    if (role !== 'guest') {
+      alreadyWishlisted != null
         ? deleteWishlistItem!.mutate({ product_id: id })
         : addWishlistItem!.mutate({ id });
     }
@@ -41,18 +42,18 @@ const Card: FC<Props> = ({ item }) => {
       >
         <Link to={itemLink} tabIndex={-1}>
           <img
-            src={images[0] as string}
+            src={images[0]}
             alt={title}
             loading="lazy"
             className={`${
-              isHovered ? "hidden" : "animate__fadeIn"
-            } h-80 animate__animated  object-cover`}
+              isHovered ? 'hidden' : 'animate__fadeIn'
+            } animate__animated h-80  object-cover`}
           />
           <img
             className={`${
-              !isHovered ? "hidden" : ""
+              !isHovered ? 'hidden' : ''
             } h-80 transform object-cover transition-transform duration-1000 hover:scale-110`}
-            src={(images[1] as string) || (images[0] as string)}
+            src={images[1] || images[0]}
             alt={title}
           />
         </Link>
@@ -64,7 +65,7 @@ const Card: FC<Props> = ({ item }) => {
           onMouseOver={() => setIsWLHovered(true)}
           onMouseLeave={() => setIsWLHovered(false)}
         >
-          {isWLHovered || alreadyWishlisted ? (
+          {isWLHovered || alreadyWishlisted != null ? (
             <HiHeart className="text-red-500" />
           ) : (
             <HiOutlineHeart className="text-gray-500" />

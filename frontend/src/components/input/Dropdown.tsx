@@ -1,12 +1,13 @@
-import { Fragment } from "react";
-import { HiOutlineChevronDown } from "react-icons/hi";
-import { Menu, Transition } from "@headlessui/react";
-import { capitalCase } from "change-case";
+import { Fragment } from 'react';
+import { HiOutlineChevronDown } from 'react-icons/hi';
+
+import { Menu, Transition } from '@headlessui/react';
+import { capitalCase } from 'change-case';
 
 interface props {
   selected: string;
   setSelected: React.Dispatch<React.SetStateAction<string>>;
-  options: Array<string>;
+  options: string[];
   width?: string;
   border?: string;
 }
@@ -19,10 +20,10 @@ const Dropdown = ({ selected, setSelected, options, width, border }: props) => {
       <div>
         <Menu.Button
           className={`${
-            border ? border : "border-2 border-gray-500"
-          } inline-flex h-12 w-full justify-between p-4 bg-white px-4 py-2 text font-medium text-gray-700  hover:bg-gray-50`}
+            border || 'border-2 border-gray-500'
+          } text inline-flex h-12 w-full justify-between bg-white p-4 px-4 py-2 font-medium text-gray-700  hover:bg-gray-50`}
         >
-          {capitalCase(selectedSort || "")}
+          {capitalCase(selectedSort || '')}
           <HiOutlineChevronDown
             className="-mr-1 ml-2 h-8 w-5"
             aria-hidden="true"
@@ -48,8 +49,8 @@ const Dropdown = ({ selected, setSelected, options, width, border }: props) => {
                 <button
                   type="button"
                   className={`${
-                    active ? "bg-gray-100 text-gray-900" : "text-gray-700"
-                  } group flex w-full items-center rounded-md px-2 py-2 text`}
+                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
+                  } text group flex w-full items-center rounded-md px-2 py-2`}
                   onClick={() => {
                     setSelected(option);
                   }}

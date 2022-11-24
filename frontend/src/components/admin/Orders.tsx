@@ -1,10 +1,12 @@
-import { useQuery } from "react-query";
-import { DashboardService } from "../../api";
-import { convertToCurrency } from "../util/utilFunc";
-import { capitalCase } from "change-case";
-import Pagination from "../Pagination";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState } from 'react';
+import { useQuery } from 'react-query';
+import { Link } from 'react-router-dom';
+
+import { capitalCase } from 'change-case';
+
+import { DashboardService } from '../../api';
+import Pagination from '../Pagination';
+import { convertToCurrency } from '../util/utilFunc';
 
 interface DefaultParams {
   page: number;
@@ -17,7 +19,7 @@ const Orders = () => {
     pageSize: 20,
   });
 
-  const fetchOrders = useQuery(["orders", params], () =>
+  const fetchOrders = useQuery(['orders', params], () =>
     DashboardService.getOrder(params.page, params.pageSize)
   );
 
@@ -26,25 +28,25 @@ const Orders = () => {
   }
 
   return (
-    <div className=" whitespace-nowrap mb-8 px-8 pt-4 pb-8 border border-gray-500">
+    <div className=" mb-8 whitespace-nowrap border border-gray-500 px-8 pt-4 pb-8">
       <div>
-        <tr className="border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4">
-          <th className="py-2 text-left font-semibold table-cell flex-[2]">
+        <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
+          <th className="table-cell flex-[2] py-2 text-left font-semibold">
             Created At
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[3]">
+          <th className="table-cell flex-[3] py-2 text-left font-semibold">
             Name
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[6]">
+          <th className="table-cell flex-[6] py-2 text-left font-semibold">
             Address
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[2]">
+          <th className="table-cell flex-[2] py-2 text-left font-semibold">
             Nb Product
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[2]">
+          <th className="table-cell flex-[2] py-2 text-left font-semibold">
             Product Total
           </th>
-          <th className="py-2 text-left font-semibold table-cell flex-[2]">
+          <th className="table-cell flex-[2] py-2 text-left font-semibold">
             Status
           </th>
         </tr>
@@ -54,25 +56,25 @@ const Orders = () => {
           return (
             <Link to={`${order.id}`}>
               <tr
-                className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 hover:bg-gray-50 cursor-pointer"
+                className=" flex w-full cursor-pointer  place-content-evenly  gap-x-4 border-b-2 border-gray-200 pl-4 hover:bg-gray-50"
                 key={index}
               >
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[2]">
+                <td className="table-cell flex-[2] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {order.created_at}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
+                <td className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {order.name}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[6]">
+                <td className="table-cell flex-[6] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {order.address}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[2]">
+                <td className="table-cell flex-[2] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {order.total_product}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[2]">
+                <td className="table-cell flex-[2] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {convertToCurrency(order.total_price)}
                 </td>
-                <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[2]">
+                <td className="table-cell flex-[2] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {capitalCase(order.status)}
                 </td>
               </tr>

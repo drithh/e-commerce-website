@@ -1,8 +1,8 @@
 include .env
 
-APP=docker-compose run backend
-EXEC=docker-compose exec backend
-MIGRATE=docker-compose run --rm backend poetry run alembic
+APP=docker compose run backend
+EXEC=docker compose exec backend
+MIGRATE=docker compose run --rm backend poetry run alembic
 
 seed:
 	$(EXEC) poetry run python -m app.seeders.seeder
@@ -15,14 +15,8 @@ create-apptest:
 	docker compose exec postgres createdb apptest -U postgres
 	docker compose exec postgres psql -U postgres -d apptest -f docker-entrypoint-initdb.d/extension.sql
 
-test-api:
-	docker compose exec backend pytest tests/api
-
-test-model:
-	docker compose exec backend pytest tests/models
-
 test:
-	docker compose exec backend pytest
+	docker compose exec backend pytest tests/$(filter-out $@,$(MAKECMDGOALS))
 
 migrate-up:
 		$(MIGRATE) upgrade head
@@ -35,3 +29,6 @@ create:
 
 pre-commit:
 		pre-commit run --all-files
+
+docker:
+		docker compose -f docker-compose.yml -f docker-compose.prod.yml $(filter-out $@,$(MAKECMDGOALS))

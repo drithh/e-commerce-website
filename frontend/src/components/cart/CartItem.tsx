@@ -1,17 +1,18 @@
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { HiOutlineShoppingBag } from 'react-icons/hi';
+import { useNavigate } from 'react-router-dom';
 
-import Button from "../button/Button";
-import { HiOutlineShoppingBag } from "react-icons/hi";
-import Item from "./Item";
-import { roundDecimal, convertToCurrency } from "../util/utilFunc";
-import { useCart } from "../../context/CartContext";
-import { useNavigate } from "react-router-dom";
+import { Dialog, Transition } from '@headlessui/react';
+
+import { useCart } from '../../context/CartContext';
+import Button from '../button/Button';
+import { convertToCurrency, roundDecimal } from '../util/utilFunc';
+import Item from './Item';
 
 export default function CartItem() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [animate, setAnimate] = useState("");
+  const [animate, setAnimate] = useState('');
   const { cart, updateCartItem, deleteCartItem } = useCart();
 
   let subtotal = 0;
@@ -20,11 +21,9 @@ export default function CartItem() {
     return acc + item.details.quantity;
   }, 0);
 
-  // count total number of items in cart
-
   const handleAnimate = useCallback(() => {
     if (noOfItems === 0) return;
-    setAnimate("animate__animated animate__headShake");
+    setAnimate('animate__animated animate__headShake');
     // setTimeout(() => {
     //   setAnimate("");
     // }, 0.1);
@@ -34,7 +33,7 @@ export default function CartItem() {
   useEffect(() => {
     handleAnimate();
     setTimeout(() => {
-      setAnimate("");
+      setAnimate('');
     }, 1000);
   }, [handleAnimate]);
 
@@ -50,7 +49,7 @@ export default function CartItem() {
     <>
       <div className="relative">
         <button type="button" onClick={openModal} aria-label="Cart">
-          <HiOutlineShoppingBag className="h-8 w-8 sm:h-6 sm:w-6" />
+          <HiOutlineShoppingBag className="-mb-[5px] h-8 w-8 sm:h-6 sm:w-6" />
           {noOfItems > 0 && (
             <span
               className={`${animate} absolute -top-3 rounded-full bg-gray-500 py-1 px-2 text-xs text-gray-100`}
@@ -99,8 +98,8 @@ export default function CartItem() {
               leaveTo="translate-x-full"
             >
               <div
-                style={{ height: "100vh" }}
-                className="dur relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
+                style={{ height: '100vh' }}
+                className="relative inline-block h-screen w-full max-w-md transform overflow-hidden bg-white text-left align-middle shadow-xl transition-all"
               >
                 <div className="bg-lightgreen flex items-center justify-between p-6">
                   <h3 className="text-xl">Cart ({noOfItems})</h3>
@@ -108,32 +107,30 @@ export default function CartItem() {
                     type="button"
                     className="text-3xl outline-none focus:outline-none sm:text-2xl"
                     onClick={closeModal}
-                  >
-                    &#10005;
-                  </button>
+                  ></button>
                 </div>
 
-                <div className="h-full flex flex-col place-content-between">
-                  <div className="itemContainer w-full flex-shrink flex-grow px-4 overflow-y-scroll">
+                <div className="flex h-full flex-col place-content-between">
+                  <div className="itemContainer w-full flex-shrink flex-grow overflow-y-scroll px-4">
                     {cart.data.map((item) => {
-                      subtotal += item.price * item.details.quantity!;
+                      subtotal += item.price * item.details.quantity;
                       return (
                         <Item
                           key={item.id}
                           name={item.name}
-                          price={item.price * item.details.quantity!}
-                          quantity={item.details.quantity!}
+                          price={item.price * item.details.quantity}
+                          quantity={item.details.quantity}
                           size={item.details.size}
-                          img={item.image as string}
+                          img={item.image}
                           onAdd={() => {
                             updateCartItem?.mutate({
-                              cart_id: item.id,
+                              id: item.id,
                               quantity: 1,
                             });
                           }}
                           onRemove={() => {
                             updateCartItem?.mutate({
-                              cart_id: item.id,
+                              id: item.id,
                               quantity: -1,
                             });
                           }}
@@ -152,11 +149,11 @@ export default function CartItem() {
                       <span>{convertToCurrency(roundDecimal(subtotal))}</span>
                     </div>
                     <Button
-                      value={"Checkout"}
+                      value={'Checkout'}
                       onClick={() => {
-                        navigate("/checkout");
+                        navigate('/checkout');
                       }}
-                      disabled={cart.data.length < 1 ? true : false}
+                      disabled={cart.data.length < 1}
                       extraClass="text-center"
                       size="lg"
                     />

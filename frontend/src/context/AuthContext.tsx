@@ -1,10 +1,15 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
-import { OpenAPI, AuthenticationService, UserRead } from "../api";
-import { toast } from "react-toastify";
-import { UseMutationResult, useQuery } from "react-query";
-import Cookies from "js-cookie";
-import { useMutation } from "react-query";
+import {
+  OpenAPI,
+  AuthenticationService,
+  UserRead,
+  DefaultResponse,
+} from '../api';
+import { UseMutationResult, useQuery } from 'react-query';
+import Cookies from 'js-cookie';
+import { useMutation } from 'react-query';
+import { toast } from 'react-toastify';
 
 export type authType = {
   role: string;
@@ -29,10 +34,21 @@ export type authType = {
     },
     unknown
   >;
+  forgotPassword?: UseMutationResult<DefaultResponse, unknown, string, unknown>;
+  resetPassword?: UseMutationResult<
+    DefaultResponse,
+    unknown,
+    {
+      email: string;
+      token: string;
+      password: string;
+    },
+    unknown
+  >;
   logout?: () => void;
 };
 
-const AuthContext = createContext<authType>({ role: "none" });
+const AuthContext = createContext<authType>({ role: 'none' });
 
 export const useAuth = () => useContext(AuthContext);
 
@@ -46,10 +62,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 };
 
 const useProvideAuth = () => {
-  const [role, setRole] = useState("none");
+  const [role, setRole] = useState('none');
 
   const { refetch } = useQuery(
-    "authentication",
+    'authentication',
     () => AuthenticationService.getRole(),
     {
       retry: false,
@@ -57,9 +73,8 @@ const useProvideAuth = () => {
       refetchOnMount: false,
       staleTime: Infinity,
       onSuccess: (data) => {
-        toast.success(data.message);
         setRole(data.message);
-        OpenAPI.TOKEN = Cookies.get("token");
+        OpenAPI.TOKEN = Cookies.get('token');
       },
     }
   );
@@ -72,7 +87,8 @@ const useProvideAuth = () => {
       }),
     {
       onSuccess: (data) => {
-        Cookies.set("token", data.access_token);
+        toast.success(`Welcome back ${data.user_information.name}!`);
+        Cookies.set('token', data.access_token);
         OpenAPI.TOKEN = data.access_token;
         refetch();
       },
@@ -94,16 +110,30 @@ const useProvideAuth = () => {
       }),
     {
       onSuccess: (data) => {
-        Cookies.set("token", data.access_token);
+        Cookies.set('token', data.access_token);
+        toast.success(`Welcome ${data.user_information.name}!`);
         OpenAPI.TOKEN = data.access_token;
         refetch();
       },
     }
   );
 
+  const forgotPassword = useMutation((email: string) =>
+    AuthenticationService.forgotPassword(email)
+  );
+
+  const resetPassword = useMutation(
+    (variables: { email: string; token: string; password: string }) =>
+      AuthenticationService.resetPassword({
+        email: variables.email,
+        token: variables.token,
+        password: variables.password,
+      })
+  );
+
   const logout = () => {
-    Cookies.remove("token");
-    OpenAPI.TOKEN = "";
+    Cookies.remove('token');
+    OpenAPI.TOKEN = '';
     refetch();
   };
 
@@ -113,6 +143,8 @@ const useProvideAuth = () => {
     login,
     refetch,
     register,
+    forgotPassword,
+    resetPassword,
     logout,
   };
 };

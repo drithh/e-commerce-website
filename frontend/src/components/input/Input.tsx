@@ -1,6 +1,6 @@
-import { FC, FormEvent } from "react";
+import { FC, FormEvent } from 'react';
 
-type Props = {
+interface Props {
   type?: string;
   name: string;
   placeholder?: string;
@@ -12,16 +12,16 @@ type Props = {
   onChange?: (e: FormEvent<HTMLInputElement>) => void;
   value?: string;
   readOnly?: boolean;
-};
+}
 
 const Input: FC<Props> = ({
-  type = "text",
+  type = 'text',
   name,
   placeholder,
   extraClass,
   required = false,
-  border = "",
-  label = "",
+  border = '',
+  label = '',
   onChange,
   value,
   readOnly = false,
@@ -30,7 +30,7 @@ const Input: FC<Props> = ({
     type={type}
     readOnly={readOnly}
     className={`${
-      border !== "" ? border : "border-2 border-gray-500"
+      border !== '' ? border : 'border-2 border-gray-500'
     } py-2 px-4 outline-none ${extraClass}`}
     name={name}
     placeholder={placeholder}

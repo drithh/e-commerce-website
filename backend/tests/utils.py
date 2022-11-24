@@ -2,8 +2,7 @@ import secrets
 import string
 from typing import Any
 
-from fastapi_users.jwt import generate_jwt
-
+from app.deps.authentication import create_access_token
 from app.models.user import User
 
 
@@ -12,4 +11,4 @@ def generate_random_string(length: int) -> str:
 
 
 def get_jwt_header(user: User) -> Any:
-    return {"Authorization": f"Bearer {generate_jwt(user)}"}
+    return {"Authorization": f"Bearer {create_access_token({'sub': user.email})}"}

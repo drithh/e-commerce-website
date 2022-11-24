@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.logger import logger
@@ -13,12 +14,13 @@ from app.models.category import Category
 from app.models.image import Image
 from app.models.user import User
 from app.schemas.category import (
+    CreateCategory,
     DeleteCategory,
     DetailCategory,
     GetCategory,
     UpdateCategory,
 )
-from app.schemas.request_params import DefaultResponse
+from app.schemas.default_model import DefaultResponse
 
 router = APIRouter()
 
@@ -26,10 +28,10 @@ router = APIRouter()
 @router.get("", response_model=GetCategory, status_code=status.HTTP_200_OK)
 def get_category(
     session: Generator = Depends(get_db),
-):
+) -> JSONResponse:
     categories = session.query(Category).all()
 
-    if not categories:
+    if len(categories) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="There are no categories",
@@ -40,10 +42,10 @@ def get_category(
 
 @router.get("/detail", response_model=DetailCategory, status_code=status.HTTP_200_OK)
 def get_detail_category(
-    category_id: UUID,
+    id: UUID,
     session: Generator = Depends(get_db),
-):
-    category = session.query(Category).filter(Category.id == category_id).first()
+) -> JSONResponse:
+    category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -55,12 +57,12 @@ def get_detail_category(
 
 @router.post("", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED)
 def create_category(
+    request: CreateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-    category_name: str = Query(..., min_length=2, max_length=100),
-):
+) -> JSONResponse:
     try:
-        session.add(Category(title=category_name))
+        session.add(Category(**request.dict()))
         session.commit()
     except Exception as e:
         logger.error(format_error(e))
@@ -68,19 +70,19 @@ def create_category(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=format_error(e),
         )
-    logger.info(f"Category {category_name} created by {current_user.name}")
+    logger.info(f"Category {request.title} created by {current_user.name}")
 
     return DefaultResponse(message="Category added")
 
 
 @router.put("", response_model=DefaultResponse, status_code=status.HTTP_200_OK)
 def update_category(
-    category_id: UUID,
+    id: UUID,
     request: UpdateCategory,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-):
-    category = session.query(Category).filter(Category.id == category_id).first()
+) -> JSONResponse:
+    category = session.query(Category).filter(Category.id == id).first()
     if not category:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -101,7 +103,7 @@ def delete_category(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
     category_id: DeleteCategory = Depends(DeleteCategory),
-):
+) -> JSONResponse:
     try:
         session.query(Category).filter(Category.id == category_id.id).delete()
         session.commit()

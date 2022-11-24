@@ -1,51 +1,69 @@
-import { Fragment, useState, FC } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { IoCloseOutline } from "react-icons/io5";
-import Login from "./Login";
-import Register from "./Register";
-import ForgotPassword from "./ForgotPassword";
-type CurrentPage = "login" | "register" | "forgot-password";
+import { FC, Fragment, useState } from 'react';
+import { IoCloseOutline } from 'react-icons/io5';
 
-type Props = {
+import { Dialog, Transition } from '@headlessui/react';
+
+import ForgotPassword from './ForgotPassword';
+import Login from './Login';
+import Register from './Register';
+import ResetPassword from './ResetPassword';
+type CurrentPage = 'login' | 'register' | 'forgot-password' | 'reset-password';
+
+interface Props {
   extraClass?: string;
   children: any;
-};
+}
 
 const LoginForm: FC<Props> = ({ extraClass, children }) => {
-  const [currentPage, setCurrentPage] = useState<CurrentPage>("login");
+  const [currentPage, setCurrentPage] = useState<CurrentPage>('login');
+  const [emailForReset, setEmailForReset] = useState('');
   const [open, setOpen] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [errorMsg, setErrorMsg] = useState('');
 
   let modalBox: JSX.Element;
 
-  if (currentPage === "login") {
+  if (currentPage === 'login') {
     modalBox = (
       <Login
-        onRegister={() => setCurrentPage("register")}
-        onForgotPassword={() => setCurrentPage("forgot-password")}
+        onRegister={() => setCurrentPage('register')}
+        onForgotPassword={() => setCurrentPage('forgot-password')}
         closeModal={closeModal}
       />
     );
-  } else if (currentPage === "register") {
+  } else if (currentPage === 'register') {
     modalBox = (
       <Register
-        onLogin={() => setCurrentPage("login")}
+        onLogin={() => setCurrentPage('login')}
         closeModal={closeModal}
       />
     );
-  } else {
+  } else if (currentPage === 'forgot-password') {
     modalBox = (
       <ForgotPassword
-        onLogin={() => setCurrentPage("login")}
+        setEmailForReset={setEmailForReset}
+        onLogin={() => setCurrentPage('login')}
+        onResetPassword={() => setCurrentPage('reset-password')}
         errorMsg={errorMsg}
         setErrorMsg={setErrorMsg}
       />
     );
+  } else if (currentPage === 'reset-password') {
+    modalBox = (
+      <ResetPassword
+        emailForReset={emailForReset}
+        onLogin={() => setCurrentPage('login')}
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        closeModal={closeModal}
+      />
+    );
+  } else {
+    modalBox = <div>404</div>;
   }
 
   function closeModal() {
     setOpen(false);
-    setErrorMsg("");
+    setErrorMsg('');
   }
 
   function openModal() {

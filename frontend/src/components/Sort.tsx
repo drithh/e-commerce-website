@@ -1,19 +1,20 @@
-import { useQuery } from "react-query";
-import { CategoryService, Pagination } from "../api";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
-import { capitalCase } from "change-case";
-import { CiDollar } from "react-icons/ci";
-import Dropdown from "../components/Dropdown";
-import { useRef } from "react";
-const pluralize = require("pluralize");
+import { useEffect, useRef } from 'react';
+import { CiDollar } from 'react-icons/ci';
+import { useQuery } from 'react-query';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+
+import { capitalCase } from 'change-case';
+
+import { CategoryService, Pagination } from '../api';
+import Dropdown from '../components/Dropdown';
+const pluralize = require('pluralize');
 
 interface TypeParams {
-  category: Array<string>;
+  category: string[];
   page: number;
   pageSize: number;
   sortBy: string;
-  price: Array<number>;
+  price: number[];
   condition: string;
   productName: string;
 }
@@ -30,51 +31,55 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
   const popping = useRef(false);
   useEffect(() => {
     window.onpopstate = () => {
-      if (!window.location.pathname.includes("product")) return;
+      if (!window.location.pathname.includes('product')) return;
       setParams({
-        category: searchParams.getAll("category"),
-        page: Number(searchParams.get("page")) || 1,
-        pageSize: Number(searchParams.get("page_size")) || 12,
-        sortBy: searchParams.get("sort_by") || "Title a_z",
-        price: searchParams.getAll("price").map((price) => Number(price)),
-        condition: searchParams.get("condition") || "",
-        productName: searchParams.get("product_name") || "",
+        category: searchParams.getAll('category'),
+        page: Number(searchParams.get('page')) || 1,
+        pageSize: Number(searchParams.get('page_size')) || 12,
+        sortBy: searchParams.get('sort_by') || 'Title a_z',
+        price: searchParams.getAll('price').map((price) => Number(price)),
+        condition: searchParams.get('condition') || '',
+        productName: searchParams.get('product_name') || '',
       });
     };
     popping.current = true;
   }, [setParams, searchParams]);
 
   const fetchCategories = useQuery(
-    "categories",
+    'categories',
     () => CategoryService.getCategory(),
     {
       staleTime: Infinity,
     }
   );
 
-  const conditions = ["new", "used"];
+  const conditions = ['new', 'used'];
 
   useEffect(() => {
     const requestParams = new URLSearchParams();
-    requestParams.append("page", params.page.toString());
-    requestParams.append("page_size", params.pageSize.toString());
-    requestParams.append("sort_by", params.sortBy);
+    requestParams.append('page', params.page.toString());
+    requestParams.append('page_size', params.pageSize.toString());
+    requestParams.append('sort_by', params.sortBy);
+
+    if (searchParams.get('searchImage') !== null) {
+      params.category = searchParams.getAll('category');
+    }
     params.category.forEach((single_category) => {
-      requestParams.append("category", single_category);
+      requestParams.append('category', single_category);
     });
     params.price.forEach((single_price) => {
       if (single_price) {
-        requestParams.append("price", single_price.toString());
+        requestParams.append('price', single_price.toString());
       }
     });
     if (params.condition.length > 0) {
-      requestParams.append("condition", params.condition);
+      requestParams.append('condition', params.condition);
     }
     if (params.productName.length > 0) {
-      requestParams.append("product_name", params.productName);
+      requestParams.append('product_name', params.productName);
     }
     if (
-      searchParams.toString() === "" ||
+      searchParams.toString() === '' ||
       searchParams.toString() === requestParams.toString() ||
       popping.current
     ) {
@@ -91,30 +96,33 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
     return <div>Loading...</div>;
   }
 
-  if (fetchCategories.isError || !fetchCategories.data) {
+  if (fetchCategories.isError || fetchCategories.data == null) {
     return <div>Error...</div>;
   }
 
   const categories = fetchCategories.data.data;
-  const categoriesByType = categories.reduce((acc, category) => {
-    const { type } = category;
-    if (!acc[type]) {
-      acc[type] = [];
-    }
-    acc[type].push(category);
-    return acc;
-  }, {} as Record<string, Array<any>>);
+  const categoriesByType = categories.reduce<Record<string, any[]>>(
+    (acc, category) => {
+      const { type } = category;
+      if (!acc[type]) {
+        acc[type] = [];
+      }
+      acc[type].push(category);
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className="flex w-full  flex-col text-gray-600">
       <div className="border-b border-b-gray-100 px-4 py-5 ">
-        {pagination && pagination.total_item > 0 ? (
+        {pagination != null && pagination.total_item > 0 ? (
           <span>
-            Showing {1 + (pagination.page - 1) * pagination.page_size} -{" "}
+            Showing {1 + (pagination.page - 1) * pagination.page_size} -{' '}
             {Math.min(
               pagination.page * pagination.page_size,
               pagination.total_item
-            )}{" "}
+            )}{' '}
             of {pagination.total_item} Results
           </span>
         ) : (
@@ -125,7 +133,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
         {Object.entries(categoriesByType).map(([type, categories]) => (
           <div key={type}>
             <h2 className="mb-2 text-xl text-black">
-              {pluralize(capitalCase(type, { delimiter: " & " }))}
+              {pluralize(capitalCase(type, { delimiter: ' & ' }))}
             </h2>
             <ul className="flex flex-col gap-y-2">
               {categories.map((category) => (
@@ -203,7 +211,7 @@ const Sort: React.FC<SortProps> = ({ params, setParams, pagination }) => {
               defaultValue={params.price[1]}
               className="h-5 w-full"
               onBlur={(e) => {
-                let value = e.target.value;
+                const value = e.target.value;
                 if (!value) {
                   setParams((prev) => ({
                     ...prev,

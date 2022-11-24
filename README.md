@@ -87,7 +87,7 @@ make seed
 
 Now you can navigate to the following URLs:
 
-- Backend: http://localhost:8000/api/v1
+- Backend: http://localhost:8000/v1
 - Backend OpenAPI docs: http://localhost:8000/docs/
 - Frontend: http://localhost:3000
 

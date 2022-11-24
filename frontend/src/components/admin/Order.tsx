@@ -1,19 +1,21 @@
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { ApiError, OrderService } from "../../api";
-import Button from "../button/Button";
-import { toast } from "react-toastify";
-import Dropdown from "../input/Dropdown";
-import dayjs from "dayjs";
-import { capitalCase } from "change-case";
-import { convertToCurrency } from "../util/utilFunc";
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { useMutation, useQuery } from 'react-query';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { capitalCase } from 'change-case';
+import dayjs from 'dayjs';
+
+import { ApiError, OrderService } from '../../api';
+import Button from '../button/Button';
+import Dropdown from '../input/Dropdown';
+import { convertToCurrency } from '../util/utilFunc';
 
 const Order = () => {
   const { id } = useParams();
-  const [status, setStatus] = useState("");
-  const statusOptions = ["processed", "shipped", "cancelled", "completed"];
+  const [status, setStatus] = useState('');
+  const statusOptions = ['processed', 'shipped', 'cancelled', 'completed'];
 
   const updateOrder = useMutation(
     (variables: { id: string; status: string }) =>
@@ -21,6 +23,7 @@ const Order = () => {
     {
       onSuccess: (data) => {
         toast.success(data.message);
+        fetchOrder.refetch();
       },
       onError: (error) => {
         toast.error((error as ApiError).body.message);
@@ -29,7 +32,7 @@ const Order = () => {
   );
 
   const fetchOrder = useQuery(
-    ["order", id],
+    ['order', id],
     () => OrderService.getOrderDetails(id as string),
     {
       refetchOnWindowFocus: false,
@@ -45,13 +48,13 @@ const Order = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateOrder.mutate({ id: id as string, status });
+    updateOrder.mutate({ id, status });
   };
 
   return (
     <>
       <h2 className="w-full text-2xl font-medium">Update Order</h2>
-      <div className="py-3 flex ">
+      <div className="flex py-3 ">
         <Link to="/admin/orders" className="flex place-items-center  gap-x-2">
           <HiOutlineChevronLeft className="text-xl" />
           Go Back
@@ -61,18 +64,18 @@ const Order = () => {
         className="information flex w-full flex-col gap-y-4 py-4 text-lg text-gray-700 "
         onSubmit={handleSubmit}
       >
-        <div className="border-gray-500 border w-full p-6 pb-4">
-          <div className="flex w-full place-content-between mb-6  text-gray-400 uppercase text-[1.05rem]">
+        <div className="w-full border border-gray-500 p-6 pb-4">
+          <div className="mb-6 flex w-full place-content-between  text-[1.05rem] uppercase text-gray-400">
             <div>
               {dayjs(fetchOrder.data?.created_at).format(
-                "dddd, MMMM D YYYY, h:mm A"
+                'dddd, MMMM D YYYY, h:mm A'
               )}
             </div>
             <div className="tracking-wider">
-              {capitalCase(fetchOrder.data?.status || "")}
+              {capitalCase(fetchOrder.data?.status || '')}
             </div>
           </div>
-          <div className=" grid grid-cols-2 mb-6  text-gray-700 border-gray-100 pb-6 border-b-2 ">
+          <div className=" mb-6 grid grid-cols-2  border-b-2 border-gray-100 pb-6 text-gray-700 ">
             <div className="w-64">
               <p className="font-semibold">Customer</p>
               <p className="">{fetchOrder.data?.name}</p>
@@ -96,22 +99,22 @@ const Order = () => {
             </div>
           </div>
         </div>
-        <div className="w-full whitespace-nowrap px-8 pt-4 pb-8 border border-gray-500">
+        <div className="w-full whitespace-nowrap border border-gray-500 px-8 pt-4 pb-8">
           <div>
-            <tr className="border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4">
-              <th className="py-2 text-left font-semibold table-cell flex-[3]">
+            <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
+              <th className="table-cell flex-[3] py-2 text-left font-semibold">
                 Product
               </th>
-              <th className="py-2 text-left font-semibold table-cell flex-1">
+              <th className="table-cell flex-1 py-2 text-left font-semibold">
                 Size
               </th>
-              <th className="py-2 text-left font-semibold table-cell flex-1">
+              <th className="table-cell flex-1 py-2 text-left font-semibold">
                 Quantity
               </th>
-              <th className="py-2 text-left font-semibold table-cell flex-[1.5]">
+              <th className="table-cell flex-[1.5] py-2 text-left font-semibold">
                 Unit Price
               </th>
-              <th className="py-2 text-left font-semibold table-cell flex-[1.5]">
+              <th className="table-cell flex-[1.5] py-2 text-left font-semibold">
                 Total
               </th>
             </tr>
@@ -121,22 +124,22 @@ const Order = () => {
               return product.details.map((detail, index) => {
                 return (
                   <tr
-                    className=" border-b-2 flex pl-4  border-gray-200  w-full place-content-evenly gap-x-4 "
+                    className=" flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4 "
                     key={index}
                   >
-                    <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[3]">
+                    <td className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
                       {product.name}
                     </td>
-                    <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
+                    <td className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
                       {detail.size}
                     </td>
-                    <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-1">
+                    <td className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
                       {detail.quantity}
                     </td>
-                    <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[1.5]">
+                    <td className="table-cell flex-[1.5] overflow-hidden text-ellipsis py-2 text-left font-normal">
                       {convertToCurrency(product.price)}
                     </td>
-                    <td className="py-2 text-left font-normal overflow-hidden text-ellipsis table-cell flex-[1.5]">
+                    <td className="table-cell flex-[1.5] overflow-hidden text-ellipsis py-2 text-left font-normal">
                       {convertToCurrency(product.price * detail.quantity)}
                     </td>
                   </tr>
@@ -145,10 +148,10 @@ const Order = () => {
             })}
           </div>
         </div>
-        <div className="w-full whitespace-nowrap pl-12 pr-24 py-6 border border-gray-500">
-          <div className="flex py">
-            <p className="font-semibold flex-[7]">Sum Product</p>
-            <p className="text-left flex-1">
+        <div className="w-full whitespace-nowrap border border-gray-500 py-6 pl-12 pr-24">
+          <div className="py flex">
+            <p className="flex-[7] font-semibold">Sum Product</p>
+            <p className="flex-1 text-left">
               {convertToCurrency(
                 fetchOrder.data?.products.reduce((a, b) => {
                   return (
@@ -158,15 +161,15 @@ const Order = () => {
               )}
             </p>
           </div>
-          <div className="flex pt-2 pb-4 mb-4 border-b-2 border-gray-100">
-            <p className="font-semibold flex-[7]">Shipping Fee</p>
-            <p className="text-left flex-1">
+          <div className="mb-4 flex border-b-2 border-gray-100 pt-2 pb-4">
+            <p className="flex-[7] font-semibold">Shipping Fee</p>
+            <p className="flex-1 text-left">
               {convertToCurrency(fetchOrder.data?.shipping_price || 0)}
             </p>
           </div>
           <div className="flex">
-            <p className="font-semibold flex-[7]">Total</p>
-            <p className="text-left flex-1">
+            <p className="flex-[7] font-semibold">Total</p>
+            <p className="flex-1 text-left">
               {convertToCurrency(
                 (fetchOrder.data?.products.reduce((a, b) => {
                   return (

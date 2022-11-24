@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TUTU ORDER</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        text-align: justify;
+      }
+    </style>
+  </head>
+  <body
+    style="
+      max-width: 600px;
+      margin: 0 auto;
+      font-size: 16px;
+      font-family: Helvetica, Arial, sans-serif;
+      border: 2px solid #686868;
+      color: #374251;
+      padding: 24px 28px 36px 28px;
+    "
+  >
+    <table role="presentation" style="margin: 0 !important">
+      <tr>
+        <td
+          style="
+            width: 100%;
+            text-align: center;
+            padding: 6px 0;
+            border-bottom: 2px solid #eeeef1;
+          "
+        >
+          <img
+            style="width: 100px"
+            src="https://storage.googleapis.com/startup-campus/logo.png"
+            alt="logo"
+          />
+        </td>
+      </tr>
+
+      <tr style="margin-bottom: 4px; font-weight: 600">
+        <td style="padding: 12px 0">Hi, {{name}}</td>
+      </tr>
+      <tr>
+        <td style="padding-bottom: 16px; border-bottom: 2px solid #eeeef1">
+          Your order has been processed by the TUTU team and will be delivered
+          within a few days, please wait for a bit and keep checking on the
+          status of your package. If you have any questions, please feel free to
+          contact us. We are always happy to help!
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="
+            padding-bottom: 16px;
+            margin: 16px 0;
+            border-bottom: 2px solid #eeeef1;
+          "
+        >
+          <table style="width: 100%">
+            <tr>
+              <td
+                style="
+                  padding-bottom: 16px;
+                  font-weight: 700;
+                  margin-bottom: 4px;
+                  text-transform: uppercase;
+                "
+              >
+                Order Details
+              </td>
+            </tr>
+
+            <tr>
+              <td style="width: 50%">Order Time:</td>
+              <td>{{order_time}}</td>
+            </tr>
+            <tr>
+              <td>Shipping Method:</td>
+              <td>{{ shipping_method }}</td>
+            </tr>
+            <tr>
+              <td>Shipping Address:</td>
+              <td>{{shipping_address}}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td
+          style="
+            padding-bottom: 16px;
+            margin: 16px 0;
+            border-bottom: 2px solid #eeeef1;
+          "
+        >
+          {% for item in order_items %}
+          <table style="width: 100%">
+            <tr>
+              <td style="padding-bottom: 8px; font-weight: 600">
+                {{ item.title }}
+              </td>
+            </tr>
+            <tr>
+              <td style="width: 50%">Brand:</td>
+              <td>{{ item.brand }}</td>
+            </tr>
+            <tr>
+              <td>Condition:</td>
+              <td>{{ item.condition }}</td>
+            </tr>
+
+            <tr>
+              <td>Size:</td>
+              <td>{{ item.size }}</td>
+            </tr>
+            <tr>
+              <td>Quantity:</td>
+              <td>{{ item.quantity }}</td>
+            </tr>
+            <tr>
+              <td>Price:</td>
+              <td>Rp {{ item.price }}</td>
+            </tr>
+          </table>
+          {% endfor %}
+        </td>
+      </tr>
+      <tr>
+        <td style="border-bottom: 2px solid #eeeef1">
+          <table style="width: 100%; margin: 16px 0">
+            <tr>
+              <td style="width: 50%">Sub Total:</td>
+              <td>Rp {{ subtotal }}</td>
+            </tr>
+            <tr>
+              <td>Shipping Price:</td>
+              <td>Rp {{ shipping_price }}</td>
+            </tr>
+            <tr>
+              <td>Total:</td>
+              <td>Rp {{ total }}</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <h4
+            style="
+              font-weight: 700;
+              margin-bottom: 4px;
+              text-transform: uppercase;
+            "
+          >
+            Next Steps
+          </h4>
+          <div style="margin-bottom: 24px">
+            <p style="margin-bottom: 4px">
+              If you encounter any errors or problems with your order, please
+              feel free to contact our customer service department for
+              assistance in resolving these issues. We are always willing to
+              help where we can to ensure that every customer's needs are met.
+            </p>
+            <p style="margin-bottom: 4px">
+              We wish you a happy shopping at TUTU!
+            </p>
+          </div>
+          <div style="width: 100%; text-align: center; margin-bottom: 16px">
+            <button
+              style="
+                padding: 12px 24px;
+                line-height: 12px;
+                border-width: 2px;
+                background-color: #282828;
+                color: #eeeef1;
+                cursor: pointer;
+              "
+            >
+              Customer Service Tutu
+            </button>
+          </div>
+          <div style="margin-bottom: 12px">
+            <p style="padding: 0; margin: 4px 0">Kind regards,</p>
+            <b style="padding: 0; margin: 0">TUTU Team</b>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

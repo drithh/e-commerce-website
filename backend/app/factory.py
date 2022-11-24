@@ -4,20 +4,20 @@ from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import JSONResponse, PlainTextResponse
 from fastapi.routing import APIRoute
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import FileResponse
 
 from app.api import (
+    admins,
     authentications,
     carts,
     categories,
-    dashboards,
     homes,
-    images,
     orders,
     products,
-    sales,
+    searches,
     users,
     wishlists,
 )
@@ -30,10 +30,12 @@ def create_app():
     description = f"{settings.PROJECT_NAME} API"
     app = FastAPI(
         title=settings.PROJECT_NAME,
+        servers=[{"url": settings.REACT_APP_BACKEND_URL}],
         openapi_url=f"{settings.API_PATH}/openapi.json",
-        docs_url="/docs/",
+        docs_url="/swagger",
         description=description,
-        redoc_url="/redoc/",
+        version=settings.VERSION,
+        redoc_url="/redoc",
     )
 
     @app.exception_handler(StarletteHTTPException)
@@ -82,9 +84,9 @@ def setup_routers(app: FastAPI) -> None:
         tags=["Wishlist"],
     )
     app.include_router(
-        images.router,
-        prefix=f"{settings.API_PATH}/image",
-        tags=["Image"],
+        searches.router,
+        prefix=f"{settings.API_PATH}",
+        tags=["Search"],
     )
     app.include_router(
         homes.router,
@@ -107,18 +109,13 @@ def setup_routers(app: FastAPI) -> None:
         tags=["Cart"],
     )
     app.include_router(
-        sales.router,
-        prefix=f"{settings.API_PATH}",
-        tags=["Sales"],
-    )
-    app.include_router(
         orders.router,
         prefix=f"{settings.API_PATH}",
         tags=["Order"],
     )
     app.include_router(
-        dashboards.router,
-        prefix=f"{settings.API_PATH}/dashboard",
+        admins.router,
+        prefix=f"{settings.API_PATH}/admin",
         tags=["Dashboard"],
     )
 
@@ -128,16 +125,21 @@ def setup_routers(app: FastAPI) -> None:
 
 def serve_static_app(app):
     app.mount("/", StaticFiles(directory="static"), name="static")
+    templates = Jinja2Templates(directory="static")
 
     @app.middleware("http")
     async def _add_404_middleware(request: Request, call_next):
         """Serves static assets on 404"""
         response = await call_next(request)
         path = request["path"]
-        if path.startswith(settings.API_PATH) or path.startswith("/docs"):
+        if path.startswith(settings.API_PATH):
             return response
         if response.status_code == 404:
-            return FileResponse("static/index.html")
+            # remove path and query string
+            return templates.TemplateResponse(
+                "index.html",
+                {"request": request, "host": settings.REACT_APP_BACKEND_URL},
+            )
         return response
 
 

@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ApiRequestOptions } from "./ApiRequestOptions";
-import type { ApiResult } from "./ApiResult";
+import type { ApiRequestOptions } from './ApiRequestOptions';
+import type { ApiResult } from './ApiResult';
 
 export class ApiError extends Error {
   public readonly url: string;
@@ -18,7 +18,7 @@ export class ApiError extends Error {
   ) {
     super(message);
 
-    this.name = "ApiError";
+    this.name = 'ApiError';
     this.url = response.url;
     this.status = response.status;
     this.statusText = response.statusText;

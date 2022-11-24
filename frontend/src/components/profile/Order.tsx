@@ -1,14 +1,16 @@
-import { useMutation, useQuery } from "react-query";
-import { OrderService } from "../../api";
-import dayjs from "dayjs";
-import { capitalCase } from "change-case";
-import { BsTruck, BsBoxSeam } from "react-icons/bs";
-import { IoMdCheckmark } from "react-icons/io";
-import GhostButton from "../button/GhostButton";
-import { toast } from "react-toastify";
-import OrderProducts from "./OrderProducts";
-import Pagination from "../Pagination";
-import { useState } from "react";
+import { useState } from 'react';
+import { BsBoxSeam, BsTruck } from 'react-icons/bs';
+import { IoMdCheckmark } from 'react-icons/io';
+import { useMutation, useQuery } from 'react-query';
+import { toast } from 'react-toastify';
+
+import { capitalCase } from 'change-case';
+import dayjs from 'dayjs';
+
+import { OrderService } from '../../api';
+import GhostButton from '../button/GhostButton';
+import Pagination from '../Pagination';
+import OrderProducts from './OrderProducts';
 
 interface DefaultParams {
   page: number;
@@ -21,7 +23,7 @@ const Order = () => {
     pageSize: 5,
   });
 
-  const fetchOrder = useQuery(["orders", params], () =>
+  const fetchOrder = useQuery(['orders', params], () =>
     OrderService.getOrdersUser(params.page, params.pageSize)
   );
 
@@ -48,9 +50,9 @@ const Order = () => {
       {fetchOrder.data?.data.map((order) => (
         <div key={order.id}>
           <div className="w-full border-2 border-gray-400 p-8  text-gray-600">
-            <div className="flex w-full place-content-between mb-4 pb-4  text-gray-400 uppercase text-[1.05rem]">
+            <div className="mb-4 flex w-full place-content-between pb-4  text-[1.05rem] uppercase text-gray-400">
               <span>
-                {dayjs(order.created_at).format("dddd, MMMM D YYYY, h:mm A")}
+                {dayjs(order.created_at).format('dddd, MMMM D YYYY, h:mm A')}
               </span>
               <span className="tracking-wider">
                 {capitalCase(order.status)}
@@ -72,11 +74,11 @@ const Order = () => {
             <div className="order-status mx-auto mt-16 flex max-w-[44rem] place-content-between place-items-center py-2 ">
               <div
                 className={`${
-                  order.status === "processed" ||
-                  order.status === "shipped" ||
-                  order.status === "completed"
-                    ? "border-emerald-300 text-emerald-300"
-                    : "border-gray-200 text-gray-200"
+                  order.status === 'processed' ||
+                  order.status === 'shipped' ||
+                  order.status === 'completed'
+                    ? 'border-emerald-300 text-emerald-300'
+                    : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
               >
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
@@ -86,16 +88,16 @@ const Order = () => {
               </div>
               <div
                 className={`${
-                  order.status === "shipped" || order.status === "completed"
-                    ? "bg-emerald-300"
-                    : "bg-gray-200"
+                  order.status === 'shipped' || order.status === 'completed'
+                    ? 'bg-emerald-300'
+                    : 'bg-gray-200'
                 } line mb-7 h-1 w-full`}
               ></div>
               <div
                 className={`${
-                  order.status === "shipped" || order.status === "completed"
-                    ? "border-emerald-300 text-emerald-300"
-                    : "border-gray-200 text-gray-200"
+                  order.status === 'shipped' || order.status === 'completed'
+                    ? 'border-emerald-300 text-emerald-300'
+                    : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
               >
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
@@ -105,16 +107,16 @@ const Order = () => {
               </div>
               <div
                 className={`${
-                  order.status === "completed"
-                    ? "bg-emerald-300"
-                    : "bg-gray-200"
+                  order.status === 'completed'
+                    ? 'bg-emerald-300'
+                    : 'bg-gray-200'
                 } line mb-7 h-1 w-full `}
               ></div>
               <div
                 className={`${
-                  order.status === "completed"
-                    ? "border-emerald-300 text-emerald-300"
-                    : "border-gray-200 text-gray-200"
+                  order.status === 'completed'
+                    ? 'border-emerald-300 text-emerald-300'
+                    : 'border-gray-200 text-gray-200'
                 } status flex flex-col gap-y-2`}
               >
                 <div className="rounded-full border-[3px] border-current p-4  text-4xl">
@@ -125,7 +127,7 @@ const Order = () => {
             </div>
             <div
               className={`${
-                order.status === "shipped" ? "flex" : "hidden"
+                order.status === 'shipped' ? 'flex' : 'hidden'
               } mt-12 place-content-end`}
             >
               <GhostButton onClick={() => completeOrder(order.id)}>

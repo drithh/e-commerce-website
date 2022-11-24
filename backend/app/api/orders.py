@@ -4,18 +4,20 @@ from uuid import UUID
 
 from fastapi import HTTPException, Query, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
 from app.core.logger import logger
 from app.deps.authentication import get_current_active_admin, get_current_active_user
 from app.deps.db import get_db
+from app.deps.send_email import send_checkout_email
 from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
+from app.schemas.default_model import DefaultResponse, Pagination
 from app.schemas.order import CreateOrder, GetAdminOrders, GetDetailOrder, GetUserOrders
-from app.schemas.request_params import DefaultResponse, Pagination
 
 router = APIRouter()
 
@@ -26,7 +28,7 @@ def get_orders_user(
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     orders = session.execute(
         f"""
         SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products,
@@ -55,7 +57,7 @@ def get_orders_user(
             AND product_images.id = (
                 SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
             )
-            JOIN images ON images.id = product_images.image_id
+            LEFT JOIN images ON images.id = product_images.image_id
             WHERE orders.user_id = :user_id
             GROUP BY orders.id, products.id, images.id, order_items.price
         ) order_product
@@ -71,7 +73,7 @@ def get_orders_user(
         },
     ).fetchall()
 
-    if not orders:
+    if len(orders) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="You have no orders",
@@ -88,12 +90,116 @@ def get_orders_user(
     )
 
 
+@router.get(
+    "/orders/{id}", response_model=GetDetailOrder, status_code=status.HTTP_200_OK
+)
+def get_order_details(
+    id: UUID,
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> JSONResponse:
+    order = session.execute(
+        """
+        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city,
+        array_agg(product) products, name, email
+        FROM (
+            SELECT  orders.id, orders.city, orders.created_at, users.name, users.email,
+            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
+            json_build_object(
+                'id', products.id,
+                'details', array_agg(
+                        json_build_object(
+                            'quantity', order_items.quantity,
+                            'size', sizes.size
+                    )
+                ),
+                'price', order_items.price,
+                'name', products.title,
+                'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
+            ) product
+            FROM only orders
+            JOIN order_items ON orders.id = order_items.order_id
+            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
+            JOIN sizes ON product_size_quantities.size_id = sizes.id
+            JOIN products ON product_size_quantities.product_id = products.id
+            LEFT JOIN product_images ON products.id = product_images.product_id
+            AND product_images.id = (
+                SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
+            )
+            LEFT JOIN images ON images.id = product_images.image_id
+            JOIN users ON orders.user_id = users.id
+            WHERE orders.id = :id
+            GROUP BY orders.id, products.id, images.id, users.name, users.email, order_items.price
+        ) order_product
+        group by order_product.id, order_product.created_at, order_product.shipping_method,
+        order_product.shipping_price, order_product.status, order_product.shipping_address,
+        order_product.city, order_product.name, order_product.email
+        """,
+        {
+            "id": id,
+        },
+    ).fetchone()
+
+    if len(order) == 0:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
+        )
+
+    return order
+
+
+@router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)
+def get_orders_admin(
+    sort_by: str = Query("Price a_z", regex="^(Price a_z|Price z_a)$"),
+    page: int = Query(1, ge=1),
+    page_size: int = Query(25, ge=1, le=100),
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_admin),
+) -> JSONResponse:
+    sort = "ASC" if sort_by == "Price a_z" else "DESC"
+    orders = session.execute(
+        f"""
+        SELECT id, title, sizes, created_at, product_detail,
+        email, images_url, user_id, total
+        FROM (
+            SELECT DISTINCT ON (products.id) orders.id, products.title,
+            array_agg( DISTINCT sizes.size) sizes, orders.created_at,
+            products.product_detail, users.email, array_agg( DISTINCT
+            CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) images_url,
+            orders.user_id, SUM(order_items.price) total
+            FROM only orders
+            JOIN order_items ON orders.id = order_items.order_id
+            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
+            JOIN sizes ON product_size_quantities.size_id = sizes.id
+            JOIN products ON product_size_quantities.product_id = products.id
+            LEFT JOIN product_images ON products.id = product_images.product_id
+            LEFT JOIN images ON product_images.image_id = images.id
+            JOIN users ON orders.user_id = users.id
+            GROUP BY orders.id, products.id, users.id
+        ) order_product
+        GROUP BY order_product.id, order_product.title, order_product.created_at, order_product.product_detail,
+        order_product.email, order_product.user_id, order_product.total, sizes, images_url
+        ORDER BY total {sort}
+        LIMIT :page_size OFFSET :offset
+    """,
+        {"page_size": page_size, "offset": (page - 1) * page_size},
+    ).fetchall()
+
+    if not orders:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="No orders found",
+        )
+
+    return GetAdminOrders(data=orders)
+
+
 @router.post("/order", status_code=status.HTTP_201_CREATED)
-def create_order(
+async def create_order(
     request: CreateOrder,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     if request.shipping_address.address_name == "":
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -121,9 +227,10 @@ def create_order(
     cart = session.execute(
         """
         SELECT product_size_quantities.id, product_size_quantities.quantity as stock,
-        carts.quantity, order, products.title
+        carts.quantity, products.title, products.brand, products.condition, products.price, sizes.size
         FROM only carts
         JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
+        JOIN sizes ON product_size_quantities.size_id = sizes.id
         JOIN products ON product_size_quantities.product_id = products.id
         WHERE user_id = :user_id
     """,
@@ -237,8 +344,22 @@ def create_order(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong, when reducing balance",
         )
-
-    return DefaultResponse(message="Order created successfully")
+    if request.send_email:
+        await send_checkout_email(
+            email=current_user.email,
+            name=current_user.name,
+            shipping_address=request.shipping_address.address,
+            shipping_method=request.shipping_method,
+            shipping_price=shipping_price,
+            subtotal=total_price,
+            total=total_price + shipping_price,
+            order_items=cart,
+        )
+        return DefaultResponse(
+            message="Order created successfully And An Email Has Been Sent To You"
+        )
+    else:
+        return DefaultResponse(message="Order created successfully")
 
 
 @router.put(
@@ -248,7 +369,7 @@ def update_order_status(
     order_id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     order = (
         session.query(Order)
         .filter(Order.id == order_id)
@@ -279,7 +400,7 @@ def update_orders(
     status: str = Query(regex="^(processed|shipped|cancelled|completed)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
-):
+) -> JSONResponse:
     order = session.execute(
         """
         SELECT status FROM only orders
@@ -306,106 +427,3 @@ def update_orders(
     logger.info(f"Order {id} updated by {current_user.email}")
 
     return DefaultResponse(message="Order updated")
-
-
-@router.get(
-    "/orders/{id}", response_model=GetDetailOrder, status_code=status.HTTP_200_OK
-)
-def get_order_details(
-    id: UUID,
-    session: Generator = Depends(get_db),
-    current_user: User = Depends(get_current_active_admin),
-):
-    order = session.execute(
-        """
-        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city,
-        array_agg(product) products, name, email
-        FROM (
-            SELECT  orders.id, orders.city, orders.created_at, users.name, users.email,
-            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
-            json_build_object(
-                'id', products.id,
-                'details', array_agg(
-                        json_build_object(
-                            'quantity', order_items.quantity,
-                            'size', sizes.size
-                    )
-                ),
-                'price', order_items.price,
-                'name', products.title,
-                'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
-            ) product
-            FROM only orders
-            JOIN order_items ON orders.id = order_items.order_id
-            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
-            JOIN sizes ON product_size_quantities.size_id = sizes.id
-            JOIN products ON product_size_quantities.product_id = products.id
-            LEFT JOIN product_images ON products.id = product_images.product_id
-            AND product_images.id = (
-                SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
-            )
-            JOIN images ON images.id = product_images.image_id
-            JOIN users ON orders.user_id = users.id
-            WHERE orders.id = :id
-            GROUP BY orders.id, products.id, images.id, users.name, users.email, order_items.price
-        ) order_product
-        group by order_product.id, order_product.created_at, order_product.shipping_method,
-        order_product.shipping_price, order_product.status, order_product.shipping_address,
-        order_product.city, order_product.name, order_product.email
-        """,
-        {
-            "id": id,
-        },
-    ).fetchone()
-
-    if not order:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
-        )
-
-    return order
-
-
-@router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)
-def get_orders_admin(
-    sort_by: str = Query("Price a_z", regex="^(Price a_z|Price z_a)$"),
-    page: int = Query(1, ge=1),
-    page_size: int = Query(25, ge=1, le=100),
-    session: Generator = Depends(get_db),
-    current_user: User = Depends(get_current_active_admin),
-):
-    sort = "ASC" if sort_by == "Price a_z" else "DESC"
-    orders = session.execute(
-        f"""
-        SELECT id, title, sizes, created_at, product_detail,
-        email, images_url, user_id, total
-        FROM (
-            SELECT DISTINCT ON (products.id) orders.id, products.title,
-            array_agg( DISTINCT sizes.size) sizes, orders.created_at,
-            products.product_detail, users.email, array_agg( DISTINCT images.image_url) images_url,
-            orders.user_id, SUM(order) total
-            FROM only orders
-            JOIN order_items ON orders.id = order_items.order_id
-            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
-            JOIN sizes ON product_size_quantities.size_id = sizes.id
-            JOIN products ON product_size_quantities.product_id = products.id
-            JOIN product_images ON products.id = product_images.product_id
-            JOIN images ON product_images.image_id = images.id
-            JOIN users ON orders.user_id = users.id
-            GROUP BY orders.id, products.id, users.id
-        ) order_product
-        GROUP BY order_product.id, order_product.title, order_product.created_at, order_product.product_detail,
-        order_product.email, order_product.user_id, order_product.total, sizes, images_url
-        ORDER BY total {sort}
-        LIMIT :page_size OFFSET :offset
-    """,
-        {"page_size": page_size, "offset": (page - 1) * page_size},
-    ).fetchall()
-
-    if not orders:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="No orders found",
-        )
-
-    return GetAdminOrders(data=orders)

@@ -1,5 +1,71 @@
-<body>
-  <h1>404 Not Found</h1>
-  <h1>To See Swagger Documentation, <a href="/docs/">Click Here</a></h1>
-  <h1>To See Redoc Documentation, <a href="/redoc/">Click Here</a></h1>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TUTU DOC</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body class="bg-[#F9FAFB] w-screen overflow-x-hidden">
+    <header
+      class="w-full flex place-content-center place-items-center flex-col mb-16 my-12 font-segoe"
+    >
+      <h1
+        class="font-black text-[6rem] inline-block text-transparent bg-clip-text bg-gradient-to-r from-teal-500 to-violet-500 underline decoration-8 underline-offset-[1rem] decoration-gray-200 mb-2"
+      >
+        TutuApi
+      </h1>
+      <div class="text-gray-700 text-4xl font-bold">
+        Official API for TUTU E-Commerce
+      </div>
+    </header>
+    <main
+      class="flex flex-col place-content-start place-items-center font-matter max-w-5xl mx-auto"
+    >
+      <div class="text-2xl text-[#111827] text-justify">
+        The Tutu API is organized around REST. Our API has predictable,
+        resource-oriented URLs, and uses HTTP response codes to indicate API
+        errors. We use built-in HTTP features, like HTTP authentication and HTTP
+        verbs, which are understood by off-the-shelf HTTP clients. We support
+        cross-origin resource sharing, allowing you to interact securely with
+        our API from a client-side web application. JSON is returned by all API
+        responses, including errors.
+      </div>
+      <section class="flex place-content-start flex-col w-full gap-y-12 my-16">
+        <div class="relative">
+          <div class="dot text-xl absolute inset-0 top-1 w-8">○</div>
+          <div class="flex ml-8 gap-y flex-col">
+            <h2 class="text-2xl">
+              To see our official API documentation, you can visit:
+            </h2>
+            <a href="/docs" class="text-[#111827] text-2xl font-bold underline"
+              >{{ host }}/docs</a
+            >
+          </div>
+        </div>
+        <div class="relative">
+          <div class="dot text-xl absolute inset-0 top-1 w-8">○</div>
+          <div class="flex ml-8 gap-y flex-col">
+            <h2 class="text-2xl">If you are a Redoc cults, you can visit:</h2>
+            <a href="/redoc" class="text-[#111827] text-2xl font-bold underline"
+              >{{ host }}/redoc</a
+            >
+          </div>
+        </div>
+        <div class="relative">
+          <div class="dot text-xl absolute inset-0 top-1 w-8">○</div>
+          <div class="flex ml-8 gap-y flex-col">
+            <h2 class="text-2xl">Into the classic? You can visit:</h2>
+            <a
+              href="/swagger"
+              class="text-[#111827] text-2xl font-bold underline"
+              >{{ host }}/swagger</a
+            >
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

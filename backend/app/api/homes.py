@@ -1,7 +1,8 @@
-from typing import Any, Generator
+from typing import Generator
 
 from fastapi import HTTPException, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
@@ -10,8 +11,8 @@ from app.deps.db import get_db
 from app.models.banner import Banner
 from app.models.category import Category
 from app.models.image import Image
+from app.schemas.default_model import DefaultResponse
 from app.schemas.home import BestSeller, GetBanners, GetBestSeller, GetCategories
-from app.schemas.request_params import DefaultResponse
 
 router = APIRouter()
 
@@ -19,7 +20,7 @@ router = APIRouter()
 @router.get("/banner", response_model=GetBanners, status_code=status.HTTP_200_OK)
 def get_banner(
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     banners = session.execute(
         f"""
             SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image
@@ -38,7 +39,7 @@ def get_banner(
 @router.get("/category", response_model=GetCategories, status_code=status.HTTP_200_OK)
 def get_category_with_image(
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     categories = session.execute(
         f"""
             SELECT categories.id, categories.title, CONCAT('{settings.CLOUD_STORAGE}/',
@@ -70,7 +71,7 @@ def get_category_with_image(
 )
 def get_best_seller(
     session: Generator = Depends(get_db),
-) -> Any:
+) -> JSONResponse:
     best_seller = session.execute(
         f"""
             SELECT products.id, products.title, products.price,

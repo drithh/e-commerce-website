@@ -2,20 +2,20 @@ import sys
 from typing import Any, Dict, List, Optional
 
 from pydantic import BaseSettings, HttpUrl, PostgresDsn, validator
-from pydantic.networks import AnyHttpUrl
 
 
 class Settings(BaseSettings):
 
     PROJECT_NAME: str = "e-commerce-website"
+    VERSION: str = "0.1.0"
 
     SENTRY_DSN: Optional[HttpUrl] = None
 
-    API_PATH: str = "/api/v1"
+    API_PATH: str = "/v1"
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
 
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = []
+    BACKEND_CORS_ORIGINS: List[str] = []
 
     # The following variables need to be defined in environment
 
@@ -55,6 +55,23 @@ class Settings(BaseSettings):
     USE_CREDENTIALS: bool
     VALIDATE_CERTS: bool
 
+    # Twitter
+    TWITTER_API: str
+
+    # Backend URL
+    REACT_APP_BACKEND_URL: str
+
+    # Google Cloud Platform
+    GCP_TYPE: str
+    GCP_PROJECT_ID: str
+    GCP_PRIVATE_KEY_ID: str
+    GCP_PRIVATE_KEY: str
+    GCP_CLIENT_EMAIL: str
+    GCP_CLIENT_ID: str
+    GCP_AUTH_URI: str
+    GCP_TOKEN_URI: str
+    GCP_AUTH_PROVIDER_X509_CERT_URL: str
+    GCP_CLIENT_X509_CERT_URL: str
     #  END: required environment variables
 
     class Config:

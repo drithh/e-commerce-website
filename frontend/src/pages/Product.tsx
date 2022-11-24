@@ -1,36 +1,38 @@
-import { useParams, Link } from "react-router-dom";
-import { useQuery } from "react-query";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { useState } from "react";
-import GhostButton from "../components/button/GhostButton";
-import { HiOutlineHeart, HiHeart } from "react-icons/hi";
-import { SlSocialFacebook } from "react-icons/sl";
-import { SiInstagram } from "react-icons/si";
-import { useWishlist } from "../context/WishlistContext";
-import { useAuth } from "../context/AuthContext";
-import { ApiError, ProductService } from "../api";
-import Button from "../components/button/Button";
-import { useCart } from "../context/CartContext";
-import { convertToCurrency } from "../components/util/utilFunc";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import { HiHeart, HiOutlineHeart } from 'react-icons/hi';
+import { SiInstagram } from 'react-icons/si';
+import { SlSocialFacebook } from 'react-icons/sl';
+import { useQuery } from 'react-query';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+import { ApiError, ProductService } from '../api';
+import Button from '../components/button/Button';
+import GhostButton from '../components/button/GhostButton';
+import { convertToCurrency } from '../components/util/utilFunc';
+import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
+import { useWishlist } from '../context/WishlistContext';
 
 const Product = () => {
   const { id } = useParams();
 
-  const [size, setSize] = useState("");
+  const [size, setSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [mainImage, setMainImage] = useState("");
+  const [mainImage, setMainImage] = useState('');
   const { wishlist, addWishlistItem, deleteWishlistItem } = useWishlist();
   const { role } = useAuth();
   const { addCartItem } = useCart();
 
   const fetchProduct = useQuery(
-    ["product", id],
+    ['product', id],
     () => ProductService.getProduct(id as string),
     {
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
-        setMainImage(data.images[0] as string);
+        setMainImage(data.images[0]);
         setSize((data.size as string[])[0]);
       },
     }
@@ -46,12 +48,12 @@ const Product = () => {
     return <div>Error...</div>;
   }
 
-  const alreadyWishlisted = wishlist.data!.find(
+  const alreadyWishlisted = wishlist.data.find(
     (item) => item.product_id === id
   );
   const handleWishlist = () => {
-    if (role !== "guest") {
-      alreadyWishlisted
+    if (role !== 'guest') {
+      alreadyWishlisted != null
         ? deleteWishlistItem!.mutate({ product_id: id })
         : addWishlistItem!.mutate({ id });
     }
@@ -64,14 +66,14 @@ const Product = () => {
           <div className="breadcrumb w=full text-left">
             <Link to="/" className="text-gray-400">
               Home
-            </Link>{" "}
-            /{" "}
+            </Link>{' '}
+            /{' '}
             <Link
               to={`/products?category=${fetchProduct.data!.category_id}`}
               className="capitalize text-gray-400"
             >
               {fetchProduct.data!.category_name}
-            </Link>{" "}
+            </Link>{' '}
             / <span>{fetchProduct.data!.title}</span>
           </div>
         </div>
@@ -87,8 +89,8 @@ const Product = () => {
                 alt={fetchProduct.data!.title}
                 className={`cursor-pointer ${
                   mainImage === image
-                    ? "border border-gray-300 opacity-100"
-                    : "opacity-50"
+                    ? 'border border-gray-300 opacity-100'
+                    : 'opacity-50'
                 }`}
                 onClick={() => setMainImage(image)}
               />
@@ -107,7 +109,7 @@ const Product = () => {
               <SwiperSlide>
                 <img
                   className="each-slide w-full"
-                  src={fetchProduct.data!.images[0] as string}
+                  src={fetchProduct.data!.images[0]}
                   width={1000}
                   height={1282}
                   alt={fetchProduct.data!.title}
@@ -116,10 +118,10 @@ const Product = () => {
               <SwiperSlide>
                 <img
                   className="each-slide w-full"
-                  src={fetchProduct.data!.images[1] as string}
+                  src={fetchProduct.data?.images[1]}
                   width={1000}
                   height={1282}
-                  alt={fetchProduct.data!.title}
+                  alt={fetchProduct.data?.title}
                 />
               </SwiperSlide>
             </Swiper>
@@ -156,9 +158,9 @@ const Product = () => {
               .data!.size?.map((singleSize) => ({
                 singleSize,
                 points:
-                  singleSize === "M"
+                  singleSize === 'M'
                     ? 0
-                    : singleSize.length * (singleSize.includes("S") ? -1 : 1),
+                    : singleSize.length * (singleSize.includes('S') ? -1 : 1),
               }))
               .sort((a, b) => a.points - b.points)
               .map(({ singleSize }) => (
@@ -166,8 +168,8 @@ const Product = () => {
                   key={singleSize}
                   className={`${
                     size === singleSize
-                      ? "border-gray-500"
-                      : "border-gray-300 text-gray-400"
+                      ? 'border-gray-500'
+                      : 'border-gray-300 text-gray-400'
                   } flex h-8 w-8 items-center justify-center border hover:bg-gray-500 hover:text-gray-100`}
                   onClick={() => setSize(singleSize)}
                 >
@@ -180,7 +182,7 @@ const Product = () => {
               <div
                 onClick={() => setQuantity((prevState) => prevState - 1)}
                 className={`${
-                  quantity === 1 && "pointer-events-none"
+                  quantity === 1 && 'pointer-events-none'
                 } flex h-full w-full cursor-pointer items-center justify-center hover:bg-gray-500 hover:text-gray-100 sm:w-12`}
               >
                 -
@@ -199,7 +201,7 @@ const Product = () => {
               <Button
                 value="Add to Cart"
                 size="lg"
-                extraClass={`flex-grow text-center whitespace-nowrap`}
+                extraClass={'flex-grow text-center whitespace-nowrap'}
                 onClick={() => {
                   if (quantity > 0) {
                     addCartItem?.mutate(
@@ -218,10 +220,10 @@ const Product = () => {
                 }}
               />
               <GhostButton onClick={handleWishlist} extraClass="text-4xl">
-                {alreadyWishlisted ? (
-                  <HiHeart className="text-gray-500 text-4xl w-7 h-7" />
+                {alreadyWishlisted != null ? (
+                  <HiHeart className="h-7 w-7 text-4xl text-gray-500" />
                 ) : (
-                  <HiOutlineHeart className="text-gray-500 text-4xl w-7 h-7" />
+                  <HiOutlineHeart className="h-7 w-7 text-4xl text-gray-500" />
                 )}
               </GhostButton>
             </div>

@@ -1,8 +1,9 @@
-import GhostButton from "../components/button/GhostButton";
-import { Link } from "react-router-dom";
-import { useWishlist } from "../context/WishlistContext";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { convertToCurrency } from "../components/util/utilFunc";
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { Link } from 'react-router-dom';
+
+import GhostButton from '../components/button/GhostButton';
+import { convertToCurrency } from '../components/util/utilFunc';
+import { useWishlist } from '../context/WishlistContext';
 const Wishlist = () => {
   const { wishlist, deleteWishlistItem, clearWishlist } = useWishlist();
 
@@ -32,7 +33,7 @@ const Wishlist = () => {
                 <th className="hidden py-2 text-left font-normal sm:text-center md:table-cell xl:w-72">
                   Product Name
                 </th>
-                <th className="py-2 font-normal text-center max-w-xs">
+                <th className="max-w-xs py-2 text-center font-normal">
                   Unit Price
                 </th>
                 <th className="hidden  whitespace-nowrap py-2 text-center font-normal sm:table-cell">
@@ -76,7 +77,7 @@ const Wishlist = () => {
                           {item.title}
                         </Link>
                       </td>
-                      <td className="text-center max-w-xs text-gray-400">
+                      <td className="max-w-xs text-center text-gray-400">
                         {convertToCurrency(item.price)}
                       </td>
                       {/* <td className="hidden max-w-xs text-center text-gray-400 sm:table-cell">

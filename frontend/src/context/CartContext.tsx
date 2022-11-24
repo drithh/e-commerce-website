@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from 'react';
 
-import { CartService, GetCart, DefaultResponse } from "../api";
-import { UseMutationResult, useQuery } from "react-query";
-import { useMutation } from "react-query";
-import { useAuth } from "./AuthContext";
+import { CartService, GetCart, DefaultResponse } from '../api';
+import { UseMutationResult, useQuery } from 'react-query';
+import { useMutation } from 'react-query';
+import { useAuth } from './AuthContext';
 
 export type cartType = {
   cart: GetCart;
@@ -23,7 +23,7 @@ export type cartType = {
     DefaultResponse,
     unknown,
     {
-      cart_id: string;
+      id: string;
       quantity: number;
     },
     unknown
@@ -62,12 +62,12 @@ const useProvideCart = () => {
     data: [],
   });
 
-  const { refetch } = useQuery("cart", CartService.getCart, {
+  const { refetch } = useQuery('cart', CartService.getCart, {
     retry: false,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     staleTime: Infinity,
-    enabled: role === "user" || role === "admin",
+    enabled: role === 'user' || role === 'admin',
     onSuccess: (data) => {
       setCart(data);
     },
@@ -84,7 +84,7 @@ const useProvideCart = () => {
   );
 
   const updateCartItem = useMutation(
-    (variables: { cart_id: string; quantity: number }) =>
+    (variables: { id: string; quantity: number }) =>
       CartService.updateCart({ ...variables }),
     {
       onSuccess: () => {

@@ -1,30 +1,32 @@
-import Banner from "../components/Banner";
-import Card from "../components/Card";
-import LinkButton from "../components/button/LinkButton";
-import OverlayContainer from "../components/OverlayContainer";
-import { Category, HomeService, OpenAPI } from "../api";
-import { useQuery } from "react-query";
-import Cookies from "js-cookie";
-import { capitalCase } from "change-case";
-const pluralize = require("pluralize");
-OpenAPI.TOKEN = Cookies.get("token");
+import { useQuery } from 'react-query';
+
+import { capitalCase } from 'change-case';
+import Cookies from 'js-cookie';
+
+import { Category, HomeService, OpenAPI } from '../api';
+import Banner from '../components/Banner';
+import LinkButton from '../components/button/LinkButton';
+import Card from '../components/Card';
+import OverlayContainer from '../components/OverlayContainer';
+const pluralize = require('pluralize');
+OpenAPI.TOKEN = Cookies.get('token');
 
 const Home = () => {
   let categories: Category[] = [];
   const fetchCategories = useQuery(
-    "category_images",
+    'category_images',
     HomeService.getCategoryWithImage,
     {
       staleTime: 1000 * 60,
     }
   );
-  const fetchBestSellers = useQuery("bestSellers", HomeService.getBestSeller, {
+  const fetchBestSellers = useQuery('bestSellers', HomeService.getBestSeller, {
     staleTime: 1000 * 60,
   });
 
   if (fetchCategories.isLoading) return <div>Loading...</div>;
   if (fetchCategories.error) return <div>Error</div>;
-  if (fetchCategories.data) {
+  if (fetchCategories.data != null) {
     categories = fetchCategories.data.data.map((category: Category) => {
       const title = capitalCase(pluralize.singular(category.title));
       return {
@@ -41,7 +43,6 @@ const Home = () => {
   return (
     <main id="main-content" className="min-h-[60vh]">
       <Banner />
-
       {/* ===== Category Section ===== */}
       <section className="h-auto w-full border-b-2  border-y-gray-100 py-10  ">
         <div className="my-6 text-center">

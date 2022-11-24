@@ -1,21 +1,25 @@
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import { Link, useParams } from "react-router-dom";
-import { useQuery, useMutation } from "react-query";
-import { ApiError, UserService } from "../../api";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { toast } from "react-toastify";
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
+import { ApiError, UserService } from '../../api';
+import Button from '../button/Button';
+import Input from '../input/Input';
 
 const Customer = () => {
   const { id } = useParams();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [balance, setBalance] = useState(0);
-  const [addressName, setAddressName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
+  const [addressName, setAddressName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState('');
+  const [city, setCity] = useState('');
 
   const updateUser = useMutation(
     (variables: {
@@ -48,8 +52,19 @@ const Customer = () => {
     }
   );
 
+  const deleteUser = useMutation((id: string) => UserService.deleteUser(id), {
+    onSuccess: (data) => {
+      toast.success(data.message);
+      queryClient.invalidateQueries('users');
+      navigate('/admin/customers');
+    },
+    onError: (error) => {
+      toast.error((error as ApiError).body.message);
+    },
+  });
+
   const fetchUser = useQuery(
-    ["user-detail", id],
+    ['user-detail', id],
     () => UserService.getDetailUser(id as string),
     {
       refetchOnWindowFocus: false,
@@ -57,10 +72,10 @@ const Customer = () => {
         setName(data.name);
         setEmail(data.email);
         setBalance(data.balance);
-        setAddressName(data.address_name ?? "");
-        setPhoneNumber(data.phone_number ?? "");
-        setAddress(data.address ?? "");
-        setCity(data.city ?? "");
+        setAddressName(data.address_name ?? '');
+        setPhoneNumber(data.phone_number ?? '');
+        setAddress(data.address ?? '');
+        setCity(data.city ?? '');
       },
     }
   );
@@ -85,8 +100,8 @@ const Customer = () => {
 
   return (
     <>
-      <h2 className="w-full text-2xl font-medium">Update Category</h2>
-      <div className="py-3 flex ">
+      <h2 className="w-full text-2xl font-medium">Update Customer</h2>
+      <div className="flex py-3 ">
         <Link
           to="/admin/customers"
           className="flex place-items-center  gap-x-2"
@@ -204,7 +219,15 @@ const Customer = () => {
           />
         </div>
 
-        <div className="mt-8 flex place-content-end">
+        <div className="mt-8 flex place-content-between">
+          <button
+            type="button"
+            onClick={() => deleteUser.mutate(id)}
+            className="mb-4 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500  hover:text-gray-100 sm:py-2 sm:text-base"
+            aria-label="Delete User"
+          >
+            Delete User
+          </button>
           <Button
             type="submit"
             value="Update User"

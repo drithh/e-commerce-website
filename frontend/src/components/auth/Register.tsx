@@ -1,22 +1,24 @@
-import React, { useState } from "react";
-import { Dialog } from "@headlessui/react";
-import Button from "../button/Button";
-import Input from "../input/Input";
-import { useAuth } from "../../context/AuthContext";
-import { ApiError } from "../../api";
+import React, { useState } from 'react';
 
-type Props = {
+import { Dialog } from '@headlessui/react';
+
+import { ApiError } from '../../api';
+import { useAuth } from '../../context/AuthContext';
+import Button from '../button/Button';
+import Input from '../input/Input';
+
+interface Props {
   onLogin: () => void;
   closeModal: () => void;
-};
+}
 
 const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
   const { register } = useAuth();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [phone, setPhone] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
       <form onSubmit={handleSubmit} className="mt-2">
         <Input
           type="name"
-          placeholder={"Name *"}
+          placeholder={'Name *'}
           name="name"
           required
           extraClass="w-full focus:border-gray-500"
@@ -48,7 +50,7 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
         />
         <Input
           type="email"
-          placeholder={"Email Address *"}
+          placeholder={'Email Address *'}
           name="email"
           required
           extraClass="w-full focus:border-gray-500"
@@ -58,7 +60,7 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
         />
         <Input
           type="password"
-          placeholder={"Password *"}
+          placeholder={'Password *'}
           name="password"
           required
           extraClass="w-full focus:border-gray-500 mb-4"
@@ -68,14 +70,14 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
         />
         <Input
           type="text"
-          placeholder={"Phone *"}
+          placeholder={'Phone *'}
           name="phone"
           extraClass="w-full focus:border-gray-500"
           border="border-2 border-gray-300 mb-4"
           onChange={(e) => setPhone((e.target as HTMLInputElement).value)}
           value={phone}
         />
-        {errorMsg !== "" && (
+        {errorMsg !== '' && (
           <div className="mb-4 whitespace-nowrap text-sm text-red-600">
             {errorMsg}
           </div>
@@ -89,12 +91,12 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
         </div>
         <Button
           type="submit"
-          value={"Register"}
+          value={'Register'}
           extraClass="w-full text-center text-xl mb-4"
           size="lg"
         />
         <div className="text-center text-gray-400">
-          {"Already a member ? "}
+          {'Already a member ? '}
           <span
             onClick={onLogin}
             className="cursor-pointer text-gray-500 focus:underline focus:outline-none"

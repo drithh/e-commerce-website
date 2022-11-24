@@ -1,11 +1,10 @@
-import React from "react";
-
-import { SlGraph } from "react-icons/sl";
-import { MdOutlineAttachMoney } from "react-icons/md";
-import { BsBookmark } from "react-icons/bs";
-import { IoShirtOutline } from "react-icons/io5";
-import { AiOutlineUser } from "react-icons/ai";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import React from 'react';
+import { AiOutlineUser } from 'react-icons/ai';
+import { BsBookmark } from 'react-icons/bs';
+import { IoShirtOutline } from 'react-icons/io5';
+import { MdOutlineAttachMoney } from 'react-icons/md';
+import { SlGraph } from 'react-icons/sl';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
   const location = useLocation();
@@ -13,7 +12,7 @@ const Admin = () => {
   return (
     <main
       id="main-content"
-      className="mt-20 relative w-screen 2xl:w-[90rem] overflow-hidden mx-auto  border-t border-gray-100 min-h-screen"
+      className="relative mx-auto mt-20 min-h-screen w-screen overflow-hidden  border-t border-gray-100 2xl:w-[90rem]"
     >
       {/* ===== Heading ===== */}
       <div className="w-full  ">
@@ -21,14 +20,14 @@ const Admin = () => {
           Dashboard
         </h1>
       </div>
-      <div className="flex mt-4 gap-x-4">
+      <div className="mt-4 flex gap-x-4">
         {/* ===== Side Panel Section ===== */}
-        <section className="side-panel inset-0 flex h-fit flex-col gap-y-[2px]   border-[1.5px] border-gray-500 font-medium text-gray-400 py-2 px-5">
+        <section className="side-panel inset-0 flex h-fit flex-col gap-y-[2px]   border-[1.5px] border-gray-500 py-2 px-5 font-medium text-gray-400">
           <button
-            onClick={() => navigate("")}
+            onClick={() => navigate('')}
             className={`${
-              location.pathname === "/dashboard" && "text-black"
-            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
+              location.pathname === '/admin' && 'text-black'
+            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
           >
             <span className="text-xl">
               <SlGraph />
@@ -36,10 +35,10 @@ const Admin = () => {
             Dashboard
           </button>
           <button
-            onClick={() => navigate("orders")}
+            onClick={() => navigate('orders')}
             className={`${
-              location.pathname === "/dashboard/orders" && "text-black"
-            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
+              location.pathname === '/admin/orders' && 'text-black'
+            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
           >
             <span className="text-xl">
               <MdOutlineAttachMoney />
@@ -47,10 +46,10 @@ const Admin = () => {
             Orders
           </button>
           <button
-            onClick={() => navigate("products")}
+            onClick={() => navigate('products')}
             className={`${
-              location.pathname === "/dashboard/products" && "text-black"
-            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
+              location.pathname === '/admin/products' && 'text-black'
+            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
           >
             <span className="text-xl">
               <IoShirtOutline />
@@ -58,10 +57,10 @@ const Admin = () => {
             Products
           </button>
           <button
-            onClick={() => navigate("categories")}
+            onClick={() => navigate('categories')}
             className={`${
-              location.pathname === "/dashboard/categories" && "text-black"
-            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 font-medium hover:text-black uppercase px-6`}
+              location.pathname === '/admin/categories' && 'text-black'
+            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
           >
             <span className="text-xl">
               <BsBookmark />
@@ -69,10 +68,10 @@ const Admin = () => {
             Categories
           </button>
           <button
-            onClick={() => navigate("customers")}
+            onClick={() => navigate('customers')}
             className={`${
-              location.pathname === "/dashboard/customers" && "text-black"
-            } flex w-full cursor-pointer place-items-center  gap-x-3 py-4 font-medium hover:text-black uppercase px-6`}
+              location.pathname === '/admin/customers' && 'text-black'
+            } flex w-full cursor-pointer place-items-center  gap-x-3 py-4 px-6 font-medium uppercase hover:text-black`}
           >
             <span className="text-xl">
               <AiOutlineUser />
@@ -80,7 +79,7 @@ const Admin = () => {
             Customers
           </button>
         </section>
-        <section className="wrapper overflow-hidden w-full">
+        <section className="wrapper w-full overflow-hidden">
           <Outlet />
         </section>
       </div>

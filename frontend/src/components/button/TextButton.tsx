@@ -1,15 +1,17 @@
-import { FC } from "react";
+import { FC } from 'react';
 
-type Props = {
+interface Props {
   // size: "small" | "large";
   value: string;
-};
+}
 
 const TextButton: FC<Props> = ({ value }) => (
-  <div className={`group relative flex w-28 justify-center transition-all`}>
+  <div className={'group relative flex w-28 justify-center transition-all'}>
     <button
       type="button"
-      className={`inline-block p-2 text-gray-500 no-underline duration-500 group-hover:tracking-widest`}
+      className={
+        'inline-block p-2 text-gray-500 no-underline duration-500 group-hover:tracking-widest'
+      }
     >
       {value}
     </button>

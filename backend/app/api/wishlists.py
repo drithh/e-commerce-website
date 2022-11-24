@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import HTTPException, status
 from fastapi.params import Depends
+from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
 
 from app.core.config import settings
@@ -14,8 +15,7 @@ from app.models.order import Order
 from app.models.order_item import OrderItem
 from app.models.user import User
 from app.models.wishlist import Wishlist
-from app.schemas.request_params import DefaultResponse
-from app.schemas.sale import GetSales
+from app.schemas.default_model import DefaultResponse
 from app.schemas.wishlist import GetWishlist
 
 router = APIRouter()
@@ -25,7 +25,7 @@ router = APIRouter()
 def get_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     wishlists = session.execute(
         f"""
         SELECT wishlists.id, wishlists.product_id, products.title, products.price,
@@ -42,12 +42,6 @@ def get_wishlist(
         {"user_id": current_user.id},
     ).fetchall()
 
-    if not wishlists:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="You have no wishlists",
-        )
-
     return GetWishlist(data=wishlists)
 
 
@@ -56,7 +50,7 @@ def create_wishlist(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     try:
         wishlist = Wishlist(
             user_id=current_user.id,
@@ -79,7 +73,7 @@ def delete_wishlist(
     id: UUID,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     try:
         session.query(Wishlist).filter(
             Wishlist.user_id == current_user.id, Wishlist.product_id == id
@@ -102,7 +96,7 @@ def delete_wishlist(
 def clear_wishlist(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
-):
+) -> JSONResponse:
     try:
         session.query(Wishlist).filter(Wishlist.user_id == current_user.id).delete()
         session.commit()

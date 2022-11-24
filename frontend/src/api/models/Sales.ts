@@ -3,5 +3,7 @@
 /* eslint-disable */
 
 export type Sales = {
-  total: number;
+  total_sales: number;
+  total_user: number;
+  total_order: number;
 };

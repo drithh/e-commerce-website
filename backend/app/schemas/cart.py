@@ -38,7 +38,7 @@ class CreateCart(BaseModel):
 
 
 class UpdateCart(BaseModel):
-    cart_id: UUID
+    id: UUID
     quantity: int
 
     class Config:

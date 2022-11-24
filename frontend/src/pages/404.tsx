@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 const Custom404 = () => {
   return (
     <main className="flex h-[70vh] flex-col items-center justify-center gap-y-10">
@@ -10,7 +10,7 @@ const Custom404 = () => {
         height={300}
       />
       <span className="text-gray-400">
-        Go Back To{" "}
+        Go Back To{' '}
         <Link to="/" className="font-bold underline hover:text-gray-500">
           Home Page
         </Link>

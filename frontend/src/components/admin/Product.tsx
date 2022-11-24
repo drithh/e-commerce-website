@@ -1,20 +1,21 @@
-import { Link, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useState } from 'react';
+import { HiOutlineChevronLeft } from 'react-icons/hi';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import {
-  ProductService,
-  CategoryService,
-  UpdateStock,
-  Stock,
   ApiError,
-} from "../../api";
-import { useState } from "react";
-import { HiOutlineChevronLeft } from "react-icons/hi";
-import Input from "../input/Input";
-import Button from "../button/Button";
-import Dropdown from "../input/Dropdown";
-import Dropzone from "./Dropzone";
-import { convertToBase64 } from "../util/utilFunc";
-import { toast } from "react-toastify";
+  CategoryService,
+  ProductService,
+  Stock,
+  UpdateStock,
+} from '../../api';
+import Button from '../button/Button';
+import Dropdown from '../input/Dropdown';
+import Input from '../input/Input';
+import { convertToBase64 } from '../util/utilFunc';
+import Dropzone from './Dropzone';
 
 interface categoryType {
   id: string;
@@ -23,26 +24,19 @@ interface categoryType {
 
 const Product = () => {
   const { id } = useParams();
-  const [title, setTitle] = useState("");
-  const [brand, setBrand] = useState("");
-  const [detail, setDetail] = useState("");
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  const [title, setTitle] = useState('');
+  const [brand, setBrand] = useState('');
+  const [detail, setDetail] = useState('');
   const [price, setPrice] = useState(0);
-  const [category, setCategory] = useState("");
-  const [condition, setCondition] = useState("");
+  const [category, setCategory] = useState('');
+  const [condition, setCondition] = useState('');
   const [stock, setStock] = useState<Stock[]>([]);
   const [categoryOptions, setCategoryOptions] = useState<categoryType[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [files, setFiles] = useState<File[]>([]);
-
-  // id: string;
-  // title: string;
-  // brand: string;
-  // product_detail: string;
-  // images: Array<string>;
-  // price: number;
-  // category_id: string;
-  // condition: string;
-  // stock: Array<UpdateStock>;
 
   const updateProduct = useMutation(
     (variables: {
@@ -69,7 +63,7 @@ const Product = () => {
   );
 
   const fetchProduct = useQuery(
-    ["product", id],
+    ['product', id],
     () => ProductService.getProduct(id as string),
     {
       refetchOnWindowFocus: false,
@@ -87,7 +81,7 @@ const Product = () => {
   );
 
   const fetchCategories = useQuery(
-    "categories",
+    'categories',
     () => CategoryService.getCategory(),
     {
       refetchOnWindowFocus: false,
@@ -102,14 +96,28 @@ const Product = () => {
     }
   );
 
-  if (fetchProduct.isLoading || fetchCategories.isLoading) {
+  const deleteProduct = useMutation(
+    (id: string) => ProductService.deleteProduct(id),
+    {
+      onSuccess: (data) => {
+        toast.success(data.message);
+        queryClient.invalidateQueries('products');
+        navigate('/admin/products');
+      },
+      onError: (error) => {
+        toast.error((error as ApiError).body.message);
+      },
+    }
+  );
+
+  if (fetchProduct.isLoading || fetchCategories.isLoading || !id) {
     return <div>Loading...</div>;
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const base64Images = await Promise.all(
-      files.map((file) => convertToBase64(file))
+      files.map(async (file) => await convertToBase64(file))
     );
 
     const combinedImages = [...images, ...base64Images] as string[];
@@ -132,7 +140,7 @@ const Product = () => {
       },
       {
         onSuccess: () => {
-          toast.success("Product updated");
+          toast.success('Product updated');
         },
         onError: (error) => {
           toast.error((error as ApiError).body.message);
@@ -144,7 +152,7 @@ const Product = () => {
   return (
     <>
       <h2 className="w-full text-2xl font-medium">Update Product</h2>
-      <div className="py-3 flex ">
+      <div className="flex py-3 ">
         <Link to="/admin/products" className="flex place-items-center  gap-x-2">
           <HiOutlineChevronLeft className="text-xl" />
           Go Back
@@ -188,15 +196,15 @@ const Product = () => {
           </label>
           <textarea
             aria-label="Address"
-            className="w-full mt-1 mb-2 border-2 border-gray-400 p-4 outline-none"
+            className="mt-1 mb-2 w-full border-2 border-gray-400 p-4 outline-none"
             rows={4}
             value={detail}
             onChange={(e) => setDetail((e.target as HTMLTextAreaElement).value)}
             required
           />
-          <div className="flex flex-wrap gap-x-4 place-content-between">
-            <div className="w-full flex-1 min-w-[10rem]">
-              <div className="text-lg mb-1">Price</div>
+          <div className="flex flex-wrap place-content-between gap-x-4">
+            <div className="w-full min-w-[10rem] flex-1">
+              <div className="mb-1 text-lg">Price</div>
               <Input
                 name="price"
                 type="number"
@@ -210,7 +218,7 @@ const Product = () => {
               />
             </div>
             <div className="">
-              <div className="text-lg mb-2">Category Type</div>
+              <div className="mb-2 text-lg">Category Type</div>
               <Dropdown
                 selected={category}
                 setSelected={setCategory}
@@ -220,19 +228,19 @@ const Product = () => {
               />
             </div>
             <div className="">
-              <div className="text-lg mb-2">Condition</div>
+              <div className="mb-2 text-lg">Condition</div>
               <Dropdown
                 selected={condition}
                 setSelected={setCondition}
                 width="w-64"
                 border="border-2 border-gray-400"
-                options={["new", "used"]}
+                options={['new', 'used']}
               />
             </div>
           </div>
-          <div className="flex gap-x-4 my-4 flex-wrap">
+          <div className="my-4 flex flex-wrap gap-x-4">
             {stock.map((item) => (
-              <div className="flex-1 min-w-[10rem]" key={item.size}>
+              <div className="min-w-[10rem] flex-1" key={item.size}>
                 <label htmlFor="stock" className="text-lg">
                   Size {item.size}
                 </label>
@@ -270,7 +278,15 @@ const Product = () => {
             setFiles={setFiles}
           />
         </div>
-        <div className="mt-8 flex place-content-end">
+        <div className="mt-8 flex place-content-between">
+          <button
+            type="button"
+            onClick={() => deleteProduct.mutate(id)}
+            className="mb-4 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500  hover:text-gray-100 sm:py-2 sm:text-base"
+            aria-label="Delete Product"
+          >
+            Delete Product
+          </button>
           <Button
             type="submit"
             value="Update Product"
