@@ -39,7 +39,7 @@ import { CartProvider } from './context/CartContext';
 
 import 'animate.css';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
 
 const queryClient = new QueryClient();
 
@@ -50,65 +50,70 @@ function App() {
         <AuthProvider>
           <WishlistProvider>
             <CartProvider>
-              <div className="App relative font-lato ">
-                <ToastContainer
-                  position="top-center"
-                  autoClose={5000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                />
-                <BrowserRouter>
-                  {/* ===== Head Section ===== */}
-                  <Search />
-                  <Header />
+              <Suspense fallback={<div>Loading...</div>}>
+                <div className="App relative font-lato ">
+                  <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
+                  <BrowserRouter>
+                    {/* ===== Head Section ===== */}
+                    <Search />
+                    <Header />
 
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/products/:id" element={<Product />} />
-                    <Route element={<UserRoutes />}>
-                      <Route path="/wishlist" element={<Wishlist />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/profile" element={<Profile />}>
-                        <Route path="" element={<PersonalData />} />
-                        <Route path="order" element={<Order />} />
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/products/:id" element={<Product />} />
+                      <Route element={<UserRoutes />}>
+                        <Route path="/wishlist" element={<Wishlist />} />
+                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/profile" element={<Profile />}>
+                          <Route path="" element={<PersonalData />} />
+                          <Route path="order" element={<Order />} />
+                        </Route>
                       </Route>
-                    </Route>
-                    <Route element={<AdminRoutes />}>
-                      <Route path="/admin" element={<Admin />}>
-                        <Route path="" element={<Dashboard />} />
-                        <Route path="orders" element={<Orders />} />
-                        <Route path="orders/:id" element={<AdminOrder />} />
-                        <Route path="products" element={<AdminProducts />} />
-                        <Route
-                          path="products/create"
-                          element={<CreateProduct />}
-                        />
-                        <Route path="products/:id" element={<AdminProduct />} />
-                        <Route path="categories" element={<Categories />} />
-                        <Route
-                          path="categories/create"
-                          element={<CreateCategory />}
-                        />
-                        <Route path="categories/:id" element={<Category />} />
-                        <Route path="customers" element={<Customers />} />
-                        <Route path="customers/:id" element={<Customer />} />
+                      <Route element={<AdminRoutes />}>
+                        <Route path="/admin" element={<Admin />}>
+                          <Route path="" element={<Dashboard />} />
+                          <Route path="orders" element={<Orders />} />
+                          <Route path="orders/:id" element={<AdminOrder />} />
+                          <Route path="products" element={<AdminProducts />} />
+                          <Route
+                            path="products/create"
+                            element={<CreateProduct />}
+                          />
+                          <Route
+                            path="products/:id"
+                            element={<AdminProduct />}
+                          />
+                          <Route path="categories" element={<Categories />} />
+                          <Route
+                            path="categories/create"
+                            element={<CreateCategory />}
+                          />
+                          <Route path="categories/:id" element={<Category />} />
+                          <Route path="customers" element={<Customers />} />
+                          <Route path="customers/:id" element={<Customer />} />
+                        </Route>
                       </Route>
-                    </Route>
-                    <Route path="/coming-soon" element={<ComingSoon />} />
-                    <Route path="*" element={<Custom404 />} />
-                  </Routes>
+                      <Route path="/coming-soon" element={<ComingSoon />} />
+                      <Route path="*" element={<Custom404 />} />
+                    </Routes>
 
-                  {/* ===== Footer Section ===== */}
-                  <Footer />
-                </BrowserRouter>
-              </div>
+                    {/* ===== Footer Section ===== */}
+                    <Footer />
+                  </BrowserRouter>
+                </div>
+              </Suspense>
               <ReactQueryDevtools
                 initialIsOpen={false}
                 position="bottom-right"

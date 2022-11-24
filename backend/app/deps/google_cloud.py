@@ -7,18 +7,18 @@ try:
     storage_client = storage.Client.from_service_account_info(
         {
             "type": settings.GCP_TYPE,
-            "project_id": settings.GCP_TYPE,
+            "project_id": settings.GCP_PROJECT_ID,
             "private_key_id": settings.GCP_PRIVATE_KEY_ID,
-            "private_key": settings.GCP_PRIVATE_KEY.replace("/\\n/g", "\n"),
+            "private_key": settings.GCP_PRIVATE_KEY,
             "client_email": settings.GCP_CLIENT_EMAIL,
             "client_id": settings.GCP_CLIENT_ID,
-            "auth_uri": settings.GCP_CLIENT_ID,
+            "auth_uri": settings.GCP_AUTH_URI,
             "token_uri": settings.GCP_TOKEN_URI,
             "auth_provider_x509_cert_url": settings.GCP_AUTH_PROVIDER_X509_CERT_URL,
             "client_x509_cert_url": settings.GCP_CLIENT_X509_CERT_URL,
         }
     )
-    bucket_name = "startup-campus"
+    bucket_name = "tutu-startup-campus"
     bucket = storage_client.bucket(bucket_name)
     logger.info("Google Cloud Storage initialized")
 except Exception as e:
@@ -31,11 +31,10 @@ def upload_image(file, category):
         prefix = f"products/{category}/{file['file_name']}"
         images = bucket.list_blobs(prefix=prefix, delimiter="/")
         last_image_name = list(images)
-        if last_image_name:
-            last_image_name = last_image_name[-1].name.split(".")[0].split("-")[-1]
-        else:
-            last_image_name = 0
-        file["file_name"] = f"{prefix}-{int(last_image_name) + 1}.{file['media_type']}"
+        last_index = 1
+        for image in last_image_name:
+            last_index = max(last_index, int(image.name.split(".")[0].split("-")[-1]))
+        file["file_name"] = f"{prefix}-{int(last_index) + 1}.{file['media_type']}"
 
         blob = bucket.blob(file["file_name"])
         blob.upload_from_string(

@@ -144,8 +144,8 @@ def create_product_size_quantity(
 
 @pytest.fixture(scope="function")
 def create_size(db: Session):
-    def inner() -> Size:
-        size = Size.seed(fake, faker_uuid("size"))
+    def inner(size_model: str = faker_uuid("size")) -> Size:
+        size = Size.seed(fake, size_model)
         db.add(size)
         db.commit()
         db.refresh(size)

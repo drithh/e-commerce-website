@@ -144,7 +144,36 @@ def create_product(
     ).fetchone()[0]
 
     title_slug = product.title.lower().replace(" ", "-")
-
+    # create product size quantity
+    for item in request.stock:
+        size_id = session.execute(
+            "SELECT id FROM sizes WHERE size = :size",
+            {"size": item.size},
+        ).fetchone()
+        if size_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Size does not exist",
+            )
+        size_id = size_id[0]
+        try:
+            product_size_quantity = ProductSizeQuantity(
+                product_id=product.id,
+                size_id=size_id,
+                quantity=item.quantity,
+            )
+            session.add(product_size_quantity)
+            session.commit()
+            session.refresh(product_size_quantity)
+            logger.info(
+                f"Product size quantity {product_size_quantity.id} created by {current_user.name}"
+            )
+        except Exception as e:
+            logger.error(e)
+            session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+            )
     for image in request.images:
         if not image.startswith("data:image"):
             raise HTTPException(
@@ -189,31 +218,6 @@ def create_product(
             session.refresh(product_image)
             logger.info(
                 f"Product image {product_image.id} created by {current_user.name}"
-            )
-        except Exception as e:
-            logger.error(e)
-            session.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-            )
-
-    # create product size quantity
-    for item in request.stock:
-        try:
-            size_id = session.execute(
-                "SELECT id FROM sizes WHERE size = :size",
-                {"size": item.size},
-            ).fetchone()[0]
-            product_size_quantity = ProductSizeQuantity(
-                product_id=product.id,
-                size_id=size_id,
-                quantity=item.quantity,
-            )
-            session.add(product_size_quantity)
-            session.commit()
-            session.refresh(product_size_quantity)
-            logger.info(
-                f"Product size quantity {product_size_quantity.id} created by {current_user.name}"
             )
         except Exception as e:
             logger.error(e)
@@ -378,8 +382,13 @@ def delete_product(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
+    product = session.query(Product).filter(Product.id == product_id).first()
+    if product is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found",
+        )
     try:
-        product = session.query(Product).filter(Product.id == product_id).first()
         session.delete(product)
         session.commit()
     except Exception as e:

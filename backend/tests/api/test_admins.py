@@ -42,11 +42,16 @@ def test_get_order_no_order(client: TestClient, create_admin):
     assert resp.json().get("message") == "You don't have any order"
 
 
-def test_get_order(client: TestClient, create_admin, create_order, create_order_item):
+def test_get_order(
+    client: TestClient,
+    create_admin,
+    create_order,
+    create_order_item,
+    create_size,
+    create_product_size_quantity,
+):
     admin = create_admin()
     order = create_order(admin)
-    create_order_item(order)
-    create_order_item(order)
     create_order_item(order)
     resp = client.get(f"{prefix}/order", headers=get_jwt_header(admin))
     assert resp.status_code == 200
