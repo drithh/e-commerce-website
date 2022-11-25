@@ -70,25 +70,25 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SearchProvider>
-        <AuthProvider>
-          <WishlistProvider>
-            <CartProvider>
-              <div className="App relative font-lato ">
-                <ToastContainer
-                  position="top-center"
-                  autoClose={5000}
-                  hideProgressBar={false}
-                  newestOnTop={false}
-                  closeOnClick
-                  rtl={false}
-                  pauseOnFocusLoss
-                  draggable
-                  pauseOnHover
-                  theme="light"
-                />
-                <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>Loading...</div>}>
+      <QueryClientProvider client={queryClient}>
+        <SearchProvider>
+          <AuthProvider>
+            <WishlistProvider>
+              <CartProvider>
+                <div className="App relative font-lato ">
+                  <ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
                   <BrowserRouter>
                     {/* ===== Head Section ===== */}
                     <Search />
@@ -136,13 +136,13 @@ function App() {
                     {/* ===== Footer Section ===== */}
                     <Footer />
                   </BrowserRouter>
-                </Suspense>
-              </div>
-            </CartProvider>
-          </WishlistProvider>
-        </AuthProvider>
-      </SearchProvider>
-    </QueryClientProvider>
+                </div>
+              </CartProvider>
+            </WishlistProvider>
+          </AuthProvider>
+        </SearchProvider>
+      </QueryClientProvider>
+    </Suspense>
   );
 }
 
