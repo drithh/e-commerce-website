@@ -6,3 +6,5 @@ numpy==1.22.0
 Pillow>=8.1.1
 python-multipart==0.0.5
 torchvision==0.7.0+cpu
+opencv-python==2.4.9
+torchvision==0.14.0 
