@@ -177,7 +177,7 @@ def update_cart(
                 detail=format_error(e),
             )
 
-        logger.info(f"User {current_user.name} deleted cart {request.cart_id}")
+        logger.info(f"User {current_user.name} deleted cart {request.id}")
 
     return DefaultResponse(message="Cart updated")
 

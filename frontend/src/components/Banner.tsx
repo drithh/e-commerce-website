@@ -9,6 +9,7 @@ import TextButton from './button/TextButton';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { Link } from 'react-router-dom';
 SwiperCore.use([Pagination, Navigation, Autoplay]);
 
 const Slideshow = () => {
@@ -75,7 +76,9 @@ const Slideshow = () => {
                 <br />
                 {convertTitle(slider.title).titleDown}
               </span>
-              <TextButton value={'Shop Now'} />
+              <Link to={'/products'}>
+                <TextButton value={'Shop Now'} />
+              </Link>
             </div>
           </SwiperSlide>
         ))}
