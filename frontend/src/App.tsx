@@ -88,50 +88,55 @@ function App() {
                   pauseOnHover
                   theme="light"
                 />
-                <BrowserRouter>
-                  {/* ===== Head Section ===== */}
-                  <Search />
-                  <Header />
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/products/:id" element={<Product />} />
-                    <Route element={<UserRoutes />}>
-                      <Route path="/wishlist" element={<Wishlist />} />
-                      <Route path="/checkout" element={<Checkout />} />
-                      <Route path="/profile" element={<Profile />}>
-                        <Route path="" element={<PersonalData />} />
-                        <Route path="order" element={<Order />} />
+                <Suspense fallback={<div>Loading...</div>}>
+                  <BrowserRouter>
+                    {/* ===== Head Section ===== */}
+                    <Search />
+                    <Header />
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/products" element={<Products />} />
+                      <Route path="/products/:id" element={<Product />} />
+                      <Route element={<UserRoutes />}>
+                        <Route path="/wishlist" element={<Wishlist />} />
+                        <Route path="/checkout" element={<Checkout />} />
+                        <Route path="/profile" element={<Profile />}>
+                          <Route path="" element={<PersonalData />} />
+                          <Route path="order" element={<Order />} />
+                        </Route>
                       </Route>
-                    </Route>
-                    <Route element={<AdminRoutes />}>
-                      <Route path="/admin" element={<Admin />}>
-                        <Route path="" element={<Dashboard />} />
-                        <Route path="orders" element={<Orders />} />
-                        <Route path="orders/:id" element={<AdminOrder />} />
-                        <Route path="products" element={<AdminProducts />} />
-                        <Route
-                          path="products/create"
-                          element={<CreateProduct />}
-                        />
-                        <Route path="products/:id" element={<AdminProduct />} />
-                        <Route path="categories" element={<Categories />} />
-                        <Route
-                          path="categories/create"
-                          element={<CreateCategory />}
-                        />
-                        <Route path="categories/:id" element={<Category />} />
-                        <Route path="customers" element={<Customers />} />
-                        <Route path="customers/:id" element={<Customer />} />
+                      <Route element={<AdminRoutes />}>
+                        <Route path="/admin" element={<Admin />}>
+                          <Route path="" element={<Dashboard />} />
+                          <Route path="orders" element={<Orders />} />
+                          <Route path="orders/:id" element={<AdminOrder />} />
+                          <Route path="products" element={<AdminProducts />} />
+                          <Route
+                            path="products/create"
+                            element={<CreateProduct />}
+                          />
+                          <Route
+                            path="products/:id"
+                            element={<AdminProduct />}
+                          />
+                          <Route path="categories" element={<Categories />} />
+                          <Route
+                            path="categories/create"
+                            element={<CreateCategory />}
+                          />
+                          <Route path="categories/:id" element={<Category />} />
+                          <Route path="customers" element={<Customers />} />
+                          <Route path="customers/:id" element={<Customer />} />
+                        </Route>
                       </Route>
-                    </Route>
-                    <Route path="/coming-soon" element={<ComingSoon />} />
-                    <Route path="*" element={<Custom404 />} />
-                  </Routes>
+                      <Route path="/coming-soon" element={<ComingSoon />} />
+                      <Route path="*" element={<Custom404 />} />
+                    </Routes>
 
-                  {/* ===== Footer Section ===== */}
-                  <Footer />
-                </BrowserRouter>
+                    {/* ===== Footer Section ===== */}
+                    <Footer />
+                  </BrowserRouter>
+                </Suspense>
               </div>
             </CartProvider>
           </WishlistProvider>
