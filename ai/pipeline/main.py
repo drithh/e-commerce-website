@@ -1,44 +1,41 @@
-import numpy as np
-from PIL import Image
 import torch
 import torchvision.transforms as transforms
-import torch.nn as nn
-from torchvision.models import resnet34
-import torch.nn.functional as F
+from torch.autograd import Variable
+import cv2
+from model import Net
 
 class ImageClassifier:
-    def __init__(self):        
-        self.classifier = Classifier()
-        model_path = MODEL_PATH               
+    def __init__(self):
+        # Class module from model.py        
+        self.classifier = Net()
+        # Model path with pth file
+        model_path = 'ModelAug.pth'               
         self.classifier.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
 
-    def predict(self, image): 
-        # Preprocessing image      
-        normalize = transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                         std=[0.229, 0.224, 0.225])
-        preprocess = transforms.Compose([transforms.RandomResizedCrop(224),
-                                         transforms.RandomHorizontalFlip(),
-                                         transforms.ToTensor(),
-                                         normalize])
-        image = preprocess(image) 
-        image = image.unsqueeze(0)
+    def preprocessing(self, image):
+      transform =transforms.Compose([transforms.Resize((128,128)),
+                                     transforms.RandomHorizontalFlip(),
+                                     transforms.ToTensor(), 
+                                     transforms.Normalize([0.5,], [0.5,]),
+                                     transforms.Grayscale(1)
+                                    ])
+      
+      image = transform(image).float()
+      return image
+
+    def predict(self, image):
+        # Preprocessing image
+        image = cv2.imread(image, 3)
+        image = Image.fromarray(image)
+        image_tensor = self.preprocessing(image).float()
+        image_tensor = image_tensor.unsqueeze_(0)
+        image = Variable(image_tensor)    
         # Predict image from classifier
-        preds = F.softmax(self.classifier(image), dim=1)
-        # Get a results with tensor value
-        results = torch.topk(preds.cpu().data, k=3, dim=1)
-        # Get tensor classes and convert it to list 
-        classes = results[1][0]
-        classes = classes.tolist()
-        # Get tensor values and convert it to list
-        value = results[0][0]
-        v = value.tolist()
-        # To dictionary
-        res = {classes[i]: v[i] for i in range(len(classes))}
-        # Get key of max value from dictionary
-        max_value = max(res, key = res.get)
-        # Open class txt for know what the predicted value from the model
+        output = self.classifier(image)
+        index = output.data.numpy().argmax()
         with open('class.txt', 'r') as f:
           to_label = eval(f.read())
         # Get result final and return it
-        result_final = to_label[max_value]
+        result_final = to_label[index]
+        # Will return string value
         return result_final

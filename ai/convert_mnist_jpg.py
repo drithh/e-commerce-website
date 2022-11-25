@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import os
 import struct
 import sys
@@ -9,7 +8,6 @@ from os import path
 
 import png
 
-# source: http://abel.ee.ucla.edu/cvxopt/_downloads/mnist.py
 def read(dataset="training", path="."):
     if dataset == "training":
         fname_img = os.path.join(path, "train-images-idx3-ubyte")
