@@ -3,7 +3,8 @@ from app.models.user import User
 
 def user_seed(fake, session):
     user_id = []
-    admin, user = User.default_seed(fake)
+    admin = User.default_admin_seed(fake)
+    user = User.default_user_seed(fake)
     user_id.append(user.id)
     session.add(admin)
     session.add(user)

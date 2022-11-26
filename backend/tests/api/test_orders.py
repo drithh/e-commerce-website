@@ -66,11 +66,15 @@ def test_get_empty_orders_admin(client: TestClient, create_admin):
 
 
 def test_get_orders_admin(
-    client: TestClient, create_admin, create_user, create_order_item, create_order
+    client: TestClient,
+    create_admin,
+    create_user,
+    create_order_item,
+    create_order_with_time,
 ):
     admin = create_admin()
     create_user()
-    order = create_order()
+    order = create_order_with_time()
     create_order_item(order)
 
     resp = client.get(

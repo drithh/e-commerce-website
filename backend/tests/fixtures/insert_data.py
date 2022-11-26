@@ -38,6 +38,19 @@ def create_user(db: Session):
 
 
 @pytest.fixture(scope="function")
+def create_default_user(db: Session):
+    def inner() -> User:
+        user = User.default_user_seed(fake)
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        user.password = "user"
+        return user
+
+    return inner
+
+
+@pytest.fixture(scope="function")
 def create_admin(db: Session):
     def inner() -> User:
         admin = User.default_admin_seed(fake)
@@ -194,6 +207,20 @@ def create_order(db: Session, create_user: Callable):
         if not user:
             user = create_user()
         order = Order.seed(fake, user.id, "completed")
+        db.add(order)
+        db.commit()
+        db.refresh(order)
+        return order
+
+    return inner
+
+
+@pytest.fixture(scope="function")
+def create_order_with_time(db: Session, create_user: Callable):
+    def inner(user=None) -> Order:
+        if not user:
+            user = create_user()
+        order = Order.seed(fake, user.id, "completed", 12, 2021)
         db.add(order)
         db.commit()
         db.refresh(order)

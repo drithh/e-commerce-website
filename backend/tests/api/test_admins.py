@@ -27,9 +27,9 @@ def test_get_customer_no_customer(client: TestClient, create_admin):
     assert resp.json().get("message") == "You don't have any customer"
 
 
-def test_get_customer(client: TestClient, create_admin, create_user):
+def test_get_customer(client: TestClient, create_admin, create_default_user):
     admin = create_admin()
-    user = create_user()
+    user = create_default_user()
     resp = client.get(f"{prefix}/customer", headers=get_jwt_header(admin))
     assert resp.status_code == 200
     assert resp.json().get("data")[0].get("id") == str(user.id)

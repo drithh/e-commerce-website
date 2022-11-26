@@ -1,9 +1,9 @@
 from starlette.testclient import TestClient
 
 from app.core.config import settings
+from tests.utils import get_jwt_header
 
 prefix = f"{settings.API_PATH}/categories"
-from tests.utils import get_jwt_header
 
 
 def test_get_empty_category(client: TestClient):

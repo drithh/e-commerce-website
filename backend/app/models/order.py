@@ -50,6 +50,3 @@ class Order(DefaultModel, Base):
                 user_id=user_id,
             )
         return order
-
-    def __str__(self):
-        return f"Order {self.status} created at {self.created_at} "

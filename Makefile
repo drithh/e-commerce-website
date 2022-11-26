@@ -18,6 +18,10 @@ create-apptest:
 test:
 	docker compose exec backend pytest tests/$(filter-out $@,$(MAKECMDGOALS))
 
+coverage:
+	docker compose exec backend coverage run -m pytest tests
+	docker compose exec backend coverage report -m
+
 migrate-up:
 		$(MIGRATE) upgrade head
 migrate-down:

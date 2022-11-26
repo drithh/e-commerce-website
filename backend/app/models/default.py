@@ -1,6 +1,3 @@
-import datetime
-from typing import TYPE_CHECKING
-
 from fastapi_users_db_sqlalchemy import GUID
 from sqlalchemy import Column, DateTime
 from sqlalchemy.orm import declarative_mixin
@@ -11,20 +8,13 @@ from sqlalchemy.sql.functions import func
 class DefaultModel:
     """Default Column names for all models."""
 
-    if TYPE_CHECKING:
-        id: GUID
-        created_at: datetime
-        updated_at: datetime
-        deleted_at: datetime
-
-    else:
-        id = Column(GUID, primary_key=True, server_default=func.uuid_generate_v4())
-        created_at = Column(
-            DateTime(timezone=True), server_default=func.now(), nullable=True
-        )
-        updated_at = Column(
-            DateTime(timezone=True),
-            server_default=func.now(),
-            nullable=True,
-        )
-        deleted_at = Column(DateTime(timezone=True), nullable=True)
+    id = Column(GUID, primary_key=True, server_default=func.uuid_generate_v4())
+    created_at = Column(
+        DateTime(timezone=True), server_default=func.now(), nullable=True
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=True,
+    )
+    deleted_at = Column(DateTime(timezone=True), nullable=True)

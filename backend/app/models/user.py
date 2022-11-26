@@ -23,10 +23,6 @@ class User(DefaultModel, Base):
     is_admin = Column(Boolean, nullable=False, server_default="false")
 
     @classmethod
-    def default_seed(cls, fake):
-        return User.default_user_seed(fake), User.default_admin_seed(fake)
-
-    @classmethod
     def default_user_seed(cls, fake):
         password, salt = cls.encrypt_password("user")
         user = User(
@@ -63,12 +59,12 @@ class User(DefaultModel, Base):
 
     @classmethod
     def seed(cls, fake, password="password"):
-        password, salt = cls.encrypt_password(password)
+        hashed_password, salt = cls.encrypt_password(password)
         user = User(
             id=fake.uuid4(),
             name=fake.name(),
             email=fake.email(),
-            password=password,
+            password=hashed_password,
             salt=salt,
             phone_number=fake.phone_number(),
             address_name=fake.text(max_nb_chars=24),
