@@ -25,7 +25,7 @@ from app.schemas.search import (
 router = APIRouter()
 
 
-@router.get("", response_model=GetImage, status_code=status.HTTP_200_OK)
+@router.get("/image", response_model=GetImage, status_code=status.HTTP_200_OK)
 async def get_image(
     image_name: str,
     session: Generator = Depends(get_db),

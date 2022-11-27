@@ -141,6 +141,7 @@ def sign_up(
 )
 async def forgot_password(
     email: str,
+    background_task: BackgroundTasks,
     session: Generator = Depends(get_db),
 ) -> JSONResponse:
     user = session.query(User).filter(User.email == email).first()
@@ -163,9 +164,9 @@ async def forgot_password(
     )
     session.add(forgot_password)
     session.commit()
-    await send_forgot_password_email(email, token)
+    background_task.add_task(send_forgot_password_email, email, token)
     return DefaultResponse(
-        message="Reset password code has been sent to your email",
+        message="Reset password code will be sent to your email, please check your email"
     )
 
 

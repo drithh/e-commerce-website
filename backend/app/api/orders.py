@@ -2,7 +2,7 @@ import math
 from typing import Generator
 from uuid import UUID
 
-from fastapi import HTTPException, Query, status
+from fastapi import BackgroundTasks, HTTPException, Query, status
 from fastapi.params import Depends
 from fastapi.responses import JSONResponse
 from fastapi.routing import APIRouter
@@ -197,6 +197,7 @@ def get_orders_admin(
 @router.post("/order", status_code=status.HTTP_201_CREATED)
 async def create_order(
     request: CreateOrder,
+    background_task: BackgroundTasks,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
@@ -345,18 +346,19 @@ async def create_order(
             detail="Something went wrong, when reducing balance",
         )
     if request.send_email:
-        await send_checkout_email(
-            email=current_user.email,
-            name=current_user.name,
-            shipping_address=request.shipping_address.address,
-            shipping_method=request.shipping_method,
-            shipping_price=shipping_price,
-            subtotal=total_price,
-            total=total_price + shipping_price,
-            order_items=cart,
+        background_task.add_task(
+            send_checkout_email,
+            current_user.name,
+            current_user.email,
+            request.shipping_address.address,
+            request.shipping_method,
+            shipping_price,
+            total_price,
+            total_price + shipping_price,
+            cart,
         )
         return DefaultResponse(
-            message="Order created successfully And An Email Has Been Sent To You"
+            message="Order created successfully And An Email Will Be Sent To You Shortly"
         )
     else:
         return DefaultResponse(message="Order created successfully")

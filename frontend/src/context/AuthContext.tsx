@@ -134,7 +134,7 @@ const useProvideAuth = () => {
   const logout = () => {
     Cookies.remove('token');
     OpenAPI.TOKEN = '';
-    refetch();
+    window.location.reload();
   };
 
   return {

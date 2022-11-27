@@ -1,10 +1,15 @@
 import logging
 
 import uvicorn
+from fastapi import BackgroundTasks, FastAPI, Request
+from fastapi.routing import APIRouter
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
+from starlette.responses import JSONResponse
 
 from app.factory import create_app
 
 app = create_app()
+
 
 logger = logging.getLogger("uvicorn")
 console_formatter = uvicorn.logging.DefaultFormatter(

@@ -65,8 +65,14 @@ import { CartProvider } from './context/CartContext';
 import 'animate.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { lazy, Suspense } from 'react';
+import { OpenAPI } from './api';
+import Cookies from 'js-cookie';
 
 const queryClient = new QueryClient();
+
+OpenAPI.TOKEN = async () => {
+  return Cookies.get('token') || '';
+};
 
 function App() {
   return (
