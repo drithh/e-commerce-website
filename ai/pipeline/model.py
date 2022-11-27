@@ -22,12 +22,12 @@ class Net(nn.Module):
           self.avgpool    = nn.AdaptiveAvgPool2d((7, 7))
 
           self.classifier = nn.Sequential(
-                                nn.Dropout(0.2), 
-                                nn.Linear(128 * 7 * 7, 4096), 
+                                nn.Linear(128 * 7 * 7, 256), 
                                 nn.ReLU(inplace=True),
-                                nn.Linear(4096, 4096), 
+                                nn.Linear(256, 256), 
+                                nn.Dropout(0.2), 
                                 nn.ReLU(inplace=True), 
-                                nn.Linear(4096, num_classes),)
+                                nn.Linear(256, num_classes),)
           
       def forward(self, x):
           x = self.features(x)
