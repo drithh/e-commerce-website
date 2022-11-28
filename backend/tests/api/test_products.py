@@ -176,9 +176,7 @@ def test_create_product(client: TestClient, create_category, create_admin, creat
     assert resp.status_code == 201
 
 
-def test_create_product_wrong_category(
-    client: TestClient,  create_admin
-):
+def test_create_product_wrong_category(client: TestClient, create_admin):
     admin = create_admin()
 
     resp = client.post(

@@ -126,9 +126,7 @@ def test_forgot_password(client: TestClient, create_user):
     )
     message = "Reset password code will be sent to your email, please check your email"
     assert resp.status_code == 200
-    assert (
-        resp.json().get("message") == message
-    )
+    assert resp.json().get("message") == message
 
 
 def test_reset_password_invalid_token(client: TestClient):
