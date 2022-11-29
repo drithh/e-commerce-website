@@ -82,14 +82,14 @@ class ImageClassifier:
         )
         return list_image
 
-    def read_base64(self, base64_data):
-        image = cv2.imdecode(np.frombuffer(base64_data, np.uint8), 3)
+    def read_bytewD(self, byte_image):
+        image = cv2.imdecode(np.frombuffer(byte_image, np.uint8), 3)
         return image
 
-    def predict(self, base64_data):
+    def predict(self, byte_image):
         count_final = 2
 
-        image = self.read_base64(base64_data)
+        image = self.read_bytewD(byte_image)
         list_image = self.augmentation(image)
         list_image.append(image)
         while count_final > 1:

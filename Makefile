@@ -11,6 +11,9 @@ dearchive:
 drop-tables:
 	$(EXEC) poetry run python -m app.util.drop-tables
 
+download_model:
+	docker compose exec backend wget "https://storage.googleapis.com/tutu-startup-campus/model.pth" -O app/image_classification/pipeline/model.pth
+
 create-apptest:
 	docker compose exec postgres createdb apptest -U postgres
 	docker compose exec postgres psql -U postgres -d apptest -f docker-entrypoint-initdb.d/extension.sql
