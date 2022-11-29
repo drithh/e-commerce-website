@@ -1,5 +1,4 @@
 import random
-from asyncio import sleep
 from datetime import datetime, timedelta
 from typing import Generator, List
 
@@ -13,6 +12,7 @@ from app.core.config import settings
 from app.core.logger import logger
 from app.deps.db import get_db
 from app.deps.image_base64 import base64_to_image
+from app.image_classification.pipeline.main import ImageClassifier
 from app.models.image import Image
 from app.schemas.search import (
     GetImage,
@@ -64,15 +64,26 @@ async def search_image(
     request: SearchImage,
     session: Generator = Depends(get_db),
 ) -> JSONResponse:
+    # check if image is base64
+    if not request.base64_image.startswith("data:"):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Image is not base64",
+        )
+
     img_data, image_type = base64_to_image(request.base64_image)
-    await sleep(15)  # Simulate a long running task AI Image Classification
+    image_classifier = ImageClassifier()
+    result = image_classifier.predict(img_data)
     return session.execute(
         """
             SELECT id, title FROM
             categories
-        """
+            WHERE title = :title;
+        """,
+        {
+            "title": result,
+        },
     ).fetchone()
-    return Response(content=img_data, media_type=f"image/{image_type}")
 
 
 @router.get(

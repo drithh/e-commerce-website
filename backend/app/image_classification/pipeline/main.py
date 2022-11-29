@@ -1,11 +1,29 @@
+import os
 from collections import Counter
 
 import cv2
+import numpy as np
 import torch
 import torchvision.transforms as transforms
-from model import Net
 from PIL import Image
 from torch.autograd import Variable
+
+from app.image_classification.pipeline.model import Net
+
+CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
+PRODUCT_CATEGORY = {
+    0: "t-shirts",
+    1: "trousers",
+    2: "hats",
+    3: "pullovers",
+    4: "dresses",
+    5: "coats",
+    6: "sandals",
+    7: "shirts",
+    8: "sneakers",
+    9: "bags",
+    10: "ankle-boots",
+}
 
 
 class ImageClassifier:
@@ -13,7 +31,7 @@ class ImageClassifier:
         # Class module from AI team
         self.classifiers = Net(num_classes=11)
         # Model path with pth file
-        model_path = "ModelAug2.pth"
+        model_path = f"{CURRENT_PATH}/model.pth"
         self.classifiers.load_state_dict(
             torch.load(model_path, map_location=torch.device("cpu"))
         )
@@ -64,9 +82,14 @@ class ImageClassifier:
         )
         return list_image
 
-    def predict(self, image):
+    def read_base64(self, base64_data):
+        image = cv2.imdecode(np.frombuffer(base64_data, np.uint8), 3)
+        return image
+
+    def predict(self, base64_data):
         count_final = 2
-        image = cv2.imread(image, 3)
+
+        image = self.read_base64(base64_data)
         list_image = self.augmentation(image)
         list_image.append(image)
         while count_final > 1:
@@ -80,10 +103,9 @@ class ImageClassifier:
                 output = self.classifiers(image)
                 self.classifiers.eval()
                 index = output.data.numpy().argmax()
-                with open("class.txt", "r") as f:
-                    to_label = eval(f.read())
+
                 # Get result final and return it
-                result_final = to_label[index]
+                result_final = PRODUCT_CATEGORY[index]
                 lists.append(result_final)
             c = Counter(lists)
             highest_freq = max(c.values())
