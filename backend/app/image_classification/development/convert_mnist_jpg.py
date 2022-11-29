@@ -2,7 +2,6 @@
 import os
 import struct
 import sys
-
 from array import array
 from os import path
 
