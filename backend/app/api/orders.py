@@ -399,7 +399,7 @@ def update_order_status(
 @router.put("/orders/{id}", status_code=status.HTTP_200_OK)
 def update_orders(
     id: UUID,
-    status: str = Query(regex="^(processed|shipped|cancelled|completed)$"),
+    order_status: str = Query(regex="^(processed|shipped|cancelled|completed)$"),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
@@ -422,7 +422,7 @@ def update_orders(
         SET status = :status
         WHERE id = :id
         """,
-        {"id": id, "status": status},
+        {"id": id, "status": order_status},
     )
 
     session.commit()
