@@ -8,6 +8,7 @@ from os import path
 
 import png
 
+
 def read(dataset="training", path="."):
     if dataset == "training":
         fname_img = os.path.join(path, "train-images-idx3-ubyte")
