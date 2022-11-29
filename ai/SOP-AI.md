@@ -14,6 +14,8 @@ git clone https://github.com/Drithh/e-commerce-website.git
 cd e-commerce-website
 pip install pre-commit
 pre-commit install
+cd ai
+python3.9 main.py
 ```
 
 ## Development
