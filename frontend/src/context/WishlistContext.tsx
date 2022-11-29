@@ -56,7 +56,7 @@ const useProvideWishlist = () => {
   });
 
   const { refetch } = useQuery('wishlist', WishlistService.getWishlist, {
-    retry: false,
+    retry: 0,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     staleTime: Infinity,
