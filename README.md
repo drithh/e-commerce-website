@@ -1,12 +1,20 @@
 # e-commerce-website
 
+This is a simple e-commerce website built with fastapi and react.
+
+### live demo:
+
+Website: https://projectakhir.me
+API: https://api.projectakhir.me
+
+See our API documentation here: https://api.projectakhir.me/docs
+
 ## Technologies used
 
 - FastAPI
 - SQLAlchemy and Alembic
 - Pre-commit hooks (black, autoflake, isort, flake8, prettier)
 - Github Action
-- Dependabot config
 - Docker images
 
 ## Project structure
@@ -22,6 +30,12 @@
 │   │   │   ├── ...
 │   │   │   ├── sales.py
 │   │   │   └── users.py
+│   │   ├── image_classification  -> Image classification model
+│   │   │   ├── development -> Development environment
+│   │   │   ├── pipeline -> Pipeline for classification model
+│   │   │   │   ├── main.py -> Pipeline main file
+│   │   │   │   └── model.py -> Model definition
+│   │   │   └── utils -> Utility functions
 │   │   ├── core  -> Config and Utils
 │   │   │   ├── config.py
 │   │   │   └── logger.py

@@ -67,6 +67,14 @@ product_items = [
                 "name": "Men Leopard Print Shirt",
                 "price": 140000,
             },
+            {
+                "name": "Men Letter Graphic Shirt",
+                "price": 190000,
+            },
+            {
+                "name": "Men Floral Print Shirt",
+                "price": 130000,
+            },
         ],
     },
     {
@@ -112,6 +120,14 @@ product_items = [
                 "name": "Cow Tee",
                 "price": 80000,
             },
+            {
+                "name": "Guys Butterfly Graphic Tee",
+                "price": 110000,
+            },
+            {
+                "name": "Monalisa Figure Graphic Tee",
+                "price": 90000,
+            },
         ],
     },
     {
@@ -155,6 +171,14 @@ product_items = [
             },
             {
                 "name": "Open Toe Massage Sandals",
+                "price": 180000,
+            },
+            {
+                "name": "Two Part Chunky Heels",
+                "price": 190000,
+            },
+            {
+                "name": "Double Strap Slide Sandals",
                 "price": 180000,
             },
         ],
@@ -202,6 +226,14 @@ product_items = [
                 "name": "Graffiti Print Shoes",
                 "price": 290000,
             },
+            {
+                "name": "Men Graphic Front Sneakers",
+                "price": 360000,
+            },
+            {
+                "name": "Colorblock Front Skate Shoes",
+                "price": 290000,
+            },
         ],
     },
     {
@@ -246,6 +278,14 @@ product_items = [
             {
                 "name": "Chunky Snow Boots",
                 "price": 510000,
+            },
+            {
+                "name": "Zipper Chunky Heeled Boots",
+                "price": 380000,
+            },
+            {
+                "name": "Leopard Pattern Booties",
+                "price": 290000,
             },
         ],
     },
@@ -292,6 +332,14 @@ product_items = [
                 "name": "Slant Pocket Cord Straight Leg Pants",
                 "price": 300000,
             },
+            {
+                "name": "Plaid Print Wide Leg Pants",
+                "price": 170000,
+            },
+            {
+                "name": "Flap Pocket Cargo Pants",
+                "price": 180000,
+            },
         ],
     },
     {
@@ -336,6 +384,14 @@ product_items = [
             {
                 "name": "Men Stripe Pattern Ribbed Knit Sweater",
                 "price": 360000,
+            },
+            {
+                "name": "Plus Battery Graphic Sweatshirt",
+                "price": 150000,
+            },
+            {
+                "name": "Thermal Lined Sweatshirt",
+                "price": 120000,
             },
         ],
     },
@@ -382,6 +438,14 @@ product_items = [
                 "name": "Ruffle Hem Puff Sleeve Dress",
                 "price": 300000,
             },
+            {
+                "name": "Sleeve Belted Sequins Dress",
+                "price": 360000,
+            },
+            {
+                "name": "Lantern Sleeve Layered Dress",
+                "price": 280000,
+            },
         ],
     },
     {
@@ -427,6 +491,14 @@ product_items = [
                 "name": "Men Plaid Letter Graphic Flap Pocket Zipper Coat",
                 "price": 550000,
             },
+            {
+                "name": "Breasted Belted Trench Coat",
+                "price": 310000,
+            },
+            {
+                "name": "Frog Button High Low Coat",
+                "price": 360000,
+            },
         ],
     },
     {
@@ -471,6 +543,67 @@ product_items = [
             {
                 "name": "Men Letter Patch Cartoon Decor Messenger Bag",
                 "price": 310000,
+            },
+            {
+                "name": "Ruched Detail Satchel Bag",
+                "price": 90000,
+            },
+            {
+                "name": "Mini Plaid Pocket Backpack",
+                "price": 70000,
+            },
+        ],
+    },
+    {
+        "category": "hats",
+        "item": [
+            {
+                "name": "Halloween Skull Pattern Embroidery Beanie",
+                "price": 45000,
+            },
+            {
+                "name": "Bear Decor Bucket Hat",
+                "price": 45000,
+            },
+            {
+                "name": "Letter Graphic Baseball Cap",
+                "price": 50000,
+            },
+            {
+                "name": "Slogan Graphic Bucket Hat",
+                "price": 50000,
+            },
+            {
+                "name": "Buckle Decor Baker Boy Cap",
+                "price": 60000,
+            },
+            {
+                "name": "Letter Embroidery Baseball Cap",
+                "price": 55000,
+            },
+            {
+                "name": "Men Letter Graphic Baseball Cap",
+                "price": 40000,
+            },
+            {
+                "name": "Men Breathable Baseball Cap",
+                "price": 40000,
+            },
+            {
+                "name": "Men Letter Graphic Baseball Green Cap",
+                "price": 60000,
+            },
+            {
+                "name": "Men Letter Embroidered Outdoor Hat",
+                "price": 75000,
+            },
+            {
+                "name": "Men Letter Embroidery Baseball Cap",
+                "price": 50000,
+            },
+            {
+                "name": "Men Mountain & Letter Graphic Trucker Hat",
+                "price": 50000,
             },
         ],
     },

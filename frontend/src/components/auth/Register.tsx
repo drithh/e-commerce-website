@@ -6,6 +6,7 @@ import { ApiError } from '../../api';
 import { useAuth } from '../../context/AuthContext';
 import Button from '../button/Button';
 import Input from '../input/Input';
+import { toast } from 'react-toastify';
 
 interface Props {
   onLogin: () => void;
@@ -22,11 +23,14 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    register!.mutate({ name, email, password, phone });
-    if (register!.error) {
-      const error = register!.error as ApiError;
-      setErrorMsg(error.body.message);
-    }
+    register!.mutate(
+      { name, email, password, phone },
+      {
+        onError: (error) => {
+          setErrorMsg((error as ApiError).body.message);
+        },
+      }
+    );
   };
 
   return (
