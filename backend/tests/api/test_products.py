@@ -219,7 +219,10 @@ def test_create_product_wrong_category(client: TestClient, create_admin):
 
 #     assert resp.json() == {}
 
-def test_update_product_false_category_id(client: TestClient, create_product, create_admin):
+
+def test_update_product_false_category_id(
+    client: TestClient, create_product, create_admin
+):
     product = create_product()
     admin = create_admin()
 
@@ -238,11 +241,13 @@ def test_update_product_false_category_id(client: TestClient, create_product, cr
             "stock": [{"size": "S", "quantity": 100}],
         },
     )
-    assert resp.json()['message'].startswith("IntegrityError")
+    assert resp.json()["message"].startswith("IntegrityError")
     assert resp.status_code == 400
 
 
-def test_update_product_unavailable_size(client: TestClient, create_product, create_admin, db: Session):
+def test_update_product_unavailable_size(
+    client: TestClient, create_product, create_admin, db: Session
+):
     product = create_product()
     admin = create_admin()
 
@@ -278,8 +283,9 @@ def test_update_product_unavailable_size(client: TestClient, create_product, cre
             "stock": [{"size": "XXL", "quantity": 10}],
         },
     )
-    assert resp.json()['message'] == "Size does not exist"
+    assert resp.json()["message"] == "Size does not exist"
     assert resp.status_code == 400
+
 
 def test_update_product_not_admin(client: TestClient):
 
@@ -288,10 +294,16 @@ def test_update_product_not_admin(client: TestClient):
     assert resp.status_code == 401
 
 
-def test_update_product(client: TestClient, create_product, create_admin, create_product_size_quantity, db : Session):
+def test_update_product(
+    client: TestClient,
+    create_product,
+    create_admin,
+    create_product_size_quantity,
+    db: Session,
+):
     admin = create_admin()
     product = create_product()
-    
+
     db.execute("INSERT INTO sizes (size) VALUES ('S')")
     db.commit()
     size = db.execute("SELECT * FROM sizes").fetchone()

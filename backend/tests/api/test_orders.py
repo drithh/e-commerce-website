@@ -109,8 +109,8 @@ def test_create_order(client: TestClient, create_user, create_cart):
 
 
 def test_create_order_insufficient_balance(
-    client: TestClient, 
-    create_user, 
+    client: TestClient,
+    create_user,
     create_cart,
 ):
     user = create_user()
@@ -146,11 +146,11 @@ def test_create_order_without_adrress_name(client: TestClient, create_user):
                 "address_name": "",
                 "address": "",
                 "city": "",
-                "phone_number": ""
-            }
-        }
+                "phone_number": "",
+            },
+        },
     )
-    assert resp.json()['message'] == 'Address name is empty'
+    assert resp.json()["message"] == "Address name is empty"
     assert resp.status_code == 400
 
 
@@ -166,11 +166,11 @@ def test_create_order_without_adrress(client: TestClient, create_user):
                 "address_name": "lokotre",
                 "address": "",
                 "city": "",
-                "phone_number": ""
-            }
-        }
+                "phone_number": "",
+            },
+        },
     )
-    assert resp.json()['message'] == 'Address is empty'
+    assert resp.json()["message"] == "Address is empty"
     assert resp.status_code == 400
 
 
@@ -186,11 +186,11 @@ def test_create_order_without_city(client: TestClient, create_user):
                 "address_name": "lokotre",
                 "address": "hehe",
                 "city": "",
-                "phone_number": ""
-            }
-        }
+                "phone_number": "",
+            },
+        },
     )
-    assert resp.json()['message'] == 'City is empty'
+    assert resp.json()["message"] == "City is empty"
     assert resp.status_code == 400
 
 
@@ -206,11 +206,11 @@ def test_create_order_without_phone(client: TestClient, create_user):
                 "address_name": "lokotre",
                 "address": "hehe",
                 "city": "hoho",
-                "phone_number": ""
-            }
-        }
+                "phone_number": "",
+            },
+        },
     )
-    assert resp.json()['message'] == 'Phone number is empty'
+    assert resp.json()["message"] == "Phone number is empty"
     assert resp.status_code == 400
 
 
@@ -225,21 +225,21 @@ def test_create_order_without_cart(client: TestClient, create_user):
                 "address_name": "lokotre",
                 "address": "hehe",
                 "city": "hoho",
-                "phone_number": "123"
-            }
-        }
+                "phone_number": "123",
+            },
+        },
     )
-    assert resp.json()['message'] == 'Cart is empty'
+    assert resp.json()["message"] == "Cart is empty"
     assert resp.status_code == 404
 
 
 def test_create_order_no_quantitiy(
-    client: TestClient, 
-    create_user, 
+    client: TestClient,
+    create_user,
     create_cart,
     create_product,
-    create_size, 
-    db:Session
+    create_size,
+    db: Session,
 ):
     user = create_user()
     user.balance = 1000000
@@ -272,11 +272,11 @@ def test_create_order_no_quantitiy(
                 "address_name": "lokotre",
                 "address": "hehe",
                 "city": "hoho",
-                "phone_number": "123"
-            }
-        }
+                "phone_number": "123",
+            },
+        },
     )
-    assert resp.json()['message'].startswith('Product')
+    assert resp.json()["message"].startswith("Product")
     assert resp.status_code == 400
 
 
@@ -291,7 +291,7 @@ def test_update_empty_order_status(client: TestClient, create_user):
     assert resp.status_code == 400
 
 
-def test_update_order_status_not_shipped(client: TestClient, create_user, db:Session):
+def test_update_order_status_not_shipped(client: TestClient, create_user, db: Session):
     user = create_user()
 
     db.execute(
@@ -320,6 +320,7 @@ def test_update_order_status_not_shipped(client: TestClient, create_user, db:Ses
     )
     assert resp.json()["message"] == "Order status is not shipped"
     assert resp.status_code == 400
+
 
 def test_update_order_status(client: TestClient, create_user, db: Session):
     user = create_user()

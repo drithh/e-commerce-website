@@ -270,7 +270,6 @@ def update_product(
             )
         size_id = size_id[0]
         session.execute(
-
             """
             UPDATE product_size_quantities SET quantity = :quantity WHERE product_id = :product_id
             AND size_id = :size_id
@@ -282,7 +281,7 @@ def update_product(
             },
         )
     session.commit()
-    
+
     # updating images
     # get all images of the product
     request_updated_images = []
