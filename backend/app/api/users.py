@@ -79,7 +79,7 @@ def update_user(
 @router.put(
     "/shipping_address", response_model=DefaultResponse, status_code=status.HTTP_200_OK
 )
-def put_user_shipping_address(
+def update_user_shipping_address(
     request: PutUserAddress,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
@@ -98,7 +98,7 @@ def put_user_shipping_address(
 @router.put(
     "/balance", response_model=DefaultResponse, status_code=status.HTTP_201_CREATED
 )
-def put_user_balance(
+def update_user_balance(
     request: PutUserBalance,
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
