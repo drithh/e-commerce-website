@@ -2,9 +2,13 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type app__schemas__authentication__GetUser = {
+export type GetUser = {
+  id: string;
   name: string;
   email: string;
   phone_number: string;
-  type: string;
+  address_name?: string;
+  address?: string;
+  city?: string;
+  balance: number;
 };

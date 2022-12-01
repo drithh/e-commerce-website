@@ -2,9 +2,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { app__schemas__product__GetProduct } from '../models/app__schemas__product__GetProduct';
+import type { app__schemas__product__GetProducts } from '../models/app__schemas__product__GetProducts';
 import type { CreateProduct } from '../models/CreateProduct';
 import type { DefaultResponse } from '../models/DefaultResponse';
-import type { GetProducts } from '../models/GetProducts';
 import type { UpdateProduct } from '../models/UpdateProduct';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -21,7 +21,7 @@ export class ProductService {
    * @param price
    * @param condition
    * @param productName
-   * @returns GetProducts Successful Response
+   * @returns app__schemas__product__GetProducts Successful Response
    * @throws ApiError
    */
   public static getProducts(
@@ -32,7 +32,7 @@ export class ProductService {
     price?: Array<number>,
     condition: string = '',
     productName: string = ''
-  ): CancelablePromise<GetProducts> {
+  ): CancelablePromise<app__schemas__product__GetProducts> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/products',

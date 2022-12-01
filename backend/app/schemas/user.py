@@ -1,7 +1,10 @@
-from typing import Union
+import datetime
+from typing import List, Union
 from uuid import UUID
 
 from pydantic import BaseModel
+
+from app.schemas.default_model import Pagination
 
 
 class GetUser(BaseModel):
@@ -54,8 +57,30 @@ class PutUserBalance(BaseModel):
         orm_mode = True
 
 
-class DeleteUser(BaseModel):
-    id: UUID
+class GetProductDetails(BaseModel):
+    quantity: int
+    size: str
 
-    class Config:
-        orm_mode = True
+
+class GetProducts(BaseModel):
+    id: UUID
+    details: List[GetProductDetails]
+    price: int
+    image: str
+    name: str
+
+
+class GetOrder(BaseModel):
+    id: UUID
+    created_at: datetime.datetime
+    products: List[GetProducts]
+    shipping_method: str
+    shipping_price: int
+    city: str
+    status: str
+    shipping_address: str
+
+
+class GetOrders(BaseModel):
+    data: List[GetOrder]
+    pagination: Pagination

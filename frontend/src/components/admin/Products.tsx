@@ -7,10 +7,16 @@ import { capitalCase } from 'change-case';
 import { ProductService } from '../../api';
 import Pagination from '../Pagination';
 import { convertToCurrency } from '../util/utilFunc';
+import { HiArrowDown } from 'react-icons/hi';
 
 interface DefaultParams {
   page: number;
   pageSize: number;
+}
+
+interface SortType {
+  column: string;
+  order: 'asc' | 'desc' | 'off';
 }
 
 const Products = () => {
@@ -19,13 +25,51 @@ const Products = () => {
     page: 1,
     pageSize: 15,
   });
-  const fetchProducts = useQuery(['products', params], () =>
-    ProductService.getProducts([], params.page, params.pageSize)
-  );
 
-  if (fetchProducts.isLoading) {
-    return <div>Loading...</div>;
-  }
+  const [sort, setSort] = useState<SortType>({
+    column: 'name',
+    order: 'desc',
+  });
+
+  const convertSort = (sortType: SortType) => {
+    if (sortType.column === 'title') {
+      if (sortType.order === 'asc') {
+        return 'Title a_z';
+      } else if (sortType.order === 'desc') {
+        return 'Title z_a';
+      }
+    } else if (sortType.column === 'price') {
+      if (sortType.order === 'asc') {
+        return 'Price a_z';
+      } else if (sortType.order === 'desc') {
+        return 'Price z_a';
+      }
+    }
+    return '';
+  };
+
+  const changeSort = (column: string) => {
+    if (sort.column === column) {
+      if (sort.order === 'asc') {
+        setSort({ column, order: 'desc' });
+      } else if (sort.order === 'desc') {
+        setSort({ column, order: 'off' });
+      } else {
+        setSort({ column, order: 'asc' });
+      }
+    } else {
+      setSort({ column, order: 'asc' });
+    }
+  };
+
+  const fetchProducts = useQuery(['products', params, sort], () =>
+    ProductService.getProducts(
+      [],
+      params.page,
+      params.pageSize,
+      convertSort(sort)
+    )
+  );
 
   return (
     <div className="w-full whitespace-nowrap border border-gray-500 px-8 pt-4 pb-8">
@@ -40,42 +84,73 @@ const Products = () => {
         </button>
       </div>
       <div>
-        <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
-          <th className="table-cell flex-[5] py-2 text-left font-semibold">
-            Title
-          </th>
-          <th className="table-cell flex-[4] py-2 text-left font-semibold">
+        <div className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
+          <div className="table-cell flex-[5] py-2 text-left font-semibold">
+            <div
+              className="flex place-content-between place-items-center pr-2 cursor-pointer hover:text-gray-400 m-0"
+              onClick={() => {
+                changeSort('title');
+              }}
+            >
+              <span>Title</span>
+              <HiArrowDown
+                className={`
+                  ${
+                    sort.column === 'title' && sort.order === 'asc'
+                      ? 'transform rotate-180'
+                      : sort.column !== 'title' || sort.order === 'off'
+                      ? 'hidden'
+                      : ''
+                  } text-gray-400 transition-all`}
+              />
+            </div>
+          </div>
+          <div className="table-cell flex-[4] py-2 text-left font-semibold">
             Brand
-          </th>
-          <th className="table-cell flex-[3] py-2 text-left font-semibold">
-            Unit Price
-          </th>
-          <th className="table-cell flex-[2] py-2 text-left font-semibold">
+          </div>
+          <div className="table-cell flex-[3] py-2 text-left font-semibold">
+            <div
+              className="flex place-content-between place-items-center pr-2 cursor-pointer hover:text-gray-400 m-0"
+              onClick={() => {
+                changeSort('price');
+              }}
+            >
+              <span>Unit Price</span>
+              <HiArrowDown
+                className={`
+                  ${
+                    sort.column === 'price' && sort.order === 'asc'
+                      ? 'transform rotate-180'
+                      : sort.column !== 'price' || sort.order === 'off'
+                      ? 'hidden'
+                      : ''
+                  } text-gray-400 transition-all`}
+              />
+            </div>
+          </div>
+          <div className="table-cell flex-[2] py-2 text-left font-semibold">
             Condition
-          </th>
-        </tr>
+          </div>
+        </div>
       </div>
       <div className="mb-8">
         {fetchProducts.data?.data.map((product) => {
           return (
-            <Link to={`${product.id}`}>
-              <tr
-                className=" flex w-full cursor-pointer  place-content-evenly  gap-x-4 border-b-2 border-gray-200 pl-4 hover:bg-gray-50"
-                key={product.id}
-              >
-                <td className="table-cell flex-[5] overflow-hidden text-ellipsis py-2 text-left font-normal">
+            <Link to={`${product.id}`} key={product.id}>
+              <div className=" flex w-full cursor-pointer  place-content-evenly  gap-x-4 border-b-2 border-gray-200 pl-4 hover:bg-gray-50">
+                <div className="table-cell flex-[5] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {product.title}
-                </td>
-                <td className="table-cell flex-[4] overflow-hidden text-ellipsis py-2 text-left font-normal">
+                </div>
+                <div className="table-cell flex-[4] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {product.brand}
-                </td>
-                <td className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
+                </div>
+                <div className="table-cell flex-[3] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {convertToCurrency(product.price)}
-                </td>
-                <td className="table-cell flex-[2] overflow-hidden text-ellipsis py-2 text-left font-normal">
+                </div>
+                <div className="table-cell flex-[2] overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {capitalCase(product.condition)}
-                </td>
-              </tr>
+                </div>
+              </div>
             </Link>
           );
         })}

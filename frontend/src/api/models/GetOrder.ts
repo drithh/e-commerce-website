@@ -2,12 +2,12 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { GetUserProducts } from './GetUserProducts';
+import type { app__schemas__user__GetProducts } from './app__schemas__user__GetProducts';
 
-export type GetUserOrder = {
+export type GetOrder = {
   id: string;
   created_at: string;
-  products: Array<GetUserProducts>;
+  products: Array<app__schemas__user__GetProducts>;
   shipping_method: string;
   shipping_price: number;
   city: string;

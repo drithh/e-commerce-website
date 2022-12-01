@@ -75,9 +75,10 @@ def get_products(
         query += "AND price <= :max_price "
     if condition != "":
         query += "AND condition = :condition "
-    query += (
-        f"GROUP BY products.id  ORDER BY {order} {sort} LIMIT :limit OFFSET :offset"
-    )
+    query += "GROUP BY products.id "
+    if sort_by != "":
+        query += f"ORDER BY {order} {sort} "
+    query += "LIMIT :limit OFFSET :offset "
 
     query = query.replace("AND", "WHERE", 1)
 
@@ -89,8 +90,8 @@ def get_products(
             "min_price": price[0] if price.__len__() > 0 else 0,
             "max_price": price[1] if price.__len__() > 1 else 0,
             "condition": condition,
-            "offset": (page - 1) * page_size,
             "limit": page_size,
+            "offset": (page - 1) * page_size,
         },
     ).fetchall()
 

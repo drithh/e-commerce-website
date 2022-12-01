@@ -4,11 +4,10 @@
 
 export type GetAdminOrder = {
   id: string;
-  title: string;
-  sizes: Array<string>;
   created_at: string;
-  product_detail: string;
-  email: string;
-  images_url: Array<string>;
+  users_id: string;
+  user_email: string;
+  user_name: string;
+  status: string;
   total: number;
 };

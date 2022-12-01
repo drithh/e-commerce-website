@@ -36,7 +36,7 @@ const ShoppingCart = () => {
     UserService.getUserShippingAddress()
   );
 
-  const fetchOrder = useQuery('order', () => OrderService.getOrdersUser(), {
+  const fetchOrder = useQuery('order', () => UserService.getOrdersUser(), {
     enabled: false,
   });
 

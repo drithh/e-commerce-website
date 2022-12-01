@@ -24,7 +24,7 @@ from app.schemas.default_model import DefaultResponse
 router = APIRouter()
 
 
-@router.get("", response_model=GetSales, status_code=status.HTTP_200_OK)
+@router.get("/sales", response_model=GetSales, status_code=status.HTTP_200_OK)
 def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
@@ -108,13 +108,18 @@ def get_dashboard(
 
 @router.get("/customer", response_model=GetCustomers, status_code=status.HTTP_200_OK)
 def get_customer(
+    sort_by: str = Query(
+        "created_at",
+        title="Sort by",
+        regex="^(name|email|total_order|total_spent|last_order)$",
+    ),
+    sort_type: str = Query("desc", title="Sort type", regex="^(asc|desc|off)$"),
     session: Generator = Depends(get_db),
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
-    customers = session.execute(
-        """
+    query = """
         SELECT users.name, users.id, users.email, COUNT(orders.id) total_order,
         COALESCE(SUM(order_items.price * order_items.quantity), 0) total_spent,
         COALESCE(TO_CHAR(MAX(orders.created_at), 'YYYY-MM-DD'), 'Never') last_order,
@@ -124,12 +129,14 @@ def get_customer(
         LEFT JOIN ONLY order_items ON orders.id = order_items.order_id AND orders.status = 'completed'
         WHERE is_admin = false
         GROUP BY users.id
-        OFFSET :offset LIMIT :limit
-        """,
-        {
-            "offset": (page - 1) * page_size,
-            "limit": page_size,
-        },
+        """
+
+    if sort_type != "off":
+        query += f"ORDER BY {sort_by} {sort_type}"
+    query += f" LIMIT {page_size} OFFSET {(page - 1) * page_size}"
+
+    customers = session.execute(
+        query, {"page": page, "page_size": page_size}
     ).fetchall()
 
     if not customers:
@@ -152,13 +159,17 @@ def get_customer(
 
 @router.get("/order", response_model=GetOrders, status_code=status.HTTP_200_OK)
 def get_order(
+    sort_by: str = Query(
+        "created_at",
+        regex="^(created_at|name|address|total_product|total_price|status)$",
+    ),
+    sort_type: str = Query("asc", regex="^(asc|desc|off)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
-    orders = session.execute(
-        """
+    query = """
         SELECT orders.id, users.name, users.email, orders.status,
         orders.address, DATE(orders.created_at) created_at,
         SUM(order_items.price * order_items.quantity) total_price,
@@ -168,8 +179,13 @@ def get_order(
         JOIN ONLY users ON orders.user_id = users.id
         JOIN ONLY order_items ON orders.id = order_items.order_id
         GROUP BY orders.id, users.id
-        OFFSET :offset LIMIT :limit
-        """,
+        """
+    if sort_type != "off":
+        query += f"ORDER BY {sort_by} {sort_type}"
+    query += f" LIMIT {page_size} OFFSET {(page - 1) * page_size}"
+
+    orders = session.execute(
+        query,
         {
             "offset": (page - 1) * page_size,
             "limit": page_size,

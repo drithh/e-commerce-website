@@ -2,11 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Order } from './Order';
 import type { Pagination } from './Pagination';
-import type { Product } from './Product';
 
-export type GetProducts = {
-  data: Array<Product>;
-  total_rows: number;
+export type app__schemas__admin__GetOrders = {
+  data: Array<Order>;
   pagination: Pagination;
 };

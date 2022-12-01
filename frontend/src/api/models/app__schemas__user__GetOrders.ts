@@ -2,10 +2,10 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { GetUserOrder } from './GetUserOrder';
+import type { GetOrder } from './GetOrder';
 import type { Pagination } from './Pagination';
 
-export type GetUserOrders = {
-  data: Array<GetUserOrder>;
+export type app__schemas__user__GetOrders = {
+  data: Array<GetOrder>;
   pagination: Pagination;
 };

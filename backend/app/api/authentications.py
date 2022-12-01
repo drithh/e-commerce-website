@@ -22,7 +22,6 @@ from app.models.forgot_password import ForgotPassword
 from app.models.user import User
 from app.schemas.authentication import (
     ChangePassword,
-    GetUser,
     ResetPassword,
     UserCreate,
     UserRead,
@@ -76,14 +75,11 @@ def sign_in(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token = create_access_token(data={"sub": user.email})
-    user = GetUser(
+    return UserRead(
         name=user.name,
         email=user.email,
         phone_number=user.phone_number,
         type="seller" if user.is_admin else "buyer",
-    )
-    return UserRead(
-        user_information=user,
         access_token=access_token,
         token_type="bearer",
         message="Login success",
@@ -119,15 +115,12 @@ def sign_up(
 
     access_token = create_access_token(data={"sub": request.email})
 
-    user = GetUser(
+    logger.info(f"User {user.email} signed up")
+    return UserRead(
         name=request.name,
         email=request.email,
         phone_number=request.phone_number,
         type="buyer",
-    )
-    logger.info(f"User {user.email} signed up")
-    return UserRead(
-        user_information=user,
         access_token=access_token,
         token_type="bearer",
         message="success, user created",

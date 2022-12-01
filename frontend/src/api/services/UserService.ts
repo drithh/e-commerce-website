@@ -1,8 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { app__schemas__user__GetUser } from '../models/app__schemas__user__GetUser';
+import type { app__schemas__user__GetOrders } from '../models/app__schemas__user__GetOrders';
 import type { DefaultResponse } from '../models/DefaultResponse';
+import type { GetUser } from '../models/GetUser';
 import type { GetUserAddress } from '../models/GetUserAddress';
 import type { GetUserBalance } from '../models/GetUserBalance';
 import type { PutUserAddress } from '../models/PutUserAddress';
@@ -15,10 +16,10 @@ import { request as __request } from '../core/request';
 export class UserService {
   /**
    * Get User
-   * @returns app__schemas__user__GetUser Successful Response
+   * @returns GetUser Successful Response
    * @throws ApiError
    */
-  public static getUser(): CancelablePromise<app__schemas__user__GetUser> {
+  public static getUser(): CancelablePromise<GetUser> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/user',
@@ -32,7 +33,7 @@ export class UserService {
    * @throws ApiError
    */
   public static updateUser(
-    requestBody: app__schemas__user__GetUser
+    requestBody: GetUser
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
@@ -77,16 +78,16 @@ export class UserService {
   }
 
   /**
-   * Put User Shipping Address
+   * Update User Shipping Address
    * @param requestBody
    * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
-  public static putUserShippingAddress(
+  public static updateUserShippingAddress(
     requestBody: PutUserAddress
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: 'PUT',
+      method: 'POST',
       url: '/v1/user/shipping_address',
       body: requestBody,
       mediaType: 'application/json',
@@ -109,16 +110,16 @@ export class UserService {
   }
 
   /**
-   * Put User Balance
+   * Update User Balance
    * @param requestBody
    * @returns DefaultResponse Successful Response
    * @throws ApiError
    */
-  public static putUserBalance(
+  public static updateUserBalance(
     requestBody: PutUserBalance
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
-      method: 'PUT',
+      method: 'POST',
       url: '/v1/user/balance',
       body: requestBody,
       mediaType: 'application/json',
@@ -129,14 +130,36 @@ export class UserService {
   }
 
   /**
-   * Get Detail User
-   * @param id
-   * @returns app__schemas__user__GetUser Successful Response
+   * Get Orders User
+   * @param page
+   * @param pageSize
+   * @returns app__schemas__user__GetOrders Successful Response
    * @throws ApiError
    */
-  public static getDetailUser(
-    id: string
-  ): CancelablePromise<app__schemas__user__GetUser> {
+  public static getOrdersUser(
+    page: number = 1,
+    pageSize: number = 25
+  ): CancelablePromise<app__schemas__user__GetOrders> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v1/user/order',
+      query: {
+        page: page,
+        page_size: pageSize,
+      },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Get Detail User
+   * @param id
+   * @returns GetUser Successful Response
+   * @throws ApiError
+   */
+  public static getDetailUser(id: string): CancelablePromise<GetUser> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/user/{id}',

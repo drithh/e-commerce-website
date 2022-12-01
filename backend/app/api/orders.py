@@ -1,5 +1,4 @@
-import math
-from typing import Generator
+from typing import Generator, List
 from uuid import UUID
 
 from fastapi import BackgroundTasks, HTTPException, Query, status
@@ -17,77 +16,14 @@ from app.models.order_item import OrderItem
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
 from app.schemas.default_model import DefaultResponse, Pagination
-from app.schemas.order import CreateOrder, GetAdminOrders, GetDetailOrder, GetUserOrders
+from app.schemas.order import (
+    CreateOrder,
+    GetAdminOrders,
+    GetDetailOrder,
+    GetShippingPrice,
+)
 
 router = APIRouter()
-
-
-@router.get("/order", response_model=GetUserOrders, status_code=status.HTTP_200_OK)
-def get_orders_user(
-    session: Generator = Depends(get_db),
-    page: int = Query(1, ge=1),
-    page_size: int = Query(25, ge=1, le=100),
-    current_user: User = Depends(get_current_active_user),
-) -> JSONResponse:
-    orders = session.execute(
-        f"""
-        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products,
-        COUNT(*) OVER() totalrow_count
-        FROM (
-            SELECT  orders.id, orders.city, orders.created_at,
-            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
-            json_build_object(
-                'id', products.id,
-                'details', array_agg(
-                        json_build_object(
-                            'quantity', order_items.quantity,
-                            'size', sizes.size
-                    )
-                ),
-                'price', order_items.price,
-                'name', products.title,
-                'image', CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))
-            ) product
-            FROM only orders
-            JOIN order_items ON orders.id = order_items.order_id
-            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
-            JOIN sizes ON product_size_quantities.size_id = sizes.id
-            JOIN products ON product_size_quantities.product_id = products.id
-            LEFT JOIN product_images ON products.id = product_images.product_id
-            AND product_images.id = (
-                SELECT id FROM product_images WHERE product_id = products.id LIMIT 1
-            )
-            LEFT JOIN images ON images.id = product_images.image_id
-            WHERE orders.user_id = :user_id
-            GROUP BY orders.id, products.id, images.id, order_items.price
-        ) order_product
-        group by order_product.id, order_product.created_at, order_product.shipping_method,
-        order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
-        ORDER BY order_product.created_at DESC
-        OFFSET :offset LIMIT :limit
-    """,
-        {
-            "user_id": current_user.id,
-            "offset": (page - 1) * page_size,
-            "limit": page_size,
-        },
-    ).fetchall()
-
-    if len(orders) == 0:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="You have no orders",
-        )
-
-    return GetUserOrders(
-        data=orders,
-        pagination=Pagination(
-            page=page,
-            page_size=page_size,
-            total_item=orders[0].totalrow_count if orders else 0,
-            total_page=math.ceil(orders[0].totalrow_count / page_size) if orders else 1,
-        ),
-    )
 
 
 @router.get(
@@ -148,6 +84,59 @@ def get_order_details(
     return order
 
 
+@router.get(
+    "/shipping_price",
+    response_model=List[GetShippingPrice],
+    status_code=status.HTTP_200_OK,
+)
+def get_shipping_price(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> JSONResponse:
+
+    total_price = session.execute(
+        """
+        SELECT SUM(products.price * carts.quantity) total_price
+        FROM only carts
+        JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
+        JOIN products ON product_size_quantities.product_id = products.id
+        WHERE carts.user_id = :user_id
+        """,
+        {
+            "user_id": current_user.id,
+        },
+    ).fetchone()
+
+    if total_price is None:
+        total_price = 0
+    else:
+        total_price = total_price[0]
+
+    #  Regular:
+    #  If total price of items < 200k: Shipping price is 15% of the total price of items purchased
+    #  If total price of items >= 200k: Shipping price is 20% of the total price of items purchased
+    #  Next Day:
+    #  If total price of items < 300k: Shipping price is 20% of the total price of items purchased
+    #  If total price of items >= 300k: Shipping price is 25% of the total price of items purchased
+    regular_shipping_price = int(
+        total_price * 0.15 if total_price < 200000 else total_price * 0.2
+    )
+    next_day_shipping_price = int(
+        total_price * 0.2 if total_price < 300000 else total_price * 0.25
+    )
+
+    return [
+        GetShippingPrice(
+            name="Regular",
+            price=regular_shipping_price,
+        ),
+        GetShippingPrice(
+            name="Next Day",
+            price=next_day_shipping_price,
+        ),
+    ]
+
+
 @router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)
 def get_orders_admin(
     sort_by: str = Query("Price a_z", regex="^(Price a_z|Price z_a)$"),
@@ -157,28 +146,15 @@ def get_orders_admin(
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
     sort = "ASC" if sort_by == "Price a_z" else "DESC"
+
     orders = session.execute(
         f"""
-        SELECT id, title, sizes, created_at, product_detail,
-        email, images_url, user_id, total
-        FROM (
-            SELECT DISTINCT ON (products.id) orders.id, products.title,
-            array_agg( DISTINCT sizes.size) sizes, orders.created_at,
-            products.product_detail, users.email, array_agg( DISTINCT
-            CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(images.image_url, 'image-not-available.webp'))) images_url,
-            orders.user_id, SUM(order_items.price) total
-            FROM only orders
-            JOIN order_items ON orders.id = order_items.order_id
-            JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
-            JOIN sizes ON product_size_quantities.size_id = sizes.id
-            JOIN products ON product_size_quantities.product_id = products.id
-            LEFT JOIN product_images ON products.id = product_images.product_id
-            LEFT JOIN images ON product_images.image_id = images.id
-            JOIN users ON orders.user_id = users.id
-            GROUP BY orders.id, products.id, users.id
-        ) order_product
-        GROUP BY order_product.id, order_product.title, order_product.created_at, order_product.product_detail,
-        order_product.email, order_product.user_id, order_product.total, sizes, images_url
+        SELECT orders.id, to_char(orders.created_at, 'Dy, DD FMMonth YYYY') created_at,
+        users.id as users_id, users.name as user_name, users.email as user_email, status, SUM(order_items.price * order_items.quantity + orders.shipping_price) total
+        FROM only orders
+        JOIN order_items ON orders.id = order_items.order_id
+        JOIN users ON orders.user_id = users.id
+        GROUP BY orders.id, users.id
         ORDER BY total {sort}
         LIMIT :page_size OFFSET :offset
     """,

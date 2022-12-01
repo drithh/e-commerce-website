@@ -33,32 +33,32 @@ const Categories: React.FC = () => {
         </button>
       </div>
       <div>
-        <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
-          <th className="table-cell flex-1 py-2 text-left font-semibold">
+        <div className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
+          <div className="table-cell flex-1 py-2 text-left font-semibold">
             Title
-          </th>
-          <th className="table-cell flex-1 py-2 text-left font-semibold">
+          </div>
+          <div className="table-cell flex-1 py-2 text-left font-semibold">
             Type
-          </th>
-        </tr>
+          </div>
+        </div>
       </div>
       <div className="">
         {fetchCategories.data?.data.map((category) => {
           return (
             <Link key={category.id} to={`/admin/categories/${category.id}`}>
-              <tr
+              <div
                 className=" flex w-full cursor-pointer  place-content-evenly  gap-x-4 border-b-2 border-gray-200 pl-4 hover:bg-gray-50"
                 key={category.id}
               >
-                <td className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
+                <div className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {capitalCase(pluralize.singular(category.title))}
-                </td>
-                <td className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
+                </div>
+                <div className="table-cell flex-1 overflow-hidden text-ellipsis py-2 text-left font-normal">
                   {capitalCase(pluralize.singular(category.type), {
                     delimiter: ' & ',
                   })}
-                </td>
-              </tr>
+                </div>
+              </div>
             </Link>
           );
         })}
