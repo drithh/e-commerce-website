@@ -42,6 +42,11 @@ class GetDetailOrder(GetUserOrder, BaseModel):
     email: str
 
 
+class GetShippingPrice(BaseModel):
+    name: str
+    price: int
+
+
 class GetAdminOrder(BaseModel):
     id: UUID
     created_at: str

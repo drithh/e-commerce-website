@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, List
 from uuid import UUID
 
 from fastapi import BackgroundTasks, HTTPException, Query, status
@@ -16,7 +16,12 @@ from app.models.order_item import OrderItem
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
 from app.schemas.default_model import DefaultResponse, Pagination
-from app.schemas.order import CreateOrder, GetAdminOrders, GetDetailOrder, GetUserOrders
+from app.schemas.order import (
+    CreateOrder,
+    GetAdminOrders,
+    GetDetailOrder,
+    GetShippingPrice,
+)
 
 router = APIRouter()
 
@@ -77,6 +82,59 @@ def get_order_details(
         )
 
     return order
+
+
+@router.get(
+    "/shipping_price",
+    response_model=List[GetShippingPrice],
+    status_code=status.HTTP_200_OK,
+)
+def get_shipping_price(
+    session: Generator = Depends(get_db),
+    current_user: User = Depends(get_current_active_user),
+) -> JSONResponse:
+
+    total_price = session.execute(
+        """
+        SELECT SUM(products.price * carts.quantity) total_price
+        FROM only carts
+        JOIN product_size_quantities ON carts.product_size_quantity_id = product_size_quantities.id
+        JOIN products ON product_size_quantities.product_id = products.id
+        WHERE carts.user_id = :user_id
+        """,
+        {
+            "user_id": current_user.id,
+        },
+    ).fetchone()
+
+    if total_price is None:
+        total_price = 0
+    else:
+        total_price = total_price[0]
+
+    #  Regular:
+    #  If total price of items < 200k: Shipping price is 15% of the total price of items purchased
+    #  If total price of items >= 200k: Shipping price is 20% of the total price of items purchased
+    #  Next Day:
+    #  If total price of items < 300k: Shipping price is 20% of the total price of items purchased
+    #  If total price of items >= 300k: Shipping price is 25% of the total price of items purchased
+    regular_shipping_price = int(
+        total_price * 0.15 if total_price < 200000 else total_price * 0.2
+    )
+    next_day_shipping_price = int(
+        total_price * 0.2 if total_price < 300000 else total_price * 0.25
+    )
+
+    return [
+        GetShippingPrice(
+            name="Regular",
+            price=regular_shipping_price,
+        ),
+        GetShippingPrice(
+            name="Next Day",
+            price=next_day_shipping_price,
+        ),
+    ]
 
 
 @router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)
