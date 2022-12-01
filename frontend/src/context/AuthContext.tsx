@@ -87,7 +87,7 @@ const useProvideAuth = () => {
       }),
     {
       onSuccess: (data) => {
-        toast.success(`Welcome back ${data.user_information.name}!`);
+        toast.success(`Welcome back ${data.name}!`);
         Cookies.set('token', data.access_token);
         OpenAPI.TOKEN = data.access_token;
         refetch();
@@ -111,7 +111,7 @@ const useProvideAuth = () => {
     {
       onSuccess: (data) => {
         Cookies.set('token', data.access_token);
-        toast.success(`Welcome ${data.user_information.name}!`);
+        toast.success(`Welcome ${data.name}!`);
         OpenAPI.TOKEN = data.access_token;
         refetch();
       },

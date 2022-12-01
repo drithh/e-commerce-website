@@ -19,7 +19,7 @@ export class DashboardService {
   public static getSales(): CancelablePromise<GetSales> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/v1/admin',
+      url: '/v1/admin/sales',
     });
   }
 

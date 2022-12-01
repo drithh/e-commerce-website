@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { app__schemas__user__GetUser } from '../models/app__schemas__user__GetUser';
 import type { DefaultResponse } from '../models/DefaultResponse';
+import type { GetUser } from '../models/GetUser';
 import type { GetUserAddress } from '../models/GetUserAddress';
 import type { GetUserBalance } from '../models/GetUserBalance';
 import type { PutUserAddress } from '../models/PutUserAddress';
@@ -15,10 +15,10 @@ import { request as __request } from '../core/request';
 export class UserService {
   /**
    * Get User
-   * @returns app__schemas__user__GetUser Successful Response
+   * @returns GetUser Successful Response
    * @throws ApiError
    */
-  public static getUser(): CancelablePromise<app__schemas__user__GetUser> {
+  public static getUser(): CancelablePromise<GetUser> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/user',
@@ -32,7 +32,7 @@ export class UserService {
    * @throws ApiError
    */
   public static updateUser(
-    requestBody: app__schemas__user__GetUser
+    requestBody: GetUser
   ): CancelablePromise<DefaultResponse> {
     return __request(OpenAPI, {
       method: 'PUT',
@@ -131,12 +131,10 @@ export class UserService {
   /**
    * Get Detail User
    * @param id
-   * @returns app__schemas__user__GetUser Successful Response
+   * @returns GetUser Successful Response
    * @throws ApiError
    */
-  public static getDetailUser(
-    id: string
-  ): CancelablePromise<app__schemas__user__GetUser> {
+  public static getDetailUser(id: string): CancelablePromise<GetUser> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/user/{id}',

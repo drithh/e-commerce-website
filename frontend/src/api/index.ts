@@ -6,10 +6,8 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
-export type { app__schemas__authentication__GetUser } from './models/app__schemas__authentication__GetUser';
 export type { app__schemas__cart__GetProduct } from './models/app__schemas__cart__GetProduct';
 export type { app__schemas__product__GetProduct } from './models/app__schemas__product__GetProduct';
-export type { app__schemas__user__GetUser } from './models/app__schemas__user__GetUser';
 export type { app__schemas__wishlist__GetProduct } from './models/app__schemas__wishlist__GetProduct';
 export type { Banner } from './models/Banner';
 export type { BestSeller } from './models/BestSeller';
@@ -39,6 +37,7 @@ export type { GetOrders } from './models/GetOrders';
 export type { GetProductDetail } from './models/GetProductDetail';
 export type { GetProducts } from './models/GetProducts';
 export type { GetSales } from './models/GetSales';
+export type { GetUser } from './models/GetUser';
 export type { GetUserAddress } from './models/GetUserAddress';
 export type { GetUserBalance } from './models/GetUserBalance';
 export type { GetUserOrder } from './models/GetUserOrder';

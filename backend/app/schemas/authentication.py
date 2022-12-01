@@ -17,13 +17,6 @@ class TokenData(BaseModel):
     email: Union[str, None] = None
 
 
-class GetUser(BaseModel):
-    name: str
-    email: str
-    phone_number: str
-    type: str
-
-
 class UserDefault(BaseModel):
     name: str
     email: str
@@ -40,7 +33,10 @@ class UserCreate(BaseModel):
 
 
 class UserRead(BaseModel):
-    user_information: GetUser
+    name: str
+    email: str
+    phone_number: str
+    type: str
     message: str
     access_token: str
     token_type: str

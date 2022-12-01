@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import torch
 import torchvision.transforms as transforms
+from fastapi import HTTPException
 from PIL import Image
 from torch.autograd import Variable
 
@@ -82,34 +83,37 @@ class ImageClassifier:
         )
         return list_image
 
-    def read_bytewD(self, byte_image):
+    def read_byte(self, byte_image):
         image = cv2.imdecode(np.frombuffer(byte_image, np.uint8), 3)
         return image
 
     def predict(self, byte_image):
         count_final = 2
+        try:
+            image = self.read_byte(byte_image)
+            list_image = self.augmentation(image)
+            list_image.append(image)
 
-        image = self.read_bytewD(byte_image)
-        list_image = self.augmentation(image)
-        list_image.append(image)
-        while count_final > 1:
-            lists = []
-            for i in range(len(list_image)):
-                image = Image.fromarray(list_image[i])
-                image_tensor = self.preprocessing(image).float()
-                image_tensor = image_tensor.unsqueeze_(0)
-                image = Variable(image_tensor)
-                # Predict image from classifier
-                output = self.classifiers(image)
-                self.classifiers.eval()
-                index = output.data.numpy().argmax()
+            while count_final > 1:
+                lists = []
+                for i in range(len(list_image)):
+                    image = Image.fromarray(list_image[i])
+                    image_tensor = self.preprocessing(image).float()
+                    image_tensor = image_tensor.unsqueeze_(0)
+                    image = Variable(image_tensor)
+                    # Predict image from classifier
+                    output = self.classifiers(image)
+                    self.classifiers.eval()
+                    index = output.data.numpy().argmax()
 
-                # Get result final and return it
-                result_final = PRODUCT_CATEGORY[index]
-                lists.append(result_final)
-            c = Counter(lists)
-            highest_freq = max(c.values())
-            mod = [n for n, freq in sorted(c.items()) if freq == highest_freq]
-            count_final = len(mod)
-        result_final = mod[0]
+                    # Get result final and return it
+                    result_final = PRODUCT_CATEGORY[index]
+                    lists.append(result_final)
+                c = Counter(lists)
+                highest_freq = max(c.values())
+                mod = [n for n, freq in sorted(c.items()) if freq == highest_freq]
+                count_final = len(mod)
+            result_final = mod[0]
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
         return result_final

@@ -24,7 +24,7 @@ from app.schemas.default_model import DefaultResponse
 router = APIRouter()
 
 
-@router.get("", response_model=GetSales, status_code=status.HTTP_200_OK)
+@router.get("/sales", response_model=GetSales, status_code=status.HTTP_200_OK)
 def get_sales(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
