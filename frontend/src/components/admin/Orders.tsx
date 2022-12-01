@@ -7,16 +7,27 @@ import { capitalCase } from 'change-case';
 import { DashboardService } from '../../api';
 import Pagination from '../Pagination';
 import { convertToCurrency } from '../util/utilFunc';
+import { HiArrowDown } from 'react-icons/hi';
 
 interface DefaultParams {
   page: number;
   pageSize: number;
 }
 
+interface SortType {
+  column: string;
+  order: 'asc' | 'desc' | 'off';
+}
+
 const Orders = () => {
   const [params, setParams] = useState<DefaultParams>({
     page: 1,
     pageSize: 20,
+  });
+
+  const [sort, setSort] = useState<SortType>({
+    column: 'createdAt',
+    order: 'desc',
   });
 
   const fetchOrders = useQuery(['orders', params], () =>
@@ -32,7 +43,18 @@ const Orders = () => {
       <div>
         <tr className="flex w-full place-content-evenly  gap-x-4  border-b-2 border-gray-200 pl-4">
           <th className="table-cell flex-[2] py-2 text-left font-semibold">
-            Created At
+            <div
+              className="flex place-content-between place-items-center pr-2"
+              onClick={() => {
+                setSort({
+                  column: 'orderNumber',
+                  order: sort.order === 'asc' ? 'desc' : 'asc',
+                });
+              }}
+            >
+              <span>Created At</span>
+              <HiArrowDown className="text-gray-400" />
+            </div>
           </th>
           <th className="table-cell flex-[3] py-2 text-left font-semibold">
             Name

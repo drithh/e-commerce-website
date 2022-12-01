@@ -18,7 +18,7 @@ const TopUp: React.FC<Props> = ({ closeModal }) => {
 
   const topUp = useMutation(
     (variables: { balance: number }) =>
-      UserService.putUserBalance({
+      UserService.updateUserBalance({
         balance: variables.balance,
       }),
     {

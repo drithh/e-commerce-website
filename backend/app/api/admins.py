@@ -108,7 +108,11 @@ def get_dashboard(
 
 @router.get("/customer", response_model=GetCustomers, status_code=status.HTTP_200_OK)
 def get_customer(
-    sort_by: str = Query("created_at", title="Sort by", regex="^(users.name|users.email|total_order|total_spent|last_order)$"),
+    sort_by: str = Query(
+        "created_at",
+        title="Sort by",
+        regex="^(users.name|users.email|total_order|total_spent|last_order)$",
+    ),
     sort_type: str = Query("desc", title="Sort type", regex="^(asc|desc)$"),
     session: Generator = Depends(get_db),
     page: int = Query(1, ge=1),
@@ -155,7 +159,10 @@ def get_customer(
 
 @router.get("/order", response_model=GetOrders, status_code=status.HTTP_200_OK)
 def get_order(
-    sort_by: str = Query("created_at", regex="^(created_at|user.name|orders.address|total_product|total_price|order.status)$"),
+    sort_by: str = Query(
+        "created_at",
+        regex="^(created_at|user.name|orders.address|total_product|total_price|order.status)$",
+    ),
     sort_type: str = Query("ASC", regex="^(ASC|DESC)$"),
     page: int = Query(1, ge=1),
     page_size: int = Query(25, ge=1, le=100),
