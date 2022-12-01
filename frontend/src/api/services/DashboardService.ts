@@ -1,9 +1,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { app__schemas__admin__GetOrders } from '../models/app__schemas__admin__GetOrders';
 import type { GetCustomers } from '../models/GetCustomers';
 import type { GetDashboard } from '../models/GetDashboard';
-import type { GetOrders } from '../models/GetOrders';
 import type { GetSales } from '../models/GetSales';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -63,13 +63,13 @@ export class DashboardService {
    * Get Order
    * @param page
    * @param pageSize
-   * @returns GetOrders Successful Response
+   * @returns app__schemas__admin__GetOrders Successful Response
    * @throws ApiError
    */
   public static getOrder(
     page: number = 1,
     pageSize: number = 25
-  ): CancelablePromise<GetOrders> {
+  ): CancelablePromise<app__schemas__admin__GetOrders> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/v1/admin/order',

@@ -5,55 +5,12 @@ import type { CreateOrder } from '../models/CreateOrder';
 import type { DefaultResponse } from '../models/DefaultResponse';
 import type { GetAdminOrders } from '../models/GetAdminOrders';
 import type { GetDetailOrder } from '../models/GetDetailOrder';
-import type { GetUserOrders } from '../models/GetUserOrders';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class OrderService {
-  /**
-   * Get Orders User
-   * @param page
-   * @param pageSize
-   * @returns GetUserOrders Successful Response
-   * @throws ApiError
-   */
-  public static getOrdersUser(
-    page: number = 1,
-    pageSize: number = 25
-  ): CancelablePromise<GetUserOrders> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/order',
-      query: {
-        page: page,
-        page_size: pageSize,
-      },
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
-  /**
-   * Create Order
-   * @param requestBody
-   * @returns any Successful Response
-   * @throws ApiError
-   */
-  public static createOrder(requestBody: CreateOrder): CancelablePromise<any> {
-    return __request(OpenAPI, {
-      method: 'POST',
-      url: '/v1/order',
-      body: requestBody,
-      mediaType: 'application/json',
-      errors: {
-        422: `Validation Error`,
-      },
-    });
-  }
-
   /**
    * Get Order Details
    * @param id
@@ -120,6 +77,24 @@ export class OrderService {
         page: page,
         page_size: pageSize,
       },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Create Order
+   * @param requestBody
+   * @returns any Successful Response
+   * @throws ApiError
+   */
+  public static createOrder(requestBody: CreateOrder): CancelablePromise<any> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v1/order',
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },
