@@ -41,11 +41,13 @@ def test_get_user_empty_orders(client: TestClient, create_user):
         f"{prefix}/order",
         headers=get_jwt_header(user),
     )
-    assert resp.json()['message'] == "You have no orders"
+    assert resp.json()["message"] == "You have no orders"
     assert resp.status_code == 404
 
 
-def test_get_user_orders(client: TestClient, create_user, create_order, create_order_item):
+def test_get_user_orders(
+    client: TestClient, create_user, create_order, create_order_item
+):
     user = create_user()
     order = create_order(user)
     create_order_item(order)
@@ -53,8 +55,9 @@ def test_get_user_orders(client: TestClient, create_user, create_order, create_o
         f"{prefix}/order",
         headers=get_jwt_header(user),
     )
-    assert resp.json()['data'][0]['id'] == str(order.id)
+    assert resp.json()["data"][0]["id"] == str(order.id)
     assert resp.status_code == 200
+
 
 def test_get_user_shipping_address(client: TestClient, create_user):
     user = create_user()
