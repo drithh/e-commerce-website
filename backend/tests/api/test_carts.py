@@ -63,7 +63,7 @@ def test_create_existed_cart(
     create_product,
     create_size,
     db: Session,
-    create_cart
+    create_cart,
 ):
     user = create_user()
     product = create_product()
@@ -94,7 +94,7 @@ def test_create_existed_cart(
     ).fetchone()
 
     create_cart(user, product_size_quantity)
-    
+
     resp = client.post(
         f"{prefix}",
         headers=get_jwt_header(user),
@@ -102,11 +102,12 @@ def test_create_existed_cart(
             "product_id": str(product.id),
             "quantity": 5,
             "size": str(size.size),
-        }
+        },
     )
 
     assert resp.status_code == 201
-    assert resp.json()['message'] == "Added to cart"
+    assert resp.json()["message"] == "Added to cart"
+
 
 def test_update_cart(
     client: TestClient,

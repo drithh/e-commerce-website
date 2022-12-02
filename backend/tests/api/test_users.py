@@ -102,7 +102,7 @@ def test_update_user_balance_value_error(client: TestClient, create_user):
         headers=get_jwt_header(user),
         json={"balance": 9223372036854775807},
     )
-    assert resp.json()['message'].startswith('Unknown error')
+    assert resp.json()["message"].startswith("Unknown error")
     assert resp.status_code == 400
 
 

@@ -364,7 +364,14 @@ def test_update_empty_order_admin(client: TestClient, create_admin):
     assert resp.status_code == 404
 
 
-def test_get_shipping_price(client: TestClient, create_user, create_cart, create_product_size_quantity, create_product, create_size):
+def test_get_shipping_price(
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product_size_quantity,
+    create_product,
+    create_size,
+):
     user = create_user()
     product = create_product()
     size = create_size()
