@@ -10,27 +10,6 @@ prefix = f"{settings.API_PATH}/order"
 prefix_admin = f"{settings.API_PATH}/orders"
 
 
-def test_get_empty_orders_user(client: TestClient, create_user):
-    user = create_user()
-
-    resp = client.get(f"{prefix}", headers=get_jwt_header(user))
-    assert resp.status_code == 404
-    assert resp.json() == {"message": "You have no orders"}
-
-
-def test_get_orders_user(
-    client: TestClient, create_user, create_order, create_order_item
-):
-    user = create_user()
-    order = create_order(user)
-    create_order_item(order)
-
-    resp = client.get(f"{prefix}", headers=get_jwt_header(user))
-    assert resp.status_code == 200
-    data = resp.json().get("data")
-    assert data[0]["id"] == str(order.id)
-
-
 def test_get_empty_order_detail(client: TestClient, create_user):
     user = create_user()
 
