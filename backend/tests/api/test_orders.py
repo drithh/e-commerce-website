@@ -362,3 +362,16 @@ def test_update_empty_order_admin(client: TestClient, create_admin):
     )
     assert resp.json() == {"message": "Order not found"}
     assert resp.status_code == 404
+
+
+def test_get_shipping_price(client: TestClient, create_user, create_cart, create_product_size_quantity, create_product, create_size):
+    user = create_user()
+    product = create_product()
+    size = create_size()
+    product_size_quantity = create_product_size_quantity(product, size)
+    create_cart(user, product_size_quantity)
+    resp = client.get(
+        "/shipping_price",
+        headers=get_jwt_header(user),
+    )
+    assert resp.status_code == 200

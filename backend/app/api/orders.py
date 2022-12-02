@@ -21,6 +21,7 @@ from app.schemas.order import (
     GetAdminOrders,
     GetDetailOrder,
     GetShippingPrice,
+    GetShippingPrices,
 )
 
 router = APIRouter()
@@ -86,7 +87,7 @@ def get_order_details(
 
 @router.get(
     "/shipping_price",
-    response_model=List[GetShippingPrice],
+    response_model=GetShippingPrices,
     status_code=status.HTTP_200_OK,
 )
 def get_shipping_price(

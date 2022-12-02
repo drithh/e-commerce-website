@@ -46,6 +46,8 @@ class GetShippingPrice(BaseModel):
     name: str
     price: int
 
+class GetShippingPrices(BaseModel):
+    data: List[GetShippingPrice]
 
 class GetAdminOrder(BaseModel):
     id: UUID
