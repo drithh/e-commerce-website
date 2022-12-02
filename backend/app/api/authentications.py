@@ -115,7 +115,7 @@ def sign_up(
 
     access_token = create_access_token(data={"sub": request.email})
 
-    logger.info(f"User {user.email} signed up")
+    logger.info(f"User {request.email} signed up")
     return UserRead(
         name=request.name,
         email=request.email,

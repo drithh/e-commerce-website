@@ -8,9 +8,9 @@ prefix = f"{settings.API_PATH}/admin"
 
 def test_get_sales(client: TestClient, create_admin):
     user = create_admin()
-    resp = client.get(f"{prefix}", headers=get_jwt_header(user))
-    assert resp.status_code == 200
+    resp = client.get(f"{prefix}/sales", headers=get_jwt_header(user))
     assert resp.json().get("data").get("total_sales") == 0
+    assert resp.status_code == 200
 
 
 def test_get_dashboard(client: TestClient, create_admin):

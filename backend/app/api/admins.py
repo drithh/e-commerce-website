@@ -119,6 +119,8 @@ def get_customer(
     page_size: int = Query(25, ge=1, le=100),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
+    if sort_by == "created_at":
+        sort_by = "users.created_at"
     query = """
         SELECT users.name, users.id, users.email, COUNT(orders.id) total_order,
         COALESCE(SUM(order_items.price * order_items.quantity), 0) total_spent,
