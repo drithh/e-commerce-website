@@ -1,4 +1,5 @@
 from starlette.testclient import TestClient
+from sqlalchemy.orm.session import Session
 
 from app.core.config import settings
 from tests.utils import get_jwt_header
@@ -54,6 +55,58 @@ def test_create_cart(
     data = resp.json()
     assert data["message"] == "Added to cart"
     assert resp.status_code == 201
+
+
+def test_create_existed_cart(
+    client: TestClient,
+    create_user,
+    create_product,
+    create_size,
+    db: Session,
+    create_cart,
+):
+    user = create_user()
+    product = create_product()
+    size = create_size()
+
+    db.execute(
+        """
+        INSERT INTO product_size_quantities (product_id, size_id, quantity)
+        VALUES (:product_id, :size_id, :quantity)
+        """,
+        {
+            "product_id": product.id,
+            "size_id": size.id,
+            "quantity": 10,
+        },
+    )
+    db.commit()
+
+    product_size_quantity = db.execute(
+        """
+        SELECT * FROM product_size_quantities
+        WHERE product_id = :product_id AND size_id = :size_id
+        """,
+        {
+            "product_id": product.id,
+            "size_id": size.id,
+        },
+    ).fetchone()
+
+    create_cart(user, product_size_quantity)
+
+    resp = client.post(
+        f"{prefix}",
+        headers=get_jwt_header(user),
+        json={
+            "product_id": str(product.id),
+            "quantity": 5,
+            "size": str(size.size),
+        },
+    )
+
+    assert resp.status_code == 201
+    assert resp.json()["message"] == "Added to cart"
 
 
 def test_update_cart(

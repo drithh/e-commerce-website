@@ -95,6 +95,17 @@ def test_update_user_shipping_address(client: TestClient, create_user):
     assert resp.status_code == 200
 
 
+def test_update_user_balance_value_error(client: TestClient, create_user):
+    user = create_user()
+    resp = client.post(
+        f"{prefix}/balance",
+        headers=get_jwt_header(user),
+        json={"balance": 9223372036854775807},
+    )
+    assert resp.json()["message"].startswith("Unknown error")
+    assert resp.status_code == 400
+
+
 def test_update_user_balance(client: TestClient, create_user):
     user = create_user()
     user_balance = user.balance
