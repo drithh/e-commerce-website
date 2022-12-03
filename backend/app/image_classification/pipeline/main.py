@@ -92,10 +92,6 @@ class ImageClassifier:
     def predict(self, byte_image):
         count_final = 2
         try:
-            image = self.read_byte(byte_image)
-            list_image = self.augmentation(image)
-            list_image.append(image)
-
             image = self.read_byte_image(byte_image)
             list_image = self.augmentation(image)
             list_image.append(image)
