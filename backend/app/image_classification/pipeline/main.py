@@ -31,6 +31,7 @@ class ImageClassifier:
     def __init__(self):
         # Class module from AI team
         self.classifiers = Net(num_classes=11)
+        self.classifiers.eval()
         # Model path with pth file
         model_path = f"{CURRENT_PATH}/model.pth"
         self.classifiers.load_state_dict(
@@ -41,7 +42,8 @@ class ImageClassifier:
         transform = transforms.Compose(
             [
                 transforms.Resize((128, 128)),
-                transforms.RandomHorizontalFlip(),
+                transforms.Grayscale(num_output_channels=1),
+                transforms.RandomHorizontalFlip(p=0.8),
                 transforms.ToTensor(),
                 transforms.Normalize(
                     [
@@ -51,7 +53,6 @@ class ImageClassifier:
                         0.5,
                     ],
                 ),
-                transforms.Grayscale(1),
             ]
         )
         image = transform(image).float()
@@ -65,7 +66,8 @@ class ImageClassifier:
 
     def edges(self, image):
         edges = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        edges = cv2.Canny(edges, 100, 200)
+        edges = cv2.Canny(edges, 100, 200, apertureSize=7, L2gradient=True)
+        edges = cv2.dilate(edges, (1, 1), iterations=1)
         edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
         return edges
 
@@ -83,7 +85,7 @@ class ImageClassifier:
         )
         return list_image
 
-    def read_byte(self, byte_image):
+    def read_byte_image(self, byte_image):
         image = cv2.imdecode(np.frombuffer(byte_image, np.uint8), 3)
         return image
 
@@ -94,17 +96,20 @@ class ImageClassifier:
             list_image = self.augmentation(image)
             list_image.append(image)
 
-            while count_final > 1:
-                lists = []
-                for i in range(len(list_image)):
-                    image = Image.fromarray(list_image[i])
-                    image_tensor = self.preprocessing(image).float()
-                    image_tensor = image_tensor.unsqueeze_(0)
-                    image = Variable(image_tensor)
-                    # Predict image from classifier
-                    output = self.classifiers(image)
-                    self.classifiers.eval()
-                    index = output.data.numpy().argmax()
+        image = self.read_byte_image(byte_image)
+        list_image = self.augmentation(image)
+        list_image.append(image)
+        while count_final > 1:
+            lists = []
+            for i in range(len(list_image)):
+                image = Image.fromarray(list_image[i])
+                image_tensor = self.preprocessing(image).float()
+                image_tensor = image_tensor.unsqueeze_(0)
+                image = Variable(image_tensor)
+                # Predict image from classifier
+                output = self.classifiers(image)
+                self.classifiers.eval()
+                index = output.data.numpy().argmax()
 
                     # Get result final and return it
                     result_final = PRODUCT_CATEGORY[index]

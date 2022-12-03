@@ -67,6 +67,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { lazy, Suspense } from 'react';
 import { OpenAPI } from './api';
 import Cookies from 'js-cookie';
+import TestModel from './pages/TestModel';
 
 const queryClient = new QueryClient();
 
@@ -112,6 +113,7 @@ function App() {
                         </Route>
                       </Route>
                       <Route element={<AdminRoutes />}>
+                        <Route path="/test-model" element={<TestModel />} />
                         <Route path="/admin" element={<Admin />}>
                           <Route path="" element={<Dashboard />} />
                           <Route path="orders" element={<Orders />} />

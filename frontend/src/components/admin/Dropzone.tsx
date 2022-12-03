@@ -103,7 +103,7 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
           </>
         )}
         <p className="text-lg text-gray-300">
-          (Only *.jpeg and *.png images will be accepted)
+          (Only *.jpeg *.png and *.webp images will be accepted)
         </p>
       </div>
     </>
