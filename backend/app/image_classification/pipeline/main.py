@@ -40,7 +40,8 @@ class ImageClassifier:
         transform = transforms.Compose(
             [
                 transforms.Resize((128, 128)),
-                transforms.RandomHorizontalFlip(),
+                transforms.Grayscale(num_output_channels = 1),
+                transforms.RandomHorizontalFlip(p = 0.8),
                 transforms.ToTensor(),
                 transforms.Normalize(
                     [
@@ -55,7 +56,7 @@ class ImageClassifier:
         )
         image = transform(image).float()
         return image
-
+    
     def threshold(self, image):
         img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         _, th1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
@@ -63,10 +64,12 @@ class ImageClassifier:
         return img
 
     def edges(self, image):
-        edges = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        edges = cv2.Canny(edges, 100, 200)
-        edges = cv2.cvtColor(edges, cv2.COLOR_GRAY2RGB)
-        return edges
+      edges = cv2.cvtColor(image,cv2.COLOR_RGB2GRAY)
+      edges = cv2.Canny(edges,100,200, apertureSize = 7, 
+                 L2gradient = True)
+      edges = cv2.dilate(edges,(1,1), iterations=1)
+      edges = cv2.cvtColor(edges,cv2.COLOR_GRAY2RGB)
+      return edges
 
     def augmentation(self, image):
         list_image = []
