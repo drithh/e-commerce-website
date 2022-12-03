@@ -30,6 +30,7 @@ class ImageClassifier:
     def __init__(self):
         # Class module from AI team
         self.classifiers = Net(num_classes=11)
+        self.classifiers.eval()
         # Model path with pth file
         model_path = f"{CURRENT_PATH}/model.pth"
         self.classifiers.load_state_dict(
@@ -51,7 +52,6 @@ class ImageClassifier:
                         0.5,
                     ],
                 ),
-                transforms.Grayscale(1),
             ]
         )
         image = transform(image).float()
@@ -84,14 +84,14 @@ class ImageClassifier:
         )
         return list_image
 
-    def read_bytewD(self, byte_image):
+    def read_byte_image(self, byte_image):
         image = cv2.imdecode(np.frombuffer(byte_image, np.uint8), 3)
         return image
 
     def predict(self, byte_image):
         count_final = 2
 
-        image = self.read_bytewD(byte_image)
+        image = self.read_byte_image(byte_image)
         list_image = self.augmentation(image)
         list_image.append(image)
         while count_final > 1:

@@ -115,10 +115,12 @@ const Dropzone = () => {
       },
       onSuccess: (data) => {
         setSearch!(false);
-        setSearchImage!({
-          file: image.current,
-          category: data.title,
-        });
+        setSearchImage!(
+          new Array({
+            file: image.current,
+            category: data.title,
+          })
+        );
         navigate(`/products?category=${data.id}&searchImage=true`);
       },
     }
@@ -216,7 +218,7 @@ const Dropzone = () => {
           </p>
         ) : (
           <p className="text-lg text-gray-300">
-            Only *.jpeg and *.png images will be accepted
+            Only *.jpeg *.png and *.webp images will be accepted
           </p>
         )}
       </div>

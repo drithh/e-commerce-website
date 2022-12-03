@@ -10,17 +10,14 @@ export type SearchType = {
   setSearchText?: React.Dispatch<React.SetStateAction<string>>;
   search: boolean;
   setSearch?: React.Dispatch<React.SetStateAction<boolean>>;
-  searchImage: SearchImage;
-  setSearchImage?: React.Dispatch<React.SetStateAction<SearchImage>>;
+  searchImage: SearchImage[];
+  setSearchImage?: React.Dispatch<React.SetStateAction<SearchImage[]>>;
 };
 
 const SearchContext = createContext<SearchType>({
   searchText: '',
   search: false,
-  searchImage: {
-    file: new File([], ''),
-    category: '',
-  },
+  searchImage: [],
 });
 
 export const useSearch = () => useContext(SearchContext);
@@ -39,10 +36,7 @@ export const SearchProvider = ({ children }: SearchProviderProps) => {
 const useProvideSearch = () => {
   const [searchText, setSearchText] = useState('');
   const [search, setSearch] = useState(false);
-  const [searchImage, setSearchImage] = useState<SearchImage>({
-    file: new File([], ''),
-    category: '',
-  });
+  const [searchImage, setSearchImage] = useState<SearchImage[]>([]);
 
   return {
     searchText,

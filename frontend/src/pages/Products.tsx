@@ -84,32 +84,34 @@ const Products = () => {
           />
         </section>
         <div className="flex flex-1 flex-col gap-y-4">
-          {searchImage.category.length > 0 && (
+          {searchImage[0].category.length > 0 && (
             <section className="w-full  border border-gray-400 p-4">
               <div className="group relative flex w-full place-content-start gap-x-4 overflow-hidden ">
                 <img
                   alt="you searched for"
-                  src={(searchImage as any).file.preview}
+                  src={(searchImage[0].file as any).preview}
                   className="w-40 rounded-md border-2  border-gray-100  object-contain object-bottom"
                   onLoad={() => {
-                    URL.revokeObjectURL((searchImage as any).file.preview);
+                    URL.revokeObjectURL((searchImage[0].file as any).preview);
                   }}
                 />
                 <div className="text-left text-xl text-gray-700">
                   <b>We found these following products:</b>
                   <p>
                     We're pretty sure you were looking for{' '}
-                    <b>{searchImage.category}</b>
+                    <b>{searchImage[0].category}</b>
                     <br />
                     If this not what you were looking for, then we are fricked
                   </p>
                 </div>
                 <IoClose
                   onClick={() => {
-                    setSearchImage!({
-                      file: new File([], ''),
-                      category: '',
-                    });
+                    setSearchImage!(
+                      new Array({
+                        file: new File([], ''),
+                        category: '',
+                      })
+                    );
                   }}
                   className="absolute top-0 right-0 animate-spin-fast-once cursor-pointer text-3xl text-gray-400"
                 />
