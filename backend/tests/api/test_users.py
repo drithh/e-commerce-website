@@ -35,6 +35,30 @@ def test_get_user_details(client: TestClient, create_admin):
     assert data["id"] == str(user.id)
 
 
+def test_get_user_empty_orders(client: TestClient, create_user):
+    user = create_user()
+    resp = client.get(
+        f"{prefix}/order",
+        headers=get_jwt_header(user),
+    )
+    assert resp.json()["message"] == "You have no orders"
+    assert resp.status_code == 404
+
+
+def test_get_user_orders(
+    client: TestClient, create_user, create_order, create_order_item
+):
+    user = create_user()
+    order = create_order(user)
+    create_order_item(order)
+    resp = client.get(
+        f"{prefix}/order",
+        headers=get_jwt_header(user),
+    )
+    assert resp.json()["data"][0]["id"] == str(order.id)
+    assert resp.status_code == 200
+
+
 def test_get_user_shipping_address(client: TestClient, create_user):
     user = create_user()
 
@@ -56,7 +80,7 @@ def test_get_user_balance(client: TestClient, create_user):
 def test_update_user_shipping_address(client: TestClient, create_user):
     user = create_user()
 
-    resp = client.put(
+    resp = client.post(
         f"{prefix}/shipping_address",
         headers=get_jwt_header(user),
         json={
@@ -71,11 +95,22 @@ def test_update_user_shipping_address(client: TestClient, create_user):
     assert resp.status_code == 200
 
 
+def test_update_user_balance_value_error(client: TestClient, create_user):
+    user = create_user()
+    resp = client.post(
+        f"{prefix}/balance",
+        headers=get_jwt_header(user),
+        json={"balance": 9223372036854775807},
+    )
+    assert resp.json()["message"].startswith("Unknown error")
+    assert resp.status_code == 400
+
+
 def test_update_user_balance(client: TestClient, create_user):
     user = create_user()
     user_balance = user.balance
 
-    resp = client.put(
+    resp = client.post(
         f"{prefix}/balance",
         headers=get_jwt_header(user),
         json={

@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import torch
 import torchvision.transforms as transforms
+from fastapi import HTTPException
 from PIL import Image
 from torch.autograd import Variable
 
@@ -90,6 +91,10 @@ class ImageClassifier:
 
     def predict(self, byte_image):
         count_final = 2
+        try:
+            image = self.read_byte(byte_image)
+            list_image = self.augmentation(image)
+            list_image.append(image)
 
         image = self.read_byte_image(byte_image)
         list_image = self.augmentation(image)
@@ -106,12 +111,14 @@ class ImageClassifier:
                 self.classifiers.eval()
                 index = output.data.numpy().argmax()
 
-                # Get result final and return it
-                result_final = PRODUCT_CATEGORY[index]
-                lists.append(result_final)
-            c = Counter(lists)
-            highest_freq = max(c.values())
-            mod = [n for n, freq in sorted(c.items()) if freq == highest_freq]
-            count_final = len(mod)
-        result_final = mod[0]
+                    # Get result final and return it
+                    result_final = PRODUCT_CATEGORY[index]
+                    lists.append(result_final)
+                c = Counter(lists)
+                highest_freq = max(c.values())
+                mod = [n for n, freq in sorted(c.items()) if freq == highest_freq]
+                count_final = len(mod)
+            result_final = mod[0]
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
         return result_final

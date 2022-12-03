@@ -32,24 +32,32 @@ class GetUserOrder(BaseModel):
     shipping_address: str
 
 
-class GetDetailOrder(GetUserOrder, BaseModel):
-    name: str
-    email: str
-
-
 class GetUserOrders(BaseModel):
     data: List[GetUserOrder]
     pagination: Pagination
 
 
+class GetDetailOrder(GetUserOrder, BaseModel):
+    name: str
+    email: str
+
+
+class GetShippingPrice(BaseModel):
+    name: str
+    price: int
+
+
+class GetShippingPrices(BaseModel):
+    data: List[GetShippingPrice]
+
+
 class GetAdminOrder(BaseModel):
     id: UUID
-    title: str
-    sizes: List[str]
-    created_at: datetime.datetime
-    product_detail: str
-    email: str
-    images_url: List[str]
+    created_at: str
+    users_id: UUID
+    user_email: str
+    user_name: str
+    status: str
     total: int
 
 

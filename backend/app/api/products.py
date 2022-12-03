@@ -19,6 +19,7 @@ from app.models.product import Product
 from app.models.product_image import ProductImage
 from app.models.product_size_quantity import ProductSizeQuantity
 from app.models.user import User
+from app.models.size import Size
 from app.schemas.default_model import DefaultResponse
 from app.schemas.product import (
     CreateProduct,
@@ -74,9 +75,10 @@ def get_products(
         query += "AND price <= :max_price "
     if condition != "":
         query += "AND condition = :condition "
-    query += (
-        f"GROUP BY products.id  ORDER BY {order} {sort} LIMIT :limit OFFSET :offset"
-    )
+    query += "GROUP BY products.id "
+    if sort_by != "":
+        query += f"ORDER BY {order} {sort} "
+    query += "LIMIT :limit OFFSET :offset "
 
     query = query.replace("AND", "WHERE", 1)
 
@@ -88,8 +90,8 @@ def get_products(
             "min_price": price[0] if price.__len__() > 0 else 0,
             "max_price": price[1] if price.__len__() > 1 else 0,
             "condition": condition,
-            "offset": (page - 1) * page_size,
             "limit": page_size,
+            "offset": (page - 1) * page_size,
         },
     ).fetchall()
 
@@ -256,27 +258,30 @@ def update_product(
         )
 
     # update quantity of each size
-    try:
-        for stock in request.stock:
-            session.execute(
-                """
-                UPDATE product_size_quantities SET quantity = :quantity WHERE product_id = :product_id
-                AND (SELECT id FROM sizes WHERE size = :size) = size_id
-                """,
-                {
-                    "quantity": stock.quantity,
-                    "product_id": request.id,
-                    "size": stock.size,
-                },
-            )
-        session.commit()
 
-    except Exception as e:
-        logger.error(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+    for stock in request.stock:
+        size_id = session.execute(
+            "SELECT id FROM sizes WHERE size = :size",
+            {"size": stock.size},
+        ).fetchone()
+        if size_id is None:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Size does not exist",
+            )
+        size_id = size_id[0]
+        session.execute(
+            """
+            UPDATE product_size_quantities SET quantity = :quantity WHERE product_id = :product_id
+            AND size_id = :size_id
+            """,
+            {
+                "quantity": stock.quantity,
+                "product_id": request.id,
+                "size_id": size_id,
+            },
         )
+    session.commit()
 
     # updating images
     # get all images of the product

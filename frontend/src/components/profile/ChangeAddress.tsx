@@ -26,7 +26,7 @@ const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
       address: string;
       city: string;
     }) =>
-      UserService.putUserShippingAddress({
+      UserService.updateUserShippingAddress({
         address_name: variables.addressName,
         phone_number: variables.phoneNumber,
         address: variables.address,

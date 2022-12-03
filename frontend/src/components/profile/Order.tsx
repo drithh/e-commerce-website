@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { capitalCase } from 'change-case';
 import dayjs from 'dayjs';
 
-import { OrderService } from '../../api';
+import { OrderService, UserService } from '../../api';
 import GhostButton from '../button/GhostButton';
 import Pagination from '../Pagination';
 import OrderProducts from './OrderProducts';
@@ -25,7 +25,7 @@ const Order = () => {
 
   const fetchOrder = useQuery(
     ['orders', params],
-    () => OrderService.getOrdersUser(params.page, params.pageSize),
+    () => UserService.getOrdersUser(params.page, params.pageSize),
     {
       retry: 0,
     }

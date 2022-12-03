@@ -21,7 +21,7 @@ export class SearchService {
   public static getImage(imageName: string): CancelablePromise<GetImage> {
     return __request(OpenAPI, {
       method: 'GET',
-      url: '/v1',
+      url: '/v1/image',
       query: {
         image_name: imageName,
       },
