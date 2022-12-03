@@ -96,20 +96,20 @@ class ImageClassifier:
             list_image = self.augmentation(image)
             list_image.append(image)
 
-        image = self.read_byte_image(byte_image)
-        list_image = self.augmentation(image)
-        list_image.append(image)
-        while count_final > 1:
-            lists = []
-            for i in range(len(list_image)):
-                image = Image.fromarray(list_image[i])
-                image_tensor = self.preprocessing(image).float()
-                image_tensor = image_tensor.unsqueeze_(0)
-                image = Variable(image_tensor)
-                # Predict image from classifier
-                output = self.classifiers(image)
-                self.classifiers.eval()
-                index = output.data.numpy().argmax()
+            image = self.read_byte_image(byte_image)
+            list_image = self.augmentation(image)
+            list_image.append(image)
+            while count_final > 1:
+                lists = []
+                for i in range(len(list_image)):
+                    image = Image.fromarray(list_image[i])
+                    image_tensor = self.preprocessing(image).float()
+                    image_tensor = image_tensor.unsqueeze_(0)
+                    image = Variable(image_tensor)
+                    # Predict image from classifier
+                    output = self.classifiers(image)
+                    self.classifiers.eval()
+                    index = output.data.numpy().argmax()
 
                     # Get result final and return it
                     result_final = PRODUCT_CATEGORY[index]
