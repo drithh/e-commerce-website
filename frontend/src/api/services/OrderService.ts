@@ -5,6 +5,7 @@ import type { CreateOrder } from '../models/CreateOrder';
 import type { DefaultResponse } from '../models/DefaultResponse';
 import type { GetAdminOrders } from '../models/GetAdminOrders';
 import type { GetDetailOrder } from '../models/GetDetailOrder';
+import type { GetShippingPrices } from '../models/GetShippingPrices';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -33,13 +34,13 @@ export class OrderService {
   /**
    * Update Orders
    * @param id
-   * @param status
+   * @param orderStatus
    * @returns any Successful Response
    * @throws ApiError
    */
   public static updateOrders(
     id: string,
-    status: string
+    orderStatus: string
   ): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: 'PUT',
@@ -48,11 +49,23 @@ export class OrderService {
         id: id,
       },
       query: {
-        status: status,
+        order_status: orderStatus,
       },
       errors: {
         422: `Validation Error`,
       },
+    });
+  }
+
+  /**
+   * Get Shipping Price
+   * @returns GetShippingPrices Successful Response
+   * @throws ApiError
+   */
+  public static getShippingPrice(): CancelablePromise<GetShippingPrices> {
+    return __request(OpenAPI, {
+      method: 'GET',
+      url: '/v1/shipping_price',
     });
   }
 

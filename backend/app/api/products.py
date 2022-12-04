@@ -18,8 +18,8 @@ from app.models.image import Image
 from app.models.product import Product
 from app.models.product_image import ProductImage
 from app.models.product_size_quantity import ProductSizeQuantity
-from app.models.user import User
 from app.models.size import Size
+from app.models.user import User
 from app.schemas.default_model import DefaultResponse
 from app.schemas.product import (
     CreateProduct,

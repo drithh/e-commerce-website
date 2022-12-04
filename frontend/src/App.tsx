@@ -39,6 +39,7 @@ const Customer = lazy(() => import('./components/admin/Customer'));
 const Search = lazy(() => import('./components/Search'));
 const CreateCategory = lazy(() => import('./components/admin/CreateCategory'));
 const CreateProduct = lazy(() => import('./components/admin/CreateProduct'));
+const TestModel = lazy(() => import('./pages/TestModel'));
 
 // import Orders from './components/admin/Orders';
 // import Customers from './components/admin/Customers';
@@ -54,6 +55,7 @@ const CreateProduct = lazy(() => import('./components/admin/CreateProduct'));
 // import Search from './components/Search';
 // import CreateCategory from './components/admin/CreateCategory';
 // import CreateProduct from './components/admin/CreateProduct';
+// import TestModel from './pages/TestModel';
 
 import UserRoutes from './util/UserRoutes';
 import AdminRoutes from './util/AdminRoutes';
@@ -67,7 +69,6 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { lazy, Suspense } from 'react';
 import { OpenAPI } from './api';
 import Cookies from 'js-cookie';
-import TestModel from './pages/TestModel';
 
 const queryClient = new QueryClient();
 

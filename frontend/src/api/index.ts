@@ -41,6 +41,8 @@ export type { GetOrder } from './models/GetOrder';
 export type { GetProductDetail } from './models/GetProductDetail';
 export type { GetProductDetails } from './models/GetProductDetails';
 export type { GetSales } from './models/GetSales';
+export type { GetShippingPrice } from './models/GetShippingPrice';
+export type { GetShippingPrices } from './models/GetShippingPrices';
 export type { GetUser } from './models/GetUser';
 export type { GetUserAddress } from './models/GetUserAddress';
 export type { GetUserBalance } from './models/GetUserBalance';

@@ -1,4 +1,4 @@
-from typing import Generator, List
+from typing import Generator
 from uuid import UUID
 
 from fastapi import BackgroundTasks, HTTPException, Query, status

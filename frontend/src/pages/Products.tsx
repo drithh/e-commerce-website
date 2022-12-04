@@ -84,7 +84,7 @@ const Products = () => {
           />
         </section>
         <div className="flex flex-1 flex-col gap-y-4">
-          {searchImage[0].category.length > 0 && (
+          {searchImage[0] && searchImage[0].category.length > 0 && (
             <section className="w-full  border border-gray-400 p-4">
               <div className="group relative flex w-full place-content-start gap-x-4 overflow-hidden ">
                 <img

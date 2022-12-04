@@ -76,7 +76,7 @@ export class DashboardService {
    */
   public static getOrder(
     sortBy: string = 'created_at',
-    sortType: string = 'ASC',
+    sortType: string = 'asc',
     page: number = 1,
     pageSize: number = 25
   ): CancelablePromise<app__schemas__admin__GetOrders> {

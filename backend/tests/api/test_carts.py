@@ -1,5 +1,5 @@
-from starlette.testclient import TestClient
 from sqlalchemy.orm.session import Session
+from starlette.testclient import TestClient
 
 from app.core.config import settings
 from tests.utils import get_jwt_header
