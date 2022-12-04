@@ -85,7 +85,7 @@ const Dropzone = () => {
     'showerThought',
     () => SearchService.showerThoughts(),
     {
-      staleTime: 10000,
+      staleTime: Infinity,
       onSuccess: (data) => {
         setShowerThought(data.data[indexShowerThought.current]);
         indexShowerThought.current++;
