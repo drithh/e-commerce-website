@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 
-import { CartService, GetCart, DefaultResponse } from '../api';
+import { CartService, GetCart, DefaultResponse, ApiError } from '../api';
 import { UseMutationResult, useQuery } from 'react-query';
 import { useMutation } from 'react-query';
 import { useAuth } from './AuthContext';
@@ -70,6 +70,11 @@ const useProvideCart = () => {
     enabled: role === 'user' || role === 'admin',
     onSuccess: (data) => {
       setCart(data);
+    },
+    onError: (error: ApiError) => {
+      if (error.body.message === 'You have no carts') {
+        setCart({ data: [] });
+      }
     },
   });
 
