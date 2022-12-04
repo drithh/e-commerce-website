@@ -42,7 +42,6 @@ class ImageClassifier:
         transform = transforms.Compose(
             [
                 transforms.Resize((128, 128)),
-                transforms.Grayscale(num_output_channels=1),
                 transforms.RandomHorizontalFlip(p=0.8),
                 transforms.ToTensor(),
                 transforms.Normalize(
@@ -53,16 +52,17 @@ class ImageClassifier:
                         0.5,
                     ],
                 ),
+                transforms.Grayscale(1),
             ]
         )
         image = transform(image).float()
         return image
 
     def threshold(self, image):
-        img = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-        _, th1 = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY_INV)
-        img = cv2.cvtColor(th1, cv2.COLOR_GRAY2RGB)
-        return img
+        imge = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+        _, th1 = cv2.threshold(imge, 127, 255, cv2.THRESH_BINARY_INV)
+        imge = cv2.cvtColor(th1, cv2.COLOR_GRAY2RGB)
+        return imge
 
     def edges(self, image):
         edges = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
@@ -80,7 +80,6 @@ class ImageClassifier:
                 cv2.flip(image, 0),
                 cv2.flip(image, -1),
                 self.threshold(image),
-                self.edges(image),
             )
         )
         return list_image
@@ -98,13 +97,12 @@ class ImageClassifier:
             while count_final > 1:
                 lists = []
                 for i in range(len(list_image)):
-                    image = Image.fromarray(list_image[i])
-                    image_tensor = self.preprocessing(image).float()
+                    img = Image.fromarray(list_image[i])
+                    image_tensor = self.preprocessing(img)
                     image_tensor = image_tensor.unsqueeze_(0)
-                    image = Variable(image_tensor)
+                    img = Variable(image_tensor)
                     # Predict image from classifier
-                    output = self.classifiers(image)
-                    self.classifiers.eval()
+                    output = self.classifiers(img)
                     index = output.data.numpy().argmax()
 
                     # Get result final and return it

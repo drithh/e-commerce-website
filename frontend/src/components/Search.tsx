@@ -7,8 +7,9 @@ import {
 } from 'react-icons/ai';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-import { SearchService } from '../api';
+import { ApiError, SearchService } from '../api';
 import { useSearch } from '../context/SearchContext';
 import { convertToBase64 } from './util/utilFunc';
 
@@ -122,6 +123,10 @@ const Dropzone = () => {
           })
         );
         navigate(`/products?category=${data.id}&searchImage=true`);
+      },
+      onError: (error: ApiError) => {
+        toast.error(error.body.message);
+        setProcessing(false);
       },
     }
   );

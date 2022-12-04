@@ -3,7 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import { AiOutlineLoading3Quarters } from 'react-icons/ai';
 import { useMutation, useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
-import { SearchService } from '../api';
+import { toast } from 'react-toastify';
+import { ApiError, SearchService } from '../api';
 import { convertToBase64 } from '../components/util/utilFunc';
 import { useSearch } from '../context/SearchContext';
 
@@ -77,6 +78,10 @@ const Dropzone = () => {
           setSearch!(false);
           setProcessing(false);
         }
+      },
+      onError: (error: ApiError) => {
+        toast.error(error.body.message);
+        setProcessing(false);
       },
     }
   );
