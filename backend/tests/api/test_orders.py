@@ -378,7 +378,19 @@ def test_get_shipping_price(
     product_size_quantity = create_product_size_quantity(product, size)
     create_cart(user, product_size_quantity)
     resp = client.get(
-        "/shipping_price",
+        f"{settings.API_PATH}/shipping_price",
         headers=get_jwt_header(user),
     )
     assert resp.status_code == 200
+    assert resp.json()['data'][0]["name"] == "Regular"
+
+
+def test_get_admin_empty_orders(client: TestClient, create_admin):
+    admin = create_admin()
+    order_id = uuid.uuid4()
+    resp = client.get(
+        f"{prefix_admin}/{order_id}",
+        headers=get_jwt_header(admin),
+    )
+    assert resp.status_code == 404
+    assert resp.json()["message"] == "Order not found"
