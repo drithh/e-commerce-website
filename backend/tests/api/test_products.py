@@ -152,12 +152,14 @@ def test_create_product_invalid_size(client: TestClient, create_admin, create_ca
     assert resp.json() == {"message": "Size does not exist"}
 
 
-def test_create_product(client: TestClient, create_category, create_admin, create_size):
+def test_create_product(client: TestClient, create_category, create_admin, create_size, get_base64_image):
 
     category = create_category()
     admin = create_admin()
     size = create_size(size_model="S")
+    test_image = get_base64_image()
 
+    # assert test_image == ""
     resp = client.post(
         f"{prefix}",
         headers=get_jwt_header(admin),
@@ -165,7 +167,7 @@ def test_create_product(client: TestClient, create_category, create_admin, creat
             "title": "hehe",
             "brand": "hoho",
             "product_detail": "haha",
-            "images": [],
+            "images": [test_image],
             "price": 10000,
             "condition": "new",
             "category_id": str(category.id),
@@ -195,29 +197,6 @@ def test_create_product_wrong_category(client: TestClient, create_admin):
     )
     assert resp.status_code == 400
     assert resp.json()["message"].startswith("IntegrityError")
-
-
-# def test_create_product_without_product_size_quantity(client: TestClient, create_category, create_admin, create_size):
-#     admin = create_admin()
-#     category = create_category()
-#     size = create_size(size_model="S")
-
-#     resp = client.post(
-#         f"{prefix}",
-#         headers=get_jwt_header(admin),
-#         json={
-#             "title": "hehe",
-#             "brand": "hoho",
-#             "product_detail": "haha",
-#             "images": [],
-#             "price": 10000,
-#             "condition": "new",
-#             "category_id": str(category.id),
-#             "stock": [{"size": "S", "quantity": 0}],
-#         },
-#     )
-
-#     assert resp.json() == {}
 
 
 def test_update_product_false_category_id(

@@ -14,6 +14,7 @@ from app.factory import create_app
 
 pytest_plugins = [
     "tests.fixtures.insert_data",
+    "tests.fixtures.image",
 ]
 
 fake = Faker("id_ID")
