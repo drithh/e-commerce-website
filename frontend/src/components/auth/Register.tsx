@@ -26,8 +26,8 @@ const Register: React.FC<Props> = ({ onLogin, closeModal }) => {
     register!.mutate(
       { name, email, password, phone },
       {
-        onError: (error: ApiError) => {
-          setErrorMsg(error.body.message);
+        onError: (error) => {
+          setErrorMsg((error as ApiError).body.message);
         },
       }
     );

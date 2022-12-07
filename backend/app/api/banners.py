@@ -32,7 +32,7 @@ def get_banners(
             SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
             COALESCE(url_path, '/products') AS url_path, text_position
             FROM only banners
-            JOIN images ON banners.image_id = images.id
+            LEFT JOIN images ON banners.image_id = images.id
             """
     ).fetchall()
     if not banners:
@@ -53,7 +53,7 @@ def get_banner(
             SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
             COALESCE(url_path, '/products') AS url_path, text_position
             FROM only banners
-            JOIN images ON banners.image_id = images.id
+            LEFT JOIN images ON banners.image_id = images.id
             WHERE banners.id = '{banner_id}'
             """
     ).fetchone()
@@ -136,39 +136,42 @@ def update_banner(
         )
 
     if request.image:
-        if not request.image.startswith("data:image"):
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Invalid image format. Please use base64 format with data:image",
-            )
-        title_slug = request.title.lower().replace(" ", "-")
-        image_data, image_type = base64_to_image(request.image)
-        file = {
-            "file": image_data,
-            "media_type": image_type,
-            "file_name": title_slug,
-        }
-        image_url = upload_image(file, "banners")
-        if image_url is None:
-            raise HTTPException(
-                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                detail="Image upload failed, because of cloud storage error",
-            )
+        if request.image == "delete":
+            banner.image_id = None
+        else:
+            if not request.image.startswith("data:image"):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid image format. Please use base64 format with data:image",
+                )
+            title_slug = request.title.lower().replace(" ", "-")
+            image_data, image_type = base64_to_image(request.image)
+            file = {
+                "file": image_data,
+                "media_type": image_type,
+                "file_name": title_slug,
+            }
+            image_url = upload_image(file, "banners")
+            if image_url is None:
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Image upload failed, because of cloud storage error",
+                )
 
-        name = image_url.split("/")[-1].split(".")[0]
-        image = Image(name=name, image_url=image_url)
-        try:
-            session.add(image)
-            session.commit()
-            session.refresh(image)
-        except Exception as e:
-            logger.error(e)
-            session.rollback()
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-            )
+            name = image_url.split("/")[-1].split(".")[0]
+            image = Image(name=name, image_url=image_url)
+            try:
+                session.add(image)
+                session.commit()
+                session.refresh(image)
+            except Exception as e:
+                logger.error(e)
+                session.rollback()
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
+                )
 
-        banner.image_id = image.id
+            banner.image_id = image.id
 
     banner.title = request.title
     banner.url_path = request.url_path

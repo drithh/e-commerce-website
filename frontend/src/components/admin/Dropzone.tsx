@@ -33,6 +33,7 @@ const Dropzone = ({ initialImages, setImages, files, setFiles }: props) => {
     accept: {
       'image/jpeg': [],
       'image/png': [],
+      'image/webp': [],
     },
   });
 

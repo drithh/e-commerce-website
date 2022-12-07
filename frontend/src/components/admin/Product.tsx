@@ -59,7 +59,15 @@ const Product = () => {
         category_id: variables.category,
         condition: variables.condition,
         stock: variables.stock,
-      })
+      }),
+    {
+      onSuccess: () => {
+        toast.success('Product updated');
+      },
+      onError: (error: ApiError) => {
+        toast.error(error.body.message);
+      },
+    }
   );
 
   const fetchProduct = useQuery(
@@ -126,26 +134,16 @@ const Product = () => {
       (option) => option.title === category
     );
 
-    updateProduct.mutate(
-      {
-        title,
-        brand,
-        detail,
-        price,
-        category: selectedCategory?.id as string,
-        condition,
-        stock,
-        images: combinedImages,
-      },
-      {
-        onSuccess: () => {
-          toast.success('Product updated');
-        },
-        onError: (error: ApiError) => {
-          toast.error(error.body.message);
-        },
-      }
-    );
+    updateProduct.mutate({
+      title,
+      brand,
+      detail,
+      price,
+      category: selectedCategory?.id as string,
+      condition,
+      stock,
+      images: combinedImages,
+    });
   };
 
   return (

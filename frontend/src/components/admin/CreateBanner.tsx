@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { HiOutlineChevronLeft } from 'react-icons/hi';
 import { IoClose } from 'react-icons/io5';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+
+import { useMutation, useQueryClient } from 'react-query';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useDropzone } from 'react-dropzone';
 
@@ -12,26 +13,24 @@ import Dropdown from '../input/Dropdown';
 import Input from '../input/Input';
 import { convertToBase64 } from '../util/utilFunc';
 
-const Banner = () => {
-  const { id } = useParams();
+const CreateBanner = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const [title, setTitle] = useState('');
   const [urlPath, setUrlPath] = useState('');
-  const [textPosition, setTextPosition] = useState('');
+  const [textPosition, setTextPosition] = useState('left');
   const [image, setImage] = useState<string>('');
   const [file, setFile] = useState<File>(new File([], ''));
 
-  const updateBanner = useMutation(
+  const createBanner = useMutation(
     (variables: {
       title: string;
       url_path: string;
       text_position: string;
       image: string;
     }) =>
-      BannerService.updateBanner({
-        id: id as string,
+      BannerService.createBanner({
         title: variables.title,
         url_path: variables.url_path,
         text_position: variables.text_position,
@@ -46,38 +45,6 @@ const Banner = () => {
     }
   );
 
-  const fetchBanner = useQuery(
-    ['banner', id],
-    () => BannerService.getBanner(id as string),
-    {
-      refetchOnWindowFocus: false,
-      onSuccess: (data) => {
-        setTitle(data.title);
-        setUrlPath(data.url_path);
-        setTextPosition(data.text_position);
-        setImage(data.image);
-      },
-    }
-  );
-
-  const deleteBanner = useMutation(
-    (id: string) => BannerService.deleteBanner(id),
-    {
-      onSuccess: (data) => {
-        toast.success(data.message);
-        queryClient.invalidateQueries('banners');
-        navigate('/admin/banners');
-      },
-      onError: (error: ApiError) => {
-        toast.error(error.body.message);
-      },
-    }
-  );
-
-  if (fetchBanner.isLoading || !id) {
-    return <div>Loading...</div>;
-  }
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -86,7 +53,7 @@ const Banner = () => {
       : image === ''
       ? 'delete'
       : '';
-    updateBanner.mutate({
+    createBanner.mutate({
       title,
       url_path: urlPath,
       text_position: textPosition,
@@ -96,7 +63,7 @@ const Banner = () => {
 
   return (
     <>
-      <h2 className="w-full text-2xl font-medium">Update Banner</h2>
+      <h2 className="w-full text-2xl font-medium">Create Banner</h2>
       <div className="flex py-3 ">
         <Link to="/admin/banners" className="flex place-items-center  gap-x-2">
           <HiOutlineChevronLeft className="text-xl" />
@@ -156,15 +123,15 @@ const Banner = () => {
         <div className="mt-8 flex place-content-between">
           <button
             type="button"
-            onClick={() => deleteBanner.mutate(id)}
+            onClick={() => navigate('/admin/banners')}
             className="mb-4 w-52 border border-gray-500 py-3 px-6 text-center text-xl hover:bg-gray-500  hover:text-gray-100 sm:py-2 sm:text-base"
-            aria-label="Delete Banner"
+            aria-label="Cancel Banner"
           >
-            Delete Banner
+            Cancel
           </button>
           <Button
             type="submit"
-            value="Update Banner"
+            value="Create Banner"
             extraClass="w-52 text-center text-xl mb-4"
             size="lg"
           />
@@ -212,24 +179,6 @@ const Dropzone = ({ initialImage, setImage, file, setFile }: props) => {
   return (
     <>
       <div className="mb-4 flex flex-wrap gap-x-2">
-        {!file.name && (
-          <button
-            type="button"
-            className="group relative h-40 w-52 cursor-pointer overflow-hidden rounded border-2  border-gray-100"
-            onClick={() => {
-              setImage('');
-            }}
-          >
-            <img
-              src={initialImage}
-              alt=""
-              className="rounded-md object-contain"
-            />
-            <div className="group absolute inset-0 hidden h-full  w-full place-content-center place-items-center bg-gray-100 opacity-50 group-hover:flex">
-              <IoClose className="animate-spin-fast-once text-7xl text-black " />
-            </div>
-          </button>
-        )}
         {file.name && (
           <button
             type="button"
@@ -280,4 +229,4 @@ const Dropzone = ({ initialImage, setImage, file, setFile }: props) => {
   );
 };
 
-export default Banner;
+export default CreateBanner;
