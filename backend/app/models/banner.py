@@ -17,7 +17,7 @@ class Banner(DefaultModel, Base):
     text_position = Column(String(length=32), nullable=False, server_default="left")
 
     @classmethod
-    def seed(cls, fake, image_id, title, text_position):
+    def seed(cls, fake, image_id, title, text_position="left"):
         banner = Banner(
             id=fake.uuid4(),
             title=title,

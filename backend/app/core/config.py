@@ -23,6 +23,9 @@ class Settings(BaseSettings):
     DATABASE_URL: PostgresDsn
     ASYNC_DATABASE_URL: Optional[PostgresDsn]
 
+    BUCKET_NAME: str
+    TEST_BUCKET_NAME: Optional[str]
+
     @validator("DATABASE_URL", pre=True)
     def build_test_database_url(cls, v: Optional[str], values: Dict[str, Any]):
         """Overrides DATABASE_URL with TEST_DATABASE_URL in test environment."""
@@ -39,6 +42,17 @@ class Settings(BaseSettings):
         """Builds ASYNC_DATABASE_URL from DATABASE_URL."""
         v = values["DATABASE_URL"]
         return v.replace("postgresql", "postgresql+asyncpg") if v else v
+
+    @validator("BUCKET_NAME")
+    def build_bucket_name(cls, v: Optional[str], values: Dict[str, Any]):
+        """Builds BUCKET_NAME from TEST_BUCKET_NAME in test environment."""
+        if "pytest" in sys.modules:
+            if not values.get("TEST_BUCKET_NAME"):
+                raise Exception(
+                    "pytest detected, but TEST_BUCKET_NAME is not set in environment"
+                )
+            return values["TEST_BUCKET_NAME"]
+        return v
 
     SECRET_KEY: str
 

@@ -18,7 +18,7 @@ try:
             "client_x509_cert_url": settings.GCP_CLIENT_X509_CERT_URL,
         }
     )
-    bucket_name = "tutu-startup-campus"
+    bucket_name = settings.BUCKET_NAME
     bucket = storage_client.bucket(bucket_name)
     logger.info("Google Cloud Storage initialized")
 except Exception as e:
@@ -43,3 +43,10 @@ def upload_image(file, parent_folder):
 
         logger.info(f"Image {file['file_name']} uploaded to {bucket_name}")
         return file["file_name"]
+
+
+def delete_image(file_name):
+    if bucket:
+        blob = bucket.blob(file_name)
+        blob.delete()
+        logger.info(f"Image {file_name} deleted from {bucket_name}")
