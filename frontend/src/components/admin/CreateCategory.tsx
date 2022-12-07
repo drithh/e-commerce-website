@@ -29,8 +29,8 @@ const CreateCategory = () => {
         queryClient.invalidateQueries('categories');
         navigate('/admin/categories');
       },
-      onError: (error) => {
-        toast.error((error as ApiError).body.message);
+      onError: (error: ApiError) => {
+        toast.error(error.body.message);
       },
     }
   );

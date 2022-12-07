@@ -28,6 +28,8 @@ import Footer from './components/Footer';
 const Orders = lazy(() => import('./components/admin/Orders'));
 const Customers = lazy(() => import('./components/admin/Customers'));
 const Categories = lazy(() => import('./components/admin/Categories'));
+const Banners = lazy(() => import('./components/admin/Banners'));
+const Banner = lazy(() => import('./components/admin/Banner'));
 const AdminProducts = lazy(() => import('./components/admin/Products'));
 const AdminOrder = lazy(() => import('./components/admin/Order'));
 const AdminProduct = lazy(() => import('./components/admin/Product'));
@@ -117,6 +119,8 @@ function App() {
                         <Route path="/test-model" element={<TestModel />} />
                         <Route path="/admin" element={<Admin />}>
                           <Route path="" element={<Dashboard />} />
+                          <Route path="banners" element={<Banners />} />
+                          <Route path="banners/:id" element={<Banner />} />
                           <Route path="orders" element={<Orders />} />
                           <Route path="orders/:id" element={<AdminOrder />} />
                           <Route path="products" element={<AdminProducts />} />

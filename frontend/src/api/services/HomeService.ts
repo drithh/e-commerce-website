@@ -1,7 +1,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { GetBanners } from '../models/GetBanners';
 import type { GetBestSeller } from '../models/GetBestSeller';
 import type { GetCategories } from '../models/GetCategories';
 
@@ -10,18 +9,6 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
 export class HomeService {
-  /**
-   * Get Banner
-   * @returns GetBanners Successful Response
-   * @throws ApiError
-   */
-  public static getBanner(): CancelablePromise<GetBanners> {
-    return __request(OpenAPI, {
-      method: 'GET',
-      url: '/v1/home/banner',
-    });
-  }
-
   /**
    * Get Category With Image
    * @returns GetCategories Successful Response

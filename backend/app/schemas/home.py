@@ -15,24 +15,6 @@ class GetBestSeller(BaseModel):
     data: list[BestSeller]
 
 
-class Banner(BaseModel):
-    id: UUID
-    image: str
-    title: str
-    url_path: str
-    text_position: str
-
-    class Config:
-        orm_mode = True
-
-
-class GetBanners(BaseModel):
-    data: list[Banner]
-
-    class Config:
-        orm_mode = True
-
-
 class Category(BaseModel):
     id: UUID
     image: str

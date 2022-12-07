@@ -12,6 +12,7 @@ from starlette.responses import FileResponse
 from app.api import (
     admins,
     authentications,
+    banners,
     carts,
     categories,
     homes,
@@ -92,6 +93,11 @@ def setup_routers(app: FastAPI) -> None:
         homes.router,
         prefix=f"{settings.API_PATH}/home",
         tags=["Home"],
+    )
+    app.include_router(
+        banners.router,
+        prefix=f"{settings.API_PATH}/banners",
+        tags=["Banner"],
     )
     app.include_router(
         products.router,

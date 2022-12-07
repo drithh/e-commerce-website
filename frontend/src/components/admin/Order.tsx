@@ -25,8 +25,8 @@ const Order = () => {
         toast.success(data.message);
         fetchOrder.refetch();
       },
-      onError: (error) => {
-        toast.error((error as ApiError).body.message);
+      onError: (error: ApiError) => {
+        toast.error(error.body.message);
       },
     }
   );
