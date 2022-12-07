@@ -9,7 +9,7 @@ class Banner(DefaultModel, Base):
     __tablename__ = "banners"
 
     title = Column(String(length=128), nullable=False, unique=True)
-    image_id = Column(ForeignKey("images.id", ondelete="CASCADE"), nullable=False)
+    image_id = Column(ForeignKey("images.id", ondelete="CASCADE"), nullable=True)
     url_path = Column(
         String(length=256),
         nullable=True,

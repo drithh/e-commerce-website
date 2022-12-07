@@ -30,6 +30,7 @@ const Customers = lazy(() => import('./components/admin/Customers'));
 const Categories = lazy(() => import('./components/admin/Categories'));
 const Banners = lazy(() => import('./components/admin/Banners'));
 const Banner = lazy(() => import('./components/admin/Banner'));
+const CreateBanner = lazy(() => import('./components/admin/CreateBanner'));
 const AdminProducts = lazy(() => import('./components/admin/Products'));
 const AdminOrder = lazy(() => import('./components/admin/Order'));
 const AdminProduct = lazy(() => import('./components/admin/Product'));
@@ -121,6 +122,10 @@ function App() {
                           <Route path="" element={<Dashboard />} />
                           <Route path="banners" element={<Banners />} />
                           <Route path="banners/:id" element={<Banner />} />
+                          <Route
+                            path="banners/create"
+                            element={<CreateBanner />}
+                          />
                           <Route path="orders" element={<Orders />} />
                           <Route path="orders/:id" element={<AdminOrder />} />
                           <Route path="products" element={<AdminProducts />} />

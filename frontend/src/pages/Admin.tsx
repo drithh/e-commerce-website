@@ -4,7 +4,7 @@ import { BsBookmark } from 'react-icons/bs';
 import { IoShirtOutline } from 'react-icons/io5';
 import { MdOutlineAttachMoney } from 'react-icons/md';
 import { SlGraph } from 'react-icons/sl';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const Admin = () => {
   const location = useLocation();
@@ -23,8 +23,8 @@ const Admin = () => {
       <div className="mt-4 flex gap-x-4">
         {/* ===== Side Panel Section ===== */}
         <section className="side-panel inset-0 flex h-fit flex-col gap-y-[2px]   border-[1.5px] border-gray-500 py-2 px-5 font-medium text-gray-400">
-          <button
-            onClick={() => navigate('')}
+          <Link
+            to=""
             className={`${
               location.pathname === '/admin' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
@@ -33,9 +33,9 @@ const Admin = () => {
               <SlGraph />
             </span>
             Dashboard
-          </button>
-          <button
-            onClick={() => navigate('banners')}
+          </Link>
+          <Link
+            to="banners"
             className={`${
               location.pathname === '/admin/banners' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
@@ -44,9 +44,9 @@ const Admin = () => {
               <AiOutlinePicCenter />
             </span>
             Banners
-          </button>
-          <button
-            onClick={() => navigate('orders')}
+          </Link>
+          <Link
+            to="orders"
             className={`${
               location.pathname === '/admin/orders' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
@@ -55,9 +55,9 @@ const Admin = () => {
               <MdOutlineAttachMoney />
             </span>
             Orders
-          </button>
-          <button
-            onClick={() => navigate('products')}
+          </Link>
+          <Link
+            to="products"
             className={`${
               location.pathname === '/admin/products' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
@@ -66,9 +66,9 @@ const Admin = () => {
               <IoShirtOutline />
             </span>
             Products
-          </button>
-          <button
-            onClick={() => navigate('categories')}
+          </Link>
+          <Link
+            to="categories"
             className={`${
               location.pathname === '/admin/categories' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
@@ -77,9 +77,9 @@ const Admin = () => {
               <BsBookmark />
             </span>
             Categories
-          </button>
-          <button
-            onClick={() => navigate('customers')}
+          </Link>
+          <Link
+            to="customers"
             className={`${
               location.pathname === '/admin/customers' && 'text-black'
             } flex w-full cursor-pointer place-items-center  gap-x-3 py-4 px-6 font-medium uppercase hover:text-black`}
@@ -88,7 +88,7 @@ const Admin = () => {
               <AiOutlineUser />
             </span>
             Customers
-          </button>
+          </Link>
         </section>
         <section className="wrapper w-full overflow-hidden">
           <Outlet />

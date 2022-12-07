@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { Banner, HomeService } from '../api';
+import { Banner, BannerService, HomeService } from '../api';
 import TextButton from './button/TextButton';
 
 import 'swiper/css';
@@ -15,7 +15,7 @@ SwiperCore.use([Pagination, Navigation, Autoplay]);
 const Slideshow = () => {
   const { data, isLoading, error } = useQuery(
     'banners',
-    HomeService.getBanner,
+    BannerService.getBanners,
     {
       staleTime: 1000 * 60,
     }
@@ -77,7 +77,7 @@ const Slideshow = () => {
                 {convertTitle(slider.title).titleDown}
               </span>
               <Link to={slider.url_path}>
-                <TextButton value={'Shop Now'} />
+                <TextButton value="Shop Now" />
               </Link>
             </div>
           </SwiperSlide>

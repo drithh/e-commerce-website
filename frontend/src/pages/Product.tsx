@@ -211,8 +211,8 @@ const Product = () => {
                         size,
                       },
                       {
-                        onError: (error: ApiError) => {
-                          toast.error(error.body.message);
+                        onError: (error) => {
+                          toast.error((error as ApiError).body.message);
                         },
                       }
                     );
