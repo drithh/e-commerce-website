@@ -24,7 +24,7 @@ def get_banner(
     banners = session.execute(
         f"""
             SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
-            COALESCE(url_path, '/products') AS url_path
+            COALESCE(url_path, '/products') AS url_path, text_position
             FROM only banners
             JOIN images ON banners.image_id = images.id
             """

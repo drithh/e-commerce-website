@@ -2,6 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { app__schemas__admin__GetOrders } from '../models/app__schemas__admin__GetOrders';
+import type { CreateBanner } from '../models/CreateBanner';
+import type { DefaultResponse } from '../models/DefaultResponse';
 import type { GetCustomers } from '../models/GetCustomers';
 import type { GetDashboard } from '../models/GetDashboard';
 import type { GetSales } from '../models/GetSales';
@@ -89,6 +91,26 @@ export class DashboardService {
         page: page,
         page_size: pageSize,
       },
+      errors: {
+        422: `Validation Error`,
+      },
+    });
+  }
+
+  /**
+   * Create Banner
+   * @param requestBody
+   * @returns DefaultResponse Successful Response
+   * @throws ApiError
+   */
+  public static createBanner(
+    requestBody: CreateBanner
+  ): CancelablePromise<DefaultResponse> {
+    return __request(OpenAPI, {
+      method: 'POST',
+      url: '/v1/admin/banners',
+      body: requestBody,
+      mediaType: 'application/json',
       errors: {
         422: `Validation Error`,
       },

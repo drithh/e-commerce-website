@@ -2,10 +2,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Banner = {
-  id: string;
+export type CreateBanner = {
   image: string;
   title: string;
   url_path: string;
-  text_position: string;
 };

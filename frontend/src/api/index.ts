@@ -19,6 +19,7 @@ export type { Body_sign_in_v1_sign_in_post } from './models/Body_sign_in_v1_sign
 export type { Category } from './models/Category';
 export type { CategoryOrder } from './models/CategoryOrder';
 export type { ChangePassword } from './models/ChangePassword';
+export type { CreateBanner } from './models/CreateBanner';
 export type { CreateCart } from './models/CreateCart';
 export type { CreateCategory } from './models/CreateCategory';
 export type { CreateOrder } from './models/CreateOrder';

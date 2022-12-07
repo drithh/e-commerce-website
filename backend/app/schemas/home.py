@@ -20,6 +20,7 @@ class Banner(BaseModel):
     image: str
     title: str
     url_path: str
+    text_position: str
 
     class Config:
         orm_mode = True

@@ -60,14 +60,14 @@ const Slideshow = () => {
 
             <div
               className={`absolute bottom-10 right-1/2 translate-x-1/2 transform bg-white p-4 opacity-90 sm:top-1/3 sm:transform-none sm:bg-transparent sm:p-0 sm:opacity-100 ${
-                slider.title === 'Night Summer Dresses'
+                slider.text_position === 'right'
                   ? 'flex flex-col items-center sm:right-12 sm:items-end md:right-20 lg:right-40'
                   : 'flex flex-col items-center sm:left-12 sm:items-start md:left-20 lg:left-40'
               }`}
             >
               <span
                 className={`my-4 text-center text-4xl sm:text-5xl md:text-6xl lg:text-7xl ${
-                  slider.title === 'Night Summer Dresses'
+                  slider.text_position === 'right'
                     ? 'sm:text-right'
                     : 'sm:text-left'
                 }`}

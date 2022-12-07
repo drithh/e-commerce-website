@@ -16,10 +16,22 @@ from app.seeders.size_seeder import size_seed
 from app.seeders.user_seeder import user_seed
 from app.seeders.wishlist_seeder import wishlist_seed
 
-banners_urls = [
-    "banners/night-summer-dresses-1.webp",
-    "banners/cocktail-dresses-1.webp",
-    "banners/epic-bucket-hat-1.webp",
+banners = [
+    {
+        "title": "Night Summer Dresses",
+        "url_path": "banners/night-summer-dresses-1.webp",
+        "text_position": "right",
+    },
+    {
+        "title": "New Cocktail Dresses",
+        "url_path": "banners/cocktail-dresses-1.webp",
+        "text_position": "left",
+    },
+    {
+        "title": "Epic Bucket Hat",
+        "url_path": "banners/epic-bucket-hat-1.webp",
+        "text_position": "left",
+    },
 ]
 
 
@@ -663,8 +675,6 @@ for product_item in product_items:
                 f"products/{product_item['category']}/{item['name'].replace(' ', '-').lower()}-{i}.webp"
             )
 
-banner_text = ["Night Summer Dresses", "New Cocktail Dresses", "Epic Bucket Hat"]
-
 
 def seed():
 
@@ -675,7 +685,9 @@ def seed():
         user_id = user_seed(fake, session)
 
         logger.info("Seeding Table Images")
-        banner_image_id = image_seed(fake, session, banners_urls)
+        banner_image_id = image_seed(
+            fake, session, [banner["url_path"] for banner in banners]
+        )
         product_image_id = image_seed(fake, session, product_urls)
 
         logger.info("Seeding Table Sizes")
@@ -686,7 +698,7 @@ def seed():
         category_id = category_seed(fake, session, category_items)
 
         logger.info("Seeding Table Banners")
-        banner_seed(fake, session, banner_image_id, banner_text)
+        banner_seed(fake, session, banner_image_id, banners)
         session.commit()
 
         # change product_items category to category_id

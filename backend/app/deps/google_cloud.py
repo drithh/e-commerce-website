@@ -26,9 +26,9 @@ except Exception as e:
     logger.error(f"Google Cloud Storage initialization failed: {e}")
 
 
-def upload_image(file, category):
+def upload_image(file, parent_folder):
     if bucket:
-        prefix = f"products/{category}/{file['file_name']}"
+        prefix = f"{parent_folder}/{file['file_name']}"
         images = bucket.list_blobs(prefix=prefix, delimiter="/")
         last_image_name = list(images)
         last_index = 1

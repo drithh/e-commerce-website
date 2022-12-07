@@ -1,8 +1,8 @@
 """models
 
-Revision ID: 05fe6baf8f18
+Revision ID: 6141760a7674
 Revises: 
-Create Date: 2022-12-07 10:18:41.808772
+Create Date: 2022-12-07 10:50:10.850814
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import fastapi_users_db_sqlalchemy
 
 
 # revision identifiers, used by Alembic.
-revision = '05fe6baf8f18'
+revision = '6141760a7674'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -76,6 +76,7 @@ def upgrade():
     sa.Column('title', sa.String(length=128), nullable=False),
     sa.Column('image_id', fastapi_users_db_sqlalchemy.generics.GUID(), nullable=False),
     sa.Column('url_path', sa.String(length=256), nullable=True),
+    sa.Column('text_position', sa.String(length=32), server_default='left', nullable=False),
     sa.ForeignKeyConstraint(['image_id'], ['images.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('title')

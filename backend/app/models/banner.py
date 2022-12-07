@@ -14,12 +14,14 @@ class Banner(DefaultModel, Base):
         String(length=256),
         nullable=True,
     )
+    text_position = Column(String(length=32), nullable=False, server_default="left")
 
     @classmethod
-    def seed(cls, fake, image_id, text):
+    def seed(cls, fake, image_id, title, text_position):
         banner = Banner(
             id=fake.uuid4(),
-            title=text,
+            title=title,
             image_id=image_id,
+            text_position=text_position,
         )
         return banner

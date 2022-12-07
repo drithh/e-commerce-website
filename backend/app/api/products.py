@@ -190,7 +190,7 @@ def create_product(
             "media_type": image_type,
             "file_name": title_slug,
         }
-        image_url = upload_image(file, category)
+        image_url = upload_image(file, f"products/{category}")
         if image_url is None:
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -313,7 +313,7 @@ def update_product(
                 {"id": request.category_id},
             ).fetchone()[0]
 
-            image_url = upload_image(file, category)
+            image_url = upload_image(file, f"products/{category}")
             if image_url is None:
                 raise HTTPException(
                     status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
