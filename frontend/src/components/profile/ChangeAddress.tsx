@@ -37,8 +37,8 @@ const ChangeAddress: React.FC<Props> = ({ closeModal }) => {
         toast.success(data.message);
         closeModal();
       },
-      onError: (error) => {
-        setErrorMsg((error as ApiError).body.message);
+      onError: (error: ApiError) => {
+        setErrorMsg(error.body.message);
       },
     }
   );

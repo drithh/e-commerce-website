@@ -65,6 +65,7 @@ export type { SearchImageResponse } from './models/SearchImageResponse';
 export type { SearchText } from './models/SearchText';
 export type { ShowerThoughts } from './models/ShowerThoughts';
 export type { Stock } from './models/Stock';
+export type { UpdateBanner } from './models/UpdateBanner';
 export type { UpdateCart } from './models/UpdateCart';
 export type { UpdateCategory } from './models/UpdateCategory';
 export type { UpdateProduct } from './models/UpdateProduct';
@@ -74,6 +75,7 @@ export type { UserRead } from './models/UserRead';
 export type { ValidationError } from './models/ValidationError';
 
 export { AuthenticationService } from './services/AuthenticationService';
+export { BannerService } from './services/BannerService';
 export { CartService } from './services/CartService';
 export { CategoryService } from './services/CategoryService';
 export { DashboardService } from './services/DashboardService';

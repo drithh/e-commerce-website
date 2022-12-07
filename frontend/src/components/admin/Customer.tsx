@@ -46,8 +46,8 @@ const Customer = () => {
       onSuccess: (data) => {
         toast.success(data.message);
       },
-      onError: (error) => {
-        toast.error((error as ApiError).body.message);
+      onError: (error: ApiError) => {
+        toast.error(error.body.message);
       },
     }
   );
@@ -58,8 +58,8 @@ const Customer = () => {
       queryClient.invalidateQueries('users');
       navigate('/admin/customers');
     },
-    onError: (error) => {
-      toast.error((error as ApiError).body.message);
+    onError: (error: ApiError) => {
+      toast.error(error.body.message);
     },
   });
 

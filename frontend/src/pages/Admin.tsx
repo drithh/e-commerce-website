@@ -1,5 +1,5 @@
 import React from 'react';
-import { AiOutlineUser } from 'react-icons/ai';
+import { AiOutlinePicCenter, AiOutlineUser } from 'react-icons/ai';
 import { BsBookmark } from 'react-icons/bs';
 import { IoShirtOutline } from 'react-icons/io5';
 import { MdOutlineAttachMoney } from 'react-icons/md';
@@ -33,6 +33,17 @@ const Admin = () => {
               <SlGraph />
             </span>
             Dashboard
+          </button>
+          <button
+            onClick={() => navigate('banners')}
+            className={`${
+              location.pathname === '/admin/banners' && 'text-black'
+            } flex w-full cursor-pointer place-items-center  gap-x-3 border-b-2 border-gray-100 py-4 px-6 font-medium uppercase hover:text-black`}
+          >
+            <span className="text-xl">
+              <AiOutlinePicCenter />
+            </span>
+            Banners
           </button>
           <button
             onClick={() => navigate('orders')}

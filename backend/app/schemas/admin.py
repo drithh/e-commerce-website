@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Optional
+from typing import List
 from uuid import UUID
 
 from fastapi import Query
@@ -75,24 +75,3 @@ class CategoryOrder(BaseModel):
 class GetDashboard(BaseModel):
     income_per_month: List[IncomeMonth]
     total_order_per_category: List[CategoryOrder]
-
-
-class CreateBanner(BaseModel):
-    image: str
-    title: str
-    url_path: Optional[str] = "products"
-    text_position: Optional[str] = Query("left", regex="^(left|right)$")
-
-    class Config:
-        orm_mode = True
-
-
-class UpdateBanner(BaseModel):
-    id: UUID
-    image: Optional[str]
-    title: str
-    url_path: str
-    text_position: str = Query("left", regex="^(left|right)$")
-
-    class Config:
-        orm_mode = True

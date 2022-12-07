@@ -8,33 +8,9 @@ from fastapi.routing import APIRouter
 from app.core.config import settings
 from app.core.logger import logger
 from app.deps.db import get_db
-from app.models.banner import Banner
-from app.models.category import Category
-from app.models.image import Image
-from app.schemas.default_model import DefaultResponse
-from app.schemas.home import BestSeller, GetBanners, GetBestSeller, GetCategories
+from app.schemas.home import GetBestSeller, GetCategories
 
 router = APIRouter()
-
-
-@router.get("/banner", response_model=GetBanners, status_code=status.HTTP_200_OK)
-def get_banner(
-    session: Generator = Depends(get_db),
-) -> JSONResponse:
-    banners = session.execute(
-        f"""
-            SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
-            COALESCE(url_path, '/products') AS url_path, text_position
-            FROM only banners
-            JOIN images ON banners.image_id = images.id
-            """
-    ).fetchall()
-    if not banners:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="There are no banners",
-        )
-    return GetBanners(data=banners)
 
 
 @router.get("/category", response_model=GetCategories, status_code=status.HTTP_200_OK)
