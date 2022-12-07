@@ -1,7 +1,7 @@
 """soft delete
 
 Revision ID: 9b7f9e3d9069
-Revises: 370d7363d2c1
+Revises: 05fe6baf8f18
 Create Date: 2022-10-17 08:52:38.709803
 
 """
@@ -12,7 +12,7 @@ import fastapi_users_db_sqlalchemy
 
 # revision identifiers, used by Alembic.
 revision = "9b7f9e3d9069"
-down_revision = "370d7363d2c1"
+down_revision = "05fe6baf8f18"
 branch_labels = None
 depends_on = None
 

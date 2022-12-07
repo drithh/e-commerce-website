@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import SwiperCore, { Autoplay, Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { HomeService } from '../api';
+import { Banner, HomeService } from '../api';
 import TextButton from './button/TextButton';
 
 import 'swiper/css';
@@ -48,7 +48,7 @@ const Slideshow = () => {
         }}
         className="mySwiper"
       >
-        {data?.data.map((slider: any) => (
+        {data?.data.map((slider: Banner) => (
           <SwiperSlide key={slider.id}>
             <div className="block">
               <img
@@ -76,7 +76,7 @@ const Slideshow = () => {
                 <br />
                 {convertTitle(slider.title).titleDown}
               </span>
-              <Link to={'/products'}>
+              <Link to={slider.url_path}>
                 <TextButton value={'Shop Now'} />
               </Link>
             </div>

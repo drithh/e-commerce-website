@@ -23,7 +23,8 @@ def get_banner(
 ) -> JSONResponse:
     banners = session.execute(
         f"""
-            SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image
+            SELECT banners.id, title, CONCAT('{settings.CLOUD_STORAGE}/', COALESCE(image_url, 'image-not-available.webp')) AS image,
+            COALESCE(url_path, '/products') AS url_path
             FROM only banners
             JOIN images ON banners.image_id = images.id
             """

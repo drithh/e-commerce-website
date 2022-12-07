@@ -19,6 +19,7 @@ class Banner(BaseModel):
     id: UUID
     image: str
     title: str
+    url_path: str
 
     class Config:
         orm_mode = True

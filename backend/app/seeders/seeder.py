@@ -17,9 +17,9 @@ from app.seeders.user_seeder import user_seed
 from app.seeders.wishlist_seeder import wishlist_seed
 
 banners_urls = [
-    "banners/banner-1.webp",
-    "banners/banner-2.webp",
-    "banners/banner-3.webp",
+    "banners/night-summer-dresses-1.webp",
+    "banners/cocktail-dresses-1.webp",
+    "banners/epic-bucket-hat-1.webp",
 ]
 
 
@@ -663,7 +663,7 @@ for product_item in product_items:
                 f"products/{product_item['category']}/{item['name'].replace(' ', '-').lower()}-{i}.webp"
             )
 
-banner_text = ["Night Summer Dresses", "The Weekend Promotions", "New Cocktail Dresses"]
+banner_text = ["Night Summer Dresses", "New Cocktail Dresses", "Epic Bucket Hat"]
 
 
 def seed():
