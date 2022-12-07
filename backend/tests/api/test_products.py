@@ -183,6 +183,34 @@ def test_create_product(
     delete_image(file_name)
 
 
+def test_create_product_wrong_image(
+    client : TestClient, 
+    create_category, 
+    create_admin, 
+    create_size
+):
+    category = create_category()
+    admin = create_admin()
+    size = create_size(size_model="S")
+
+    resp = client.post(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "title": "hehe",
+            "brand": "hoho",
+            "product_detail": "haha",
+            "images": ["hehe"],
+            "price": 10000,
+            "condition": "new",
+            "category_id": str(category.id),
+            "stock": [{"size": size.size, "quantity": 100}],
+        },
+    )
+    assert resp.status_code == 400
+    assert resp.json()["message"].startswith("Invalid image")
+
+
 def test_create_product_wrong_category(client: TestClient, create_admin):
     admin = create_admin()
 

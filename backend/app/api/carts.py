@@ -210,21 +210,13 @@ def clear_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-    try:
-        session.execute(
-            """
-            DELETE FROM carts WHERE user_id = :user_id
-            """,
-            {"user_id": current_user.id},
-        )
-        session.commit()
-    except Exception as e:
-        logger.error(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=format_error(e),
-        )
+    session.execute(
+        """
+        DELETE FROM carts WHERE user_id = :user_id
+        """,
+        {"user_id": current_user.id},
+    )
+    session.commit()
 
     logger.info(f"Cart cleared by {current_user.name}")
 

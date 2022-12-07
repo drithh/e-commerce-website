@@ -223,6 +223,77 @@ def test_create_existed_cart(
     assert resp.json()["message"] == "Added to cart"
 
 
+def test_update_non_existed_cart(
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product,
+    create_size,
+    create_product_size_quantity,
+):
+    user = create_user()
+    product = create_product()
+    size = create_size()
+    create_product_size_quantity(product, size)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(user),
+        json={"id": str(uuid.uuid4()), "quantity": "2"},
+    )
+    data = resp.json()
+    assert data["message"] == "Cart not found"
+    assert resp.status_code == 404
+
+
+def test_update_cart_with_invalid_quantity(
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product,
+    create_size,
+    create_product_size_quantity,
+    db: Session,
+):
+    user = create_user()
+    product = create_product()
+    size = create_size()
+    # product_size_quantity = create_product_size_quantity(product, size)
+    db.execute(
+        """
+        INSERT INTO product_size_quantities (product_id, size_id, quantity)
+        VALUES (:product_id, :size_id, :quantity)
+        """,
+        {
+            "product_id": product.id,
+            "size_id": size.id,
+            "quantity": 1,
+        },
+    )
+    db.commit()
+    product_size_quantity = db.execute(
+        """
+        SELECT * FROM product_size_quantities
+        WHERE product_id = :product_id AND size_id = :size_id
+        """,
+        {
+            "product_id": product.id,
+            "size_id": size.id,
+        },
+    ).fetchone()
+
+    cart = create_cart(user, product_size_quantity)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(user),
+        json={"id": str(cart.id), "quantity": 100},
+    )
+    data = resp.json()
+    assert data["message"].startswith("Out of stock")
+    assert resp.status_code == 400
+
+
 def test_update_cart(
     client: TestClient,
     create_user,
@@ -245,6 +316,24 @@ def test_update_cart(
     data = resp.json()
     assert data["message"] == "Cart updated"
     assert resp.status_code == 200
+
+
+def test_delete_empty_cart(
+    client: TestClient,
+    create_user,
+):
+    user = create_user()
+
+    resp = client.delete(
+        f"{prefix}",
+        headers=get_jwt_header(user),
+        params={
+            "id": str(uuid.uuid4()),
+        },
+    )
+    assert resp.status_code == 400
+    data = resp.json()
+    assert data["message"].startswith("Unknown error")
 
 
 def test_delete_cart(
