@@ -128,3 +128,17 @@ def test_wrong_search_image(
     assert resp.json() == {"message": "Image is not base64"}
 
 
+def test_shower_thoughts(
+    client: TestClient,
+    create_user,
+    db: Session,
+):
+    user = create_user()
+    resp = client.get(
+        f"{prefix}/shower-thoughts",
+        headers=get_jwt_header(user),
+    )
+    assert resp.status_code == 200
+    assert resp.json()['data'].__len__() > 1
+
+

@@ -372,3 +372,27 @@ def test_clear_cart(client: TestClient, create_user):
     data = resp.json()
     assert data["message"] == "Cart cleared"
     assert resp.status_code == 200
+
+
+def test_update_cart_minus_quantity(
+    client: TestClient,
+    create_user,
+    create_cart,
+    create_product,
+    create_size,
+    create_product_size_quantity,
+):
+    user = create_user()
+    product = create_product()
+    size = create_size()
+    product_size_quantity = create_product_size_quantity(product, size)
+    cart = create_cart(user, product_size_quantity)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(user),
+        json={"id": str(cart.id), "quantity": -100},
+    )
+    data = resp.json()
+    assert data["message"] == "Cart updated"
+    assert resp.status_code == 200

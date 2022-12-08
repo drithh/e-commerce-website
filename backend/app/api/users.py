@@ -123,25 +123,22 @@ def update_user(
     current_user: User = Depends(get_current_active_admin),
     session: Generator = Depends(get_db),
 ) -> JSONResponse:
-    try:
-        session.query(User).filter(User.id == request.id).update(
-            {
-                "name": request.name,
-                "email": request.email,
-                "phone_number": request.phone_number,
-                "address_name": request.address_name,
-                "address": request.address,
-                "city": request.city,
-                "balance": request.balance,
-            }
-        )
-        session.commit()
-    except Exception as e:
-        logger.error(format_error(e))
+    
+    user = session.query(User).filter(User.id == request.id).first()
+    if not user:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Internal Server Error",
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
         )
+
+    user.name = request.name
+    user.email = request.email
+    user.phone_number = request.phone_number
+    user.address_name = request.address_name
+    user.address = request.address
+    user.city = request.city
+    user.balance = request.balance
+    session.commit()
 
     return DefaultResponse(message="User updated successfully")
 

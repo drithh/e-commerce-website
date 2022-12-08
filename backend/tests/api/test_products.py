@@ -406,3 +406,40 @@ def test_update_product_true_image(
     )
     assert resp.json() == {"message": "Product updated"}
     assert resp.status_code == 200
+
+
+def test_update_products_false_image(
+    client : TestClient,
+    create_admin,
+    create_product,
+    create_product_image,
+    create_image,
+    create_size,
+    create_product_size_quantity,
+    db: Session,
+):
+    admin = create_admin()
+    product = create_product()
+    image_1 = create_image()
+    image_2 = create_image()
+    create_product_size_quantity(product, create_size("S"))
+    create_product_image(product, image_1)
+    create_product_image(product, image_2)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "id": str(product.id),
+            "title": "galilei",
+            "brand": "galileo",
+            "product_detail": "aiueo",
+            "images": [image_1.image_url],
+            "price": 10000,
+            "category_id": str(product.category_id),
+            "condition": "new",
+            "stock": [{"size": "S", "quantity": 10}],
+        },
+    )
+
+    assert resp.json() == {"message": "Product updated"}

@@ -5,6 +5,7 @@ import uuid
 from app.core.config import settings
 from tests.utils import get_jwt_header
 from app.deps.google_cloud import delete_image
+from sqlalchemy.orm.session import Session
 
 prefix = f"{settings.API_PATH}/banners"
 
@@ -222,3 +223,39 @@ def test_update_empty_banner(
     data = resp.json()
     assert data["message"] == "Banner not found"
     assert resp.status_code == 404
+
+
+def test_create_existed_banner(
+    client: TestClient,
+    create_image,
+    create_admin,
+    db: Session,
+    get_base64_image,
+):
+    admin = create_admin()
+    image = create_image()
+    db.execute(
+        """INSERT INTO banners (title, image_id, url_path,text_position) 
+        VALUES ('Banner 1', :image_id, 'banner/banner-1-1.jpeg', 'left')""",
+        {"image_id": image.id}
+    )
+    db.commit()
+    image_data = get_base64_image()
+
+    data = {
+        "image": image_data,
+        "title": "Banner 1",
+        "url_path": "banner/banner-1-1.jpeg",
+        "text_position": "left"
+    }
+
+    resp = client.post(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json=data,
+    )
+    data = resp.json()
+    assert data["message"].startswith("IntegrityError")
+    assert resp.status_code == 400
+    file_name = f"banners/banner-1-1.jpeg"
+    delete_image(file_name)

@@ -92,16 +92,10 @@ def create_banner(
 
     name = image_url.split("/")[-1].split(".")[0]
     image = Image(name=name, image_url=image_url)
-    try:
-        session.add(image)
-        session.commit()
-        session.refresh(image)
-    except Exception as e:
-        logger.error(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-        )
+    
+    session.add(image)
+    session.commit()
+    session.refresh(image)
 
     # create banner
     try:
@@ -160,16 +154,10 @@ def update_banner(
 
             name = image_url.split("/")[-1].split(".")[0]
             image = Image(name=name, image_url=image_url)
-            try:
-                session.add(image)
-                session.commit()
-                session.refresh(image)
-            except Exception as e:
-                logger.error(e)
-                session.rollback()
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-                )
+
+            session.add(image)
+            session.commit()
+            session.refresh(image)
 
             banner.image_id = image.id
 
@@ -177,14 +165,8 @@ def update_banner(
     banner.url_path = request.url_path
     banner.text_position = request.text_position
 
-    try:
-        session.commit()
-    except Exception as e:
-        logger.error(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-        )
+    session.commit()
+
 
     return DefaultResponse(message="Banner updated successfully")
 
