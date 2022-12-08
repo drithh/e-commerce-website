@@ -27,6 +27,7 @@ class GetUserOrder(BaseModel):
     products: List[GetUserProducts]
     shipping_method: str
     shipping_price: int
+    phone_number: str
     city: str
     status: str
     shipping_address: str

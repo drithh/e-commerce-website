@@ -274,13 +274,14 @@ def test_update_order_status_not_shipped(client: TestClient, create_user, db: Se
     user = create_user()
 
     db.execute(
-        """INSERT INTO orders (id, user_id, status, address, address_name, city, shipping_price, shipping_method)
-        VALUES (:id, :user_id, :status, :address, :address_name, :city, :shipping_price, :shipping_method)""",
+        """INSERT INTO orders (id, user_id, status, address, address_name, city, shipping_price, shipping_method, phone_number)
+        VALUES (:id, :user_id, :status, :address, :address_name, :city, :shipping_price, :shipping_method, :phone_number)""",
         {
             "id": uuid.uuid4(),
             "user_id": user.id,
             "status": "processed",
             "address": "Renon",
+            "phone_number": "123",
             "address_name": "Bali",
             "city": "Denpasar",
             "shipping_price": 10000,
@@ -297,21 +298,22 @@ def test_update_order_status_not_shipped(client: TestClient, create_user, db: Se
         f"{prefix}/{order.id}",
         headers=get_jwt_header(user),
     )
-    assert resp.json()["message"] == "Order status is not shipped"
     assert resp.status_code == 400
+    assert resp.json()["message"] == "Order status is not shipped"
 
 
 def test_update_order_status(client: TestClient, create_user, db: Session):
     user = create_user()
 
     db.execute(
-        """INSERT INTO orders (id, user_id, status, address, address_name, city, shipping_price, shipping_method)
-        VALUES (:id, :user_id, :status, :address, :address_name, :city, :shipping_price, :shipping_method)""",
+        """INSERT INTO orders (id, user_id, status, address, address_name, city, shipping_price, shipping_method, phone_number)
+        VALUES (:id, :user_id, :status, :address, :address_name, :city, :shipping_price, :shipping_method, :phone_number)""",
         {
             "id": uuid.uuid4(),
             "user_id": user.id,
             "status": "shipped",
             "address": "Renon",
+            "phone_number": "123",
             "address_name": "Bali",
             "city": "Denpasar",
             "shipping_price": 10000,
@@ -328,8 +330,8 @@ def test_update_order_status(client: TestClient, create_user, db: Session):
         f"{prefix}/{order.id}",
         headers=get_jwt_header(user),
     )
-    assert resp.json()["message"] == "Order status updated"
     assert resp.status_code == 200
+    assert resp.json()["message"] == "Order status updated"
 
 
 def test_update_order_admin(
@@ -346,8 +348,8 @@ def test_update_order_admin(
             "order_status": "shipped",
         },
     )
-    assert resp.json()["message"] == "Order updated"
     assert resp.status_code == 200
+    assert resp.json()["message"] == "Order updated"
 
 
 def test_update_empty_order_admin(client: TestClient, create_admin):
@@ -360,8 +362,8 @@ def test_update_empty_order_admin(client: TestClient, create_admin):
             "order_status": "shipped",
         },
     )
-    assert resp.json() == {"message": "Order not found"}
     assert resp.status_code == 404
+    assert resp.json() == {"message": "Order not found"}
 
 
 def test_get_shipping_price(

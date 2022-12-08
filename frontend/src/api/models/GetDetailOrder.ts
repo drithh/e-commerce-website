@@ -10,6 +10,7 @@ export type GetDetailOrder = {
   products: Array<GetUserProducts>;
   shipping_method: string;
   shipping_price: number;
+  phone_number: string;
   city: string;
   status: string;
   shipping_address: string;

@@ -187,8 +187,10 @@ const Dropzone = () => {
     multiple: false,
     accept: {
       'image/jpeg': [],
+      'image/jpg': [],
       'image/png': [],
       'image/webp': [],
+      'image/gif': [],
     },
   });
 
@@ -223,7 +225,7 @@ const Dropzone = () => {
           </p>
         ) : (
           <p className="text-lg text-gray-300">
-            Only *.jpeg *.png and *.webp images will be accepted
+            Only *jpg *.jpeg *.png and *.webp images will be accepted
           </p>
         )}
       </div>

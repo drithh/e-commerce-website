@@ -102,10 +102,10 @@ const ShoppingCart = () => {
 
   useEffect(() => {
     if (useUserAddress && fetchUserAddress.data != null) {
-      setAddressName(fetchUserAddress.data.address_name);
-      setPhoneNumber(fetchUserAddress.data.phone_number);
-      setAddress(fetchUserAddress.data.address);
-      setCity(fetchUserAddress.data.city);
+      setAddressName(fetchUserAddress.data.address_name ?? '');
+      setPhoneNumber(fetchUserAddress.data.phone_number ?? '');
+      setAddress(fetchUserAddress.data.address ?? '');
+      setCity(fetchUserAddress.data.city ?? '');
     }
   }, [useUserAddress, fetchUserAddress.data]);
 

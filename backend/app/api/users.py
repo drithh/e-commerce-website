@@ -34,7 +34,9 @@ def get_user(
 
 
 @router.get(
-    "/shipping_address", response_model=GetUserAddress, status_code=status.HTTP_200_OK
+    "/shipping_address",
+    response_model=GetUserAddress,
+    status_code=status.HTTP_200_OK,
 )
 def get_user_shipping_address(
     current_user: User = Depends(get_current_active_user),
@@ -58,11 +60,11 @@ def get_orders_user(
 ) -> JSONResponse:
     orders = session.execute(
         f"""
-        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products,
+        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, array_agg(product) products, phone_number,
         COUNT(*) OVER() totalrow_count
         FROM (
             SELECT  orders.id, orders.city, orders.created_at,
-            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
+            orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address, orders.phone_number,
             json_build_object(
                 'id', products.id,
                 'details', array_agg(
@@ -89,7 +91,7 @@ def get_orders_user(
             GROUP BY orders.id, products.id, images.id, order_items.price
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
-        order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address
+        order_product.shipping_price, order_product.city, order_product.status, order_product.shipping_address, order_product.phone_number
         ORDER BY order_product.created_at DESC
         OFFSET :offset LIMIT :limit
     """,

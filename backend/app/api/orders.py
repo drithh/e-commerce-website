@@ -37,10 +37,10 @@ def get_order_details(
 ) -> JSONResponse:
     order = session.execute(
         """
-        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city,
+        SELECT id, created_at, shipping_method, shipping_price, status, shipping_address, city, phone_number,
         array_agg(product) products, name, email
         FROM (
-            SELECT  orders.id, orders.city, orders.created_at, users.name, users.email,
+            SELECT  orders.id, orders.city, orders.created_at, users.name, users.email, orders.phone_number,
             orders.shipping_method, orders.shipping_price, orders.status, orders.address as shipping_address,
             json_build_object(
                 'id', products.id,
@@ -66,10 +66,10 @@ def get_order_details(
             LEFT JOIN images ON images.id = product_images.image_id
             JOIN users ON orders.user_id = users.id
             WHERE orders.id = :id
-            GROUP BY orders.id, products.id, images.id, users.name, users.email, order_items.price
+            GROUP BY orders.id, products.id, images.id, users.name, users.email, order_items.price, orders.phone_number
         ) order_product
         group by order_product.id, order_product.created_at, order_product.shipping_method,
-        order_product.shipping_price, order_product.status, order_product.shipping_address,
+        order_product.shipping_price, order_product.status, order_product.shipping_address, order_product.phone_number,
         order_product.city, order_product.name, order_product.email
         """,
         {
@@ -251,6 +251,7 @@ async def create_order(
             city=request.shipping_address.city,
             shipping_method=request.shipping_method,
             shipping_price=shipping_price,
+            phone_number=request.shipping_address.phone_number,
         )
         session.add(order)
         session.commit()

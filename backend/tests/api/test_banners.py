@@ -1,11 +1,11 @@
-from starlette.testclient import TestClient
-
 import uuid
 
-from app.core.config import settings
-from tests.utils import get_jwt_header
-from app.deps.google_cloud import delete_image
 from sqlalchemy.orm.session import Session
+from starlette.testclient import TestClient
+
+from app.core.config import settings
+from app.deps.google_cloud import delete_image
+from tests.utils import get_jwt_header
 
 prefix = f"{settings.API_PATH}/banners"
 
@@ -59,7 +59,7 @@ def test_create_banner(client: TestClient, create_admin, get_base64_image):
     data = resp.json()
     assert data["message"] == "Banner created successfully"
     assert resp.status_code == 201
-    file_name = f"banners/banner-1-1.jpeg"
+    file_name = "banners/banner-1-1.jpeg"
     delete_image(file_name)
 
 
@@ -89,7 +89,7 @@ def test_update_banner(
     data = resp.json()
     assert data["message"] == "Banner updated successfully"
     assert resp.status_code == 200
-    file_name = f"banners/banner-1-1.jpeg"
+    file_name = "banners/banner-1-1.jpeg"
     delete_image(file_name)
 
 
@@ -236,7 +236,7 @@ def test_create_existed_banner(
     admin = create_admin()
     image = create_image()
     db.execute(
-        """INSERT INTO banners (title, image_id, url_path,text_position) 
+        """INSERT INTO banners (title, image_id, url_path,text_position)
         VALUES ('Banner 1', :image_id, 'banner/banner-1-1.jpeg', 'left')""",
         {"image_id": image.id},
     )
@@ -258,5 +258,5 @@ def test_create_existed_banner(
     data = resp.json()
     assert data["message"].startswith("IntegrityError")
     assert resp.status_code == 400
-    file_name = f"banners/banner-1-1.jpeg"
+    file_name = "banners/banner-1-1.jpeg"
     delete_image(file_name)

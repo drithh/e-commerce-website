@@ -1,5 +1,5 @@
 import datetime
-from typing import List, Union
+from typing import List, Optional
 from uuid import UUID
 
 from pydantic import BaseModel
@@ -11,10 +11,10 @@ class GetUser(BaseModel):
     id: UUID
     name: str
     email: str
-    phone_number: str
-    address_name: Union[str, None]
-    address: Union[str, None]
-    city: Union[str, None]
+    phone_number: Optional[str]
+    address_name: Optional[str]
+    address: Optional[str]
+    city: Optional[str]
     balance: int
 
     class Config:
@@ -23,10 +23,10 @@ class GetUser(BaseModel):
 
 class GetUserAddress(BaseModel):
     id: UUID
-    address_name: str
-    phone_number: str
-    address: str
-    city: str
+    address_name: Optional[str]
+    phone_number: Optional[str]
+    address: Optional[str]
+    city: Optional[str]
 
     class Config:
         orm_mode = True
@@ -76,6 +76,7 @@ class GetOrder(BaseModel):
     products: List[GetProducts]
     shipping_method: str
     shipping_price: int
+    phone_number: str
     city: str
     status: str
     shipping_address: str

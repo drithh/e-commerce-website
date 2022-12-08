@@ -1,6 +1,7 @@
+import uuid
+
 from sqlalchemy.orm.session import Session
 from starlette.testclient import TestClient
-import uuid
 
 from app.core.config import settings
 from tests.utils import get_jwt_header

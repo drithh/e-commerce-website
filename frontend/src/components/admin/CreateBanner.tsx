@@ -171,8 +171,10 @@ const Dropzone = ({ initialImage, setImage, file, setFile }: props) => {
     onDrop,
     accept: {
       'image/jpeg': [],
+      'image/jpg': [],
       'image/png': [],
       'image/webp': [],
+      'image/gif': [],
     },
   });
 
@@ -222,7 +224,7 @@ const Dropzone = ({ initialImage, setImage, file, setFile }: props) => {
           </>
         )}
         <p className="text-lg text-gray-300">
-          (Only *.jpeg *.png and *.webp images will be accepted)
+          Only *jpg *.jpeg *.png and *.webp images will be accepted
         </p>
       </div>
     </>

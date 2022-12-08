@@ -12,6 +12,7 @@ class Order(DefaultModel, Base):
     status = Column(String(length=64), nullable=False, default="processed")
     address = Column(String(length=128), nullable=False)
     address_name = Column(String(length=64), nullable=False)
+    phone_number = Column(String(length=64), nullable=False)
     city = Column(String(length=64), nullable=False)
     shipping_price = Column(Integer, nullable=False)
     shipping_method = Column(String(length=64), nullable=False)
@@ -34,6 +35,7 @@ class Order(DefaultModel, Base):
                 city=fake.city(),
                 shipping_price=fake.pyint(min_value=1000),
                 shipping_method=fake.random_element(elements=("Next Day", "Regular")),
+                phone_number=fake.phone_number(),
                 user_id=user_id,
                 created_at=date,
                 updated_at=date,
@@ -47,6 +49,7 @@ class Order(DefaultModel, Base):
                 city=fake.city(),
                 shipping_price=fake.pyint(min_value=10, max_value=100) * 1000,
                 shipping_method=fake.random_element(elements=("Next Day", "Regular")),
+                phone_number=fake.phone_number(),
                 user_id=user_id,
             )
         return order

@@ -1,12 +1,10 @@
+from sqlalchemy.orm.session import Session
 from starlette.testclient import TestClient
 
-import uuid
-
 from app.core.config import settings
-from tests.utils import get_jwt_header
-from sqlalchemy.orm.session import Session
 from app.deps.google_cloud import delete_image
 from app.deps.image_base64 import base64_to_image
+from tests.utils import get_jwt_header
 
 prefix = f"{settings.API_PATH}"
 
