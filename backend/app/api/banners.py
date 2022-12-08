@@ -92,7 +92,7 @@ def create_banner(
 
     name = image_url.split("/")[-1].split(".")[0]
     image = Image(name=name, image_url=image_url)
-    
+
     session.add(image)
     session.commit()
     session.refresh(image)
@@ -167,7 +167,6 @@ def update_banner(
 
     session.commit()
 
-
     return DefaultResponse(message="Banner updated successfully")
 
 
@@ -185,5 +184,5 @@ def delete_banner(
 
     session.delete(banner)
     session.commit()
-    
+
     return DefaultResponse(message="Banner deleted successfully")

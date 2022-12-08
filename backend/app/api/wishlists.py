@@ -78,7 +78,7 @@ def delete_wishlist(
         Wishlist.user_id == current_user.id, Wishlist.product_id == id
     ).delete()
     session.commit()
-    
+
     logger.info(f"User {current_user.name} removed product {id} from wishlist")
 
     return DefaultResponse(message="Wishlist deleted")

@@ -123,7 +123,7 @@ def update_user(
     current_user: User = Depends(get_current_active_admin),
     session: Generator = Depends(get_db),
 ) -> JSONResponse:
-    
+
     user = session.query(User).filter(User.id == request.id).first()
     if not user:
         raise HTTPException(

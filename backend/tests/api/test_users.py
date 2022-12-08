@@ -185,7 +185,7 @@ def test_update_user_not_found(client: TestClient, create_admin):
             "address": "Jl. Jalan",
             "city": "Jakarta",
             "balance": 1000000,
-        }
+        },
     )
     assert resp.status_code == 404
     assert resp.json() == {"message": "User not found"}

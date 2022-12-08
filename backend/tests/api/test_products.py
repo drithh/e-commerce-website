@@ -184,10 +184,7 @@ def test_create_product(
 
 
 def test_create_product_wrong_image(
-    client : TestClient, 
-    create_category, 
-    create_admin, 
-    create_size
+    client: TestClient, create_category, create_admin, create_size
 ):
     category = create_category()
     admin = create_admin()
@@ -409,7 +406,7 @@ def test_update_product_true_image(
 
 
 def test_update_products_false_image(
-    client : TestClient,
+    client: TestClient,
     create_admin,
     create_product,
     create_product_image,

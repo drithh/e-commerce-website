@@ -382,7 +382,7 @@ def test_get_shipping_price(
         headers=get_jwt_header(user),
     )
     assert resp.status_code == 200
-    assert resp.json()['data'][0]["name"] == "Regular"
+    assert resp.json()["data"][0]["name"] == "Regular"
 
 
 def test_get_admin_empty_orders(client: TestClient, create_admin):

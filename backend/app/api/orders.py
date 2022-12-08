@@ -123,16 +123,18 @@ def get_shipping_price(
         total_price * 0.2 if total_price < 300000 else total_price * 0.25
     )
 
-    return GetShippingPrices(data = [
-        GetShippingPrice(
-            name="Regular",
-            price=regular_shipping_price,
-        ),
-        GetShippingPrice(
-            name="Next Day",
-            price=next_day_shipping_price,
-        ),
-    ])
+    return GetShippingPrices(
+        data=[
+            GetShippingPrice(
+                name="Regular",
+                price=regular_shipping_price,
+            ),
+            GetShippingPrice(
+                name="Next Day",
+                price=next_day_shipping_price,
+            ),
+        ]
+    )
 
 
 @router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)

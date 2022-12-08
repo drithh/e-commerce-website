@@ -9,6 +9,7 @@ from sqlalchemy.orm.session import Session
 
 prefix = f"{settings.API_PATH}/banners"
 
+
 def test_get_empty_banners(client: TestClient):
     resp = client.get(f"{prefix}")
     assert resp.status_code == 404
@@ -47,7 +48,7 @@ def test_create_banner(client: TestClient, create_admin, get_base64_image):
         "image": image_data,
         "title": "Banner 1",
         "url_path": "/products",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.post(
@@ -77,7 +78,7 @@ def test_update_banner(
         "image": image_data,
         "title": "Banner 1",
         "url_path": "/products",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.put(
@@ -90,7 +91,7 @@ def test_update_banner(
     assert resp.status_code == 200
     file_name = f"banners/banner-1-1.jpeg"
     delete_image(file_name)
-    
+
 
 def test_create_banner_wrong_image(
     client: TestClient,
@@ -102,7 +103,7 @@ def test_create_banner_wrong_image(
         "image": "wrong_image",
         "title": "Banner 1",
         "url_path": "/products",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.post(
@@ -162,7 +163,7 @@ def test_update_banner_wrong_image(
         "image": "wrong_image",
         "title": "Banner 1",
         "url_path": "/products",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.put(
@@ -188,7 +189,7 @@ def test_update_deleted_image_banner(
         "image": "delete",
         "title": "Banner 1",
         "url_path": "/products",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.put(
@@ -212,7 +213,7 @@ def test_update_empty_banner(
         "image": "delete",
         "title": "Banner 1",
         "url_path": "/products",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.put(
@@ -237,7 +238,7 @@ def test_create_existed_banner(
     db.execute(
         """INSERT INTO banners (title, image_id, url_path,text_position) 
         VALUES ('Banner 1', :image_id, 'banner/banner-1-1.jpeg', 'left')""",
-        {"image_id": image.id}
+        {"image_id": image.id},
     )
     db.commit()
     image_data = get_base64_image()
@@ -246,7 +247,7 @@ def test_create_existed_banner(
         "image": image_data,
         "title": "Banner 1",
         "url_path": "banner/banner-1-1.jpeg",
-        "text_position": "left"
+        "text_position": "left",
     }
 
     resp = client.post(

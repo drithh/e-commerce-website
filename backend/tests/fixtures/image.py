@@ -1,6 +1,7 @@
 import base64
 import pytest
 
+
 @pytest.fixture(scope="function")
 def get_base64_image():
     def inner():

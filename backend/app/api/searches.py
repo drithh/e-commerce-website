@@ -57,9 +57,7 @@ def search_text(
     return products
 
 
-@router.post(
-    "/search_image",  status_code=status.HTTP_200_OK
-)
+@router.post("/search_image", status_code=status.HTTP_200_OK)
 async def search_image(
     request: SearchImage,
     session: Generator = Depends(get_db),

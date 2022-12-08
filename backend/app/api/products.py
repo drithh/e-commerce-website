@@ -365,7 +365,6 @@ def update_product(
             )
             session.commit()
 
-
             logger.info(
                 f"Image {database_image.image_url} deleted by {current_user.name}"
             )
