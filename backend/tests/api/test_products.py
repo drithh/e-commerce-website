@@ -371,3 +371,38 @@ def test_delete_product(client: TestClient, create_product, create_admin):
     )
     assert resp.status_code == 200
     assert resp.json() == {"message": "Product deleted"}
+
+
+def test_update_product_true_image(
+    client: TestClient,
+    create_product,
+    create_admin,
+    create_product_size_quantity,
+    db: Session,
+    get_base64_image,
+):
+    admin = create_admin()
+    product = create_product()
+
+    db.execute("INSERT INTO sizes (size) VALUES ('S')")
+    db.commit()
+    size = db.execute("SELECT * FROM sizes").fetchone()
+    create_product_size_quantity(product, size)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "id": str(product.id),
+            "title": "galilei",
+            "brand": "galileo",
+            "product_detail": "aiueo",
+            "images": [get_base64_image()],
+            "price": 10000,
+            "category_id": str(product.category_id),
+            "condition": "new",
+            "stock": [{"size": "S", "quantity": 10}],
+        },
+    )
+    assert resp.json() == {"message": "Product updated"}
+    assert resp.status_code == 200

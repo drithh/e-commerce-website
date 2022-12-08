@@ -70,3 +70,11 @@ def auto_rollback(db: Session):
     for table in reversed(Base.metadata.sorted_tables):
         db.execute(table.delete())
     db.commit()
+
+
+@pytest.fixture(scope="session", autouse=True)
+def execute_default_sql(db: Session):
+    
+    sql_file = open("sql/extension/extension.sql", "r")
+    sql = sql_file.read()
+    db.execute(sql)

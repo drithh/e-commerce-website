@@ -148,3 +148,77 @@ def test_delete_empty_banner(
     assert resp.status_code == 404
 
 
+def test_update_banner_wrong_image(
+    client: TestClient,
+    create_admin,
+    create_banner,
+):
+    admin = create_admin()
+    banner = create_banner()
+
+    data = {
+        "id": str(banner.id),
+        "image": "wrong_image",
+        "title": "Banner 1",
+        "url_path": "/products",
+        "text_position": "left"
+    }
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json=data,
+    )
+    data = resp.json()
+    assert data["message"].startswith("Invalid image")
+    assert resp.status_code == 400
+
+
+def test_update_deleted_image_banner(
+    client: TestClient,
+    create_admin,
+    create_banner,
+):
+    admin = create_admin()
+    banner = create_banner()
+
+    data = {
+        "id": str(banner.id),
+        "image": "delete",
+        "title": "Banner 1",
+        "url_path": "/products",
+        "text_position": "left"
+    }
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json=data,
+    )
+    data = resp.json()
+    assert data["message"] == "Banner updated successfully"
+    assert resp.status_code == 200
+
+
+def test_update_empty_banner(
+    client: TestClient,
+    create_admin,
+):
+    admin = create_admin()
+
+    data = {
+        "id": str(uuid.uuid4()),
+        "image": "delete",
+        "title": "Banner 1",
+        "url_path": "/products",
+        "text_position": "left"
+    }
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json=data,
+    )
+    data = resp.json()
+    assert data["message"] == "Banner not found"
+    assert resp.status_code == 404

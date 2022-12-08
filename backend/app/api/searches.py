@@ -58,7 +58,7 @@ def search_text(
 
 
 @router.post(
-    "/search_image", response_model=SearchImageResponse, status_code=status.HTTP_200_OK
+    "/search_image",  status_code=status.HTTP_200_OK
 )
 async def search_image(
     request: SearchImage,

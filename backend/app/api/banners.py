@@ -201,14 +201,7 @@ def delete_banner(
             status_code=status.HTTP_404_NOT_FOUND, detail="Banner not found"
         )
 
-    try:
-        session.delete(banner)
-        session.commit()
-    except Exception as e:
-        logger.error(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-        )
-
+    session.delete(banner)
+    session.commit()
+    
     return DefaultResponse(message="Banner deleted successfully")
