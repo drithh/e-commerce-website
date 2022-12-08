@@ -4,6 +4,7 @@ from sqlalchemy.orm.session import Session
 from starlette.testclient import TestClient
 
 from app.core.config import settings
+from app.deps.google_cloud import delete_image
 from app.deps.image_base64 import base64_to_image
 from tests.utils import get_jwt_header
 
@@ -152,8 +153,39 @@ def test_create_product_invalid_size(client: TestClient, create_admin, create_ca
     assert resp.json() == {"message": "Size does not exist"}
 
 
-def test_create_product(client: TestClient, create_category, create_admin, create_size):
+def test_create_product(
+    client: TestClient, create_category, create_admin, create_size, get_base64_image
+):
 
+    category = create_category()
+    admin = create_admin()
+    size = create_size(size_model="S")
+    test_image = get_base64_image()
+
+    # assert test_image == ""
+    resp = client.post(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "title": "hehe",
+            "brand": "hoho",
+            "product_detail": "haha",
+            "images": [test_image],
+            "price": 10000,
+            "condition": "new",
+            "category_id": str(category.id),
+            "stock": [{"size": size.size, "quantity": 100}],
+        },
+    )
+    file_name = f"products/{category.title}/hehe-1.jpeg"
+    assert resp.json()["message"] == "Product added"
+    assert resp.status_code == 201
+    delete_image(file_name)
+
+
+def test_create_product_wrong_image(
+    client: TestClient, create_category, create_admin, create_size
+):
     category = create_category()
     admin = create_admin()
     size = create_size(size_model="S")
@@ -165,15 +197,15 @@ def test_create_product(client: TestClient, create_category, create_admin, creat
             "title": "hehe",
             "brand": "hoho",
             "product_detail": "haha",
-            "images": [],
+            "images": ["hehe"],
             "price": 10000,
             "condition": "new",
             "category_id": str(category.id),
             "stock": [{"size": size.size, "quantity": 100}],
         },
     )
-    assert resp.json()["message"] == "Product added"
-    assert resp.status_code == 201
+    assert resp.status_code == 400
+    assert resp.json()["message"].startswith("Invalid image")
 
 
 def test_create_product_wrong_category(client: TestClient, create_admin):
@@ -195,29 +227,6 @@ def test_create_product_wrong_category(client: TestClient, create_admin):
     )
     assert resp.status_code == 400
     assert resp.json()["message"].startswith("IntegrityError")
-
-
-# def test_create_product_without_product_size_quantity(client: TestClient, create_category, create_admin, create_size):
-#     admin = create_admin()
-#     category = create_category()
-#     size = create_size(size_model="S")
-
-#     resp = client.post(
-#         f"{prefix}",
-#         headers=get_jwt_header(admin),
-#         json={
-#             "title": "hehe",
-#             "brand": "hoho",
-#             "product_detail": "haha",
-#             "images": [],
-#             "price": 10000,
-#             "condition": "new",
-#             "category_id": str(category.id),
-#             "stock": [{"size": "S", "quantity": 0}],
-#         },
-#     )
-
-#     assert resp.json() == {}
 
 
 def test_update_product_false_category_id(
@@ -359,3 +368,75 @@ def test_delete_product(client: TestClient, create_product, create_admin):
     )
     assert resp.status_code == 200
     assert resp.json() == {"message": "Product deleted"}
+
+
+def test_update_product_true_image(
+    client: TestClient,
+    create_product,
+    create_admin,
+    create_product_size_quantity,
+    db: Session,
+    get_base64_image,
+):
+    admin = create_admin()
+    product = create_product()
+
+    db.execute("INSERT INTO sizes (size) VALUES ('S')")
+    db.commit()
+    size = db.execute("SELECT * FROM sizes").fetchone()
+    create_product_size_quantity(product, size)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "id": str(product.id),
+            "title": "galilei",
+            "brand": "galileo",
+            "product_detail": "aiueo",
+            "images": [get_base64_image()],
+            "price": 10000,
+            "category_id": str(product.category_id),
+            "condition": "new",
+            "stock": [{"size": "S", "quantity": 10}],
+        },
+    )
+    assert resp.json() == {"message": "Product updated"}
+    assert resp.status_code == 200
+
+
+def test_update_products_false_image(
+    client: TestClient,
+    create_admin,
+    create_product,
+    create_product_image,
+    create_image,
+    create_size,
+    create_product_size_quantity,
+    db: Session,
+):
+    admin = create_admin()
+    product = create_product()
+    image_1 = create_image()
+    image_2 = create_image()
+    create_product_size_quantity(product, create_size("S"))
+    create_product_image(product, image_1)
+    create_product_image(product, image_2)
+
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "id": str(product.id),
+            "title": "galilei",
+            "brand": "galileo",
+            "product_detail": "aiueo",
+            "images": [image_1.image_url],
+            "price": 10000,
+            "category_id": str(product.category_id),
+            "condition": "new",
+            "stock": [{"size": "S", "quantity": 10}],
+        },
+    )
+
+    assert resp.json() == {"message": "Product updated"}

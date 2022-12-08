@@ -1,4 +1,4 @@
 [report]
 
 ignore_errors = True
-omit = *image_classification*
+omit = *image_classification*, *tests*

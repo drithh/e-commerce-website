@@ -168,3 +168,24 @@ def test_delete_user(client: TestClient, create_admin, create_user):
     )
     assert resp.status_code == 200
     assert resp.json() == {"message": "User deleted successfully"}
+
+
+def test_update_user_not_found(client: TestClient, create_admin):
+    admin = create_admin()
+    fake_user_id = str(uuid.uuid4())
+    resp = client.put(
+        f"{prefix}",
+        headers=get_jwt_header(admin),
+        json={
+            "id": fake_user_id,
+            "name": "new name",
+            "email": "email@email.com",
+            "phone_number": "08123456789",
+            "address_name": "home",
+            "address": "Jl. Jalan",
+            "city": "Jakarta",
+            "balance": 1000000,
+        },
+    )
+    assert resp.status_code == 404
+    assert resp.json() == {"message": "User not found"}

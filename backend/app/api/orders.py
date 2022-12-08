@@ -77,7 +77,7 @@ def get_order_details(
         },
     ).fetchone()
 
-    if len(order) == 0:
+    if not order:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
         )
@@ -108,10 +108,7 @@ def get_shipping_price(
         },
     ).fetchone()
 
-    if total_price is None:
-        total_price = 0
-    else:
-        total_price = total_price[0]
+    total_price = total_price[0] if total_price[0] else 0
 
     #  Regular:
     #  If total price of items < 200k: Shipping price is 15% of the total price of items purchased
@@ -126,16 +123,18 @@ def get_shipping_price(
         total_price * 0.2 if total_price < 300000 else total_price * 0.25
     )
 
-    return [
-        GetShippingPrice(
-            name="Regular",
-            price=regular_shipping_price,
-        ),
-        GetShippingPrice(
-            name="Next Day",
-            price=next_day_shipping_price,
-        ),
-    ]
+    return GetShippingPrices(
+        data=[
+            GetShippingPrice(
+                name="Regular",
+                price=regular_shipping_price,
+            ),
+            GetShippingPrice(
+                name="Next Day",
+                price=next_day_shipping_price,
+            ),
+        ]
+    )
 
 
 @router.get("/orders", response_model=GetAdminOrders, status_code=status.HTTP_200_OK)

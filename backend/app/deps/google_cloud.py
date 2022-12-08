@@ -31,7 +31,7 @@ def upload_image(file, parent_folder):
         prefix = f"{parent_folder}/{file['file_name']}"
         images = bucket.list_blobs(prefix=prefix, delimiter="/")
         last_image_name = list(images)
-        last_index = 1
+        last_index = 0
         for image in last_image_name:
             last_index = max(last_index, int(image.name.split(".")[0].split("-")[-1]))
         file["file_name"] = f"{prefix}-{int(last_index) + 1}.{file['media_type']}"

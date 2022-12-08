@@ -1,4 +1,5 @@
 from starlette.testclient import TestClient
+import uuid
 
 from app.core.config import settings
 from tests.utils import get_jwt_header
@@ -38,6 +39,22 @@ def test_create_wishlist(client: TestClient, create_admin, create_product):
     data = resp.json()
     assert data["message"] == "Wishlist Created"
     assert resp.status_code == 201
+
+
+def test_crate_wishlist_wrong_id(client: TestClient, create_admin):
+    user = create_admin()
+    product_id = uuid.uuid4()
+
+    resp = client.post(
+        f"{prefix}",
+        headers=get_jwt_header(user),
+        params={
+            "id": product_id,
+        },
+    )
+    data = resp.json()
+    assert data["message"].startswith("IntegrityError")
+    assert resp.status_code == 400
 
 
 def test_delete_wishlist(

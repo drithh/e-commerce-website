@@ -5,21 +5,6 @@ from app.core.config import settings
 prefix = f"{settings.API_PATH}/home"
 
 
-def test_get_empty_banners(client: TestClient):
-    resp = client.get(f"{prefix}/banner")
-    assert resp.status_code == 404
-    assert resp.json() == {"message": "There are no banners"}
-
-
-def test_get_banners(client: TestClient, create_banner):
-    banner = create_banner()
-
-    resp = client.get(f"{prefix}/banner")
-    assert resp.status_code == 200
-    data = resp.json().get("data")
-    assert data[0]["id"] == str(banner.id)
-
-
 def test_get_empty_categories(client: TestClient):
     resp = client.get(f"{prefix}/category")
     assert resp.status_code == 404

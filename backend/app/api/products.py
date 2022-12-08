@@ -357,20 +357,13 @@ def update_product(
     # delete images that are not in the request
     for database_image in database_images:
         if database_image.image_url not in request_updated_images:
-            try:
-                session.execute(
-                    """
-                    DELETE FROM product_images WHERE product_id = :product_id AND image_id = :image_id
-                    """,
-                    {"product_id": request.id, "image_id": database_image.id},
-                )
-                session.commit()
-            except Exception as e:
-                logger.error(e)
-                session.rollback()
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-                )
+            session.execute(
+                """
+                DELETE FROM product_images WHERE product_id = :product_id AND image_id = :image_id
+                """,
+                {"product_id": request.id, "image_id": database_image.id},
+            )
+            session.commit()
 
             logger.info(
                 f"Image {database_image.image_url} deleted by {current_user.name}"
@@ -393,15 +386,8 @@ def delete_product(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Product not found",
         )
-    try:
-        session.delete(product)
-        session.commit()
-    except Exception as e:
-        logger.error(e)
-        session.rollback()
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=format_error(e)
-        )
+    session.delete(product)
+    session.commit()
 
     logger.info(f"Product {product.title} deleted by {current_user.name}")
 
