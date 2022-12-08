@@ -178,7 +178,7 @@ const ShoppingCart = () => {
             </label>
             <Input
               name="phoneNumber"
-              type="email"
+              type="text"
               extraClass={`${
                 useUserAddress ? 'bg-gray-100' : ''
               } w-full mt-1 mb-2`}
