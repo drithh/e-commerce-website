@@ -1,4 +1,4 @@
-name: CI
+name: deploy-client
 
 on:
   push:
