@@ -13,7 +13,7 @@ uvloop = ["uvloop (>=0.13,<0.15)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "alembic"
@@ -33,7 +33,7 @@ tz = ["python-dateutil"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "anyio"
@@ -55,7 +55,7 @@ trio = ["trio (>=0.16,<0.22)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "appnope"
@@ -68,7 +68,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "asttokens"
@@ -87,7 +87,7 @@ test = ["astroid", "pytest"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "asyncpg"
@@ -105,7 +105,7 @@ test = ["flake8 (>=5.0.4,<5.1.0)", "uvloop (>=0.15.3)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "attrs"
@@ -124,7 +124,7 @@ tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy 
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "backcall"
@@ -137,7 +137,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "bcrypt"
@@ -154,11 +154,11 @@ typecheck = ["mypy"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "black"
-version = "22.10.0"
+version = "22.12.0"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
@@ -181,7 +181,7 @@ uvloop = ["uvloop (>=0.15.2)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "blinker"
@@ -194,7 +194,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "cachetools"
@@ -207,7 +207,7 @@ python-versions = "~=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "certifi"
@@ -220,7 +220,7 @@ python-versions = ">=3.6"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "cffi"
@@ -236,7 +236,7 @@ pycparser = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "charset-normalizer"
@@ -252,7 +252,7 @@ unicode-backport = ["unicodedata2"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "click"
@@ -268,7 +268,7 @@ colorama = {version = "*", markers = "platform_system == \"Windows\""}
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "colorama"
@@ -281,7 +281,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,!=3.6.*,>=2.7
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "coverage"
@@ -297,7 +297,7 @@ toml = ["tomli"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "cryptography"
@@ -321,7 +321,7 @@ test = ["hypothesis (>=1.11.4,!=3.79.2)", "iso8601", "pretend", "pytest (>=6.2.0
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "databases"
@@ -347,7 +347,7 @@ sqlite = ["aiosqlite"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "decorator"
@@ -360,7 +360,7 @@ python-versions = ">=3.5"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "dnspython"
@@ -381,7 +381,7 @@ wmi = ["wmi (>=1.5.1,<2.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "ecdsa"
@@ -401,7 +401,7 @@ gmpy2 = ["gmpy2"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "email-validator"
@@ -418,7 +418,7 @@ idna = ">=2.0.0"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "exceptiongroup"
@@ -434,7 +434,7 @@ test = ["pytest (>=6)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "executing"
@@ -450,7 +450,7 @@ tests = ["asttokens", "littleutils", "pytest", "rich"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "faker"
@@ -466,7 +466,7 @@ python-dateutil = ">=2.4"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "fastapi"
@@ -489,7 +489,7 @@ test = ["anyio[trio] (>=3.2.1,<4.0.0)", "black (==22.8.0)", "coverage[toml] (>=6
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "fastapi-mail"
@@ -514,7 +514,7 @@ redis = ["redis[redis] (>=4.3.5,<5.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "fastapi-users"
@@ -542,7 +542,7 @@ sqlalchemy = ["fastapi-users-db-sqlalchemy (>=4.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "fastapi-users-db-sqlalchemy"
@@ -559,7 +559,7 @@ sqlalchemy = {version = ">=1.4", extras = ["asyncio"]}
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "google-api-core"
@@ -583,7 +583,7 @@ grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0dev)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "google-auth"
@@ -608,7 +608,7 @@ reauth = ["pyu2f (>=0.1.5)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "google-cloud-core"
@@ -628,7 +628,7 @@ grpc = ["grpcio (>=1.38.0,<2.0dev)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "google-cloud-storage"
@@ -650,7 +650,7 @@ six = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "google-crc32c"
@@ -666,7 +666,7 @@ testing = ["pytest"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "google-resumable-media"
@@ -686,7 +686,7 @@ requests = ["requests (>=2.18.0,<3.0.0dev)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "googleapis-common-protos"
@@ -705,7 +705,7 @@ grpc = ["grpcio (>=1.44.0,<2.0.0dev)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "greenlet"
@@ -722,7 +722,7 @@ test = ["faulthandler", "objgraph", "psutil"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "gunicorn"
@@ -744,7 +744,7 @@ tornado = ["tornado (>=0.2)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "h11"
@@ -757,7 +757,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "httpcore"
@@ -780,7 +780,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "httpx"
@@ -805,7 +805,7 @@ socks = ["socksio (>=1.0.0,<2.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "idna"
@@ -818,7 +818,7 @@ python-versions = ">=3.5"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "iniconfig"
@@ -831,7 +831,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "ipython"
@@ -871,7 +871,7 @@ test-extra = ["curio", "matplotlib (!=3.2.0)", "nbformat", "numpy (>=1.20)", "pa
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "jedi"
@@ -892,7 +892,7 @@ testing = ["Django (<3.1)", "attrs", "colorama", "docopt", "pytest (<7.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "jinja2"
@@ -911,7 +911,7 @@ i18n = ["Babel (>=2.7)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "makefun"
@@ -924,7 +924,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "mako"
@@ -945,7 +945,7 @@ testing = ["pytest"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "markupsafe"
@@ -958,7 +958,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "matplotlib-inline"
@@ -974,7 +974,7 @@ traitlets = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "mypy-extensions"
@@ -987,7 +987,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "packaging"
@@ -1003,7 +1003,7 @@ pyparsing = ">=2.0.2,<3.0.5 || >3.0.5"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "parso"
@@ -1020,7 +1020,7 @@ testing = ["docopt", "pytest (<6.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "passlib"
@@ -1042,7 +1042,7 @@ totp = ["cryptography"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pathspec"
@@ -1055,7 +1055,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pexpect"
@@ -1071,7 +1071,7 @@ ptyprocess = ">=0.5"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pickleshare"
@@ -1084,7 +1084,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "platformdirs"
@@ -1101,7 +1101,7 @@ test = ["appdirs (==1.4.4)", "pytest (>=7.2)", "pytest-cov (>=4)", "pytest-mock 
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pluggy"
@@ -1118,7 +1118,7 @@ testing = ["pytest", "pytest-benchmark"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "prompt-toolkit"
@@ -1134,7 +1134,7 @@ wcwidth = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "protobuf"
@@ -1147,7 +1147,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "psycopg2-binary"
@@ -1160,7 +1160,7 @@ python-versions = ">=3.6"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "ptyprocess"
@@ -1173,7 +1173,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pure-eval"
@@ -1189,7 +1189,7 @@ tests = ["pytest"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pyasn1"
@@ -1202,7 +1202,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pyasn1-modules"
@@ -1218,7 +1218,7 @@ pyasn1 = ">=0.4.6,<0.5.0"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pycparser"
@@ -1231,7 +1231,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pydantic"
@@ -1251,7 +1251,7 @@ email = ["email-validator (>=1.0.3)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pygments"
@@ -1267,7 +1267,7 @@ plugins = ["importlib-metadata"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pyjwt"
@@ -1289,7 +1289,7 @@ tests = ["coverage[toml] (==5.0.4)", "pytest (>=6.0.0,<7.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pyparsing"
@@ -1305,7 +1305,7 @@ diagrams = ["jinja2", "railroad-diagrams"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pytest"
@@ -1330,7 +1330,7 @@ testing = ["argcomplete", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "python-dateutil"
@@ -1346,7 +1346,7 @@ six = ">=1.5"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "python-jose"
@@ -1370,7 +1370,7 @@ pycryptodome = ["pyasn1", "pycryptodome (>=3.3.1,<4.0.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "python-multipart"
@@ -1386,7 +1386,7 @@ six = ">=1.4.0"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "pytz"
@@ -1399,7 +1399,7 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "requests"
@@ -1422,7 +1422,7 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "rfc3986"
@@ -1441,7 +1441,7 @@ idna2008 = ["idna"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "rsa"
@@ -1457,7 +1457,7 @@ pyasn1 = ">=0.1.3"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "setuptools"
@@ -1475,7 +1475,7 @@ testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "six"
@@ -1488,7 +1488,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "sniffio"
@@ -1501,7 +1501,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "sqlalchemy"
@@ -1538,7 +1538,7 @@ sqlcipher = ["sqlcipher3_binary"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "stack-data"
@@ -1559,7 +1559,7 @@ tests = ["cython", "littleutils", "pygments", "pytest", "typeguard"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "starlette"
@@ -1579,7 +1579,7 @@ full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyam
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "tomli"
@@ -1592,7 +1592,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "traitlets"
@@ -1609,7 +1609,7 @@ test = ["pre-commit", "pytest"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "typing-extensions"
@@ -1622,7 +1622,7 @@ python-versions = ">=3.7"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "urllib3"
@@ -1640,7 +1640,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "uvicorn"
@@ -1660,7 +1660,7 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [[package]]
 name = "wcwidth"
@@ -1673,12 +1673,12 @@ python-versions = "*"
 [package.source]
 type = "legacy"
 url = "https://pypi.org/simple"
-reference = 'pypi_'  # needed until python-poetry/poetry#3456 is resolved.
+reference = "pypi_"
 
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "86cc8567f0c937bf2feae6f9c12ad2df6aa4f6a8a82d3d9eba130c7e59cb0477"
+content-hash = "ae4452a9585d927389053650c3a486d3872642ac6bb87281d78520dcad9985c2"
 
 [metadata.files]
 aiosmtplib = [
@@ -1771,27 +1771,18 @@ bcrypt = [
     {file = "bcrypt-4.0.1.tar.gz", hash = "sha256:27d375903ac8261cfe4047f6709d16f7d18d39b1ec92aaf72af989552a650ebd"},
 ]
 black = [
-    {file = "black-22.10.0-1fixedarch-cp310-cp310-macosx_11_0_x86_64.whl", hash = "sha256:5cc42ca67989e9c3cf859e84c2bf014f6633db63d1cbdf8fdb666dcd9e77e3fa"},
-    {file = "black-22.10.0-1fixedarch-cp311-cp311-macosx_11_0_x86_64.whl", hash = "sha256:5d8f74030e67087b219b032aa33a919fae8806d49c867846bfacde57f43972ef"},
-    {file = "black-22.10.0-1fixedarch-cp37-cp37m-macosx_10_16_x86_64.whl", hash = "sha256:197df8509263b0b8614e1df1756b1dd41be6738eed2ba9e9769f3880c2b9d7b6"},
-    {file = "black-22.10.0-1fixedarch-cp38-cp38-macosx_10_16_x86_64.whl", hash = "sha256:2644b5d63633702bc2c5f3754b1b475378fbbfb481f62319388235d0cd104c2d"},
-    {file = "black-22.10.0-1fixedarch-cp39-cp39-macosx_11_0_x86_64.whl", hash = "sha256:e41a86c6c650bcecc6633ee3180d80a025db041a8e2398dcc059b3afa8382cd4"},
-    {file = "black-22.10.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:2039230db3c6c639bd84efe3292ec7b06e9214a2992cd9beb293d639c6402edb"},
-    {file = "black-22.10.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:14ff67aec0a47c424bc99b71005202045dc09270da44a27848d534600ac64fc7"},
-    {file = "black-22.10.0-cp310-cp310-win_amd64.whl", hash = "sha256:819dc789f4498ecc91438a7de64427c73b45035e2e3680c92e18795a839ebb66"},
-    {file = "black-22.10.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:5b9b29da4f564ba8787c119f37d174f2b69cdfdf9015b7d8c5c16121ddc054ae"},
-    {file = "black-22.10.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:b8b49776299fece66bffaafe357d929ca9451450f5466e997a7285ab0fe28e3b"},
-    {file = "black-22.10.0-cp311-cp311-win_amd64.whl", hash = "sha256:21199526696b8f09c3997e2b4db8d0b108d801a348414264d2eb8eb2532e540d"},
-    {file = "black-22.10.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1e464456d24e23d11fced2bc8c47ef66d471f845c7b7a42f3bd77bf3d1789650"},
-    {file = "black-22.10.0-cp37-cp37m-win_amd64.whl", hash = "sha256:9311e99228ae10023300ecac05be5a296f60d2fd10fff31cf5c1fa4ca4b1988d"},
-    {file = "black-22.10.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:fba8a281e570adafb79f7755ac8721b6cf1bbf691186a287e990c7929c7692ff"},
-    {file = "black-22.10.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:915ace4ff03fdfff953962fa672d44be269deb2eaf88499a0f8805221bc68c87"},
-    {file = "black-22.10.0-cp38-cp38-win_amd64.whl", hash = "sha256:444ebfb4e441254e87bad00c661fe32df9969b2bf224373a448d8aca2132b395"},
-    {file = "black-22.10.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:974308c58d057a651d182208a484ce80a26dac0caef2895836a92dd6ebd725e0"},
-    {file = "black-22.10.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:72ef3925f30e12a184889aac03d77d031056860ccae8a1e519f6cbb742736383"},
-    {file = "black-22.10.0-cp39-cp39-win_amd64.whl", hash = "sha256:432247333090c8c5366e69627ccb363bc58514ae3e63f7fc75c54b1ea80fa7de"},
-    {file = "black-22.10.0-py3-none-any.whl", hash = "sha256:c957b2b4ea88587b46cf49d1dc17681c1e672864fd7af32fc1e9664d572b3458"},
-    {file = "black-22.10.0.tar.gz", hash = "sha256:f513588da599943e0cde4e32cc9879e825d58720d6557062d1098c5ad80080e1"},
+    {file = "black-22.12.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9eedd20838bd5d75b80c9f5487dbcb06836a43833a37846cf1d8c1cc01cef59d"},
+    {file = "black-22.12.0-cp310-cp310-win_amd64.whl", hash = "sha256:159a46a4947f73387b4d83e87ea006dbb2337eab6c879620a3ba52699b1f4351"},
+    {file = "black-22.12.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d30b212bffeb1e252b31dd269dfae69dd17e06d92b87ad26e23890f3efea366f"},
+    {file = "black-22.12.0-cp311-cp311-win_amd64.whl", hash = "sha256:7412e75863aa5c5411886804678b7d083c7c28421210180d67dfd8cf1221e1f4"},
+    {file = "black-22.12.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c116eed0efb9ff870ded8b62fe9f28dd61ef6e9ddd28d83d7d264a38417dcee2"},
+    {file = "black-22.12.0-cp37-cp37m-win_amd64.whl", hash = "sha256:1f58cbe16dfe8c12b7434e50ff889fa479072096d79f0a7f25e4ab8e94cd8350"},
+    {file = "black-22.12.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:77d86c9f3db9b1bf6761244bc0b3572a546f5fe37917a044e02f3166d5aafa7d"},
+    {file = "black-22.12.0-cp38-cp38-win_amd64.whl", hash = "sha256:82d9fe8fee3401e02e79767016b4907820a7dc28d70d137eb397b92ef3cc5bfc"},
+    {file = "black-22.12.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:101c69b23df9b44247bd88e1d7e90154336ac4992502d4197bdac35dd7ee3320"},
+    {file = "black-22.12.0-cp39-cp39-win_amd64.whl", hash = "sha256:559c7a1ba9a006226f09e4916060982fd27334ae1998e7a38b3f33a37f7a2148"},
+    {file = "black-22.12.0-py3-none-any.whl", hash = "sha256:436cc9167dd28040ad90d3b404aec22cedf24a6e4d7de221bec2730ec0c97bcf"},
+    {file = "black-22.12.0.tar.gz", hash = "sha256:229351e5a18ca30f447bf724d007f890f97e13af070bb6ad4c0a441cd7596a2f"},
 ]
 blinker = [
     {file = "blinker-1.5-py2.py3-none-any.whl", hash = "sha256:1eb563df6fdbc39eeddc177d953203f99f097e9bf0e2b8f9f3cf18b6ca425e36"},
