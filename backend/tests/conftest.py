@@ -78,3 +78,4 @@ def execute_default_sql(db: Session):
     sql_file = open("sql/extension/extension.sql", "r")
     sql = sql_file.read()
     db.execute(sql)
+    db.commit()
