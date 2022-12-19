@@ -79,7 +79,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "autoprefixer": "^10.4.12",
     "concurrently": "^7.5.0",
-    "eslint": "^8.0.1",
+    "eslint": "^8.30.0",
     "eslint-config-standard-with-typescript": "^23.0.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0",
