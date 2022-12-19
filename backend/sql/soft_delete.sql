@@ -1,4 +1,8 @@
 -- Create Archive Table
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+
 DO $$
 DECLARE
     t text;
