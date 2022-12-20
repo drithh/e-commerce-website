@@ -30,7 +30,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",
     "recharts": "^2.1.16",
-    "swiper": "^8.4.4",
+    "swiper": "^8.4.5",
     "web-vitals": "^2.1.4",
     "workbox-background-sync": "^6.5.4",
     "workbox-broadcast-update": "^6.5.4",
