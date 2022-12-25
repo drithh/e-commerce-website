@@ -18,5 +18,6 @@ jobs:
           script: |
             cd /home/drith/e-commerce-website
             git pull
+            docker compose -f docker-compose.yml -f docker-compose.prod.yml down
             docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
-            docker-compose ps
+            docker compose ps
