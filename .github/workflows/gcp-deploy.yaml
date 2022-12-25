@@ -1,0 +1,21 @@
+name: gcp-deploy
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: SSH into GCP and rebuild and restart containers
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH Remote
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.GCP_SSH_HOST }}
+          username: ${{ secrets.GCP_SSH_USERNAME }}
+          key: ${{ secrets.GCP_SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/drith/e-commerce-website
+            git pull
+            make docker "up --build -d"
