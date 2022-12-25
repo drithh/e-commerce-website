@@ -20,6 +20,12 @@ def test_user_wishlist(client: TestClient, create_user, create_product):
 
     authorization = {"Authorization": f"Bearer {sign_in.json().get('access_token')}"}
 
+    # get all products
+    get_products = client.get(f"{settings.API_PATH}/products", headers=authorization)
+    assert get_products.status_code == 200
+    assert get_products.json().get("data")[0].get("id") == str(product_1.id)
+    assert get_products.json().get("data")[1].get("id") == str(product_2.id)
+
     # add product 1 to wishlist
     create_wishlist = client.post(
         f"{settings.API_PATH}/wishlist",
