@@ -45,7 +45,7 @@ def test_sign_in(client: TestClient, create_user):
     user = create_user()
     resp = client.post(
         f"{prefix}/sign-in",
-        data={"username": user.email, "password": user.password},
+        data={"username": user.email, "password": "password"},
     )
     assert resp.status_code == 200
     assert resp.json().get("message") == "Login success"
@@ -230,7 +230,7 @@ def test_change_password(client: TestClient, create_user):
     resp = client.put(
         f"{prefix}/change-password",
         headers=get_jwt_header(user),
-        json={"old_password": user.password, "new_password": "password123"},
+        json={"old_password": "password", "new_password": "password123"},
     )
     assert resp.status_code == 201
     assert resp.json().get("message") == "Password updated successfully"

@@ -27,11 +27,10 @@ def faker_uuid(str: str) -> str:
 @pytest.fixture(scope="function")
 def create_user(db: Session):
     def inner() -> User:
-        user = User.seed(fake, "password")
+        user = User.seed(fake)
         db.add(user)
         db.commit()
         db.refresh(user)
-        user.password = "password"
         return user
 
     return inner
