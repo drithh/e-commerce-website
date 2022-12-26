@@ -4,7 +4,10 @@ from app.core.config import settings
 
 prefix = f"{settings.API_PATH}"
 
-def test_admin_create_category(client: TestClient, create_admin, create_category, create_size, get_base64_image):
+
+def test_admin_create_category(
+    client: TestClient, create_admin, create_category, create_size, get_base64_image
+):
     admin = create_admin()
     category = create_category()
     size = create_size(size_model="L")
@@ -37,7 +40,7 @@ def test_admin_create_category(client: TestClient, create_admin, create_category
             "title": "test product",
             "brand": "test brand",
             "product_detail": "test product detail",
-            "images" : [base64_image],
+            "images": [base64_image],
             "price": 100,
             "category_id": str(category.id),
             "condition": "new",
@@ -46,7 +49,7 @@ def test_admin_create_category(client: TestClient, create_admin, create_category
                     "size": "L",
                     "quantity": 2,
                 }
-            ]
+            ],
         },
     )
     assert create_product.json().get("message") == "Product added"
@@ -68,7 +71,7 @@ def test_admin_create_category(client: TestClient, create_admin, create_category
         headers=authorization,
     )
     assert get_product_detail.status_code == 200
-    assert get_product_detail.json()['id'] == str(product_id)
+    assert get_product_detail.json()["id"] == str(product_id)
 
     # update product
     update_product = client.put(
@@ -79,7 +82,7 @@ def test_admin_create_category(client: TestClient, create_admin, create_category
             "title": "test update product",
             "brand": "test update brand",
             "product_detail": "test product detail",
-            "images" : [base64_image],
+            "images": [base64_image],
             "price": 100,
             "category_id": str(category.id),
             "condition": "new",
@@ -88,8 +91,8 @@ def test_admin_create_category(client: TestClient, create_admin, create_category
                     "size": "L",
                     "quantity": 2,
                 }
-            ]
-        }
+            ],
+        },
     )
 
     assert update_product.status_code == 200
@@ -106,9 +109,7 @@ def test_admin_create_category(client: TestClient, create_admin, create_category
     delete_product = client.delete(
         f"{prefix}/products",
         headers=authorization,
-        params={"product_id": str(product_id)}
+        params={"product_id": str(product_id)},
     )
     assert delete_product.json().get("message") == "Product deleted"
     assert delete_product.status_code == 200
-
-    

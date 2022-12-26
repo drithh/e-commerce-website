@@ -65,7 +65,7 @@ def test_user_order(
         json={
             "id": product1_id,
             "quantity": 2,
-        }
+        },
     )
     assert update_cart.json().get("message") == "Cart updated"
     assert update_cart.status_code == 200
@@ -92,8 +92,7 @@ def test_user_order(
 
     # delete cart product 2
     delete_cart = client.delete(
-        f"{settings.API_PATH}/cart", headers=authorization,
-        params={"id": product1_id}
+        f"{settings.API_PATH}/cart", headers=authorization, params={"id": product1_id}
     )
     assert delete_cart.status_code == 200
     assert delete_cart.json().get("message") == "Cart deleted"
@@ -109,21 +108,19 @@ def test_user_order(
 
     # checkout
     checkout = client.post(
-        f"{settings.API_PATH}/order", headers=authorization,
+        f"{settings.API_PATH}/order",
+        headers=authorization,
         json={
             "shipping_method": "Regular",
             "shipping_address": {
                 "address_name": "Jl. Kebon Jeruk",
-                "address" : "Jl. Kebon Jeruk No. 1",
+                "address": "Jl. Kebon Jeruk No. 1",
                 "city": "Jakarta Barat",
                 "phone_number": "082112345678",
             },
             "send_email": False,
-        }
+        },
     )
 
     assert checkout.status_code == 201
-    assert checkout.json().get("message") == "Order created successfully" 
-
-
-        
+    assert checkout.json().get("message") == "Order created successfully"
