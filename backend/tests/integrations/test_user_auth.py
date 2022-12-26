@@ -5,6 +5,7 @@ from sqlalchemy.orm.session import Session
 
 prefix = f"{settings.API_PATH}"
 
+
 def test_user_auth(client: TestClient, create_user, db: Session):
 
     # user register
@@ -17,7 +18,7 @@ def test_user_auth(client: TestClient, create_user, db: Session):
             "phone_number": "081234567890",
         },
     )
-    
+
     assert register.status_code == 201
     assert register.json().get("access_token")
 
@@ -28,9 +29,12 @@ def test_user_auth(client: TestClient, create_user, db: Session):
         f"{prefix}/forgot-password",
         params={"email": "adriel@gmail.com"},
     )
-    
+
     assert forgot_password.status_code == 200
-    assert forgot_password.json().get("message") == "Reset password code will be sent to your email, please check your email"
+    assert (
+        forgot_password.json().get("message")
+        == "Reset password code will be sent to your email, please check your email"
+    )
 
     # select user
     user = db.execute(
@@ -52,7 +56,7 @@ def test_user_auth(client: TestClient, create_user, db: Session):
             "token": "123456",
             "email": "adriel@gmail.com",
             "password": "adriel12345",
-        }
+        },
     )
 
     assert reset_password.json().get("message") == "Password updated successfully"
@@ -61,7 +65,7 @@ def test_user_auth(client: TestClient, create_user, db: Session):
     # user sign in
     sign_in = client.post(
         f"{prefix}/sign-in",
-        data={"username": "adriel@gmail.com", "password": "adriel12345"}
+        data={"username": "adriel@gmail.com", "password": "adriel12345"},
     )
 
     assert sign_in.status_code == 200
