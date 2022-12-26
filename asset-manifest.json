@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/static/css/main.bfdb437a.css",
+    "main.css": "/static/css/main.cd50173d.css",
     "main.js": "/static/js/main.0eb96f8c.js",
     "static/css/759.f3d60ab7.chunk.css": "/static/css/759.f3d60ab7.chunk.css",
     "static/js/759.f143b556.chunk.js": "/static/js/759.f143b556.chunk.js",
@@ -46,7 +46,7 @@
     "service-worker.js": "/service-worker.js",
     "static/media/Allerta-Stencil-Regular.woff": "/static/media/Allerta-Stencil-Regular.12ae85778888a5932ac2.woff",
     "index.html": "/index.html",
-    "main.bfdb437a.css.map": "/static/css/main.bfdb437a.css.map",
+    "main.cd50173d.css.map": "/static/css/main.cd50173d.css.map",
     "main.0eb96f8c.js.map": "/static/js/main.0eb96f8c.js.map",
     "759.f3d60ab7.chunk.css.map": "/static/css/759.f3d60ab7.chunk.css.map",
     "759.f143b556.chunk.js.map": "/static/js/759.f143b556.chunk.js.map",
@@ -91,7 +91,7 @@
     "203.73a9ad35.chunk.js.map": "/static/js/203.73a9ad35.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.bfdb437a.css",
+    "static/css/main.cd50173d.css",
     "static/js/main.0eb96f8c.js"
   ]
 }
