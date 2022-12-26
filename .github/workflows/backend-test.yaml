@@ -31,17 +31,6 @@ jobs:
           context: backend
           load: true
 
-      # - name: Build frontend
-      #   id: docker_build_frontend
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     push: false
-      #     tags: "e-commerce-website-frontend:latest"
-      #     cache-from: type=gha,scope=ci-test
-      #     cache-to: type=gha,mode=max,scope=ci-test
-      #     context: frontend
-      #     load: true
-
       - name: Start containers and run tests
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env

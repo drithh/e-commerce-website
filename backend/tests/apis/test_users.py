@@ -95,6 +95,17 @@ def test_update_user_shipping_address(client: TestClient, create_user):
     assert resp.status_code == 200
 
 
+def test_update_user_balace_negative_value_error(client: TestClient, create_user):
+    user = create_user()
+    resp = client.post(
+        f"{prefix}/balance",
+        headers=get_jwt_header(user),
+        json={"balance": -1},
+    )
+    assert resp.status_code == 400
+    assert resp.json()["message"] == "Balance cannot be negative"
+
+
 def test_update_user_balance_value_error(client: TestClient, create_user):
     user = create_user()
     resp = client.post(

@@ -2,12 +2,10 @@ from starlette.testclient import TestClient
 
 from app.core.config import settings
 
-prefix = f"{settings.API_PATH}/admin"
-
 
 def test_user_wishlist(client: TestClient, create_user, create_product):
-    user = create_user()
     product_1 = create_product()
+    user = create_user()
     product_2 = create_product()
 
     # user login
