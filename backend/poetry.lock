@@ -632,20 +632,21 @@ reference = "pypi_"
 
 [[package]]
 name = "google-cloud-storage"
-version = "1.44.0"
+version = "2.7.0"
 description = "Google Cloud Storage API client library"
 category = "main"
 optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
+python-versions = ">=3.7"
 
 [package.dependencies]
-google-api-core = {version = ">=1.29.0,<3.0dev", markers = "python_version >= \"3.6\""}
-google-auth = {version = ">=1.25.0,<3.0dev", markers = "python_version >= \"3.6\""}
-google-cloud-core = {version = ">=1.6.0,<3.0dev", markers = "python_version >= \"3.6\""}
-google-resumable-media = {version = ">=1.3.0,<3.0dev", markers = "python_version >= \"3.6\""}
-protobuf = {version = "*", markers = "python_version >= \"3.6\""}
+google-api-core = ">=1.31.5,<2.0.0 || >2.3.0,<3.0.0dev"
+google-auth = ">=1.25.0,<3.0dev"
+google-cloud-core = ">=2.3.0,<3.0dev"
+google-resumable-media = ">=2.3.2"
 requests = ">=2.18.0,<3.0.0dev"
-six = "*"
+
+[package.extras]
+protobuf = ["protobuf (<5.0.0dev)"]
 
 [package.source]
 type = "legacy"
@@ -1678,7 +1679,7 @@ reference = "pypi_"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "2ab7f1a2e58e75ab2a0b3013b7c6f469e9fa7c970dff198cf2e2a72b0c4d7347"
+content-hash = "67512e7936d145a811c7e680153022d66b39403b407ab51f8fe7c53fc7ad84e5"
 
 [metadata.files]
 aiosmtplib = [
@@ -2006,8 +2007,8 @@ google-cloud-core = [
     {file = "google_cloud_core-2.3.2-py2.py3-none-any.whl", hash = "sha256:8417acf6466be2fa85123441696c4badda48db314c607cf1e5d543fa8bdc22fe"},
 ]
 google-cloud-storage = [
-    {file = "google-cloud-storage-1.44.0.tar.gz", hash = "sha256:29edbfeedd157d853049302bf5d104055c6f0cb7ef283537da3ce3f730073001"},
-    {file = "google_cloud_storage-1.44.0-py2.py3-none-any.whl", hash = "sha256:cd4a223e9c18d771721a85c98a9c01b97d257edddff833ba63b7b1f0b9b4d6e9"},
+    {file = "google-cloud-storage-2.7.0.tar.gz", hash = "sha256:1ac2d58d2d693cb1341ebc48659a3527be778d9e2d8989697a2746025928ff17"},
+    {file = "google_cloud_storage-2.7.0-py2.py3-none-any.whl", hash = "sha256:f78a63525e72dd46406b255bbdf858a22c43d6bad8dc5bdeb7851a42967e95a1"},
 ]
 google-crc32c = [
     {file = "google-crc32c-1.5.0.tar.gz", hash = "sha256:89284716bc6a5a415d4eaa11b1726d2d60a0cd12aadf5439828353662ede9dd7"},
