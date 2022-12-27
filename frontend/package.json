@@ -20,7 +20,7 @@
     "js-cookie": "^3.0.1",
     "pluralize": "^8.0.0",
     "react": "^18.2.0",
-    "react-animate-height": "^3.0.4",
+    "react-animate-height": "^3.1.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-file-base64": "^1.0.3",
