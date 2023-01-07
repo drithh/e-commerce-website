@@ -92,7 +92,7 @@ def get_dashboard(
         JOIN product_size_quantities ON order_items.product_size_quantity_id = product_size_quantities.id
         JOIN products ON product_size_quantities.product_id = products.id
         JOIN categories ON products.category_id = categories.id
-        WHERE orders.status = 'completed' AND DATE_PART('year', orders.created_at) = DATE_PART('year', CURRENT_DATE)
+        WHERE orders.status = 'completed'
         GROUP BY categories.id
         """
     ).fetchall()
