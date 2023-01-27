@@ -2535,7 +2535,7 @@ video {
 @font-face {
   font-family: Matter;
 
-  src: url(https://cdn.projectakhir.me/fonts/Matter-Bold.woff)
+  src: url(https://res.cloudinary.com/dw21zy54j/image/upload/v1674834399/tutu/fonts/Matter-Bold.woff)
     format('woff');
 
   font-weight: 700;
@@ -2548,7 +2548,7 @@ video {
 @font-face {
   font-family: Matter;
 
-  src: url(https://cdn.projectakhir.me/fonts/Matter-Regular.woff)
+  src: url(https://res.cloudinary.com/dw21zy54j/image/upload/v1674834399/tutu/fonts/Matter-Regular.woff)
     format('woff');
 
   font-weight: 400;
