@@ -6,12 +6,10 @@ This is a simple e-commerce website built with fastapi and react.
 
 Website:
 
-- https://projectakhir.me (Sunsetting)
 - https://tutu.drith.me
 
 API:
 
-- https://api.projectakhir.me (Sunsetting)
 - https://api.tutu.drith.me
 
 See our API documentation here: https://tutu.readme.io/
