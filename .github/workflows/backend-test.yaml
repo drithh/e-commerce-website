@@ -22,7 +22,7 @@ jobs:
 
       - name: Build backend
         id: docker_build_backend
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v4
         with:
           push: false
           tags: 'e-commerce-website-backend:latest'
