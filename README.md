@@ -6,11 +6,11 @@ This is a simple e-commerce website built with fastapi and react.
 
 Website:
 
-- https://tutu.drith.me
+- https://e-commerce-website-drithh.vercel.app/
 
 API:
 
-- https://api.tutu.drith.me
+- https://e-commerce-server-gztuymsfwq-as.a.run.app/
 
 See our API documentation here: https://tutu.readme.io/
 
