@@ -5,7 +5,6 @@ from pydantic import BaseSettings, HttpUrl, PostgresDsn, validator
 
 
 class Settings(BaseSettings):
-
     PROJECT_NAME: str = "e-commerce-website"
     VERSION: str = "0.1.0"
 
