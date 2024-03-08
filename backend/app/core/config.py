@@ -73,7 +73,7 @@ class Settings(BaseSettings):
     TWITTER_API: str
 
     # Backend URL
-    REACT_APP_BACKEND_URL: str
+    VITE_APP_BACKEND_URL: str
 
     # Google Cloud Platform
     GCP_TYPE: str

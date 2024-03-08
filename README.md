@@ -128,7 +128,7 @@ npm install
 npm start
 ```
 
-If you want to develop against something other than the default host, localhost:8000, you can set the `REACT_APP_BACKEND_URL` environment variable
+If you want to develop against something other than the default host, localhost:8000, you can set the `VITE_APP_BACKEND_URL` environment variable
 
 Don't forget to edit the .env file and update the BACKEND_CORS_ORIGINS value (add http://mydomain:3000 to the allowed origins).
 

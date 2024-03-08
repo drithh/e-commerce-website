@@ -19,7 +19,7 @@
 #           npm run build
 #         working-directory: frontend
 #         env:
-#           REACT_APP_BACKEND_URL: ${{ secrets.REACT_APP_BACKEND_URL }}
+#           VITE_APP_BACKEND_URL: ${{ secrets.VITE_APP_BACKEND_URL }}
 
 #       - name: Deploy
 #         uses: JamesIves/github-pages-deploy-action@releases/v4

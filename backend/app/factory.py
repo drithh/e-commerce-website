@@ -31,7 +31,7 @@ def create_app():
     description = f"{settings.PROJECT_NAME} API"
     app = FastAPI(
         title=settings.PROJECT_NAME,
-        servers=[{"url": settings.REACT_APP_BACKEND_URL}],
+        servers=[{"url": settings.VITE_APP_BACKEND_URL}],
         openapi_url=f"{settings.API_PATH}/openapi.json",
         docs_url="/swagger",
         description=description,
@@ -144,7 +144,7 @@ def serve_static_app(app):
             # remove path and query string
             return templates.TemplateResponse(
                 "index.html",
-                {"request": request, "host": settings.REACT_APP_BACKEND_URL},
+                {"request": request, "host": settings.VITE_APP_BACKEND_URL},
             )
         return response
 
