@@ -4,6 +4,8 @@ This is a simple e-commerce website built with fastapi and react.
 
 ### live demo:
 
+Since the backend serverless, please allow 10-15 seconds for the server to wake up.
+
 Website:
 
 - https://e-commerce-website-drithh.vercel.app/
