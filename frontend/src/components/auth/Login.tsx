@@ -41,6 +41,11 @@ const Login: React.FC<Props> = ({
         Login
       </Dialog.Title>
       <form onSubmit={handleSubmit} className="mt-2">
+        <div className="flex flex-col gap-2 my-6">
+          <div>Admin: email=admin@admin.com pass=admin</div>
+          <div>User: email=user@user.com pass=user</div>
+        </div>
+
         <Input
           type="email"
           placeholder={'Email Address *'}

@@ -6,7 +6,7 @@ import {
   AiOutlineSearch,
 } from 'react-icons/ai';
 import { useMutation, useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { ApiError, SearchService } from '../api';
@@ -82,7 +82,24 @@ const Search = () => {
         <div className="relative flex w-full flex-col px-3 ">
           <div className="flex flex-col rounded-b-lg  bg-white  text-gray-600">
             {searchImage ? (
-              <Dropzone />
+              <div className="flex flex-col gap-4 ">
+                <Dropzone />
+                <div className="flex flex-col px-4">
+                  Example image
+                  <DownloadLink
+                    fileUrl="https://res.cloudinary.com/dw21zy54j/image/upload/v1674834399/tutu/banners/test-ayam-goreng-2.jpg"
+                    name="hat"
+                  />
+                  <DownloadLink
+                    fileUrl="https://res.cloudinary.com/dw21zy54j/image/upload/v1674834398/tutu/banners/test-4.jpg"
+                    name="shoe"
+                  />
+                  <DownloadLink
+                    fileUrl="https://res.cloudinary.com/dw21zy54j/image/upload/v1674834397/tutu/banners/makan-nasi-ayam-2.png"
+                    name="bag"
+                  />
+                </div>
+              </div>
             ) : (
               data?.map((item) => (
                 <button
@@ -98,6 +115,51 @@ const Search = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+interface DownloadLinkProps {
+  fileUrl: string;
+  name: string;
+}
+
+const DownloadLink = ({ fileUrl, name }: DownloadLinkProps) => {
+  const handleDownload = async () => {
+    try {
+      // URL of the file to be downloaded
+      // const fileUrl
+
+      // Fetch the file content
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+
+      // Create a Blob URL for the Blob object
+      const url = URL.createObjectURL(blob);
+
+      // Create a link element with the download attribute
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${name}.webp`;
+
+      // Append the link to the document body and click it
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up by removing the link and revoking the Blob URL
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    }
+  };
+
+  return (
+    <button
+      className="text-blue-500 hover:text-blue-700 text-start"
+      onClick={handleDownload}
+    >
+      {name}
+    </button>
   );
 };
 
