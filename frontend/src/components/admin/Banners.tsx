@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { capitalCase } from 'change-case';
 
 import { BannerService } from '../../api';
-const pluralize = require('pluralize');
+import pluralize from 'pluralize';
 
 const Banners: React.FC = () => {
   const navigate = useNavigate();

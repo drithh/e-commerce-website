@@ -7,7 +7,7 @@ import { capitalCase } from 'change-case';
 
 import { CategoryService, Pagination } from '../api';
 import Dropdown from '../components/Dropdown';
-const pluralize = require('pluralize');
+import pluralize from 'pluralize';
 
 interface TypeParams {
   category: string[];

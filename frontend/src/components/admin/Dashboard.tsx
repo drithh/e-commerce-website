@@ -21,7 +21,7 @@ import {
 
 import { DashboardService } from '../../api';
 import { convertToCurrency } from '../util/utilFunc';
-const pluralize = require('pluralize');
+import pluralize from 'pluralize';
 
 const Dashboard = () => {
   const fetchDashboard = useQuery('dashboard', () =>

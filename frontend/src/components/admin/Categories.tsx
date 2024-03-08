@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { capitalCase } from 'change-case';
 
 import { CategoryService } from '../../api';
-const pluralize = require('pluralize');
+import pluralize from 'pluralize';
 
 const Categories: React.FC = () => {
   const navigate = useNavigate();

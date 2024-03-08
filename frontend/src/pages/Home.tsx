@@ -8,7 +8,7 @@ import Banner from '../components/Banner';
 import LinkButton from '../components/button/LinkButton';
 import Card from '../components/Card';
 import OverlayContainer from '../components/OverlayContainer';
-const pluralize = require('pluralize');
+import pluralize from 'pluralize';
 OpenAPI.TOKEN = Cookies.get('token');
 
 const Home = () => {
