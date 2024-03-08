@@ -20,7 +20,6 @@ class Order(DefaultModel, Base):
 
     @classmethod
     def seed(cls, fake, user_id, status, month=None, year=None):
-
         if month and year:
             start_date = datetime.datetime(year, month, 1)
             end_date = datetime.datetime(year, month, 28)

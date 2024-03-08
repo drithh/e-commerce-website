@@ -156,7 +156,6 @@ def test_create_product_invalid_size(client: TestClient, create_admin, create_ca
 def test_create_product(
     client: TestClient, create_category, create_admin, create_size, get_base64_image
 ):
-
     category = create_category()
     admin = create_admin()
     size = create_size(size_model="S")
@@ -297,7 +296,6 @@ def test_update_product_unavailable_size(
 
 
 def test_update_product_not_admin(client: TestClient):
-
     resp = client.put(f"{prefix}")
     assert resp.json() == {"message": "Not authenticated"}
     assert resp.status_code == 401

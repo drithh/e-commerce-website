@@ -7,7 +7,6 @@ prefix = f"{settings.API_PATH}"
 
 
 def test_user_auth(client: TestClient, create_user, db: Session):
-
     # user register
     register = client.post(
         f"{prefix}/sign-up",

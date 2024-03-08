@@ -120,7 +120,6 @@ def create_product(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
-
     product = Product(
         title=request.title,
         brand=request.brand,

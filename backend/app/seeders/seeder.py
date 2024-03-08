@@ -677,10 +677,8 @@ for product_item in product_items:
 
 
 def seed():
-
     fake = Faker("id_ID")
     with db.SessionLocal() as session:
-
         logger.info("Seeding Table Users")
         user_id = user_seed(fake, session)
 

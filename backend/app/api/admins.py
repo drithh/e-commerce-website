@@ -68,7 +68,6 @@ def get_dashboard(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_admin),
 ) -> JSONResponse:
-
     income_per_month = session.execute(
         """
         SELECT TO_CHAR(orders.created_at, 'Mon') AS month,

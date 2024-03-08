@@ -188,7 +188,6 @@ def reset_password(
             headers={"WWW-Authenticate": "Bearer"},
         )
     if forgot_password.expires_in < datetime.now(tz=pytz.UTC):
-
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Token expired",
@@ -217,7 +216,6 @@ def change_password(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-
     if not User.verify_password(request.old_password, current_user):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

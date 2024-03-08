@@ -59,7 +59,6 @@ def create_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-
     product_size_quantity = session.execute(
         """
             SELECT product_size_quantities.id, products.title, product_size_quantities.quantity FROM only product_size_quantities
@@ -122,7 +121,6 @@ def update_cart(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-
     cart = session.execute(
         """
         SELECT carts.id, product_size_quantities.quantity as stock, carts.quantity FROM only carts

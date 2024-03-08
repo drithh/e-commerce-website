@@ -94,7 +94,6 @@ def get_shipping_price(
     session: Generator = Depends(get_db),
     current_user: User = Depends(get_current_active_user),
 ) -> JSONResponse:
-
     total_price = session.execute(
         """
         SELECT SUM(products.price * carts.quantity) total_price
