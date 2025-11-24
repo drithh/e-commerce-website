@@ -8,11 +8,11 @@ Since the backend serverless, please allow 10-15 seconds for the server to wake 
 
 Website:
 
-- https://e-commerce-website-drithh.vercel.app/
+- https://e-commerce.adriel.id/
 
 API:
 
-- https://e-commerce-server-gztuymsfwq-as.a.run.app/
+- https://e-commerce-backend.adriel.id/
 
 See our API documentation here: https://tutu.readme.io/
 
