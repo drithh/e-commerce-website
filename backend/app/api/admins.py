@@ -149,9 +149,9 @@ def get_customer(
             page=page,
             page_size=page_size,
             total_item=customers[0].totalrow_count if customers else 0,
-            total_page=math.ceil(customers[0].totalrow_count / page_size)
-            if customers
-            else 1,
+            total_page=(
+                math.ceil(customers[0].totalrow_count / page_size) if customers else 1
+            ),
         ),
     )
 

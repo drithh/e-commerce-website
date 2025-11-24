@@ -39,7 +39,7 @@ def write_dataset(labels, data, size, rows, cols, output_dir):
             os.makedirs(dir)
 
     # write data
-    for (i, label) in enumerate(labels):
+    for i, label in enumerate(labels):
         output_filename = path.join(output_dirs[label], str(i) + ".png")
         print("writing " + output_filename)
         with open(output_filename, "wb") as h:
