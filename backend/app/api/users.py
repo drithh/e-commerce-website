@@ -186,9 +186,11 @@ def update_user_balance(
         logger.error(e)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Integer value out of range"
-            if "integer out of range" in format_error(e)
-            else format_error(e),
+            detail=(
+                "Integer value out of range"
+                if "integer out of range" in format_error(e)
+                else format_error(e)
+            ),
         )
     logger.info(f"User {current_user.email} updated balance")
     return DefaultResponse(

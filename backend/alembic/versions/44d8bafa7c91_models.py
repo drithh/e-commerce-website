@@ -1,10 +1,11 @@
 """models
 
 Revision ID: 44d8bafa7c91
-Revises: 
+Revises:
 Create Date: 2022-12-08 16:41:03.425875
 
 """
+
 from alembic import op
 import sqlalchemy as sa
 import fastapi_users_db_sqlalchemy

@@ -107,9 +107,9 @@ def get_products(
             page=page,
             page_size=page_size,
             total_item=products[0].totalrow_count if products else 0,
-            total_page=math.ceil(products[0].totalrow_count / page_size)
-            if products
-            else 1,
+            total_page=(
+                math.ceil(products[0].totalrow_count / page_size) if products else 1
+            ),
         ),
     )
 
